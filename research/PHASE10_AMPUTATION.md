@@ -656,39 +656,93 @@ Contiguous groups produce 2-100x more divergence than hash groups
 at the same bit budget. The LOCATION of information matters, not
 just the amount.
 
-### Verdict: threshold + location matter
+### Falsification: Exp26b
 
-**A threshold exists.** Below ~10 bits (contiguous), no divergence.
-Above, H8 appears. This is a capacity threshold — the system needs
-enough information to discriminate which memories were reinforced.
+Exp26b tested both claims with fine-grained sweeps, deterministic
+assignments, and a falsification arm (index-contiguous on shuffled
+fields).
 
-**Location matters.** Contiguous grouping (semantically coherent
-clusters) produces dramatically more divergence than hash grouping
-(scattered). At 25 bits: contiguous 0.0188 vs hash 0.0002 (94x).
-The information isn't just "how many bits" but "where the bits are
-allocated relative to the embedding space."
+**Predefined criteria:** H8 present iff mean washout set_diff > 0.005
+AND >= 3 decision flips across all seeds. Below = absent.
 
-**Non-monotonicity.** The peak divergence is at 10 groups, not 100.
-Fewer groups = coarser information = larger boost footprints. With
-groups of 10 (36 degrees of embedding space), a flag boost affects
-a meaningful cluster. With groups of 50 or 100, the per-memory
-flag is too fine-grained to matter at top-k=10 resolution.
+**Fine-grained threshold (contiguous, ordered, 30 seeds):**
 
-### What this means
+```
+Groups    Mean             95% CI      Flips   H8?
+    5   0.0000 [nan,nan]        0      NO
+    6   0.0491 [0.0349,0.0632]  3      YES
+    7   0.0805 [0.0634,0.0977] 24      YES
+    8   0.0049 [0.0007,0.0092]  3      NO
+    9   0.0101 [0.0047,0.0156]  1      NO
+   10   0.0140 [0.0074,0.0206]  2      NO
+   11   0.0395 [0.0296,0.0493] 22      YES
+   12   0.0232 [0.0148,0.0316]  1      NO
+   15   0.0100 [0.0050,0.0150]  4      YES
+   20   0.0083 [0.0040,0.0126]  2      NO
+   25   0.0161 [0.0107,0.0216] 10      YES
+   50   0.0136 [0.0100,0.0172]  6      YES
+  100   0.0115 [0.0091,0.0138] 13      YES
+```
 
-The minimum information budget for H8 is ~10 bits under these
-conditions, and the bits must be allocated to semantically coherent
-groups. A single global bit produces nothing. Per-memory flags
-work but are finer-grained than needed.
+**NO CLEAN THRESHOLD.** H8 present at {6,7,11,15,25,50,100},
+absent at {5,8,9,10,12,20}. The apparent 5->10 cliff from Exp26
+was sampling noise — fine-grained testing shows a noisy,
+non-monotonic pattern, not a threshold.
 
-The "1 bit per memory" from Exp25 is actually 100 bits for 100
-memories. Exp26 shows ~10 bits suffice — but only if those bits
-cover coherent regions of the memory space. It's not just quantity
-of information — it's which memories share a flag.
+**Coherence measurement (n_groups=10):**
 
-This is a stronger and more precise answer: path dependence needs
-not just persistent state but persistent state allocated to
-semantically meaningful partitions of the memory space.
+```
+Assignment    Within   Between    Diff
+index (ord)   0.9643   -0.1075   1.0718  <- coherent by construction
+index (shuf)  0.0028   -0.0114   0.0142  <- scattered
+angular       0.9643   -0.1075   1.0718  <- coherent by angle
+sha256       -0.0405   -0.0070  -0.0335  <- scattered
+stride       -0.1111   -0.0000  -0.1111  <- scattered
+```
+
+**Divergence at n_groups=10:**
+
+```
+Assignment        Mean             Flips   H8?
+index_ordered   0.0140                2     NO
+index_shuffled  0.0228               11     YES  <- scattered MORE
+angular_ordered 0.0140                2     NO
+angular_shuf    0.0140                8     YES
+sha256_ordered  0.0297               26     YES  <- scattered MORE
+stride_ordered  0.0000                0     NO
+```
+
+**Location does NOT matter as claimed.** Scattered assignments
+(index_shuffled, sha256) produce MORE divergence than coherent ones
+at n_groups=10. The Exp26 interpretation that "semantic coherence"
+drives the effect is NOT supported — it was an artifact of comparing
+only "contiguous-index" vs "unstable hash" on an ordered field.
+
+At n_groups=25 the pattern partially reverses (angular > sha256),
+showing the relationship is budget-dependent and noisy, not a
+clean geometric law.
+
+### Corrected verdict
+
+**Exp26's interpretation was premature.** There is no clean
+information-budget threshold. The divergence-vs-bits curve is noisy
+and non-monotonic, not a cliff. And "semantic coherence" is not
+the driver — scattered assignments produce comparable or larger
+divergence at some budgets.
+
+What survives: SOME persistent binary state is necessary (0 bits =
+0 divergence, confirmed). But the exact budget and allocation
+requirements are messier than Exp26 suggested — the relationship
+between state compression and path dependence is not a simple
+threshold.
+
+**What we still know:**
+- Persistence across queries is required (Exp25: reset/stateless=0)
+- Accumulation beyond 1 step is required (Exp25: last_only ≈ 0)
+- Binary is sufficient; scalar amplifies ~4x
+- Zero bits = zero divergence (sanity)
+- The compression curve is non-monotonic and noisy — no clean
+  threshold at any tested resolution
 
 ---
 

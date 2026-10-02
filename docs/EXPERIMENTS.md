@@ -49,7 +49,10 @@ measurable properties that retrieval alone does not represent?
 | `exp20_chess_behavioral.py` | H11: LLM + Stockfish behavioral assay | INCONCLUSIVE (n=1 informative seed) |
 | `exp21_threshold_sweep.py` | Is k*=N-1 emergent or algebraic? | MOSTLY ALGEBRAIC (k*=N-T for T=1,2) |
 | `exp22_topology_prediction.py` | Can per-memory topology predict flips? | MOSTLY DERIVABLE (8/9 thresholds, 91% precision) |
-| `exp23_residual_decomposition.py` | What explains the residual? | DERIVABLE (100% late bloomers: direct loss 66% + cascade 34%) |
+| `exp23_residual_decomposition.py` | What explains the residual? | DERIVABLE (100% late bloomers: direct loss 99.3% + cascade 33.8%) |
+| `exp25_state_amputation.py` | What is the minimum sufficient state? | Binary flag suffices; accumulation required; persistence across queries required |
+| `exp26_state_compression.py` | How many bits does H8 need? | PREMATURE — see Exp26b |
+| `exp26b_falsification.py` | Is the threshold real? Does location matter? | BOTH FALSIFIED — no clean threshold; scattered ≥ coherent |
 
 ## Supporting infrastructure
 
@@ -72,9 +75,14 @@ adaptive state** (REINFORCED/NEUTRAL that changes what gets recalled).
 - H11 behavioral specificity: inconclusive.
 - H1 structural (RESONANT boost): not reproduced by retrieval-only
   baselines evaluated so far — but impossibility not shown.
+- H13 minimum state: binary flag suffices; accumulation and
+  persistence across queries required. Compression claims
+  (Exp26) were falsified by Exp26b — no clean threshold, location
+  doesn't drive the effect.
 
 Boundary discovered: **stateless retrieval vs stateful adaptive
-retrieval** — not retrieval vs memory.
+retrieval** — not retrieval vs memory. The minimum state is a
+persistent accumulating flag; exact bit budget is noisy.
 
 See `docs/HYPOTHESES.md` for the hypothesis ledger and
 `research/PHASE*.md` for full experimental writeups.

@@ -404,19 +404,26 @@ Groups   Bits   Washout  Flips
     0      0     0.0000      0
 ```
 
-Non-monotonic: drops 100→50, rises 25→10, crashes below 10.
-Threshold around 10 bits.
+Initial interpretation (premature): threshold at ~10 bits, contiguous
+> hash.
 
-Assignment comparison (same bits, different grouping):
-- 25 contiguous: 0.0188 vs 25 hash: 0.0002 (94x)
-- 10 contiguous: 0.0206 vs 10 hash: 0.0128 (1.6x)
-- Location matters: coherent clusters >> scattered groups
+**Exp26b falsification:**
+- Fine-grained sweep (5-12, 30 seeds): NO clean threshold. Present
+  at {6,7,11,15,25,50,100}, absent at {5,8,9,10,12,20}. Non-monotonic
+  and noisy.
+- index_contiguous on SHUFFLED field (scattered geometry) produces
+  MORE divergence than on ordered field (0.0228 vs 0.0140 at 10
+  groups). "Semantic coherence" is NOT the driver.
+- sha256 (deterministic scatter) produces MORE divergence than
+  angular at 10 groups (0.0297 vs 0.0140).
+- The Exp26 "contiguous > hash" contrast was an artifact of unstable
+  Python hash() + coarse sampling.
 
-Verdict: threshold at ~10 bits + location matters. The information
-must be allocated to semantically coherent partitions of the memory
-space. A global bit produces nothing. The "1 bit per memory" from
-Exp25 is actually 100 bits for 100 memories — ~10 suffice, but only
-if they cover coherent regions.
+Verdict: the Exp26 interpretation was premature. No clean threshold.
+Some persistent binary state is necessary (0 bits = 0), but the
+compression curve is noisy and assignment-dependent. The "location
+matters" claim is falsified — scattered groups produce comparable
+or larger divergence at some budgets.
 
 ## Valid negative outcomes (any is a successful result)
 

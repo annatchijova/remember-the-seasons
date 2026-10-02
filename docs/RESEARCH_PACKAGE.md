@@ -205,7 +205,7 @@ and `research/PHASE7_STATISTICAL_TRIALS.md` for full results.
 | Exp22 (topology prediction) | MOSTLY DERIVABLE | Per-memory topology predicts threshold (8/9); magnitude underestimated ~30-70% |
 | Exp23 (residual decomposition) | DERIVABLE | 100% of unexplained flips are late bloomers; no emergent mechanism |
 | Exp25 (state amputation) | SURVIVES | Minimum sufficient state: 1-bit accumulating persistent flag |
-| Exp26 (state compression) | SURVIVES | Threshold ~10 bits + location matters; contiguous >> hash |
+| Exp26 (state compression) | FALSIFIED | Exp26b: no clean threshold; location claim not confirmed — noisy/non-monotonic |
 
 ### Hypothesis scoreboard
 
@@ -222,7 +222,7 @@ and `research/PHASE7_STATISTICAL_TRIALS.md` for full results.
 | H10a (collective resilience) | DERIVABLE | Exp21/22/23: threshold rule + topology + dynamics fully explain; no emergent mechanism |
 | H11 (chess orthogonal) | INCONCLUSIVE | Preliminary evidence consistent with specificity; n=1 seed, no equivalence test |
 | H12 (stateful retrieval suffices) | SURVIVES | NEW (Exp19): retrieval + state reproduces H8; Raven amplifies ~2x but not necessary |
-| H13 (minimum sufficient state) | SURVIVES | Exp25: 1-bit accumulating persistent flag; Exp26: ~10 bits with coherent allocation |
+| H13 (minimum sufficient state) | SURVIVES (corrected) | Exp25: binary flag suffices; Exp26b: no clean threshold — noisy curve |
 | H3-H6 | PARTIALLY TESTED | minimal MNEME/STIGMERGY only; full systems untested |
 
 ### Key findings
@@ -315,17 +315,17 @@ and `research/PHASE7_STATISTICAL_TRIALS.md` for full results.
     equivalence test (TOST) with a predefined margin. See
     `research/PHASE10_AMPUTATION.md`.
 
-13. **The minimum sufficient state is ~10 bits with coherent
-    allocation** (H13, Exp25/26): binary REINFORCED/NEUTRAL suffices
-    for H8 (0.0112, 11 flips). Scalar magnitude amplifies ~4x.
-    Accumulation beyond 1 step is required. Permanence is NOT
-    required — decay shows more divergence (0.2476) via state wipe.
-    Persistence across queries is required. Exp26 compressed the
-    state vector: threshold at ~10 groups (contiguous), with
-    coherent allocation >> hash assignment. A global bit produces
-    nothing. The "1 bit per memory" is 100 bits for 100 memories —
-    ~10 suffice if semantically coherent. See
-    `research/PHASE10_AMPUTATION.md`.
+13. **The minimum sufficient state is a persistent accumulating
+    binary flag** (H13, Exp25): binary REINFORCED/NEUTRAL suffices
+    for H8 (0.0112, 11 flips). Scalar amplifies ~4x. Accumulation
+    beyond 1 step required. Permanence not required (decay changes
+    mechanism to state wipe). Persistence across queries required.
+    Exp26's compression claims were FALSIFIED by Exp26b: no clean
+    bit-budget threshold (noisy/non-monotonic curve), and "semantic
+    coherence" is not the driver (scattered assignments produce
+    comparable or larger divergence). What survives: some persistent
+    binary state is necessary (0 bits = 0); the exact budget is
+    noisy and assignment-dependent.
 
 ### Next gate decision
 
