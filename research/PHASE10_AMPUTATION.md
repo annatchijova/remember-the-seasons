@@ -973,6 +973,73 @@ chess decisions, in mixed directions.
 
 ---
 
+## Exp29: When does flag divergence self-amplify vs die out?
+
+### Question
+
+Exp27 found the mechanism (late flag -> recall diff -> flag diff)
+but only ~20% of seeds diverge at ng=7. What determines whether
+the initial flag difference self-amplifies or dies out?
+
+Hypothesis: the loop feeds only when a flag difference changes the
+TOP-1 of a recall — top-1 is what gets reinforced, and the
+reinforced memory's group is the next flag set. If a flag boost
+only lifts members into ranks 2-10, the set changes but the
+reinforcement target doesn't — no feedback.
+
+### Design
+
+n_groups in {6,7,8,11,25}, 30 seeds. Per-step logging:
+- flag-set Hamming distance between arms
+- does the differing flag change top-1 or only the set?
+- flag distance trajectory post-washout (grow vs shrink)
+
+### Results
+
+```
+ ng   div seeds   converged   diverged   top1 chg   top1 same
+  6        4           1          3          63         193
+  7        6           0          3          92         285
+  8        1           1          0          10          26
+ 11        6           3          0          53         291
+ 25        5           4          0          35         227
+
+Flag-diff -> top-1-change rate: 19.8%
+(253 changed vs 1022 same)
+```
+
+Flag distance trajectory (ng=7, divergent seeds):
+```
+steps 70-79:   1.05
+steps 80-89:   1.27
+steps 90-99:   1.33
+steps 100-109: 1.33
+steps 110-119: 1.40   <- slow growth, not explosive
+```
+
+### Verdict: WEAK feedback — the loop feeds ~20% of the time
+
+The hypothesis partially survives: flag differences DO change
+top-1 sometimes (19.8% of flag-differing steps), and when they do,
+divergence can grow (3/6 divergent seeds at ng=7 grew).
+
+But the loop is weak: 80% of flag-differing steps change only the
+set, not the reinforcement target. And at ng=11/25, divergent
+seeds CONVERGE post-washout — the intervention arm re-flags the
+missing group and the flag sets re-coincide.
+
+The refined mechanism:
+- Late flags create the initial divergence (Exp27)
+- Feedback amplifies ONLY when flag diffs reach rank-1 (20% rate)
+- The system self-corrects when feedback is too weak to sustain
+
+This is consistent with the whole arc: the memory mechanism is
+persistent but self-limiting — path dependence exists, amplifies
+weakly, and dies out unless the partition accidentally leaves
+rank-1-relevant groups unflagged at the intervention boundary.
+
+---
+
 ## Cross-experiment synthesis
 
 ### The amputation results

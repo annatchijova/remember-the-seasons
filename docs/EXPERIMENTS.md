@@ -56,6 +56,7 @@ measurable properties that retrieval alone does not represent?
 | `exp26_state_compression.py` | How many bits does H8 need? | PREMATURE — see Exp26b |
 | `exp26b_falsification.py` | Is the threshold real? Does location matter? | BOTH FALSIFIED — no clean threshold; scattered ≥ coherent |
 | `exp27_explain_7v8.py` | Why does ng=7 produce H8 and ng=8 not? | OBSERVED — late-flagged group + feedback loop; partition accident |
+| `exp29_feedback_mechanism.py` | When does flag divergence self-amplify? | WEAK FEEDBACK — top-1 flips 20% of flag-diff steps; ng=7 grows slowly, ng=11/25 self-correct |
 
 ## Supporting infrastructure
 

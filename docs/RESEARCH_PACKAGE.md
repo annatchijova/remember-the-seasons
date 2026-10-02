@@ -210,6 +210,7 @@ and `research/PHASE7_STATISTICAL_TRIALS.md` for full results.
 | Exp26 (state compression) | FALSIFIED | Exp26b: no clean threshold; location claim not confirmed — noisy/non-monotonic |
 | Exp26b (falsification) | COMPLETE | No threshold; location claim falsified; scattered >= coherent |
 | Exp27 (why 7 vs 8) | OBSERVED | Late-flagged group + feedback loop; partition accident, not bit count |
+| Exp29 (feedback mechanism) | WEAK | Top-1 flips 20% of flag-diff steps; ng=7 grows slowly, ng=11/25 self-correct |
 
 ### Hypothesis scoreboard
 
