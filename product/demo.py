@@ -77,7 +77,31 @@ def main():
               f"{len(rep.direct_receipts)}, decisions "
               f"{len(rep.direct_decisions)}")
 
-    section("5. Bundle — sealed evidence for a distrusting auditor")
+    section("5. Trajectory counterfactual — what if it hadn't happened?")
+    # scenario where the promotion itself decides the ranking:
+    # a reinforced memory outranks a fresher, higher-similarity rival
+    b = agent.SeasonsAgent()
+    b.remember("staging gate deployment")          # lower raw sim
+    for _ in range(3):
+        b.ask("deploy gate staging")               # promotes mem-0000
+    b.remember("deploy gate staging pass")         # higher sim, NEUTRAL
+    # mem-0000's chain: promotion lives at seq 7
+    rep = b.what_if_transition("deploy gate staging", "mem-0000",
+                               excise_seq=7)
+    print("excised mem-0000 seq 7 (STATE_CHANGED promotion):")
+    print(f"  counterfactual state: {rep['counterfactual_state']}")
+    print(f"  actual served:        {rep['actual']['served']}")
+    print(f"  counterfactual served:{rep['counterfactual']['served']}")
+    d = rep["delta"]
+    print(f"  delta: removed={d['removed']} entered={d['entered']} "
+          f"rank_changed={d['rank_changed']}")
+    print(f"  report {rep['report_sha256'][:24]}… "
+          f"(hypothetical={rep['hypothetical']})")
+    print("  one excised transition flipped the top-1 — the answer in")
+    print("  that world would have been different, and the report seals")
+    print("  exactly which transition did it.")
+
+    section("6. Bundle — sealed evidence for a distrusting auditor")
     bj = a.export_bundle()
     with tempfile.NamedTemporaryFile("w", suffix=".json",
                                      delete=False) as f:

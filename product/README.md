@@ -60,6 +60,14 @@ served set`, and the difference is checkable, not narrated.
 (`compare_worlds`): the same query against a hypothetical custody
 state, with the delta exact.
 
+`a.what_if_transition(question, memory_id, seq)` — the trajectory
+counterfactual, the gap the research identified: same query in the
+world where custody event `(memory_id, seq)` never happened. The
+excised chain is replayed generously (transitions recomputed — an
+excised REINFORCED means the promotion may never fire), the recall
+runs unmodified inside a savepoint, and the sealed report is marked
+`hypothetical: true`.
+
 ## LLM wiring
 
 - `NEBIUS_API_KEY` + `NEBIUS_BASE_URL` (default
@@ -76,7 +84,8 @@ never the verdict.
 
 ## Status
 
-Skeleton. The core forensic loop works end-to-end offline. Not wired:
-the trajectory counterfactual (what-if over the *history of
-transitions*, not only custody — the gap identified in the product
-exploration), MCP server, and the Nebius deployment path.
+Skeleton. The core forensic loop works end-to-end offline, including
+the trajectory counterfactual v1 (single-event excision on one
+memory's chain; cross-effects through decisions/links not rewound —
+documented in `seasons/trajectory.py`). Not wired: MCP server, and
+the Nebius deployment path.

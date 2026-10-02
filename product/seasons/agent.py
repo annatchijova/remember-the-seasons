@@ -128,6 +128,18 @@ class SeasonsAgent:
             world_a=None, world_b=world, top_k=top_k,
             actor_id=actors.OPERATOR)
 
+    def what_if_transition(self, question: str, memory_id: str,
+                           excise_seq: int, *, top_k: int = 5):
+        """Trajectory counterfactual: same query in the world where
+        custody event (memory_id, excise_seq) never happened — the gap
+        the research identified. Sealed report, marked hypothetical."""
+        from . import trajectory
+        return trajectory.what_if_transition(
+            self.cur,
+            query_embedding=field.quantize_embedding(embed.embed(question)),
+            memory_id=memory_id, excise_seq=excise_seq, top_k=top_k,
+            actor_id=actors.OPERATOR)
+
     # ---------- forensics ----------
 
     def chain(self, memory_id: str):
