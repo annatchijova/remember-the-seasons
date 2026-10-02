@@ -204,6 +204,7 @@ and `research/PHASE7_STATISTICAL_TRIALS.md` for full results.
 | Exp21 (threshold sweep) | MOSTLY ALGEBRAIC | k* = N-T for T=1,2; resilience is mechanical, not emergent |
 | Exp22 (topology prediction) | MOSTLY DERIVABLE | Per-memory topology predicts threshold (8/9); magnitude underestimated ~30-70% |
 | Exp23 (residual decomposition) | DERIVABLE | 100% of unexplained flips are late bloomers; no emergent mechanism |
+| Exp25 (state amputation) | SURVIVES | Minimum sufficient state: 1-bit accumulating persistent flag |
 
 ### Hypothesis scoreboard
 
@@ -220,6 +221,7 @@ and `research/PHASE7_STATISTICAL_TRIALS.md` for full results.
 | H10a (collective resilience) | DERIVABLE | Exp21/22/23: threshold rule + topology + dynamics fully explain; no emergent mechanism |
 | H11 (chess orthogonal) | INCONCLUSIVE | Preliminary evidence consistent with specificity; n=1 seed, no equivalence test |
 | H12 (stateful retrieval suffices) | SURVIVES | NEW (Exp19): retrieval + state reproduces H8; Raven amplifies ~2x but not necessary |
+| H13 (minimum sufficient state) | SURVIVES | NEW (Exp25): 1-bit accumulating persistent flag suffices; scalar amplifies ~4x |
 | H3-H6 | PARTIALLY TESTED | minimal MNEME/STIGMERGY only; full systems untested |
 
 ### Key findings
@@ -280,9 +282,9 @@ and `research/PHASE7_STATISTICAL_TRIALS.md` for full results.
     threshold (8/9 configs, 91% precision). Exp23 showed the
     residual is 100% "late bloomers" — memories that crossed the
     threshold during the intervention window in control but not in
-    intervention, due to direct contributor loss (66%) or behavioral
-    cascade (34%). No emergent mechanism needed. See
-    `research/PHASE10_AMPUTATION.md`.
+    intervention, due to direct contributor loss (present in 141/142,
+    99.3%) or behavioral cascade (present in 48/142, 33.8%). No
+    emergent mechanism needed. See `research/PHASE10_AMPUTATION.md`.
 
 10. **Exp18 is a pipeline check, not behavioral specificity** (H11):
     Chess quality is identical (0.0000) but this is expected by
@@ -310,6 +312,17 @@ and `research/PHASE7_STATISTICAL_TRIALS.md` for full results.
     — n=1 informative condition, no equivalence test. A proper
     version needs preregistered divergent conditions and an
     equivalence test (TOST) with a predefined margin. See
+    `research/PHASE10_AMPUTATION.md`.
+
+13. **The minimum sufficient state is 1 bit per memory** (H13,
+    Exp25): factorial amputation of the persistent adaptive state.
+    Binary REINFORCED/NEUTRAL suffices for H8 (0.0112, 11 flips).
+    Scalar magnitude amplifies ~4x (0.0496, 43 flips). Accumulation
+    beyond 1 step is required (last_only kills H8: 0.0012).
+    Permanence is NOT required — decay shows more divergence (0.2476)
+    but via a different mechanism (state wipe + rebuild, not freeze).
+    Persistence across queries is required (reset/stateless = 0).
+    CF closure is 100% across all variants. See
     `research/PHASE10_AMPUTATION.md`.
 
 ### Next gate decision

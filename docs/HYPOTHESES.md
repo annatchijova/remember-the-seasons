@@ -347,16 +347,44 @@ Therefore every false negative must be a "late bloomer": c_m(39) < T.
 
 Results (142 false negatives):
 - 100% are late bloomers (c39 < T)
-- A1 (direct loss of intervened contributions): 66%
-- A2 (cascade — non-intervened recall diverged): 0.7%
-- Both A1+A2: 33%
-- With cascade evidence: 34%
+- Direct loss present (A1): 141/142 (99.3%)
+- Cascade present (A2): 48/142 (33.8%)
+- A1 only: 94 (66.2%); A2 only: 1 (0.7%); both: 47 (33.1%)
 - Unexplained: 0
 
 Verdict: DERIVABLE DYNAMICALLY. Every unexplained flip is a late
 bloomer explained by contributor loss during the intervention
-window. The dominant mechanism is direct loss (66%), not cascade
-(34%). No emergent mechanism needed.
+window. Direct contributor loss is nearly universal (141/142,
+99.3%); cascade effects co-occur in 48/142 (33.8%), but pure
+cascade accounts for only 1/142 (0.7%). The cascade is real but
+small — it does not rescue H10. No emergent mechanism needed.
+
+### Minimum sufficient state (Exp25, OBSERVED)
+
+Exp19 found that retrieval + binary adaptive state suffices for H8.
+Exp25 dissected "state" factorially along three axes:
+
+  DISCRETENESS:  binary vs scalar magnitude
+  HISTORY:       accumulates vs last-touch only
+  PERSISTENCE:   permanent vs decays vs reset-per-query
+
+Results (20 seeds, washout set_diff / flips):
+
+```
+binary     0.0112   11 flips   (Exp19 baseline)
+scalar     0.0496   43 flips   (magnitude amplifies ~4x)
+last_only  0.0012    1 flip    (accumulation required)
+decay      0.2476  182 flips   (state wipe, not freeze)
+reset      0.0000    0 flips   (inert without carry-over)
+stateless  0.0000    0 flips   (B0 sanity)
+```
+
+Verdict: the minimum sufficient state is a persistent accumulating
+flag per memory — as little as 1 bit, updated on recall. Accumulation
+beyond 1 step is required. Permanence is NOT required (decay shows
+more divergence via a different mechanism: state wipe + rebuild).
+Persistence across queries is required. CF closure is 100% across
+all variants that produce flips.
 
 ## Valid negative outcomes (any is a successful result)
 

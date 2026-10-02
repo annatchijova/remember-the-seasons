@@ -440,14 +440,13 @@ F_obs \ F_pred memory, classify the mechanism:
 Total false negatives: 142
 Late bloomers (c39 < T): 142/142 (100%)
 
-Mechanism classification:
-  A1 only (lost intervened contributors):    94 (66%)
-  A2 only (lost non-intervened via cascade):  1 (0.7%)
-  Both A1+A2:                                47 (33%)
-  Neither (unexplained):                      0
-
-With cascade evidence (non-intervened agent's
-top-1 diverged during intervention):          48 (34%)
+Mechanism classification (non-exclusive):
+  Direct loss present (A1):       141/142 (99.3%)
+  Cascade present (A2):            48/142 (33.8%)
+  A1 only:                          94 (66.2%)
+  A2 only:                           1 (0.7%)
+  Both A1+A2:                       47 (33.1%)
+  Neither:                           0
 ```
 
 ### Verdict: DERIVABLE DYNAMICALLY
@@ -457,17 +456,15 @@ a "late bloomer": a memory that was NEUTRAL at step 39, crossed
 the threshold during the intervention window in control, but didn't
 in intervention because contributors were lost.
 
-Two mechanisms, both derivable from observable trajectory state:
-1. **Direct loss (66%)**: the memory needed intervened agents'
-   contributions to reach T. Those are zeroed every step.
-2. **Cascade (34%)**: the memory needed non-intervened agents'
-   contributions that never came because those agents' recalls
-   diverged during intervention and they reinforced different
-   memories.
+Direct contributor loss is nearly universal (141/142, 99.3%).
+Cascade effects co-occur in 48/142 cases (33.8%), but pure cascade
+accounts for only 1/142 (0.7%).
 
-The cascade is real but small — only 1 case is pure cascade (A2
-only), and 34% have some cascade evidence. The dominant mechanism
-is direct loss of intervened contributions.
+The cascade is real but small. It exists: intervention on one agent
+changes the shared state, which changes another agent's recall,
+which changes what that agent reinforces. But it does not rescue
+H10 — it produces only marginal flips, not the collective path
+dependence originally claimed.
 
 ### What this means
 
@@ -475,14 +472,121 @@ The residual is 100% explained by observable trajectory state:
 contributor counts + reinforcement logs. No emergent mechanism
 needed.
 
-The "collective resilience" is:
-- Threshold rule (k* = N-T for low T)
-- + heterogeneous contributor topology (determines which memories
+The observed collective-resilience effect in this experimental
+system is accounted for by:
+- The threshold rule (k* = N-T for low T)
+- Heterogeneous contributor topology (determines which memories
   can flip)
-- + intervention-window dynamics (late bloomers crossing threshold)
+- Intervention-window dynamics (late bloomers crossing threshold,
+  cascades)
 
-All three components are algebraic and observable. No emergent
-collective property is needed.
+All three components are algebraic and observable within this model.
+This is not a universal claim about collective memory — it is a
+derivation for this system's conditions.
+
+---
+
+## Exp25: Factorial amputation of persistent adaptive state
+
+### Question
+
+Exp19 found that retrieval + binary adaptive state (REINFORCED/
+NEUTRAL) suffices for H8. But "state" is still a black box. What is
+the minimum sufficient state for path dependence?
+
+### Design
+
+Dissect state along three axes:
+
+  DISCRETENESS:  binary {NEUTRAL, REINFORCED} vs scalar magnitude
+  HISTORY:       accumulates vs last-touch only
+  PERSISTENCE:   permanent vs decays vs reset-per-query
+
+Variants (retrieval + state, NO Raven machinery):
+
+  V0 binary    : REINFORCED/NEUTRAL, top-1 -> REINFORCED, mult 1.5
+                 (Exp19 baseline — persists, accumulates)
+  V1 scalar    : count-based, mult = 1 + 0.05*min(count, 20)
+                 (richer state — does magnitude matter?)
+  V2 last_only : boost only if reinforced previous step
+                 (1-step history, no accumulation)
+  V3 decay     : REINFORCED expires after 20 steps without
+                 re-reinforcement
+  V4 reset     : state cleared between queries (should be inert)
+  V5 stateless : no state multiplier (B0 sanity)
+
+20 seeds, 120 queries, intervention at steps 40-70.
+
+### Results
+
+```
+Variant        During  Washout  Nearest  Flips     CF%
+binary         0.0063   0.0112   0.0000     11  100.0%
+scalar         0.0353   0.0496   0.0000     43  100.0%
+last_only      0.0303   0.0012   0.0000      1  100.0%
+decay          0.0863   0.2476   0.0000    182  100.0%
+reset          0.0000   0.0000   0.0000      0      —
+stateless      0.0000   0.0000   0.0000      0      —
+```
+
+### Analysis per axis
+
+**Discreteness** (binary vs scalar): scalar shows 4.4x more
+divergence (0.0496 vs 0.0112) and 4x more flips (43 vs 11).
+Magnitude carries information — a count remembers HOW MANY times a
+memory was reinforced, not just WHETHER it was. The intervention
+removes more information when the state is richer.
+
+**History** (binary vs last_only): last_only nearly kills H8
+(0.0012, 1 flip). Accumulation beyond 1 step is NECESSARY — a state
+that only remembers the previous step cannot carry path dependence.
+
+**Persistence** (binary vs decay): decay amplifies to 0.2476 with
+182 flips — but through a QUALITATIVELY DIFFERENT mechanism. With
+decay_k=20 and blocked reinforcement during steps 40-70, ALL
+memories decay to NEUTRAL by step ~60. The intervention doesn't
+just freeze the state — it wipes it entirely. Post-washout, the
+arm rebuilds from all-NEUTRAL, producing massive divergence.
+
+This is NOT "same H8 amplified." It is a state wipe + divergent
+rebuild. The mechanism differs: binary blocks accumulation (frozen
+state); decay wipes state (catastrophic reset).
+
+**Carry-over** (reset/stateless): both produce exactly 0. Without
+persistence across queries, the machinery is inert. Confirmed
+negative control.
+
+### Verdict: minimum sufficient state = persistent accumulating flag
+
+The minimum state for H8 is:
+
+  **A persistent accumulating flag per memory, updated on recall.**
+
+  - Binary (1 bit, saturating) suffices for the effect to exist.
+  - Scalar magnitude amplifies the effect ~4x (richer state loses
+    more information to intervention).
+  - Accumulation beyond 1 step is REQUIRED (last_only kills H8).
+  - Permanence is NOT required for the effect to exist (decay shows
+    MORE divergence), but decay changes the mechanism: with
+    perishable state, blocking reinforcement becomes a state wipe.
+  - Persistence across queries is REQUIRED (reset/stateless = 0).
+
+### What this means
+
+The surviving organ is even smaller than expected. It's not
+"adaptive state" in some rich sense — it's a counter that can be
+as small as 1 bit. The state must:
+
+1. Persist across queries (not reset)
+2. Accumulate over multiple recalls (not just last-touch)
+
+Beyond that minimum, richer state (scalar magnitude) amplifies the
+effect, and perishable state (decay) changes the intervention
+semantics entirely (freeze -> wipe).
+
+CF closure is 100% across all variants that produce flips — the
+state is always the causal antecedent, regardless of its
+expressiveness.
 
 ---
 
@@ -499,6 +603,7 @@ collective property is needed.
 | H10a (collective resilience) | DERIVABLE — algebraic + topology + dynamics | N/A |
 | H11 (chess specificity) | INCONCLUSIVE | N/A |
 | H12 (stateful retrieval) | REPRODUCES H8 | N/A |
+| H13 (minimum state) | 1-bit accumulating persistent flag | N/A |
 
 ### What we learned
 
@@ -524,8 +629,16 @@ collective property is needed.
    topology predicts threshold position (8/9 configs, 91% precision).
    Exp23 showed the residual is 100% "late bloomers" — memories that
    crossed the threshold during the intervention window in control
-   but not in intervention, due to direct contributor loss (66%) or
-   behavioral cascade (34%). No emergent mechanism needed.
+   but not in intervention, due to direct contributor loss (99.3%
+   present) or behavioral cascade (33.8% present). No emergent
+   mechanism needed.
+
+5. **The minimum sufficient state is 1 bit per memory.** Exp25
+   dissected "persistent adaptive state" factorially: binary
+   REINFORCED/NEUTRAL suffices for H8. Scalar magnitude amplifies
+   ~4x. Accumulation beyond 1 step is required. Permanence is not
+   required (decay changes mechanism to state wipe, not freeze).
+   Persistence across queries is required (reset/stateless = 0).
 
 ### Implications for the original hypothesis
 
@@ -537,6 +650,11 @@ but the crucial clarification is:
 
 **The boundary is not retrieval vs memory. It is stateless retrieval
 vs stateful adaptive retrieval.**
+
+And Exp25 dissected the state itself:
+
+**The minimum sufficient state is a persistent accumulating flag
+per memory — as little as 1 bit, updated on recall.**
 
 - The missing ingredient is NOT graph propagation or STDP.
 - The missing ingredient is persistent adaptive state.
