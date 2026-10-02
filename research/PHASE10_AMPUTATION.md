@@ -590,6 +590,108 @@ expressiveness.
 
 ---
 
+## Exp26: State compression — how many bits does H8 need?
+
+### Question
+
+Exp25 found that a persistent binary flag per memory suffices for
+H8. But "1 bit per memory" with 100 memories is still 100 bits of
+history. How much persistent information is actually required?
+
+### Design
+
+Compress the state vector by sharing flags across groups:
+
+  100 bits: 1 flag/memory          (Exp25 binary)
+   50 bits: 1 flag/pair
+   25 bits: 1 flag/group of 4
+   10 bits: 1 flag/group of 10
+    5 bits: 1 flag/group of 20
+    2 bits: 1 flag/group of 50
+    1 bit : 1 global flag
+    0 bits: stateless
+
+When ANY memory in a group is reinforced (top-1), the group's flag
+is set. The boost (1.5) applies to ALL memories in the group.
+
+Also: same bit budget, different assignment:
+  - contiguous: adjacent memories (by angle) share a flag
+  - hash: memories assigned to groups by hash (random)
+
+20 seeds, 120 queries, intervention at steps 40-70.
+
+### Results
+
+**Bit sweep (contiguous):**
+
+```
+Groups   Bits   During  Washout  Flips
+  100    100   0.0063   0.0112     11
+   50     50   0.0040   0.0068      4
+   25     25   0.0153   0.0188     10
+   10     10   0.0247   0.0206      2
+    5      5   0.0000   0.0000      0
+    2      2   0.0000   0.0000      0
+    1      1   0.0000   0.0000      0
+    0      0   0.0000   0.0000      0
+```
+
+The curve is non-monotonic: divergence drops from 100→50, rises at
+25→10, then crashes to zero below 10. There is a threshold around
+10 bits — below that, no divergence.
+
+**Assignment comparison** (same bits, different grouping):
+
+```
+Groups   Assignment  Washout  Flips
+   10   contiguous   0.0206      2
+   10         hash   0.0128      0
+   25   contiguous   0.0188     10
+   25         hash   0.0002      0
+   50   contiguous   0.0068      4
+   50         hash   0.0030      3
+```
+
+Contiguous groups produce 2-100x more divergence than hash groups
+at the same bit budget. The LOCATION of information matters, not
+just the amount.
+
+### Verdict: threshold + location matter
+
+**A threshold exists.** Below ~10 bits (contiguous), no divergence.
+Above, H8 appears. This is a capacity threshold — the system needs
+enough information to discriminate which memories were reinforced.
+
+**Location matters.** Contiguous grouping (semantically coherent
+clusters) produces dramatically more divergence than hash grouping
+(scattered). At 25 bits: contiguous 0.0188 vs hash 0.0002 (94x).
+The information isn't just "how many bits" but "where the bits are
+allocated relative to the embedding space."
+
+**Non-monotonicity.** The peak divergence is at 10 groups, not 100.
+Fewer groups = coarser information = larger boost footprints. With
+groups of 10 (36 degrees of embedding space), a flag boost affects
+a meaningful cluster. With groups of 50 or 100, the per-memory
+flag is too fine-grained to matter at top-k=10 resolution.
+
+### What this means
+
+The minimum information budget for H8 is ~10 bits under these
+conditions, and the bits must be allocated to semantically coherent
+groups. A single global bit produces nothing. Per-memory flags
+work but are finer-grained than needed.
+
+The "1 bit per memory" from Exp25 is actually 100 bits for 100
+memories. Exp26 shows ~10 bits suffice — but only if those bits
+cover coherent regions of the memory space. It's not just quantity
+of information — it's which memories share a flag.
+
+This is a stronger and more precise answer: path dependence needs
+not just persistent state but persistent state allocated to
+semantically meaningful partitions of the memory space.
+
+---
+
 ## Cross-experiment synthesis
 
 ### The amputation results

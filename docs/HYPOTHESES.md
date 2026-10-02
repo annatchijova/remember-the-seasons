@@ -386,6 +386,38 @@ more divergence via a different mechanism: state wipe + rebuild).
 Persistence across queries is required. CF closure is 100% across
 all variants that produce flips.
 
+### State compression (Exp26, OBSERVED)
+
+Exp25 found that 1 bit per memory suffices. But 100 memories = 100
+bits of history. How much persistent information is required?
+
+Compress the state vector by sharing flags across groups:
+
+```
+Groups   Bits   Washout  Flips
+  100    100     0.0112     11
+   50     50     0.0068      4
+   25     25     0.0188     10
+   10     10     0.0206      2
+    5      5     0.0000      0
+    1      1     0.0000      0
+    0      0     0.0000      0
+```
+
+Non-monotonic: drops 100→50, rises 25→10, crashes below 10.
+Threshold around 10 bits.
+
+Assignment comparison (same bits, different grouping):
+- 25 contiguous: 0.0188 vs 25 hash: 0.0002 (94x)
+- 10 contiguous: 0.0206 vs 10 hash: 0.0128 (1.6x)
+- Location matters: coherent clusters >> scattered groups
+
+Verdict: threshold at ~10 bits + location matters. The information
+must be allocated to semantically coherent partitions of the memory
+space. A global bit produces nothing. The "1 bit per memory" from
+Exp25 is actually 100 bits for 100 memories — ~10 suffice, but only
+if they cover coherent regions.
+
 ## Valid negative outcomes (any is a successful result)
 
 - RAG (B0/B1/B2) is sufficient for most tested properties.
