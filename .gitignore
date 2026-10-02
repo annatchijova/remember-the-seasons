@@ -1,0 +1,25 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.pytest_cache/
+.venv/
+venv/
+
+# Local artifacts / experiments output
+*.db
+*.sqlite
+*.sqlite3
+runs/
+outputs/
+results/
+
+# Never commit secrets
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+
+# Editor / OS
+.DS_Store
