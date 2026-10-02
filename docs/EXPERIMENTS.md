@@ -57,7 +57,9 @@ measurable properties that retrieval alone does not represent?
 | `exp26b_falsification.py` | Is the threshold real? Does location matter? | BOTH FALSIFIED — no clean threshold; scattered ≥ coherent |
 | `exp27_explain_7v8.py` | Why does ng=7 produce H8 and ng=8 not? | OBSERVED — late-flagged group + feedback loop; partition accident |
 | `exp29_feedback_mechanism.py` | When does flag divergence self-amplify? | WEAK FEEDBACK — top-1 flips 20% of flag-diff steps; ng=7 grows slowly, ng=11/25 self-correct |
-| `exp30_mediator_intervention.py` | Does the late-flag→top-1→reinforcement chain mediate? | CAUSAL MEDIATION — rescue kills it (necessary), induce creates it (sufficient), top1_swap converges (channel confirmed) |
+| `exp30_mediator_intervention.py` | Does the late-flag→top-1→reinforcement chain mediate? | CONFIRMED (scoped) — rescue kills, induce creates, top1_swap converges; audited |
+| `exp31_asymmetry_duration.py` | Does asymmetry duration predict divergence? | PERSISTENCE MODULATES — P(div) saturates d≥4, magnitude scales with hold; duration vs blocked-transitions confound unresolved → Exp32 |
+| `exp32_duration_vs_count.py` | Duration per se vs blocked-transition count? | COUNT, NOT DURATION — washout tracks suppressed re-flag count; early_k≡hold at equal count; modest early-position bonus |
 
 ## Supporting infrastructure
 

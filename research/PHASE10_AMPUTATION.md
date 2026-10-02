@@ -1108,7 +1108,7 @@ int arm creates a large artificial asymmetry vs control's sparse
 flags — it produces divergence (0.88) by construction, not by
 mechanism. Rescue is the surgical test.
 
-### Verdict: CAUSAL MEDIATION CONFIRMED
+### Verdict: CAUSAL MEDIATION CONFIRMED (with audit caveats)
 
 The chain is:
 ```
@@ -1122,6 +1122,180 @@ we can turn the divergence OFF by flagging the late group (rescue)
 and turn it ON in a quiet seed by unflagging an active group
 (induce). The mediator is the reinforcement channel — swapping the
 reinforced memory to control's choice collapses the divergence.
+
+### Post-hoc audit (before freezing the claim)
+
+Three checks were run on the Exp30 implementation after the
+positional-argument bug fix:
+
+1. **Natural arms reproduce Exp29 bit-identically.** 0 mismatches
+   across 30 seeds × 120 steps. The engines are equivalent.
+
+2. **Rescue produces flag sets identical to control at t=70.**
+   Verified directly ({1,3,4,6} vs {1,3,4,6}). CAVEAT: in this
+   engine the ONLY persistent state is the flag vector, so equal
+   flags at t=70 force identical trajectories — the collapse is
+   partly tautological. What rescue genuinely establishes is
+   narrower and still useful: **there is no hidden divergence
+   channel** — the entire effect is carried by flag-state
+   asymmetry. "Necessary" here means "necessary within this state
+   representation".
+
+3. **Induce asymmetry is exactly one group** ({4} at t=70 for
+   seed 0 — surgical). The 3/24 seeds where induce FAILED (3, 10,
+   11) show a mechanism-consistent failure mode: the unflagged
+   group is re-flagged immediately at the first post-window
+   reinforcement (it lands top-1 at step 70), so the asymmetry
+   dies before affecting recall. Sufficiency requires the
+   asymmetry to PERSIST, not merely exist at one instant.
+
+Conclusion: the mediation claim survives, scoped as: within this
+binary-flag state representation, the unset-flag → top-1-diff →
+reinforcement-diff loop is the sole carrier of path-dependent
+divergence.
+
+---
+
+## Exp31: Does asymmetry duration causally predict divergence?
+
+### Question
+
+Exp30's audit found that induce fails on 3/24 seeds because the
+unflagged group re-flags at the first post-window reinforcement —
+the asymmetry dies before entering the loop. Refined hypothesis:
+
+```
+unflagged bit -> persistent asymmetry -> asymmetry survives
+long enough to alter a ranking -> top-1 diff -> reinforcement
+diff -> future divergence
+```
+
+Does asymmetry DURATION causally predict divergence?
+
+### Design
+
+24 quiet seeds (natural intervention produced no divergence —
+no late flags), ng=7. Manipulate how long the induced asymmetry
+is held: the induced group's re-flagging is suppressed for d
+post-window steps, d ∈ {0,1,2,4,8,16,32,50}. d=0 reproduces
+Exp30's induce arm (asymmetry can die at first reinforcement).
+
+### Results
+
+```
+Quiet seeds (n=24):
+ d     P(div)   mean wash   mean t1diff
+ 0      0.88     0.186       0.110
+ 1      0.88     0.187       0.110
+ 2      0.92     0.192       0.112
+ 4      1.00     0.238       0.139
+ 8      1.00     0.245       0.142
+16      1.00     0.340       0.193
+32      1.00     0.409       0.233
+50      1.00     0.427       0.243
+
+Divergent seeds (n=6): saturated at 1.00 for all d —
+natural late flags already provide persistent asymmetry.
+```
+
+### Verdict: ASYMMETRY PERSISTENCE MODULATES DIVERGENCE UNDER CONTROLLED HOLD
+
+Extending the enforced lifetime of the induced state asymmetry
+increases both the incidence and magnitude of downstream
+divergence. Probability saturates by d=4 in this protocol, while
+divergence magnitude continues increasing through d=50.
+
+**Important confound, kept explicit:** longer holds do not only
+keep the asymmetry alive longer — they also suppress more normal
+re-flag transitions. This experiment does NOT isolate "lifetime of
+state asymmetry" from "cumulative consequences of enforcing that
+asymmetry". What it establishes:
+
+- Surgically prolonging the asymmetry rescues all three Exp30
+  induce failures (P(div) 0.88 -> 1.00 by d=4).
+- Magnitude scales with hold length.
+- Whether the causal variable is duration per se, or the number
+  of blocked state transitions accumulated during that duration,
+  is unresolved — that is Exp32's question.
+
+The conservative causal variable remains:
+
+> a persistent state asymmetry that remains causally available
+> long enough to modify a later transition.
+
+---
+
+## Exp32: Duration vs blocked-transition count
+
+### Question
+
+Exp31's hold_d conflates two variables: elapsed asymmetry lifetime
+and the number of suppressed re-flag transitions during that
+window. A hold of 50 steps blocks a re-flag only when the induced
+group actually lands top-1 during those steps — which happened
+~2.4 times on average, not 50.
+
+Which variable is causal: duration or blocked count?
+
+### Design
+
+24 quiet seeds, ng=7, same induced gid per seed.
+
+  hold_d   — continuous suppression for d post-window steps
+  early_k  — suppress only the first k re-flag ATTEMPTS
+  late_k   — allow re-flag, then unflag at step 90 and suppress
+             k attempts (same blocked count, later placement)
+
+n_blocked logged per cell: the actual count of suppressed
+reinforcement transitions.
+
+### Results
+
+```
+hold_d:   d    P(div)  wash    n_blocked
+          0     0.88   0.186    0.00
+          4     1.00   0.238    0.54
+         16     1.00   0.340    1.33
+         50     1.00   0.427    2.42
+
+early_k:  k    P(div)  wash    n_blocked
+          4     1.00   0.399    1.83
+          8     1.00   0.427    2.42  <- identical to hold_d=50
+
+late_k:   k    P(div)  wash    n_blocked
+          4     1.00   0.338    1.46
+          8     1.00   0.339    1.62
+```
+
+**Matched-count comparison:** at equal n_blocked, hold and early
+arms produce similar washout. **Zero seeds** show washout growth
+between d=16 and d=50 at constant n_blocked. Within-duration
+correlations of washout ~ n_blocked are small/negative.
+
+### Verdict: COUNT, not duration
+
+The Exp31 "duration effect" decomposes to a dose-response on
+**suppressed state transitions**: longer holds block more re-flag
+attempts, and washout tracks that count. Elapsed asymmetry
+lifetime contributes nothing measurable once count is fixed —
+at equal n_blocked, d=4 and d=50 are indistinguishable.
+
+Modest timing effect: early_k > late_k at k>=4 (0.43 vs 0.34) —
+asymmetry adjacent to the intervention window is somewhat more
+consequential than an equivalent count placed later, but the
+difference is small.
+
+The causal variable refines once more:
+
+> divergence scales with the number of times the system was
+> prevented from healing a state asymmetry — each blocked
+> re-flag is a repeated denial of self-correction, and each
+> denial extends the window in which the asymmetry can reach a
+> ranking boundary.
+
+This also re-reads Exp31 cleanly: the hold was a proxy for
+attempt count. The system's natural healing rate (how often the
+induced group becomes top-1) is what converts duration into dose.
 
 ---
 

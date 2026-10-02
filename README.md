@@ -1,5 +1,8 @@
 # Remember the Seasons — Experimental Research Workspace
 
+> You asked us to build the next frontier of AI. We cannot claim to
+> have revolutionized it. This is our best attempt in one month.
+
 > STATUS: research / archaeology phase. This is a LAB, not a product.
 > Do NOT build "Remember the Seasons" here. Do NOT integrate systems because
 > they look compatible. Inspect, compare, mutilate, and throw away ideas safely.

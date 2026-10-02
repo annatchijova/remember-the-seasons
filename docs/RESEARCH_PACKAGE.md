@@ -211,7 +211,9 @@ and `research/PHASE7_STATISTICAL_TRIALS.md` for full results.
 | Exp26b (falsification) | COMPLETE | No threshold; location claim falsified; scattered >= coherent |
 | Exp27 (why 7 vs 8) | OBSERVED | Late-flagged group + feedback loop; partition accident, not bit count |
 | Exp29 (feedback mechanism) | WEAK | Top-1 flips 20% of flag-diff steps; ng=7 grows slowly, ng=11/25 self-correct |
-| Exp30 (mediator intervention) | CONFIRMED | Rescue=0.0000 (necessary), induce=21/24 (sufficient), top1_swap=0.029 (channel mediates) |
+| Exp30 (mediator intervention) | CONFIRMED (scoped) | Rescue=0.0000 (no hidden channel), induce=21/24 (sufficient when asymmetry persists), top1_swap=0.029 (reinforcement channel mediates); audited post-hoc |
+| Exp31 (asymmetry duration) | PERSISTENCE MODULATES | P(div) saturates d≥4, magnitude scales; duration vs blocked-count confound |
+| Exp32 (duration vs count) | COUNT NOT DURATION | Washout tracks suppressed re-flag transitions (n_blocked), not elapsed hold; early position modest bonus |
 
 ### Hypothesis scoreboard
 
