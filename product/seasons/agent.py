@@ -1,0 +1,153 @@
+"""SeasonsAgent — the product loop.
+
+    remember(text)      -> field.store            (custody event: STORED)
+    ask(question)       -> recall -> llm -> decision -> reinforce
+                           (receipt + DECISION_USED_MEMORY + REINFORCED
+                            / STATE_CHANGED events, all in one txn)
+    season(question, t) -> recall(as_of=t)        (historical view:
+                           what would this query have returned then?)
+    what_if(question, world) -> compare_worlds    (sealed counterfactual)
+
+Reinforcing served memories is the deliberate, audited act that closes
+the adaptive loop the research measured: recall -> use -> reinforcement
+-> future state. Skipping it would make the field a static index.
+"""
+
+from __future__ import annotations
+
+import sqlite3
+from typing import Any
+
+from mneme import causality, counterfactual, custody, field
+
+from . import actors, db, embed, llm
+
+POLICY_VERSION = "seasons/0.1"
+
+
+class SeasonsAgent:
+    def __init__(self, db_path: str = ":memory:"):
+        self.conn: sqlite3.Connection = db.open_db(db_path)
+        self.cur = self.conn.cursor()
+        actors.bootstrap(self.cur)
+        self.conn.commit()
+        self._seq = 0
+        self._decisions = 0
+
+    # ---------- write path ----------
+
+    def remember(self, content: str, *, topic: str | None = None,
+                 claim: str | None = None) -> str:
+        mid = f"mem-{self._seq:04d}"
+        self._seq += 1
+        field.store(
+            self.cur, memory_id=mid, actor_id=actors.AGENT,
+            reason="agent observed/experienced this",
+            content=content,
+            embedding=field.quantize_embedding(embed.embed(content)),
+            embedding_model="seasons-local" if not _nebius() else "nebius",
+            topic=topic, claim=claim)
+        self.conn.commit()
+        return mid
+
+    # ---------- the loop ----------
+
+    def ask(self, question: str, *, top_k: int = 5) -> dict[str, Any]:
+        """Recall -> answer -> sealed decision -> reinforce used memory.
+
+        Returns the answer text plus the forensic artifacts so a caller
+        can show WHY this answer, not just what it was.
+        """
+        hits, receipt = field.recall(
+            self.cur,
+            query_embedding=field.quantize_embedding(embed.embed(question)),
+            top_k=top_k, actor_id=actors.AGENT)
+        field.persist_receipt(self.cur, receipt)
+
+        served = [h.memory_id for h in hits]
+        answer = llm.chat([
+            {"role": "system",
+             "content": "Answer only from the provided memories. If none "
+                        "apply, say you have no record."},
+            {"role": "user",
+             "content": f"QUESTION: {question}\nMEMORIES:\n" +
+                        ("\n".join(f"- {h.content}" for h in hits)
+                         if hits else "(none)")}])
+
+        if served:
+            causality.record_decision(
+                self.cur, receipt=receipt, used_memory_ids=served,
+                decision_sha256=causality.decision_hash(answer),
+                policy_version=POLICY_VERSION, actor_id=actors.AGENT,
+                reason=f"answered: {question[:80]}",
+                decision_id=f"dec-{self._decisions:04d}")
+            self._decisions += 1
+
+            # Adaptive close: memories that shaped an answer get
+            # reinforced — an audited custody event, not a silent bump.
+            for mid in served:
+                field.reinforce(
+                    self.cur, memory_id=mid, actor_id=actors.AGENT,
+                    reason="used in a decision this turn")
+        self.conn.commit()
+
+        return {"answer": answer,
+                "receipt": receipt.receipt_sha256,
+                "served": served,
+                "withheld": {"custody": receipt.excluded_custody,
+                             "forgotten": receipt.excluded_forgotten,
+                             "inhibited": receipt.excluded_inhibited}}
+
+    # ---------- seasons: the product's name primitive ----------
+
+    def season(self, question: str, as_of: str, *, top_k: int = 5):
+        """The same query, in an earlier season of the field.
+
+        as_of is a canonical UTC microsecond timestamp. The answer is
+        what the agent legitimately had at that instant — reconstructed
+        by replaying custody chains truncated at t, not by trusting a
+        snapshot column. Nothing is written; a season is a view.
+        """
+        hits, receipt = field.recall(
+            self.cur,
+            query_embedding=field.quantize_embedding(embed.embed(question)),
+            top_k=top_k, as_of=as_of, actor_id=actors.OPERATOR)
+        return {"hits": [(h.memory_id, h.content, str(h.score))
+                         for h in hits],
+                "receipt": receipt.receipt_sha256,
+                "state_at": field.logical_state_at(self.cur, as_of)}
+
+    def what_if(self, question: str, world: dict[str, str] | None,
+                *, top_k: int = 5):
+        """Sealed counterfactual: the same query against a hypothetical
+        custody world. The receipt carries the override inside its
+        digest — a what-if receipt can never pass for a real one."""
+        return counterfactual.compare_worlds(
+            self.cur,
+            query_embedding=field.quantize_embedding(embed.embed(question)),
+            world_a=None, world_b=world, top_k=top_k,
+            actor_id=actors.OPERATOR)
+
+    # ---------- forensics ----------
+
+    def chain(self, memory_id: str):
+        """Full custody chain of one memory — its whole history."""
+        self.cur.execute(
+            "SELECT seq, event_type, actor_id, reason, created_at "
+            "FROM custody_chain WHERE memory_id=? ORDER BY seq", (memory_id,))
+        return self.cur.fetchall()
+
+    def impact(self, memory_id: str):
+        """Blast radius: which recalls served it, which decisions used it."""
+        return causality.impact(self.cur, memory_id)
+
+    def export_bundle(self) -> str:
+        """Sealed evidence bundle — verifiable offline by a party that
+        distrusts this process entirely (verify_offline.py)."""
+        from mneme import bundle
+        return bundle.export_bundle(self.cur)
+
+
+def _nebius() -> bool:
+    import os
+    return bool(os.environ.get("NEBIUS_API_KEY"))

@@ -1,0 +1,93 @@
+#!/usr/bin/env python3
+"""Remember the Seasons — skeleton demo.
+
+The product claim in one script: the same question asked at different
+points in the field's history returns different retrievals, and the
+difference is explainable from sealed evidence — not asserted.
+
+    python3 demo.py                          # offline, deterministic
+    NEBIUS_API_KEY=... python3 demo.py       # real model via Nebius
+"""
+
+from __future__ import annotations
+
+import datetime
+import os
+import subprocess
+import sys
+import tempfile
+
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+
+from seasons import agent
+
+
+def section(t):
+    print(f"\n{'=' * 70}\n{t}\n{'=' * 70}")
+
+
+def now() -> str:
+    return datetime.datetime.now(datetime.timezone.utc).strftime(
+        "%Y-%m-%dT%H:%M:%S.%f+00:00")
+
+
+def main():
+    a = agent.SeasonsAgent()
+
+    section("1. Season 1 — the field learns")
+    a.remember("The deploy gate requires staging to pass.",
+               topic="deploy-policy")
+    a.remember("Rollbacks run via `ops rollback <release>`.")
+    q = "What do I need before deploying?"
+    r1 = a.ask(q)
+    print(f"ask: {q!r}")
+    print(f"answer: {r1['answer']}")
+    print(f"served: {r1['served']}")
+    print(f"receipt: {r1['receipt'][:24]}…")
+    t1 = now()   # the cut between seasons
+
+    section("2. Season 2 — history happens")
+    a.remember("Policy change: staging gate is now mandatory for ALL "
+               "deploys, including hotfixes.", topic="deploy-policy")
+    a.ask("Can I skip staging for a hotfix?")
+    r2 = a.ask(q)
+    print(f"same question asked again:")
+    print(f"answer: {r2['answer']}")
+    print(f"served: {r2['served']}")
+    changed = r1["receipt"] != r2["receipt"]
+    print(f"different receipt than season 1: {changed}")
+
+    section("3. Remember the season — replay the past")
+    s = a.season(q, as_of=t1)
+    print(f"query {q!r} at as_of={t1[:23]}…")
+    print("what the field would have served THEN:")
+    for i, (mid, content, score) in enumerate(s["hits"]):
+        print(f"  #{i+1}  {mid}  {content!r}")
+    print(f"receipt {s['receipt'][:24]}… — computed from chains truncated")
+    print("at t1, not from any stored snapshot.")
+
+    section("4. Why did it change? — the chain answers")
+    for mid in set(r2["served"]) - set(r1["served"]):
+        print(f"{mid} entered season 2; its chain:")
+        for seq, et, actor, reason, ts in a.chain(mid):
+            print(f"  {seq:>2} {et:<22} by {actor:<16} {reason[:40]}")
+    if r1["served"]:
+        rep = a.impact(r1["served"][0])
+        print(f"impact({r1['served'][0]}): DIRECT receipts "
+              f"{len(rep.direct_receipts)}, decisions "
+              f"{len(rep.direct_decisions)}")
+
+    section("5. Bundle — sealed evidence for a distrusting auditor")
+    bj = a.export_bundle()
+    with tempfile.NamedTemporaryFile("w", suffix=".json",
+                                     delete=False) as f:
+        f.write(bj)
+        path = f.name
+    r = subprocess.run([sys.executable, "verify_offline.py", path],
+                       capture_output=True, text=True)
+    print(r.stdout.strip() or r.stderr.strip())
+    os.unlink(path)
+
+
+if __name__ == "__main__":
+    main()
