@@ -47,6 +47,8 @@ measurable properties that retrieval alone does not represent?
 |---|---|---|
 | `exp19_stateful_baseline.py` | H12: retrieval + state, no Raven machinery | BASELINE REPRODUCES H8; Raven amplifies ~2x |
 | `exp20_chess_behavioral.py` | H11: LLM + Stockfish behavioral assay | INCONCLUSIVE (n=1 informative seed) |
+| `exp24_chess_tost.py` | H11 done properly — preregistered + TOST | INCONCLUSIVE (CI crosses δ=30cp; 87% agreement, mixed-sign diffs) |
+| `exp28_variance_decomposition.py` | Does C↔I exceed LLM noise floor? | MARGINAL SIGNAL (D(C,I)=1.9x noise; deterministic context effects on minority of positions) |
 | `exp21_threshold_sweep.py` | Is k*=N-1 emergent or algebraic? | MOSTLY ALGEBRAIC (k*=N-T for T=1,2) |
 | `exp22_topology_prediction.py` | Can per-memory topology predict flips? | MOSTLY DERIVABLE (8/9 thresholds, 91% precision) |
 | `exp23_residual_decomposition.py` | What explains the residual? | DERIVABLE (100% late bloomers: direct loss 99.3% + cascade 33.8%) |
@@ -73,7 +75,9 @@ adaptive state** (REINFORCED/NEUTRAL that changes what gets recalled).
 - H10 collective contagion: falsified.
 - H10a collective resilience: fully derivable (threshold + topology +
   intervention-window dynamics).
-- H11 behavioral specificity: inconclusive.
+- H11 behavioral specificity: inconclusive for equivalence (TOST
+  fails at δ=30cp), but Exp28 found real deterministic context
+  effects on a minority of positions (D(C,I) = 1.9x noise floor).
 - H1 structural (RESONANT boost): not reproduced by retrieval-only
   baselines evaluated so far — but impossibility not shown.
 - H13 minimum state: binary flag suffices; accumulation and

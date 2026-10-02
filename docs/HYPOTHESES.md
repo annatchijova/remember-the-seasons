@@ -465,13 +465,40 @@ preregistered the full design before any chess evaluation:
 - Sham: same context twice (noise floor)
 
 Results: 3/16 seeds selected (2, 7, 11). Sham 14/15 (1cp noise).
-Move agreement 39/45 (87%). Nonzero diffs symmetric: +1, +32, -20,
--41, -639, +41. Mean -13.9 cp, 90% CI [-37.9, +10.1], TOST p=0.133.
+Move agreement 39/45 (87%). Nonzero diffs have mixed signs: +1,
++32, -20, -41, -639, +41. Mean -13.9 cp, 90% CI [-37.9, +10.1],
+TOST p=0.133.
 
 Verdict: INCONCLUSIVE — CI crosses -30cp. Most positions identical;
-diffs are symmetric (no systematic degradation); one -639 outlier
-prevents equivalence at delta=30. To resolve: more seeds, wider
-preregistered margin, or position filtering.
+nonzero diffs have mixed signs; no consistent directional
+degradation was observed. One -639 outlier prevents equivalence at
+delta=30. Resolution requires more power under the SAME protocol —
+widening delta or filtering positions post hoc would move the
+goalposts.
+
+### Variance decomposition (Exp28, OBSERVED)
+
+Does D(C,I) exceed the LLM's own stochasticity? 4 reps per
+condition per position, 3 seeds, 15 FENs, 360 calls:
+
+```
+D(C,C) = 18/270 = 0.067   <- LLM noise
+D(I,I) = 15/270 = 0.056   <- LLM noise
+D(C,I) = 93/720 = 0.129   <- noise + context effect
+ratio = 1.94x
+```
+
+Per-position detail separates noise from signal:
+- Marginal positions (e.g., pos 14): internally unstable in BOTH
+  conditions (cc=3/6, ii=3/6) — pure nondeterminism.
+- Real context effects (pos 8 seed 11): deterministic within each
+  condition (cc=0/6, ii=0/6) but different between (ci=16/16).
+  The Exp24 -639 outlier is a deterministic context effect, not
+  noise.
+
+Verdict: MARGINAL SIGNAL — the memory context causally affects a
+minority of chess decisions beyond LLM stochasticity, in mixed
+directions. H11 remains inconclusive for equivalence.
 
 ## Valid negative outcomes (any is a successful result)
 

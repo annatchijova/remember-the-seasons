@@ -867,9 +867,10 @@ decisions even with identical context.
 - 90% CI: [-37.9, +10.1]
 - TOST p = 0.1332
 
-The nonzero diffs are symmetric in sign — no systematic
-degradation. The -639 outlier (intervention arm played a BETTER
-move, g4h5 vs blunder g4g7) dominates the CI width.
+The nonzero diffs have mixed signs (3 positive, 3 negative) — the
+observed data do not show consistent directional degradation. The
+-639 outlier (intervention arm played a BETTER move, g4h5 vs
+blunder g4g7) dominates the CI width.
 
 ### Verdict: INCONCLUSIVE (rigorously)
 
@@ -879,13 +880,96 @@ inconclusive — not "we only had one seed" but "the equivalence
 margin was not met given observed variance."
 
 What the data supports: most positions (87%) produce identical
-moves; when moves differ, diffs are symmetric (mean ~0), not a
-degradation. What it does NOT establish: equivalence within 30cp —
-one large outlier (-639) prevents the CI from fitting the margin.
+moves; nonzero diffs have mixed signs with no consistent
+directional degradation. What it does NOT establish: equivalence
+within 30cp — one large outlier (-639) prevents the CI from fitting
+the margin.
 
-To reach a verdict we need either: more seeds (narrow the CI), a
-wider preregistered delta, or position filtering (positions where
-the LLM is decisive vs marginal).
+The correct way to resolve this is more power under the SAME
+preregistered protocol: same delta=30, same metric, same TOST,
+more independent units. Widening delta after observing these data,
+or filtering positions post hoc, would move the goalposts — a wider
+margin requires an external justification fixed before the new run.
+
+---
+
+## Exp28: Variance decomposition — does C vs I exceed noise?
+
+### Question
+
+Exp24 showed sham flips 1/15 at 1cp; intervention flips 6/45 at
+mean 129cp. But sham had 15 pairs vs 45 — unfair noise baseline.
+Does the C-vs-I change exceed what the LLM produces when nothing
+changes?
+
+### Design
+
+For each (seed, position): 4 reps with control context, 4 reps
+with intervention context. Measure disagreement within each
+condition vs between conditions.
+
+  D(C,C): same control context, different reps — LLM noise
+  D(I,I): same intervention context — LLM noise
+  D(C,I): control vs intervention — noise + context effect
+
+Seeds {2,7,11} from Exp24 calibration, 15 fixed FENs, 360 LLM
+calls total.
+
+### Results
+
+```
+Move disagreement rates:
+  D(C,C) = 18/270 = 0.067   <- LLM nondeterminism
+  D(I,I) = 15/270 = 0.056   <- LLM nondeterminism
+  D(C,I) = 93/720 = 0.129   <- noise + context effect
+  D(C,I) / max(within) = 1.94
+
+|regret diff| distributions:
+  within C:  mean=8.1  max=639
+  within I:  mean=8.4  max=639
+  between:   mean=21.1 max=639
+```
+
+### What the per-position data shows
+
+Two distinct categories of disagreement:
+
+**Pure noise** (e.g., pos 14): both conditions internally
+unstable (cc=3/6, ii=3/6). The model is marginal on this position
+regardless of context — flips are nondeterminism.
+
+**Real context effect** (pos 8 seed 11, pos 11 seeds 2/7):
+cc=0/6 AND ii=0/6 — deterministic within each condition — but
+ci=16/16 — DETERMINISTICALLY different between conditions. The
+memory context causally changes the move.
+
+The -639 diff from Exp24 is NOT noise: seed 11 pos 8, control
+always plays g4g7, intervention always plays g4h5. Consistent
+within each condition, different between. This is a real causal
+effect of the memory-context change.
+
+### Verdict: MARGINAL SIGNAL
+
+D(C,I) = 0.129 exceeds within-noise (0.067) by 1.9x. Some evidence
+of a context effect beyond LLM stochasticity, but near the noise
+boundary.
+
+When moves differ across conditions, the consequences are large
+(between 21.1cp vs within 8.4cp) — the flips that happen are real
+decision changes, not marginal wobbles.
+
+The refined picture:
+- Most positions (87%) are unaffected by memory context.
+- A minority of positions have DETERMINISTIC context effects
+  (the memory change flips the model's choice).
+- Another minority has noise-driven flips (marginal positions
+  where the model wobbles regardless of context).
+- The direction has mixed signs: sometimes intervention improves,
+  sometimes degrades. No consistent directional degradation.
+
+H11 remains inconclusive for equivalence, but the mechanism is now
+clearer: the memory context does causally affect a minority of
+chess decisions, in mixed directions.
 
 ---
 

@@ -201,7 +201,8 @@ and `research/PHASE7_STATISTICAL_TRIALS.md` for full results.
 | Exp18 (chess) | PIPELINE CHECK | Chess quality identical (0.0000) — pipeline integrity, NOT behavioral specificity |
 | Exp19 (stateful baseline) | BASELINE REPRODUCES | Retrieval + state suffices for H8; Raven amplifies ~2x |
 | Exp20 (chess behavioral) | INCONCLUSIVE | Preliminary evidence consistent with specificity; n=1 seed, no equivalence test |
-| Exp24 (chess TOST) | INCONCLUSIVE | Preregistered + TOST; CI [-37.9,+10.1] crosses δ=30cp; 87% move agreement, symmetric diffs |
+| Exp24 (chess TOST) | INCONCLUSIVE | Preregistered + TOST; CI [-37.9,+10.1] crosses δ=30cp; 87% move agreement, mixed-sign diffs |
+| Exp28 (variance decomp) | MARGINAL SIGNAL | D(C,I)=0.129 vs noise floor 0.067 (1.9x); deterministic context effects exist on a minority of positions |
 | Exp21 (threshold sweep) | MOSTLY ALGEBRAIC | k* = N-T for T=1,2; resilience is mechanical, not emergent |
 | Exp22 (topology prediction) | MOSTLY DERIVABLE | Per-memory topology predicts threshold (8/9); magnitude underestimated ~30-70% |
 | Exp23 (residual decomposition) | DERIVABLE | 100% of unexplained flips are late bloomers; no emergent mechanism |
@@ -223,7 +224,7 @@ and `research/PHASE7_STATISTICAL_TRIALS.md` for full results.
 | H9 (MNEME closure) | SURVIVES | CF2a: 100% closure with state-only replay (upgraded from WEAK) |
 | H10 (STIGMERGY collective) | FALSIFIED | Exp13 was tautological; Exp16 corrected with per-agent provenance |
 | H10a (collective resilience) | DERIVABLE | Exp21/22/23: threshold rule + topology + dynamics fully explain; no emergent mechanism |
-| H11 (chess orthogonal) | INCONCLUSIVE | Exp20: n=1 seed. Exp24: preregistered TOST, CI crosses δ=30cp; 87% agreement, symmetric diffs |
+| H11 (chess orthogonal) | INCONCLUSIVE | Exp24: preregistered TOST, CI crosses δ=30cp. Exp28: D(C,I) exceeds noise 1.9x — real context effects on a minority of positions, mixed signs |
 | H12 (stateful retrieval suffices) | SURVIVES | NEW (Exp19): retrieval + state reproduces H8; Raven amplifies ~2x but not necessary |
 | H13 (minimum sufficient state) | SURVIVES (corrected) | Exp25: binary flag suffices; Exp26b: no clean threshold — noisy curve |
 | H3-H6 | PARTIALLY TESTED | minimal MNEME/STIGMERGY only; full systems untested |
