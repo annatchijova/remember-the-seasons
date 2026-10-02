@@ -1,0 +1,2493 @@
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+"""
+RAVEN-MEMORY v1.1
+Adaptive Memory Substrate for Agentic Systems
+Track 1: MemoryAgent — Qwen Cloud Hackathon
+
+Architecture:
+- KDTree + k-NN graph for neighbourhood activation
+- Ternary states: REINFORCED (×1.5), NEUTRAL (×1.0), FORGOTTEN (×0.0)
+- Hop decay: score *= exp(-λ * hop_distance)
+- STDP: LTP (potentiation) + LTD (depression) synaptic dynamics
+- Ternary cell links: RESONANT / NEUTRAL / INHIBITORY
+- Recency scoring with configurable half-life
+- Stylometric fingerprinting for author verification
+- Audit hash-chain for tamper-proof traceability
+- SQLite persistence with lazy KDTree rebuild
+
+Authors: Anna Tchijova + Claude (VIGÍA AI Collective)
+License: Apache 2.0
+"""
+
+import json
+import os
+import sqlite3
+import hashlib
+import threading
+import time
+import math
+import logging
+from collections import deque
+from dataclasses import dataclass, field, asdict
+from typing import Deque, List, Dict, Tuple, Optional, Set, FrozenSet
+from enum import Enum
+from pathlib import Path
+
+logging.basicConfig(level=logging.INFO, format="%(asctime)s [%(levelname)s] %(name)s: %(message)s")
+logger = logging.getLogger("raven.engine")
+
+# P0: spectral must be imported BEFORE numpy — it sets the single-thread
+# BLAS env vars that underpin the determinism guarantee, and they only take
+# effect if no BLAS backend has been initialised yet. Importing it first
+# from the engine (the usual entry point) silences the late-import warning
+# for every downstream module (api_server, consolidator, demos).
+# Spectral module is optional — engine degrades gracefully without it.
+# The relative import is the real path (this module ships inside the
+# `raven` package); the absolute fallback only covers running this file
+# as a loose script. The old bare `from spectral import …` resolved in
+# neither case, so the whole spectral layer was silently dead in every
+# entry point that imported `raven.memory_engine`.
+try:
+    from .spectral import SpectralField, SpectralStore
+    _SPECTRAL_AVAILABLE = True
+except ImportError:
+    try:
+        from spectral import SpectralField, SpectralStore
+        _SPECTRAL_AVAILABLE = True
+    except ImportError:
+        _SPECTRAL_AVAILABLE = False
+
+import numpy as np
+from scipy.spatial import KDTree
+
+# Plan 2.6: optional approximate-NN backend. KDTree in 384 dimensions
+# degenerates to near-brute-force, and building the k-NN neighbour graph
+# (one k-query per stored cell) dominates the first recall at scale.
+try:
+    import hnswlib  # type: ignore
+    _HNSW_AVAILABLE = True
+except ImportError:
+    _HNSW_AVAILABLE = False
+
+if not _SPECTRAL_AVAILABLE:
+    # A missing optional module is a degradation the operator must be able
+    # to see — resonance/coherence silently reading 0.0 is exactly the kind
+    # of plausible-but-wrong output this project promises not to produce.
+    logger.warning(
+        "spectral module not importable — resonance/coherence metadata DISABLED "
+        "(recall results will carry resonance_score=0.0). This is a degraded mode."
+    )
+
+
+# ============================================================
+# CONFIG
+# ============================================================
+
+DB_PATH = Path("raven_memory.db")
+EMBEDDING_DIM = 384
+K_NEIGHBORS = 6
+HOP_LAMBDA = 0.15
+STDP_MAX_WEIGHT = 2.0
+STDP_MIN_WEIGHT = 0.0
+STDP_POTENTIATION = 0.10   # LTP: co-activated pairs strengthen
+STDP_DEPRESSION = 0.02     # LTD: previously active but absent weaken
+# P0: prune threshold for dead synaptic links. Float accumulation
+# (0.10 up / 0.02 down) can leave residues ~1e-17 that `== 0.0` never
+# matches — links would accumulate forever (progressive memory leak).
+STDP_PRUNE_EPS = 1e-9
+# P1: BFS search ceiling for hop-distance queries. Named (not magic):
+# with k=6 neighbours the graph diameter is far below this in practice;
+# the ceiling only bounds worst-case pathological geometries.
+MAX_HOP_SEARCH = 10
+ESTILOMETRIA_THRESHOLD = 0.5
+# P1: the historical profile used to be a SINGLE arbitrary sample (the first
+# fingerprint ever seen per author) — one atypical first text poisoned the
+# profile forever and generated destructive false positives. The profile is
+# now a rolling mean over the author's recent samples, per language, and
+# enforcement (auto-FORGOTTEN) is opt-in: by default a mismatch only raises
+# a ForensicAlert. Detection and action are separate concerns.
+# Scoring coefficients that were inline literals until v1.2 (the README
+# already promised every coefficient a name — these two had escaped):
+RESONANT_BOOST = 0.5        # additive boost per RESONANT hop, scaled by sim
+SYNAPTIC_SCORE_WEIGHT = 0.3  # weight of the STDP association term in final_score
+STYLO_PROFILE_WINDOW = 10   # samples kept per (author, language) profile
+STYLO_MIN_SAMPLES = int(os.environ.get("RAVEN_STYLO_MIN_SAMPLES", "3"))
+STYLO_ENFORCE = os.environ.get("RAVEN_STYLO_ENFORCE", "0") == "1"
+RECENCY_HALFLIFE = 86400.0  # seconds — 24 h half-life for recency bonus
+RECENCY_WEIGHT = 0.05       # small additive bonus for recently-accessed memories
+
+
+# ============================================================
+# ENUMS
+# ============================================================
+
+class MemoryState(Enum):
+    REINFORCED = 1.5
+    NEUTRAL = 1.0
+    FORGOTTEN = 0.0
+
+
+class LinkType(Enum):
+    RESONANT = 1.0
+    NEUTRAL = 0.0
+    INHIBITORY = -1.0
+
+
+# ============================================================
+# DATA CLASSES
+# ============================================================
+
+@dataclass
+class StylometricFingerprint:
+    functional_words: Dict[str, float]
+    avg_sentence_length: float
+    punctuation_profile: Dict[str, float]
+    fingerprint_hash: str
+    # P1: dominant language of the sample ("es" | "en" | "und").
+    # Default keeps backward compatibility with fingerprints persisted
+    # before this field existed.
+    language: str = "und"
+
+
+@dataclass
+class MemoryEntry:
+    memory_id: str
+    layer: str
+    content: str
+    content_hash: str
+    embedding: np.ndarray
+    state: MemoryState
+    cell_id: int
+    created_at: float
+    session_id: str
+    author_id: str
+    metadata: Dict
+    synaptic_links: Dict[str, float] = field(default_factory=dict)
+    last_activation: float = 0.0
+    recall_count: int = 0
+    fingerprint: Optional[StylometricFingerprint] = None
+
+    def to_dict(self) -> Dict:
+        d = asdict(self)
+        d["embedding"] = self.embedding.tolist()
+        d["state"] = self.state.name
+        d["fingerprint"] = asdict(self.fingerprint) if self.fingerprint else None
+        return d
+
+
+@dataclass
+class RecallResult:
+    memory: MemoryEntry
+    base_score: float
+    state_boost: float
+    hop_decay: float
+    synaptic_boost: float
+    recency_bonus: float
+    final_score: float
+    hop_distance: int
+    cell_id: int
+    source: str                  # "similarity" | "synaptic" | "resonant"
+    resonance_score: float = 0.0 # spectral eigen-mode resonance (epistemic, not ranking)
+    coherence_score: float = 1.0 # RESONANT/(RESONANT+INHIBITORY) links (epistemic flag)
+
+
+@dataclass
+class AuditLog:
+    timestamp: float
+    operation: str
+    query_text: Optional[str]
+    query_embedding: Optional[List[float]]   # legacy only — v3 stores qemb_sha256
+    cells_activated: List[int]
+    memories_retrieved: List[Dict]
+    total_candidates: int
+    filtered_by_state: int
+    filtered_by_estilometria: int
+    filtered_by_inhibitory: int
+    synaptic_activated: int
+    returned_to_agent: int
+    audit_hash: str
+    prev_hash: str
+    qemb_sha256: Optional[str] = None
+    # v4 — present only on "recall_intervention" rows (causal probes).
+    intervention: Optional[Dict] = None
+
+    def to_dict(self) -> Dict:
+        return asdict(self)
+
+
+@dataclass
+class ForensicAlert:
+    alert_id: str
+    timestamp: float
+    memory_id: str
+    detected_author: str
+    expected_author: str
+    mismatch_score: float
+    action_taken: str
+
+
+# ============================================================
+# CAUSAL INTERVENTION — types
+# ============================================================
+
+class InterventionError(ValueError):
+    """
+    An intervention could not be applied exactly as specified.
+
+    Raised rather than degraded on purpose. A silently ignored intervention
+    yields baseline == perturbed, i.e. delta = 0 — which is indistinguishable
+    from the genuine finding "this memory has no causal influence". A new
+    client talking to an old engine would then produce false evidence instead
+    of an error, so unsupported modes fail closed
+    (docs/INTERVENTION_DESIGN.md §2).
+    """
+
+
+class ExclusionReason:
+    """Why a memory is absent from a result set. Mechanisms, not a boolean."""
+    DIRECT_SUPPRESSION = "DIRECT_SUPPRESSION"  # silenced by the intervention itself
+    INHIBITED          = "INHIBITED"           # an INHIBITORY link silenced it
+    UNREACHABLE        = "UNREACHABLE"         # BFS never arrived
+    STATE_FILTER       = "STATE_FILTER"        # FORGOTTEN
+    LAYER_FILTER       = "LAYER_FILTER"        # layer_filter excluded it
+    STYLOMETRY         = "STYLOMETRY"          # quarantined under RAVEN_STYLO_ENFORCE
+    BELOW_TOP_K        = "BELOW_TOP_K"         # scored, but outranked
+    NOT_IN_FIELD       = "NOT_IN_FIELD"        # unknown, or not a live cell
+
+
+INTERVENTION_MODES = ("suppress",)
+# "readout" is named in the design but deliberately NOT implemented in v1:
+# suppressing at readout answers a different question (direct contribution)
+# than suppressing in the field (structural influence), and conflating the two
+# produces a delta that means nothing. See docs/INTERVENTION_DESIGN.md §3.
+INTERVENTION_STAGES = ("field",)
+_INTERVENTION_STAGES_RESERVED = ("readout",)
+
+
+@dataclass(frozen=True)
+class InterventionSpec:
+    """
+    A causal probe over one recall. Closed by construction: unknown modes,
+    stages or keys are rejected, never ignored.
+    """
+    mode: str
+    targets: Tuple[str, ...]
+    stage: str = "field"
+
+    def __post_init__(self):
+        if self.mode not in INTERVENTION_MODES:
+            if self.mode in ("excite", "stimulate", "boost"):
+                raise InterventionError(
+                    f"intervention mode {self.mode!r} is reserved but not implemented: "
+                    "excitatory modes require plasticity authority that a read-only "
+                    "probe does not have (docs/INTERVENTION_DESIGN.md §4)"
+                )
+            raise InterventionError(
+                f"unknown intervention mode {self.mode!r}; supported: {list(INTERVENTION_MODES)}"
+            )
+        if self.stage in _INTERVENTION_STAGES_RESERVED:
+            raise InterventionError(
+                f"intervention stage {self.stage!r} is specified but not implemented in v1; "
+                f"supported: {list(INTERVENTION_STAGES)}"
+            )
+        if self.stage not in INTERVENTION_STAGES:
+            raise InterventionError(
+                f"unknown intervention stage {self.stage!r}; supported: {list(INTERVENTION_STAGES)}"
+            )
+        if not isinstance(self.targets, tuple):
+            raise InterventionError("targets must be a tuple of memory_id strings")
+        if any(not isinstance(t, str) for t in self.targets):
+            raise InterventionError("every target must be a memory_id string")
+        if len(set(self.targets)) != len(self.targets):
+            raise InterventionError("duplicate targets — the treatment population is ambiguous")
+        # NOTE (red-team finding RT-2, reviewed): an EMPTY targets tuple is
+        # deliberately allowed — it is the null probe. The witness tests use
+        # InterventionSpec.suppress([]) exactly so ("a probe leaves no trace"
+        # needs a treatment guaranteed to do nothing). The cost is a sealed
+        # no-op audit row; the row is honest about what happened, and a null
+        # row is distinguishable by its empty resolved-targets payload.
+
+    @classmethod
+    def suppress(cls, targets, stage: str = "field") -> "InterventionSpec":
+        return cls(mode="suppress", targets=tuple(targets), stage=stage)
+
+    @classmethod
+    def from_dict(cls, d: Dict) -> "InterventionSpec":
+        if not isinstance(d, dict):
+            raise InterventionError("intervention must be an object")
+        allowed = {"mode", "targets", "stage"}
+        unknown = set(d) - allowed
+        if unknown:
+            raise InterventionError(
+                f"unknown intervention field(s): {sorted(unknown)}. Refusing rather "
+                "than ignoring them — an ignored field yields delta=0, which reads "
+                "as a real negative result"
+            )
+        if "mode" not in d or "targets" not in d:
+            raise InterventionError("intervention requires 'mode' and 'targets'")
+        targets = d["targets"]
+        if not isinstance(targets, (list, tuple)):
+            raise InterventionError("targets must be a list of memory_id strings")
+        return cls(mode=d["mode"], targets=tuple(targets), stage=d.get("stage", "field"))
+
+    def to_dict(self) -> Dict:
+        return {"mode": self.mode, "targets": list(self.targets), "stage": self.stage}
+
+
+@dataclass
+class _CoreOutcome:
+    """Everything one pass of the scoring core produced — plus what it refused
+    to persist. Nothing here has touched the database."""
+    top: List["RecallResult"]
+    scored: List["RecallResult"]
+    activated_cells: Set[int]
+    inhibited_cells: Set[int]
+    query_cell: Optional[int]
+    total_candidates: int
+    f_state: int
+    f_estilo: int
+    f_inhib: int
+    synaptic_count: int
+    exclusions: Dict[str, str]
+    pending_alerts: List["ForensicAlert"]
+    enforce_forget: List[Tuple[str, int]]
+    stylo_notices: List[Tuple[str, float]]
+
+
+@dataclass
+class InterventionResult:
+    spec: InterventionSpec
+    resolved_targets: List[Tuple[str, int]]
+    baseline: List["RecallResult"]
+    perturbed: List["RecallResult"]
+    baseline_scored: List["RecallResult"]
+    perturbed_scored: List["RecallResult"]
+    delta: Dict
+    baseline_exclusions: Dict[str, str]
+    perturbed_exclusions: Dict[str, str]
+    audit: "AuditLog"
+
+    @property
+    def changed(self) -> bool:
+        d = self.delta
+        return bool(
+            d["top_k"]["disappeared"] or d["top_k"]["appeared"]
+            or d["rank_displacement"] or d["disappeared_from_field"]
+        )
+
+
+def _compute_delta(baseline: "_CoreOutcome", perturbed: "_CoreOutcome", top_k: int) -> Dict:
+    """
+    Retrieval causal influence, reported DECOMPOSED — never collapsed to one
+    scalar (docs/INTERVENTION_DESIGN.md §7).
+
+    Ranks are taken over the FULL scored candidate set, not over two truncated
+    top-k lists: at the truncation boundary a memory "appearing" from rank k+1
+    is not the same finding as a memory falling out of rank 1, and comparing
+    truncated lists silently conflates them.
+    """
+    b_rank = {r.memory.memory_id: i for i, r in enumerate(baseline.scored)}
+    p_rank = {r.memory.memory_id: i for i, r in enumerate(perturbed.scored)}
+    b_score = {r.memory.memory_id: r.final_score for r in baseline.scored}
+    p_score = {r.memory.memory_id: r.final_score for r in perturbed.scored}
+
+    common = sorted(set(b_rank) & set(p_rank))
+    rank_displacement = sum(abs(b_rank[m] - p_rank[m]) for m in common)
+    score_delta = {
+        m: round(p_score[m] - b_score[m], 6)
+        for m in common
+        if round(p_score[m] - b_score[m], 6) != 0.0
+    }
+
+    b_top = [r.memory.memory_id for r in baseline.top]
+    p_top = [r.memory.memory_id for r in perturbed.top]
+
+    return {
+        "top_k": {
+            "k": top_k,
+            "baseline": b_top,
+            "perturbed": p_top,
+            "disappeared": [m for m in b_top if m not in p_top],
+            "appeared": [m for m in p_top if m not in b_top],
+        },
+        "disappeared_from_field": sorted(set(b_rank) - set(p_rank)),
+        "appeared_in_field": sorted(set(p_rank) - set(b_rank)),
+        "rank_displacement": rank_displacement,
+        "score_delta": score_delta,
+    }
+
+
+# ============================================================
+# AUDIT HASH — canonical, verifiable, content-aware
+# ============================================================
+
+def compute_audit_hash(
+    timestamp: float,
+    operation: str,
+    query_text: Optional[str],
+    cells_activated: List[int],
+    memories_retrieved,
+    prev_hash: str,
+    query_embedding=None,
+    qemb_hash: Optional[str] = None,
+    intervention: Optional[Dict] = None,
+) -> str:
+    """
+    Canonical audit hash for the tamper-evident chain.
+
+    P0 fix — two structural flaws in the previous scheme:
+      1. Only memory IDs were hashed: content could be modified post-audit
+         and the chain stayed "valid". memories_retrieved now carries each
+         memory's content_hash, and the FULL retrieved payload is hashed.
+      2. The hashed timestamp was a separate time.time() call from the one
+         stored in the row, so the chain could never be recomputed from
+         persisted data. Every input here is a stored column — any verifier
+         can recompute the hash from the DB row alone.
+
+    Verification contract:
+      audit_hash == sha256(canonical_json(payload) + prev_hash)
+      payload    == {ts, op, query, cells, results} exactly as persisted.
+    """
+    # Plan 2.5 (schema v3): the embedding's hash is precomputed and persisted
+    # in its own column; the raw vector is no longer stored. Legacy rows
+    # (query_embedding populated, qemb_hash absent) still derive the hash
+    # from the stored vector — the derivation below is byte-identical to the
+    # original scheme, so old chains keep verifying.
+    if qemb_hash is None:
+        qemb_hash = hashlib.sha256(
+            str(query_embedding).encode("utf-8") if query_embedding is not None else b""
+        ).hexdigest()
+    payload_obj = {
+        "ts": round(float(timestamp), 6),
+        "op": operation,
+        "query": query_text,
+        "cells": cells_activated,
+        "results": memories_retrieved,
+        "qemb_sha256": qemb_hash,
+    }
+    # Plan INTERVENTION (schema v4): a causal probe seals its resolved spec and
+    # both branches' outcome. The key is OMITTED — not serialized as null —
+    # when absent, so an ordinary recall row produces a payload byte-identical
+    # to the pre-v4 scheme and every historical chain keeps verifying.
+    if intervention is not None:
+        payload_obj["intervention"] = intervention
+    payload = json.dumps(
+        payload_obj,
+        sort_keys=True,
+        ensure_ascii=False,
+        separators=(",", ":"),
+    )
+    return hashlib.sha256((payload + prev_hash).encode("utf-8")).hexdigest()
+
+
+def verify_audit_chain(entries_desc: List[Dict]) -> Dict:
+    """
+    Verify both properties of the audit chain over rows ordered by id DESC:
+      linkage   — entries[i].prev_hash == entries[i+1].audit_hash
+      integrity — each audit_hash recomputes from its own stored columns
+                  (detects post-hoc edits to query, cells, or retrieved
+                  content metadata, including content_hash).
+
+    Returns {"chain_intact", "hash_integrity", "issues": [...]}.
+    Pre-fix rows (hashed under the legacy ID-only scheme) fail integrity
+    recomputation — reported as issues, not as exceptions.
+    """
+    issues: List[Dict] = []
+    chain_ok = True
+    integrity_ok = True
+
+    for i in range(len(entries_desc) - 1):
+        if entries_desc[i]["prev_hash"] != entries_desc[i + 1]["audit_hash"]:
+            chain_ok = False
+            issues.append({
+                "type": "linkage_broken",
+                "at_id": entries_desc[i].get("id"),
+            })
+
+    for e in entries_desc:
+        try:
+            cells = json.loads(e["cells_activated"]) if isinstance(
+                e["cells_activated"], str) else e["cells_activated"]
+            results = json.loads(e["memories_retrieved"]) if isinstance(
+                e["memories_retrieved"], str) else e["memories_retrieved"]
+            qemb_stored = e.get("query_embedding")
+            qemb = json.loads(qemb_stored) if qemb_stored else None
+            # v3 rows carry the hash in its own column (raw vector dropped);
+            # legacy rows re-derive it from the stored vector.
+            qemb_hash = e.get("qemb_sha256") if not qemb_stored else None
+            # v4: absent column (pre-v4 rows) and SQL NULL both mean "no
+            # intervention", which reproduces the pre-v4 payload exactly.
+            interv_stored = e.get("intervention")
+            interv = json.loads(interv_stored) if interv_stored else None
+            recomputed = compute_audit_hash(
+                e["timestamp"], e["operation"], e["query_text"],
+                cells, results, e["prev_hash"], qemb, qemb_hash=qemb_hash,
+                intervention=interv,
+            )
+            if recomputed != e["audit_hash"]:
+                integrity_ok = False
+                issues.append({
+                    "type": "hash_mismatch",
+                    "at_id": e.get("id"),
+                    "note": "stored columns do not reproduce audit_hash "
+                            "(tampered row, or legacy pre-content-hash entry)",
+                })
+        except Exception as exc:
+            integrity_ok = False
+            issues.append({"type": "verify_error", "at_id": e.get("id"), "error": str(exc)})
+
+    return {"chain_intact": chain_ok, "hash_integrity": integrity_ok, "issues": issues}
+
+
+# ============================================================
+# STYLOMETRIC EXTRACTOR
+# ============================================================
+
+class StylometricExtractor:
+    """Extracts stylometric fingerprint from text for authorship verification."""
+
+    # P1: language-separated sets. Mixing both in one bag made a bilingual
+    # author look like two different people (forensic false positives) —
+    # function-word frequency profiles are only comparable WITHIN a language.
+    FUNCTIONAL_WORDS_ES = {
+        "el", "la", "de", "que", "y", "en", "un", "es", "se", "por", "con",
+        "para", "los", "las", "del", "al", "lo", "le", "me", "te", "su", "mi",
+        "nos", "les", "pero", "como", "más", "sin", "sobre", "entre", "hasta",
+        "desde", "todo", "también", "ya", "sí", "ni",
+    }
+    FUNCTIONAL_WORDS_EN = {
+        "the", "an", "and", "or", "but", "in", "on", "at", "to", "for",
+        "of", "with", "by", "from", "as", "is", "was", "are", "were", "be",
+        "been", "have", "has", "had", "do", "does", "did", "will", "would",
+        "could", "should", "may", "might", "must", "can", "so", "very", "just",
+        "now", "then", "here", "there", "when", "where", "all", "each", "both",
+        "some", "only", "same", "than", "also", "after", "even", "new", "any",
+    }
+    # Ambiguous tokens valid in both languages — counted for frequency but
+    # not for language detection.
+    FUNCTIONAL_WORDS_SHARED = {"a", "no", "o"}
+    FUNCTIONAL_WORDS = FUNCTIONAL_WORDS_ES | FUNCTIONAL_WORDS_EN | FUNCTIONAL_WORDS_SHARED
+
+    def extract(self, text: str, author_id: str) -> StylometricFingerprint:
+        sentences = [s.strip() for s in text.replace("!", ".").replace("?", ".").split(".") if s.strip()]
+        words = text.lower().split()
+        total_words = max(len(words), 1)
+
+        func_counts: Dict[str, int] = {}
+        es_hits = en_hits = 0
+        for w in words:
+            clean = w.strip(".,;:!?\"'")
+            if clean in self.FUNCTIONAL_WORDS:
+                func_counts[clean] = func_counts.get(clean, 0) + 1
+                if clean in self.FUNCTIONAL_WORDS_ES:
+                    es_hits += 1
+                elif clean in self.FUNCTIONAL_WORDS_EN:
+                    en_hits += 1
+        func_freq = {w: c / total_words for w, c in func_counts.items()}
+
+        # P1: dominant-language detection (cheap, no external deps).
+        if es_hits > en_hits:
+            language = "es"
+        elif en_hits > es_hits:
+            language = "en"
+        else:
+            language = "und"
+
+        avg_len = float(np.mean([len(s.split()) for s in sentences])) if sentences else 0.0
+
+        punct = {",": 0, ";": 0, ":": 0, ".": 0, "!": 0, "?": 0}
+        for c in text:
+            if c in punct:
+                punct[c] += 1
+        total_chars = max(len(text), 1)
+        punct_profile = {k: v / total_chars for k, v in punct.items()}
+
+        payload = json.dumps({"func": func_freq, "avg": avg_len, "punct": punct_profile, "lang": language}, sort_keys=True)
+        fp_hash = hashlib.sha256(payload.encode()).hexdigest()[:16]
+
+        return StylometricFingerprint(
+            functional_words=func_freq,
+            avg_sentence_length=avg_len,
+            punctuation_profile=punct_profile,
+            fingerprint_hash=fp_hash,
+            language=language,
+        )
+
+    def compare(self, fp1: StylometricFingerprint, fp2: StylometricFingerprint) -> float:
+        """Returns stylometric distance: 0.0 (identical) → 1.0 (completely different)."""
+        all_words = set(fp1.functional_words) | set(fp2.functional_words)
+        if all_words:
+            v1 = [fp1.functional_words.get(w, 0) for w in all_words]
+            v2 = [fp2.functional_words.get(w, 0) for w in all_words]
+            func_dist = 1.0 - self._cosine_sim(v1, v2)
+        else:
+            func_dist = 0.0
+
+        max_len = max(fp1.avg_sentence_length, fp2.avg_sentence_length, 1.0)
+        len_diff = abs(fp1.avg_sentence_length - fp2.avg_sentence_length) / max_len
+
+        keys = list(fp1.punctuation_profile.keys())
+        p1 = [fp1.punctuation_profile.get(k, 0) for k in keys]
+        p2 = [fp2.punctuation_profile.get(k, 0) for k in keys]
+        punct_dist = 1.0 - self._cosine_sim(p1, p2) if p1 else 0.0
+
+        return 0.5 * func_dist + 0.3 * len_diff + 0.2 * punct_dist
+
+    @staticmethod
+    def _cosine_sim(a: List[float], b: List[float]) -> float:
+        if not a or not b:
+            return 0.0
+        dot = sum(x * y for x, y in zip(a, b))
+        norm_a = sum(x * x for x in a) ** 0.5
+        norm_b = sum(x * x for x in b) ** 0.5
+        if norm_a == 0 or norm_b == 0:
+            return 0.0
+        return dot / (norm_a * norm_b)
+
+
+class AuthorStyleProfile:
+    """
+    Rolling stylometric profile for one (author, language) pair.
+
+    Keeps the last STYLO_PROFILE_WINDOW fingerprints and exposes their mean
+    as a synthetic fingerprint for distance comparison. Keyed per language,
+    so a bilingual author naturally has independent profiles — the old
+    single-sample design needed an explicit language-switch escape hatch.
+    """
+
+    def __init__(self, window: int = STYLO_PROFILE_WINDOW):
+        self._samples: Deque[StylometricFingerprint] = deque(maxlen=window)
+
+    def add(self, fp: StylometricFingerprint):
+        self._samples.append(fp)
+
+    @property
+    def count(self) -> int:
+        return len(self._samples)
+
+    def mean_fingerprint(self) -> StylometricFingerprint:
+        n = len(self._samples)
+        words: Set[str] = set()
+        punct_keys: Set[str] = set()
+        for fp in self._samples:
+            words |= set(fp.functional_words)
+            punct_keys |= set(fp.punctuation_profile)
+        func = {
+            w: sum(fp.functional_words.get(w, 0.0) for fp in self._samples) / n
+            for w in words
+        }
+        punct = {
+            k: sum(fp.punctuation_profile.get(k, 0.0) for fp in self._samples) / n
+            for k in punct_keys
+        }
+        avg_len = sum(fp.avg_sentence_length for fp in self._samples) / n
+        return StylometricFingerprint(
+            functional_words=func,
+            avg_sentence_length=avg_len,
+            punctuation_profile=punct,
+            fingerprint_hash="profile_mean",
+            language=self._samples[-1].language,
+        )
+
+
+# ============================================================
+# SQLITE STORE
+# ============================================================
+
+# Bump when the schema changes and add a numbered block in _init_db.
+# Pre-versioning v1.0/v1.1 databases report user_version=0; every migration
+# block is idempotent (IF NOT EXISTS / tolerated ALTER), so they upgrade in
+# place without a separate tool.
+SCHEMA_VERSION = 4
+
+
+class MemoryStore:
+    def __init__(self, db_path: Path = DB_PATH):
+        self.db_path = db_path
+        self._prev_audit_hash = "0" * 64
+        self._init_db()
+        self._load_prev_hash()
+
+    def _connect(self) -> sqlite3.Connection:
+        """
+        P0: every connection gets a busy timeout so concurrent writers
+        (api_server + sleep_consolidator) wait instead of throwing
+        'database is locked'. WAL journal mode (set once in _init_db,
+        persistent in the DB file) lets readers proceed during writes.
+        """
+        conn = sqlite3.connect(self.db_path, timeout=5.0)
+        conn.execute("PRAGMA busy_timeout=5000")
+        return conn
+
+    def _init_db(self):
+        with self._connect() as conn:
+            # P0: WAL is a persistent DB property — concurrent reader/writer
+            # safety between the API server and the sleep consolidator.
+            # synchronous=NORMAL is the recommended pairing for WAL
+            # (durable at checkpoint, ~an order of magnitude faster).
+            conn.execute("PRAGMA journal_mode=WAL")
+            conn.execute("PRAGMA synchronous=NORMAL")
+
+            version = conn.execute("PRAGMA user_version").fetchone()[0]
+            if version > SCHEMA_VERSION:
+                # Honest failure beats silently running old code over a newer
+                # layout it does not understand.
+                raise RuntimeError(
+                    f"Database schema is v{version} but this code supports up to "
+                    f"v{SCHEMA_VERSION} — upgrade raven-memory before opening this DB."
+                )
+
+            if version < 1:
+                # ---- v1: baseline schema.
+                # Idempotent on purpose: v1.0/v1.1 DBs predate user_version
+                # (they report 0) but already contain these tables.
+                conn.execute("""
+                    CREATE TABLE IF NOT EXISTS memories (
+                        memory_id TEXT PRIMARY KEY,
+                        layer TEXT NOT NULL,
+                        content TEXT NOT NULL,
+                        content_hash TEXT NOT NULL,
+                        embedding BLOB NOT NULL,
+                        state TEXT NOT NULL,
+                        cell_id INTEGER NOT NULL UNIQUE,
+                        created_at REAL NOT NULL,
+                        session_id TEXT NOT NULL,
+                        author_id TEXT NOT NULL,
+                        metadata TEXT,
+                        synaptic_links TEXT,
+                        last_activation REAL DEFAULT 0.0,
+                        recall_count INTEGER DEFAULT 0,
+                        fingerprint TEXT
+                    )
+                """)
+                conn.execute("""
+                    CREATE TABLE IF NOT EXISTS cell_links (
+                        from_cell_id INTEGER,
+                        to_cell_id INTEGER,
+                        link_type TEXT,
+                        created_at REAL,
+                        auto_generated INTEGER,
+                        PRIMARY KEY (from_cell_id, to_cell_id)
+                    )
+                """)
+                conn.execute("""
+                    CREATE TABLE IF NOT EXISTS audit_log (
+                        id INTEGER PRIMARY KEY AUTOINCREMENT,
+                        timestamp REAL NOT NULL,
+                        operation TEXT NOT NULL,
+                        query_text TEXT,
+                        query_embedding BLOB,
+                        cells_activated TEXT,
+                        memories_retrieved TEXT,
+                        total_candidates INTEGER,
+                        filtered_by_state INTEGER,
+                        filtered_by_estilometria INTEGER,
+                        filtered_by_inhibitory INTEGER,
+                        synaptic_activated INTEGER,
+                        returned_to_agent INTEGER,
+                        audit_hash TEXT,
+                        prev_hash TEXT
+                    )
+                """)
+                conn.execute("""
+                    CREATE TABLE IF NOT EXISTS forensic_alerts (
+                        alert_id TEXT PRIMARY KEY,
+                        timestamp REAL NOT NULL,
+                        memory_id TEXT NOT NULL,
+                        detected_author TEXT,
+                        expected_author TEXT,
+                        mismatch_score REAL,
+                        action_taken TEXT
+                    )
+                """)
+                conn.execute("CREATE INDEX IF NOT EXISTS idx_mem_cell   ON memories(cell_id)")
+                conn.execute("CREATE INDEX IF NOT EXISTS idx_mem_layer  ON memories(layer)")
+                conn.execute("CREATE INDEX IF NOT EXISTS idx_mem_author ON memories(author_id)")
+                conn.execute("CREATE INDEX IF NOT EXISTS idx_mem_state  ON memories(state)")
+
+            if version < 2:
+                # ---- v2: recall_count column + hard UNIQUE on cell_id
+                # (previously ad-hoc try/except migrations).
+                try:
+                    conn.execute(
+                        "ALTER TABLE memories ADD COLUMN recall_count INTEGER DEFAULT 0"
+                    )
+                except sqlite3.OperationalError:
+                    pass  # column already exists (fresh v1 table carries it)
+                conn.execute(
+                    "CREATE UNIQUE INDEX IF NOT EXISTS uq_mem_cell_id ON memories(cell_id)"
+                )
+
+            if version < 3:
+                # ---- v3 (plan 2.5): audit entries store the SHA-256 of the
+                # query embedding instead of the full 384-float JSON (~7 KB
+                # per recall). Legacy rows keep their query_embedding column
+                # populated and still verify via recomputation.
+                try:
+                    conn.execute("ALTER TABLE audit_log ADD COLUMN qemb_sha256 TEXT")
+                except sqlite3.OperationalError:
+                    pass
+
+            if version < 4:
+                # ---- v4: causal-probe interventions are sealed into the chain,
+                # so the resolved spec must live in a persisted column —
+                # verify_audit_chain() recomputes from stored columns alone.
+                # NULL on every pre-existing row, which reproduces the v3
+                # payload byte-for-byte (see compute_audit_hash).
+                try:
+                    conn.execute("ALTER TABLE audit_log ADD COLUMN intervention TEXT")
+                except sqlite3.OperationalError:
+                    pass
+
+            conn.execute(f"PRAGMA user_version = {SCHEMA_VERSION}")
+            conn.commit()
+
+    def _load_prev_hash(self):
+        with self._connect() as conn:
+            row = conn.execute(
+                "SELECT audit_hash FROM audit_log ORDER BY id DESC LIMIT 1"
+            ).fetchone()
+            if row and row[0]:
+                self._prev_audit_hash = row[0]
+
+    # ---- MEMORIES ----
+
+    def store_memory(self, entry: MemoryEntry):
+        with self._connect() as conn:
+            conn.execute(
+                """INSERT OR REPLACE INTO memories
+                (memory_id, layer, content, content_hash, embedding, state, cell_id,
+                 created_at, session_id, author_id, metadata, synaptic_links,
+                 last_activation, recall_count, fingerprint)
+                VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)""",
+                (
+                    entry.memory_id, entry.layer, entry.content, entry.content_hash,
+                    entry.embedding.astype(np.float32).tobytes(),
+                    entry.state.name, entry.cell_id, entry.created_at,
+                    entry.session_id, entry.author_id,
+                    json.dumps(entry.metadata),
+                    json.dumps(entry.synaptic_links),
+                    entry.last_activation, entry.recall_count,
+                    json.dumps(asdict(entry.fingerprint)) if entry.fingerprint else None,
+                ),
+            )
+            conn.commit()
+
+    def load_memories(
+        self,
+        cell_ids: Optional[List[int]] = None,
+        author_id: Optional[str] = None,
+        layer: Optional[str] = None,
+        state: Optional[str] = None,
+        limit: Optional[int] = None,
+        offset: int = 0,
+    ) -> List[MemoryEntry]:
+        with self._connect() as conn:
+            conn.row_factory = sqlite3.Row
+            conditions = []
+            params: List = []
+
+            if cell_ids is not None:
+                if len(cell_ids) == 0:
+                    return []
+                if len(cell_ids) <= 999:
+                    placeholders = ",".join("?" * len(cell_ids))
+                    conditions.append(f"cell_id IN ({placeholders})")
+                    params.extend(cell_ids)
+                else:
+                    # P1-4: SQLite max 999 bound params — chunk the query
+                    all_rows = []
+                    for i in range(0, len(cell_ids), 999):
+                        chunk = cell_ids[i:i+999]
+                        ph = ",".join("?" * len(chunk))
+                        rows = conn.execute(
+                            f"SELECT * FROM memories WHERE cell_id IN ({ph})", chunk
+                        ).fetchall()
+                        all_rows.extend(rows)
+                    entries = [self._row_to_entry(r) for r in all_rows]
+                    if author_id:
+                        entries = [e for e in entries if e.author_id == author_id]
+                    if layer:
+                        entries = [e for e in entries if e.layer == layer]
+                    if state:
+                        entries = [e for e in entries if e.state.name == state]
+                    if offset:
+                        entries = entries[offset:]
+                    if limit:
+                        entries = entries[:limit]
+                    return entries
+            if author_id:
+                conditions.append("author_id = ?")
+                params.append(author_id)
+            if layer:
+                conditions.append("layer = ?")
+                params.append(layer)
+            if state:
+                conditions.append("state = ?")
+                params.append(state)
+
+            sql = "SELECT * FROM memories"
+            if conditions:
+                sql += " WHERE " + " AND ".join(conditions)
+            sql += " ORDER BY cell_id ASC"
+            if limit:
+                sql += f" LIMIT {limit} OFFSET {offset}"
+
+            rows = conn.execute(sql, params).fetchall()
+            return [self._row_to_entry(r) for r in rows]
+
+    def load_memory(self, memory_id: str) -> Optional[MemoryEntry]:
+        with self._connect() as conn:
+            conn.row_factory = sqlite3.Row
+            row = conn.execute(
+                "SELECT * FROM memories WHERE memory_id = ?", (memory_id,)
+            ).fetchone()
+            return self._row_to_entry(row) if row else None
+
+    def count_memories(self) -> int:
+        with self._connect() as conn:
+            return conn.execute("SELECT COUNT(*) FROM memories").fetchone()[0]
+
+    def load_top_recalled(self, limit: int) -> List[MemoryEntry]:
+        """Most-recalled memories, ordered in SQL (plan 2.4) — export_graph
+        used to materialise the whole table just to sort it in Python."""
+        with self._connect() as conn:
+            conn.row_factory = sqlite3.Row
+            rows = conn.execute(
+                "SELECT * FROM memories ORDER BY recall_count DESC LIMIT ?", (limit,)
+            ).fetchall()
+            return [self._row_to_entry(r) for r in rows]
+
+    def count_stats(self) -> Dict:
+        """
+        Aggregate counts computed in SQL — no row deserialization.
+
+        get_stats() previously called load_memories(), which materialised every
+        row (embedding bytes, fingerprint JSON, the lot) just to tally states.
+        Since get_stats() runs on every recall, every WebSocket broadcast and
+        every dashboard refresh, that turned a counter into a full-table scan
+        that scaled with corpus size. This stays O(1) in Python memory.
+        """
+        with self._connect() as conn:
+            state_dist = {"REINFORCED": 0, "NEUTRAL": 0, "FORGOTTEN": 0}
+            for name, c in conn.execute(
+                "SELECT state, COUNT(*) FROM memories GROUP BY state"
+            ).fetchall():
+                state_dist[name] = c
+
+            layer_dist: Dict[str, int] = {}
+            for layer, c in conn.execute(
+                "SELECT layer, COUNT(*) FROM memories GROUP BY layer"
+            ).fetchall():
+                layer_dist[layer] = c
+
+            total = conn.execute("SELECT COUNT(*) FROM memories").fetchone()[0]
+            total_recalls = conn.execute(
+                "SELECT COALESCE(SUM(recall_count), 0) FROM memories"
+            ).fetchone()[0]
+            authors = conn.execute(
+                "SELECT COUNT(DISTINCT author_id) FROM memories"
+            ).fetchone()[0]
+
+            link_types = {"RESONANT": 0, "NEUTRAL": 0, "INHIBITORY": 0}
+            for lt, c in conn.execute(
+                "SELECT link_type, COUNT(*) FROM cell_links GROUP BY link_type"
+            ).fetchall():
+                link_types[lt] = c
+
+        return {
+            "state_distribution": state_dist,
+            "layer_distribution": layer_dist,
+            "total_memories": total,
+            "total_recalls": int(total_recalls),
+            "authors": authors,
+            "cell_links": link_types,
+        }
+
+    def update_state(self, memory_id: str, new_state: MemoryState):
+        with self._connect() as conn:
+            conn.execute("UPDATE memories SET state=? WHERE memory_id=?",
+                         (new_state.name, memory_id))
+            conn.commit()
+
+    def update_synaptic_links(self, memory_id: str, links: Dict[str, float]):
+        with self._connect() as conn:
+            conn.execute("UPDATE memories SET synaptic_links=? WHERE memory_id=?",
+                         (json.dumps(links), memory_id))
+            conn.commit()
+
+    def update_synaptic_links_batch(self, links_by_id: Dict[str, Dict[str, float]]):
+        """All STDP weight updates of one recall in ONE transaction (plan 2.3)."""
+        if not links_by_id:
+            return
+        with self._connect() as conn:
+            conn.executemany(
+                "UPDATE memories SET synaptic_links=? WHERE memory_id=?",
+                [(json.dumps(links), mid) for mid, links in links_by_id.items()],
+            )
+            conn.commit()
+
+    def update_activation(self, memory_id: str, timestamp: float):
+        with self._connect() as conn:
+            conn.execute(
+                "UPDATE memories SET last_activation=?, recall_count=recall_count+1 WHERE memory_id=?",
+                (timestamp, memory_id),
+            )
+            conn.commit()
+
+    def update_activations(self, memory_ids: List[str], timestamp: float):
+        """Touch all top-k results of one recall in ONE transaction (plan 2.3)."""
+        if not memory_ids:
+            return
+        with self._connect() as conn:
+            conn.executemany(
+                "UPDATE memories SET last_activation=?, recall_count=recall_count+1 WHERE memory_id=?",
+                [(timestamp, mid) for mid in memory_ids],
+            )
+            conn.commit()
+
+    # ---- CELL LINKS ----
+
+    def store_cell_link(self, from_id: int, to_id: int, link_type: LinkType, auto: bool = True):
+        with self._connect() as conn:
+            conn.execute(
+                """INSERT OR REPLACE INTO cell_links
+                (from_cell_id, to_cell_id, link_type, created_at, auto_generated)
+                VALUES (?,?,?,?,?)""",
+                (from_id, to_id, link_type.name, time.time(), int(auto)),
+            )
+            conn.commit()
+
+    def store_cell_links_batch(self, rows: List[Tuple[int, int, LinkType, bool]]):
+        """
+        Write many links in ONE transaction (plan 2.3). A store on a hot topic
+        used to issue 2 connections + commits per contradiction pair.
+        """
+        if not rows:
+            return
+        now = time.time()
+        with self._connect() as conn:
+            conn.executemany(
+                """INSERT OR REPLACE INTO cell_links
+                (from_cell_id, to_cell_id, link_type, created_at, auto_generated)
+                VALUES (?,?,?,?,?)""",
+                [(f, t, lt.name, now, int(auto)) for f, t, lt, auto in rows],
+            )
+            conn.commit()
+
+    def load_cell_links(self, cell_id: int) -> List[Tuple[int, LinkType, bool]]:
+        with self._connect() as conn:
+            rows = conn.execute(
+                "SELECT to_cell_id, link_type, auto_generated FROM cell_links WHERE from_cell_id=?",
+                (cell_id,),
+            ).fetchall()
+            return [(r[0], LinkType[r[1]], bool(r[2])) for r in rows]
+
+    def load_all_cell_links(self) -> List[Tuple[int, int, str]]:
+        with self._connect() as conn:
+            rows = conn.execute(
+                "SELECT from_cell_id, to_cell_id, link_type FROM cell_links"
+            ).fetchall()
+            return [(r[0], r[1], r[2]) for r in rows]
+
+    def load_all_cell_links_indexed(self) -> Dict[int, List[Tuple[int, "LinkType"]]]:
+        """
+        Load all cell links in one query, indexed by from_cell_id.
+        Used in recall() to avoid N queries inside the BFS loop.
+        Returns {from_cell_id: [(to_cell_id, LinkType), ...]}
+        """
+        with self._connect() as conn:
+            rows = conn.execute(
+                "SELECT from_cell_id, to_cell_id, link_type FROM cell_links"
+            ).fetchall()
+        index: Dict[int, List[Tuple[int, LinkType]]] = {}
+        for from_id, to_id, lt_str in rows:
+            index.setdefault(from_id, []).append((to_id, LinkType[lt_str]))
+        return index
+
+    def load_cell_links_for_cells(self, cell_ids: List[int]) -> List[Tuple[int, int, str]]:
+        """
+        Load cell links where BOTH endpoints are in the given set.
+        Used by export_graph() to avoid loading O(total_links) when max_nodes
+        truncates a large corpus.
+        """
+        if not cell_ids:
+            return []
+        with self._connect() as conn:
+            all_rows: List[Tuple[int, int, str]] = []
+            for i in range(0, len(cell_ids), 999):
+                chunk = cell_ids[i:i + 999]
+                ph = ",".join("?" * len(chunk))
+                rows = conn.execute(
+                    f"SELECT from_cell_id, to_cell_id, link_type FROM cell_links "
+                    f"WHERE from_cell_id IN ({ph}) AND to_cell_id IN ({ph})",
+                    chunk + chunk,
+                ).fetchall()
+                all_rows.extend((r[0], r[1], r[2]) for r in rows)
+        return all_rows
+
+    def load_memories_by_ids(self, memory_ids: List[str]) -> List["MemoryEntry"]:
+        """
+        Batch load memories by ID in a single query.
+        Used in recall() synaptic pull and _update_stdp() to avoid N+1 queries.
+        """
+        if not memory_ids:
+            return []
+        with self._connect() as conn:
+            conn.row_factory = sqlite3.Row
+            if len(memory_ids) <= 999:
+                placeholders = ",".join("?" * len(memory_ids))
+                rows = conn.execute(
+                    f"SELECT * FROM memories WHERE memory_id IN ({placeholders})",
+                    memory_ids,
+                ).fetchall()
+            else:
+                rows = []
+                for i in range(0, len(memory_ids), 999):
+                    chunk = memory_ids[i:i + 999]
+                    ph = ",".join("?" * len(chunk))
+                    rows.extend(
+                        conn.execute(
+                            f"SELECT * FROM memories WHERE memory_id IN ({ph})", chunk
+                        ).fetchall()
+                    )
+        return [self._row_to_entry(r) for r in rows]
+
+    # ---- AUDIT ----
+
+    def store_audit(self, audit: AuditLog):
+        with self._connect() as conn:
+            conn.execute(
+                """INSERT INTO audit_log
+                (timestamp, operation, query_text, query_embedding, cells_activated,
+                 memories_retrieved, total_candidates, filtered_by_state,
+                 filtered_by_estilometria, filtered_by_inhibitory, synaptic_activated,
+                 returned_to_agent, audit_hash, prev_hash, qemb_sha256, intervention)
+                VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)""",
+                (
+                    audit.timestamp, audit.operation, audit.query_text,
+                    json.dumps(audit.query_embedding) if audit.query_embedding else None,
+                    json.dumps(audit.cells_activated),
+                    json.dumps(audit.memories_retrieved),
+                    audit.total_candidates, audit.filtered_by_state,
+                    audit.filtered_by_estilometria, audit.filtered_by_inhibitory,
+                    audit.synaptic_activated, audit.returned_to_agent,
+                    audit.audit_hash, audit.prev_hash, audit.qemb_sha256,
+                    json.dumps(audit.intervention, sort_keys=True, ensure_ascii=False,
+                               separators=(",", ":")) if audit.intervention else None,
+                ),
+            )
+            conn.commit()
+        self._prev_audit_hash = audit.audit_hash
+
+    def get_audit_trail(self, limit: int = 100) -> List[Dict]:
+        with self._connect() as conn:
+            conn.row_factory = sqlite3.Row
+            # P1: id ordering (not timestamp) — two entries can share a
+            # timestamp under load; AUTOINCREMENT id is the true sequence
+            # the hash chain was built over.
+            rows = conn.execute(
+                "SELECT * FROM audit_log ORDER BY id DESC LIMIT ?", (limit,)
+            ).fetchall()
+            return [dict(r) for r in rows]
+
+    # ---- FORENSIC ALERTS ----
+
+    def store_alert(self, alert: ForensicAlert):
+        with self._connect() as conn:
+            conn.execute(
+                """INSERT INTO forensic_alerts
+                (alert_id, timestamp, memory_id, detected_author, expected_author,
+                 mismatch_score, action_taken)
+                VALUES (?,?,?,?,?,?,?)""",
+                (alert.alert_id, alert.timestamp, alert.memory_id,
+                 alert.detected_author, alert.expected_author,
+                 alert.mismatch_score, alert.action_taken),
+            )
+            conn.commit()
+
+    def get_alerts(self, limit: int = 50) -> List[ForensicAlert]:
+        with self._connect() as conn:
+            conn.row_factory = sqlite3.Row
+            rows = conn.execute(
+                "SELECT * FROM forensic_alerts ORDER BY timestamp DESC LIMIT ?", (limit,)
+            ).fetchall()
+            return [ForensicAlert(**dict(r)) for r in rows]
+
+    def get_prev_audit_hash(self) -> str:
+        # Always read from DB — the consolidator may have written since our
+        # last recall, and a cached value would break the audit chain.
+        self._load_prev_hash()
+        return self._prev_audit_hash
+
+    # ---- INTERNAL ----
+
+    def _row_to_entry(self, row: sqlite3.Row) -> MemoryEntry:
+        fingerprint = None
+        fp_raw = row["fingerprint"] if "fingerprint" in row.keys() else None
+        if fp_raw:
+            try:
+                fingerprint = StylometricFingerprint(**json.loads(fp_raw))
+            except Exception as _fp_exc:
+                logger.error(
+                    f"Corrupted stylometric fingerprint in row — forensic verification disabled for this memory. "
+                    f"Error: {_fp_exc}"
+                )
+
+        recall_count = 0
+        try:
+            recall_count = int(row["recall_count"] or 0)
+        except Exception:
+            pass
+
+        return MemoryEntry(
+            memory_id=row["memory_id"],
+            layer=row["layer"],
+            content=row["content"],
+            content_hash=row["content_hash"],
+            embedding=np.frombuffer(row["embedding"], dtype=np.float32).copy(),
+            state=MemoryState[row["state"]],
+            cell_id=row["cell_id"],
+            created_at=row["created_at"],
+            session_id=row["session_id"],
+            author_id=row["author_id"],
+            metadata=json.loads(row["metadata"]) if row["metadata"] else {},
+            synaptic_links=json.loads(row["synaptic_links"]) if row["synaptic_links"] else {},
+            last_activation=float(row["last_activation"] or 0.0),
+            recall_count=recall_count,
+            fingerprint=fingerprint,
+        )
+
+
+# ============================================================
+# ENGINE
+# ============================================================
+
+def _synchronized(method):
+    """Serialize a public engine method under the instance RLock (see __init__)."""
+    def wrapper(self, *args, **kwargs):
+        with self._lock:
+            return method(self, *args, **kwargs)
+    wrapper.__name__ = method.__name__
+    wrapper.__doc__ = method.__doc__
+    return wrapper
+
+
+class _HnswIndex:
+    """
+    scipy-KDTree-compatible facade over hnswlib (plan 2.6).
+
+    Same L2 metric as the KDTree (identical ordering for unit-norm vectors),
+    same .query() return shapes for the two call patterns the engine uses:
+    single-row seed lookup (k=1) and the batch k-NN graph build (k=k+1).
+    Approximate by nature — enable via RAVEN_ANN_BACKEND=hnsw when the
+    exact first-recall build cost matters more than exactness at the margin.
+    """
+
+    def __init__(self, arr: np.ndarray):
+        self._n, dim = arr.shape
+        self._index = hnswlib.Index(space="l2", dim=dim)
+        self._index.init_index(max_elements=self._n, ef_construction=200, M=16)
+        self._index.add_items(arr.astype(np.float32), np.arange(self._n))
+        self._index.set_ef(64)
+
+    def query(self, x: np.ndarray, k: int = 1):
+        x = np.asarray(x, dtype=np.float32)
+        if x.ndim == 1:
+            x = x.reshape(1, -1)
+        k = min(k, self._n)
+        labels, dists = self._index.knn_query(x, k=k)
+        if k == 1:
+            return dists[:, 0], labels[:, 0]
+        return dists, labels
+
+
+class AdaptiveMemoryEngine:
+    """
+    Raven-Memory core engine.
+
+    Replaces flat vector search with a dynamical memory field:
+      - Cells ≈ Voronoi regions in embedding space
+      - Recall = neighbourhood activation + BFS hop expansion
+      - Scoring = cosine × state_boost × hop_decay + bonuses
+      - STDP strengthens co-activated cell pairs (LTP + LTD)
+      - Ternary cell links gate propagation (RESONANT/INHIBITORY)
+    """
+
+    def __init__(self, embedding_dim: int = EMBEDDING_DIM, k_neighbors: int = K_NEIGHBORS,
+                 db_path: Path = DB_PATH):
+        self.embedding_dim = embedding_dim
+        self.k_neighbors = k_neighbors
+        self._db = MemoryStore(db_path)
+        # Plan 2.6: pluggable NN index. "kdtree" (exact, default) or "hnsw"
+        # (approximate, needs hnswlib — raven-memory[ann]). An unavailable or
+        # unknown backend falls back LOUDLY to the exact default.
+        self._ann_backend = os.environ.get("RAVEN_ANN_BACKEND", "kdtree").lower()
+        if self._ann_backend == "hnsw" and not _HNSW_AVAILABLE:
+            logger.warning(
+                "RAVEN_ANN_BACKEND=hnsw but hnswlib is not installed "
+                "(pip install raven-memory[ann]) — falling back to exact KDTree"
+            )
+            self._ann_backend = "kdtree"
+        elif self._ann_backend not in ("kdtree", "hnsw"):
+            logger.warning(
+                f"Unknown RAVEN_ANN_BACKEND={self._ann_backend!r} — using exact KDTree"
+            )
+            self._ann_backend = "kdtree"
+        # Exact KDTree or _HnswIndex facade — same .query() surface for both.
+        self.kdtree = None
+        self._points: Dict[int, np.ndarray] = {}     # cell_id → embedding (sparse)
+        self._next_cell_id: int = 0                   # monotonic allocator
+        self._cell_to_memid: Dict[int, str] = {}      # cell_id → memory_id (last stored per cell)
+        self.cell_neighbors: Dict[int, Set[int]] = {}
+        self._kdtree_dirty: bool = False
+        # Live cell set — excludes FORGOTTEN/deleted cells (P0-1 fix).
+        self._active_cells: Set[int] = set()
+        # Maps KDTree array index → cell_id (rebuilt with KDTree, P0-1 fix).
+        self._kdtree_idx_to_cell: List[int] = []
+
+        # Inverted index: topic → [(memory_id, cell_id, claim)]
+        self._topic_index: Dict[str, List[Tuple[str, int, str]]] = {}
+
+        # P1: pairs already linked by _auto_link_contradictions. Without this,
+        # every store on a hot topic re-issued O(n) redundant INSERT OR REPLACE
+        # writes per existing contradiction (O(n²) total per topic).
+        self._linked_pairs: Set[Tuple[int, int, str]] = set()
+        # RESONANT neighbours for BFS hop-distance — keyed by from_cell_id.
+        self._resonant_neighbors: Dict[int, List[Tuple[int, LinkType]]] = {}
+        # P1 (plan 2.2): full directional link index kept in memory and
+        # updated on every link write, so recall() never re-reads the whole
+        # cell_links table. Out-of-process writers (sleep consolidator)
+        # require an engine reload — same contract as the KDTree.
+        self._cell_links_index: Dict[int, List[Tuple[int, LinkType]]] = {}
+
+        self.stylometric = StylometricExtractor()
+        # Rolling profiles keyed by (author_id, language). See AuthorStyleProfile.
+        self._author_profiles: Dict[Tuple[str, str], AuthorStyleProfile] = {}
+        # In alert-only mode a flagged memory stays recallable, so every later
+        # recall would re-store the same alert — dedupe per process.
+        self._alerted_memories: Set[str] = set()
+
+        # P0: public entry points may now be called from worker threads (the
+        # API server offloads blocking work off the event loop). The engine's
+        # in-memory structures (KDTree dirty flag, active cells, topic index,
+        # author profiles) are not safe under concurrent mutation. Coarse
+        # RLock: engine ops are fast local math; the slow network calls
+        # (embeddings, LLM) happen outside the engine and still overlap.
+        self._lock = threading.RLock()
+
+        # Spectral field — optional, loaded from DB if available.
+        # Call rebuild_spectral_field() after bulk stores or consolidation.
+        self._spectral: Optional["SpectralField"] = None  # type: ignore[name-defined]
+        if _SPECTRAL_AVAILABLE:
+            try:
+                loaded = SpectralStore(db_path).load()
+                if loaded and loaded.is_built:
+                    self._spectral = loaded
+                    logger.info(f"Spectral field loaded: {loaded.summary()}")
+            except Exception as _e:
+                logger.debug(f"Could not load spectral field from DB: {_e}")
+
+        # Rebuild in-memory state from persisted DB
+        self._load_from_db()
+
+    # ----------------------------------------------------------
+    # STARTUP — rebuild in-memory structures from DB
+    # ----------------------------------------------------------
+
+    def _load_from_db(self):
+        """Reconstruct KDTree, topic index, and author fingerprints from persisted data."""
+        # Reset every rebuildable structure first. _load_from_db can be called
+        # on an existing instance (e.g. after the consolidator deletes rows);
+        # carrying over stale _active_cells / _cell_to_memid would reference
+        # cell_ids that no longer exist in _points and crash the KDTree rebuild.
+        self._points = {}
+        self._cell_to_memid = {}
+        self._active_cells = set()
+        self._topic_index = {}
+        self._linked_pairs = set()
+        self._resonant_neighbors = {}
+        self._author_profiles = {}
+        self._cell_links_index = {}
+        self._next_cell_id = 0
+
+        mems = self._db.load_memories()
+        if not mems:
+            self.kdtree = None
+            self.cell_neighbors = {}
+            self._kdtree_idx_to_cell = []
+            return
+
+        # Points are stored sparsely, keyed by cell_id. cell_id only ever grows
+        # (consolidation deletes rows without reusing ids), so a list would
+        # accumulate zero-vectors for every dead cell — unbounded memory for a
+        # field that is mostly holes after many consolidation cycles.
+        max_cell = max(m.cell_id for m in mems)
+        self._next_cell_id = max_cell + 1
+
+        for m in mems:
+            self._points[m.cell_id] = m.embedding.copy()
+            self._cell_to_memid[m.cell_id] = m.memory_id
+            if m.state.name != "FORGOTTEN":
+                self._active_cells.add(m.cell_id)   # only live cells enter KDTree
+            self._index_topic(m)
+            if m.fingerprint:
+                # Every persisted sample feeds the rolling profile (rows come
+                # back ordered by cell_id ≈ creation order, so the window
+                # ends up holding the author's most recent style).
+                self._profile_for(m.author_id, m.fingerprint.language).add(m.fingerprint)
+
+        self._rebuild_kdtree()
+
+        # P1: hydrate the linked-pairs cache so dedup survives restarts.
+        # Also populate _resonant_neighbors for BFS hop-distance via RESONANT
+        # links, and the full directional index recall() reads (plan 2.2).
+        for f, t, lt in self._db.load_all_cell_links():
+            lt_str = lt.name if hasattr(lt, 'name') else str(lt)
+            lt_enum = LinkType[lt_str]
+            self._linked_pairs.add((f, t, lt_str))
+            self._cell_links_index.setdefault(f, []).append((t, lt_enum))
+            if lt_str == "RESONANT":
+                self._resonant_neighbors.setdefault(f, []).append((t, lt_enum))
+                self._resonant_neighbors.setdefault(t, []).append((f, lt_enum))
+
+        logger.info(f"Loaded {len(mems)} memories, {len(self._points)} live cells from DB")
+
+    # ----------------------------------------------------------
+    # KDTREE
+    # ----------------------------------------------------------
+
+    def _ensure_kdtree(self):
+        if self._kdtree_dirty:
+            self._rebuild_kdtree()
+            self._kdtree_dirty = False
+
+    def _rebuild_kdtree(self):
+        """
+        Build KDTree from ACTIVE cells only.
+        Deleted/FORGOTTEN cells are excluded — no ghost vectors in the index.
+        _kdtree_idx_to_cell maps array position → cell_id for query translation.
+        """
+        if not self._active_cells:
+            self.kdtree = None
+            self.cell_neighbors = {}
+            self._kdtree_idx_to_cell = []
+            return
+
+        self._kdtree_idx_to_cell = sorted(self._active_cells)
+        arr = np.array([self._points[cid] for cid in self._kdtree_idx_to_cell])
+        self.kdtree = _HnswIndex(arr) if self._ann_backend == "hnsw" else KDTree(arr)
+
+        k = min(self.k_neighbors, len(self._kdtree_idx_to_cell) - 1)
+        if k <= 0:
+            self.cell_neighbors = {cid: set() for cid in self._kdtree_idx_to_cell}
+            return
+
+        _, indices = self.kdtree.query(arr, k=k + 1)
+        self.cell_neighbors = {}
+        for arr_i, neighbors in enumerate(indices):
+            cell_id = self._kdtree_idx_to_cell[arr_i]
+            real = {self._kdtree_idx_to_cell[int(n)] for n in neighbors if n != arr_i}
+            self.cell_neighbors[cell_id] = real
+            for n_cell in real:
+                self.cell_neighbors.setdefault(n_cell, set()).add(cell_id)
+
+    # ----------------------------------------------------------
+    # AUTHOR PROFILES
+    # ----------------------------------------------------------
+
+    def _profile_for(self, author_id: str, language: str) -> AuthorStyleProfile:
+        key = (author_id, language or "und")
+        profile = self._author_profiles.get(key)
+        if profile is None:
+            profile = AuthorStyleProfile()
+            self._author_profiles[key] = profile
+        return profile
+
+    # ----------------------------------------------------------
+    # TOPIC INDEX
+    # ----------------------------------------------------------
+
+    def _index_topic(self, entry: MemoryEntry):
+        topic = entry.metadata.get("topic", "")
+        if not topic:
+            return
+        claim = entry.metadata.get("claim", "")
+        self._topic_index.setdefault(topic, []).append(
+            (entry.memory_id, entry.cell_id, claim)
+        )
+
+    # ----------------------------------------------------------
+    # STORE
+    # ----------------------------------------------------------
+
+    @_synchronized
+    def store(
+        self,
+        content: str,
+        embedding: np.ndarray,
+        layer: str = "semantic",
+        state: MemoryState = MemoryState.NEUTRAL,
+        session_id: str = "default",
+        author_id: str = "user",
+        metadata: Optional[Dict] = None,
+    ) -> MemoryEntry:
+        if embedding.shape != (self.embedding_dim,):
+            raise ValueError(f"Expected embedding dim {self.embedding_dim}, got {embedding.shape}")
+        if not np.isfinite(embedding).all():
+            raise ValueError("Embedding contains NaN or Inf values — cannot store corrupted vector")
+
+        content_hash = hashlib.sha256(content.encode()).hexdigest()
+        memory_id = f"mem_{content_hash[:16]}_{int(time.time() * 1000)}_{self._next_cell_id}"
+        cell_id = self._next_cell_id
+        self._next_cell_id += 1
+
+        self._points[cell_id] = embedding.copy()
+        self._cell_to_memid[cell_id] = memory_id
+        self._active_cells.add(cell_id)          # register as live cell
+        self._kdtree_dirty = True  # Lazy — don't rebuild on every store
+
+        fingerprint = self.stylometric.extract(content, author_id)
+        self._profile_for(author_id, fingerprint.language).add(fingerprint)
+
+        entry = MemoryEntry(
+            memory_id=memory_id, layer=layer, content=content,
+            content_hash=content_hash, embedding=embedding.copy(),
+            state=state, cell_id=cell_id, created_at=time.time(),
+            session_id=session_id, author_id=author_id,
+            metadata=metadata or {}, fingerprint=fingerprint,
+        )
+
+        self._db.store_memory(entry)
+        self._index_topic(entry)
+        self._auto_link_contradictions(entry)
+
+        return entry
+
+    def _auto_link_contradictions(self, new_entry: MemoryEntry):
+        """Create INHIBITORY links between memories with same topic but different claims."""
+        topic = new_entry.metadata.get("topic", "")
+        new_claim = new_entry.metadata.get("claim", "")
+        if not topic or not new_claim:
+            return
+
+        # Collect every pair, then write them in ONE transaction (plan 2.3) —
+        # a store on a hot topic used to commit twice per contradiction.
+        batch: List[Tuple[int, int, LinkType, bool]] = []
+        for mem_id, cell_id, claim in self._topic_index.get(topic, []):
+            if mem_id == new_entry.memory_id:
+                continue
+            if claim and claim != new_claim:
+                if (new_entry.cell_id, cell_id, "INHIBITORY") in self._linked_pairs:
+                    continue  # P1: already inhibitory-linked — skip redundant writes
+                batch.append((new_entry.cell_id, cell_id, LinkType.INHIBITORY, True))
+                batch.append((cell_id, new_entry.cell_id, LinkType.INHIBITORY, True))
+                self._linked_pairs.add((new_entry.cell_id, cell_id, "INHIBITORY"))
+                self._linked_pairs.add((cell_id, new_entry.cell_id, "INHIBITORY"))
+                self._cell_links_index.setdefault(new_entry.cell_id, []).append(
+                    (cell_id, LinkType.INHIBITORY))
+                self._cell_links_index.setdefault(cell_id, []).append(
+                    (new_entry.cell_id, LinkType.INHIBITORY))
+                logger.info(
+                    f"INHIBITORY link: cell {new_entry.cell_id} ({new_claim}) "
+                    f"↔ cell {cell_id} ({claim}) [topic={topic}]"
+                )
+        self._db.store_cell_links_batch(batch)
+
+    # ----------------------------------------------------------
+    # RECALL
+    # ----------------------------------------------------------
+
+    # ----------------------------------------------------------
+    # RECALL — pure core + effectful wrapper
+    # ----------------------------------------------------------
+
+    def _empty_outcome(self) -> "_CoreOutcome":
+        return _CoreOutcome(
+            top=[], scored=[], activated_cells=set(), inhibited_cells=set(),
+            query_cell=None, total_candidates=0, f_state=0, f_estilo=0,
+            f_inhib=0, synaptic_count=0, exclusions={}, pending_alerts=[],
+            enforce_forget=[], stylo_notices=[],
+        )
+
+    def _recall_core(
+        self,
+        query_embedding: np.ndarray,
+        *,
+        now: float,
+        top_k: int = 5,
+        hops: int = 2,
+        layer_filter: Optional[str] = None,
+        current_turn_memories: Optional[List[str]] = None,
+        suppressed: FrozenSet[int] = frozenset(),
+    ) -> "_CoreOutcome":
+        """
+        The scoring core: seed → BFS propagation → rescue → score → rank.
+
+        PURE with respect to persistent state. It performs NO writes: no STDP,
+        no activation timestamps, no state transitions, no alert rows, no audit
+        entry, and no mutation of the engine's in-memory indices. Everything a
+        real recall would persist comes back as *pending* work for the caller
+        to apply — which is what lets a causal probe run this exact code path
+        and then throw the effects away (docs/INTERVENTION_DESIGN.md §4).
+
+        `suppressed` holds cell_ids silenced for this evaluation, stage="field":
+        a suppressed cell cannot seed the search, cannot relay activation to its
+        neighbours, cannot fire its links, and cannot be ranked. Callers must
+        have called _ensure_kdtree() already — the core never rebuilds the index,
+        so both branches of a probe observe the identical field snapshot.
+        """
+        if self.kdtree is None or not self._active_cells:
+            return self._empty_outcome()
+
+        n_indexed = len(self._kdtree_idx_to_cell)
+        if n_indexed == 0 or not (self._active_cells - suppressed):
+            # Every live cell is silenced: there is no field left to enter.
+            return self._empty_outcome()
+
+        # ---- Find seed cell (nearest non-suppressed active cell) ----
+        if suppressed:
+            # k = |suppressed| + 1 guarantees by pigeonhole that at least one
+            # returned neighbour is not silenced.
+            k = min(n_indexed, len(suppressed) + 1)
+            _, idxs = self.kdtree.query(query_embedding.reshape(1, -1), k=k)
+            idx_row = np.atleast_1d(np.asarray(idxs)[0] if np.asarray(idxs).ndim > 1
+                                    else np.asarray(idxs))
+            query_cell = None
+            for raw in idx_row:
+                i = int(raw)
+                # scipy pads with i == n and inf distance when k > n_points.
+                if i >= n_indexed:
+                    continue
+                cand = self._kdtree_idx_to_cell[i]
+                if cand not in suppressed:
+                    query_cell = cand
+                    break
+            if query_cell is None:
+                return self._empty_outcome()
+        else:
+            _, idx = self.kdtree.query(query_embedding.reshape(1, -1))
+            query_cell = self._kdtree_idx_to_cell[int(idx[0])]
+
+        all_cell_links: Dict[int, List[Tuple[int, LinkType]]] = self._cell_links_index
+
+        # ---- BFS hop expansion with ternary links ----
+        activated_cells: Set[int] = set()
+        inhibited_cells: Set[int] = set()
+        resonant_boosts: Dict[int, float] = {}
+        cell_hops: Dict[int, int] = {query_cell: 0}
+        frontier = {query_cell}
+
+        for hop_idx in range(hops + 1):
+            new_frontier: Set[int] = set()
+            for cell in frontier:
+                if cell in inhibited_cells or cell in suppressed:
+                    continue
+                activated_cells.add(cell)
+
+                for neighbor in self.cell_neighbors.get(cell, set()):
+                    if neighbor in suppressed:
+                        continue
+                    new_frontier.add(neighbor)
+                    if neighbor not in cell_hops:
+                        cell_hops[neighbor] = hop_idx + 1
+
+                for target_id, link_type in all_cell_links.get(cell, []):
+                    # A silenced cell neither relays nor inhibits: its links are
+                    # skipped above (the `continue` on entry), and links POINTING
+                    # at it are inert because the target is out of the field.
+                    if target_id in suppressed:
+                        continue
+                    if link_type == LinkType.INHIBITORY:
+                        inhibited_cells.add(target_id)
+                    elif link_type == LinkType.RESONANT:
+                        new_frontier.add(target_id)
+                        resonant_boosts[target_id] = resonant_boosts.get(target_id, 0) + RESONANT_BOOST
+                        if target_id not in cell_hops:
+                            cell_hops[target_id] = hop_idx + 1
+                    else:
+                        new_frontier.add(target_id)
+                        if target_id not in cell_hops:
+                            cell_hops[target_id] = hop_idx + 1
+
+            frontier = new_frontier - activated_cells - inhibited_cells - suppressed
+
+        exclusions: Dict[str, str] = {}
+
+        # ---- Rescue REINFORCED cells that got inhibited during BFS ----
+        # A validated truth cannot be silenced by an unverified claim.
+        if inhibited_cells:
+            candidate_mems = self._db.load_memories(cell_ids=list(inhibited_cells))
+            for _m in candidate_mems:
+                if _m.state == MemoryState.REINFORCED:
+                    inhibited_cells.discard(_m.cell_id)
+                    activated_cells.add(_m.cell_id)
+                else:
+                    # Provenance for the invariant fuzzer: "left out because a
+                    # link inhibited it" must be distinguishable from "left out
+                    # because nothing reached it" (docs/INTERVENTION_DESIGN.md §9).
+                    exclusions[_m.memory_id] = ExclusionReason.INHIBITED
+
+        # Silenced cells are named explicitly so a probe can tell a direct hit
+        # apart from a downstream effect.
+        if suppressed:
+            for _m in self._db.load_memories(cell_ids=list(suppressed)):
+                exclusions[_m.memory_id] = ExclusionReason.DIRECT_SUPPRESSION
+
+        # ---- Load and score candidates ----
+        memories = self._db.load_memories(cell_ids=list(activated_cells))
+        if layer_filter:
+            kept = []
+            for m in memories:
+                if m.layer == layer_filter:
+                    kept.append(m)
+                else:
+                    exclusions[m.memory_id] = ExclusionReason.LAYER_FILTER
+            memories = kept
+
+        total_cands = len(memories)
+        f_state = f_estilo = f_inhib = 0
+        results: List[RecallResult] = []
+        pending_alerts: List[ForensicAlert] = []
+        enforce_forget: List[Tuple[str, int]] = []
+        stylo_notices: List[Tuple[str, float]] = []
+
+        for mem in memories:
+            if mem.state == MemoryState.FORGOTTEN:
+                f_state += 1
+                exclusions[mem.memory_id] = ExclusionReason.STATE_FILTER
+                continue
+
+            if mem.cell_id in inhibited_cells and mem.cell_id != query_cell:
+                f_inhib += 1
+                exclusions[mem.memory_id] = ExclusionReason.INHIBITED
+                continue
+
+            # Stylometric forensic check (only meaningful for texts of ≥15 words).
+            # The comparison itself is a pure function of stored data, so it runs
+            # identically here for a probe; only PERSISTING its consequences
+            # (the alert row, the quarantine) is deferred to the caller.
+            if mem.fingerprint and len(mem.content.split()) >= 15:
+                lang = getattr(mem.fingerprint, "language", "und")
+                profile = self._author_profiles.get((mem.author_id, lang))
+                if profile is not None and profile.count >= STYLO_MIN_SAMPLES:
+                    dist = self.stylometric.compare(mem.fingerprint, profile.mean_fingerprint())
+                    if dist > ESTILOMETRIA_THRESHOLD:
+                        action = "DEGRADED_TO_FORGOTTEN" if STYLO_ENFORCE else "ALERT_ONLY"
+                        if mem.memory_id not in self._alerted_memories:
+                            pending_alerts.append(ForensicAlert(
+                                alert_id=f"alert_{int(now*1000)}_{mem.memory_id[:8]}",
+                                timestamp=now,
+                                memory_id=mem.memory_id,
+                                detected_author="UNKNOWN_TAMPERER",
+                                expected_author=mem.author_id,
+                                mismatch_score=dist,
+                                action_taken=action,
+                            ))
+                        if STYLO_ENFORCE:
+                            enforce_forget.append((mem.memory_id, mem.cell_id))
+                            f_estilo += 1
+                            exclusions[mem.memory_id] = ExclusionReason.STYLOMETRY
+                            continue
+                        stylo_notices.append((mem.memory_id, dist))
+
+            # Score components
+            sim = float(self._cosine_sim(query_embedding, mem.embedding))
+            state_boost = mem.state.value
+            hop_dist = cell_hops.get(mem.cell_id)
+            if hop_dist is None:
+                hop_dist = self._hop_distance(query_cell, mem.cell_id)
+            hop_decay = math.exp(-HOP_LAMBDA * hop_dist) if hop_dist >= 0 else 1.0
+            resonant_boost = resonant_boosts.get(mem.cell_id, 0.0)
+
+            synaptic_boost = 0.0
+            if current_turn_memories:
+                for act_id in current_turn_memories:
+                    if act_id in mem.synaptic_links:
+                        synaptic_boost += mem.synaptic_links[act_id]
+
+            recency_bonus = 0.0
+            if mem.last_activation > 0:
+                # Age is clamped at zero. "Activity in the future" cannot mean
+                # "more recent than now": the most recent a memory can be is
+                # now, so the term's ceiling is its value at age = 0, i.e.
+                # RECENCY_WEIGHT. Without the clamp a negative age makes the
+                # exponential GROW without bound — a field imported from a
+                # machine whose clock ran ahead scored +30 days at ~5.4e7 and
+                # overflowed outright past ~2.8 years, all of it silent.
+                # Clock skew is not diagnosed here, only made harmless; see
+                # docs/INTERVENTION_DESIGN.md §13.
+                age = max(0.0, now - mem.last_activation)
+                recency_bonus = RECENCY_WEIGHT * math.exp(-math.log(2) * age / RECENCY_HALFLIFE)
+
+            resonant_contribution = resonant_boost * min(sim, 1.0)
+            final_score = (
+                sim * state_boost * hop_decay
+                + resonant_contribution
+                + synaptic_boost * SYNAPTIC_SCORE_WEIGHT
+                + recency_bonus
+            )
+            final_score = max(0.0, final_score)
+
+            # ---- Spectral resonance + coherence (epistemic metadata) ----
+            spectral_res = 0.0
+            coherence = 1.0
+            if self._spectral is not None and self._spectral.is_built:
+                try:
+                    spectral_res = self._spectral.resonance(query_embedding, mem.embedding)
+                    mem_links = all_cell_links.get(mem.cell_id, [])
+                    r_links = sum(1 for _, lt in mem_links if lt == LinkType.RESONANT)
+                    i_links = sum(1 for _, lt in mem_links if lt == LinkType.INHIBITORY)
+                    coherence = SpectralField.coherence(r_links, i_links)
+                except Exception:
+                    pass  # spectral is optional — never crash recall()
+
+            results.append(RecallResult(
+                memory=mem, base_score=sim, state_boost=state_boost,
+                hop_decay=hop_decay, synaptic_boost=synaptic_boost,
+                recency_bonus=recency_bonus, final_score=final_score,
+                hop_distance=hop_dist, cell_id=mem.cell_id, source="similarity",
+                resonance_score=round(spectral_res, 4),
+                coherence_score=round(coherence, 4),
+            ))
+
+        # ---- Synaptic pull (STDP-driven cross-turn association) ----
+        synaptic_count = 0
+        if current_turn_memories:
+            existing_ids = {r.memory.memory_id for r in results}
+            act_mems_batch = {
+                m.memory_id: m
+                for m in self._db.load_memories_by_ids(current_turn_memories)
+            }
+            link_candidates: Dict[str, float] = {}
+            for act_id in current_turn_memories:
+                act_mem = act_mems_batch.get(act_id)
+                if not act_mem:
+                    continue
+                for linked_id, weight in act_mem.synaptic_links.items():
+                    if weight >= 0.5 and linked_id not in existing_ids:
+                        link_candidates[linked_id] = max(
+                            link_candidates.get(linked_id, 0.0), weight
+                        )
+
+            if link_candidates:
+                linked_batch = {
+                    m.memory_id: m
+                    for m in self._db.load_memories_by_ids(list(link_candidates.keys()))
+                }
+                for linked_id, weight in link_candidates.items():
+                    linked = linked_batch.get(linked_id)
+                    if not linked or linked.state == MemoryState.FORGOTTEN:
+                        continue
+                    if linked.cell_id in inhibited_cells:
+                        continue
+                    # Synaptic pull bypasses the BFS entirely, so it is the one
+                    # path a silenced cell could sneak back in through.
+                    if linked.cell_id in suppressed:
+                        continue
+                    results.append(RecallResult(
+                        memory=linked, base_score=0.0, state_boost=linked.state.value,
+                        hop_decay=1.0, synaptic_boost=weight, recency_bonus=0.0,
+                        final_score=weight * SYNAPTIC_SCORE_WEIGHT, hop_distance=-1,
+                        cell_id=linked.cell_id, source="synaptic",
+                    ))
+                    existing_ids.add(linked_id)
+                    synaptic_count += 1
+
+        # Deterministic total order. Sorting on final_score alone left ties to
+        # insertion order, which is stable on the ORDER BY cell_id path but NOT
+        # on the >999-cell chunked load — where chunk boundaries shift as soon as
+        # the active cell set changes. A probe changes that set by construction, so
+        # without an explicit tiebreak a rank delta could be a sorting artifact
+        # rather than a causal effect (docs/INTERVENTION_DESIGN.md §5).
+        results.sort(key=lambda r: (-r.final_score, r.memory.memory_id))
+        top_results = results[:top_k]
+
+        top_ids = {r.memory.memory_id for r in top_results}
+        for r in results:
+            if r.memory.memory_id not in top_ids:
+                exclusions[r.memory.memory_id] = ExclusionReason.BELOW_TOP_K
+
+        return _CoreOutcome(
+            top=top_results,
+            scored=results,
+            activated_cells=activated_cells,
+            inhibited_cells=inhibited_cells,
+            query_cell=query_cell,
+            total_candidates=total_cands,
+            f_state=f_state,
+            f_estilo=f_estilo,
+            f_inhib=f_inhib,
+            synaptic_count=synaptic_count,
+            exclusions=exclusions,
+            pending_alerts=pending_alerts,
+            enforce_forget=enforce_forget,
+            stylo_notices=stylo_notices,
+        )
+
+    @_synchronized
+    def recall(
+        self,
+        query_embedding: np.ndarray,
+        query_text: Optional[str] = None,
+        top_k: int = 5,
+        hops: int = 2,
+        layer_filter: Optional[str] = None,
+        current_turn_memories: Optional[List[str]] = None,
+    ) -> Tuple[List[RecallResult], AuditLog]:
+
+        # P0-3: reject wrong dimensions early (store() does this too)
+        if query_embedding.shape != (self.embedding_dim,):
+            raise ValueError(
+                f"recall() embedding shape {query_embedding.shape} "
+                f"does not match engine dim ({self.embedding_dim},)"
+            )
+        self._ensure_kdtree()
+
+        if self.kdtree is None or not self._active_cells:
+            audit = self._build_audit(query_text, query_embedding, set(), [], 0, 0, 0, 0, 0)
+            self._db.store_audit(audit)
+            return [], audit
+
+        now = time.time()
+        outcome = self._recall_core(
+            query_embedding, now=now, top_k=top_k, hops=hops,
+            layer_filter=layer_filter, current_turn_memories=current_turn_memories,
+        )
+
+        # ---- Effects: everything the pure core deferred ----
+        for alert in outcome.pending_alerts:
+            self._db.store_alert(alert)
+            self._alerted_memories.add(alert.memory_id)
+
+        for mem_id, cell_id in outcome.enforce_forget:
+            # Opt-in (RAVEN_STYLO_ENFORCE=1): recall() mutating state is a
+            # destructive side effect of a read — by default we only alert.
+            self._db.update_state(mem_id, MemoryState.FORGOTTEN)
+            self._active_cells.discard(cell_id)
+            self._kdtree_dirty = True
+            logger.warning(f"Forensic: tampered memory {mem_id[:16]} → FORGOTTEN")
+
+        for mem_id, dist in outcome.stylo_notices:
+            logger.warning(
+                f"Forensic: stylometric mismatch on {mem_id[:16]} "
+                f"(dist={dist:.3f}) — alert stored, no state change "
+                f"(set RAVEN_STYLO_ENFORCE=1 to quarantine)"
+            )
+
+        if current_turn_memories:
+            self._update_stdp(current_turn_memories, [r.memory.memory_id for r in outcome.top])
+
+        self._db.update_activations([r.memory.memory_id for r in outcome.top], now)
+
+        audit = self._build_audit(
+            query_text, query_embedding, outcome.activated_cells, outcome.top,
+            outcome.total_candidates, outcome.f_state, outcome.f_estilo,
+            outcome.f_inhib, outcome.synaptic_count,
+        )
+        self._db.store_audit(audit)
+
+        return outcome.top, audit
+
+    # ----------------------------------------------------------
+    # CAUSAL INTERVENTION — read-only probes over the recall core
+    # ----------------------------------------------------------
+
+    def _resolve_targets(self, spec: "InterventionSpec") -> List[Tuple[str, int]]:
+        """
+        memory_id → cell_id, fail-closed.
+
+        What gets sealed is the RESOLVED population, never the selector: a
+        selector's meaning drifts as the field changes, so it does not identify
+        the treatment that was actually applied (docs/INTERVENTION_DESIGN.md §6).
+        """
+        resolved: List[Tuple[str, int]] = []
+        missing: List[str] = []
+        inactive: List[str] = []
+        for mem_id in spec.targets:
+            mem = self._db.load_memory(mem_id)
+            if mem is None:
+                missing.append(mem_id)
+            elif mem.cell_id not in self._active_cells:
+                inactive.append(mem_id)
+            else:
+                resolved.append((mem_id, mem.cell_id))
+        if missing or inactive:
+            raise InterventionError(
+                "intervention targets could not be resolved to live cells "
+                f"(unknown={missing}, inactive={inactive}) — refusing to run a "
+                "probe whose treatment population is not what was requested"
+            )
+        resolved.sort(key=lambda t: t[1])
+        return resolved
+
+    @_synchronized
+    def intervene(
+        self,
+        query_embedding: np.ndarray,
+        spec: "InterventionSpec",
+        query_text: Optional[str] = None,
+        top_k: int = 5,
+        hops: int = 2,
+        layer_filter: Optional[str] = None,
+        current_turn_memories: Optional[List[str]] = None,
+    ) -> "InterventionResult":
+        """
+        Measure the RETRIEVAL causal influence of silencing a set of cells.
+
+        Runs the scoring core twice — baseline and do(suppress) — against ONE
+        field snapshot, under ONE lock acquisition, sharing ONE `now`. Two
+        separate recall() calls would not be comparable: recency_bonus depends
+        on `now`, the first call writes last_activation and STDP weights the
+        second would then read, and a concurrent store could rebuild the index
+        in between (docs/INTERVENTION_DESIGN.md §5).
+
+        The probe writes exactly one row: the sealed audit entry that records
+        that the observation happened. It performs no other persistent write.
+
+        What this measures is the effect on RAVEN's retrieval, not on any
+        downstream agent answer — see docs/INTERVENTION_DESIGN.md §1.
+        """
+        if not isinstance(spec, InterventionSpec):
+            raise InterventionError(
+                f"spec must be an InterventionSpec, got {type(spec).__name__}"
+            )
+        if query_embedding.shape != (self.embedding_dim,):
+            raise ValueError(
+                f"intervene() embedding shape {query_embedding.shape} "
+                f"does not match engine dim ({self.embedding_dim},)"
+            )
+
+        self._ensure_kdtree()
+        resolved = self._resolve_targets(spec)
+        suppressed = frozenset(cell for _, cell in resolved)
+
+        # ONE timestamp, ONE snapshot, both branches.
+        now = time.time()
+        kwargs = dict(
+            now=now, top_k=top_k, hops=hops, layer_filter=layer_filter,
+            current_turn_memories=current_turn_memories,
+        )
+        baseline = self._recall_core(query_embedding, suppressed=frozenset(), **kwargs)
+        perturbed = self._recall_core(query_embedding, suppressed=suppressed, **kwargs)
+
+        delta = _compute_delta(baseline, perturbed, top_k)
+
+        intervention_payload = {
+            "mode": spec.mode,
+            "stage": spec.stage,
+            "targets": [{"memory_id": m, "cell_id": c} for m, c in resolved],
+            "delta": delta,
+            "perturbed": {
+                "cells": sorted(perturbed.activated_cells),
+                "results": self._audit_mem_dicts(perturbed.top),
+            },
+        }
+
+        audit = self._build_audit(
+            query_text, query_embedding, baseline.activated_cells, baseline.top,
+            baseline.total_candidates, baseline.f_state, baseline.f_estilo,
+            baseline.f_inhib, baseline.synaptic_count,
+            operation="recall_intervention",
+            intervention=intervention_payload,
+        )
+        self._db.store_audit(audit)
+
+        return InterventionResult(
+            spec=spec,
+            resolved_targets=resolved,
+            baseline=baseline.top,
+            perturbed=perturbed.top,
+            baseline_scored=baseline.scored,
+            perturbed_scored=perturbed.scored,
+            delta=delta,
+            baseline_exclusions=baseline.exclusions,
+            perturbed_exclusions=perturbed.exclusions,
+            audit=audit,
+        )
+
+    def absence_reason(self, exclusions: Dict[str, str], memory_id: str) -> str:
+        """
+        Why a memory is not in a result set.
+
+        `excluded == True` is not an oracle: direct suppression, inhibition,
+        unreachability and state filtering are causally different mechanisms,
+        and the rescue rule only ever promised protection against the second
+        one (docs/INTERVENTION_DESIGN.md §9).
+        """
+        if memory_id in exclusions:
+            return exclusions[memory_id]
+        mem = self._db.load_memory(memory_id)
+        if mem is None or mem.cell_id not in self._active_cells:
+            return ExclusionReason.NOT_IN_FIELD
+        return ExclusionReason.UNREACHABLE
+
+
+    # ----------------------------------------------------------
+    # STDP — Long-Term Potentiation + Depression
+    # ----------------------------------------------------------
+
+    def _update_stdp(self, previous: List[str], current: List[str]):
+        curr_set = set(current)
+        # Batch load all previous memories in one query (avoids N individual DB calls).
+        prev_mems = {
+            m.memory_id: m
+            for m in self._db.load_memories_by_ids(previous)
+        }
+        updates: Dict[str, Dict[str, float]] = {}
+        for prev_id in previous:
+            mem = prev_mems.get(prev_id)
+            if not mem:
+                continue
+            links = dict(mem.synaptic_links)
+
+            for curr_id in curr_set:
+                if curr_id == prev_id:
+                    continue
+                # LTP: co-activated → strengthen
+                links[curr_id] = min(STDP_MAX_WEIGHT, links.get(curr_id, 0.0) + STDP_POTENTIATION)
+
+            # LTD: had a link but target NOT in current turn → slight weakening
+            for eid in list(links.keys()):
+                if eid not in curr_set and eid != prev_id:
+                    links[eid] = max(STDP_MIN_WEIGHT, links[eid] - STDP_DEPRESSION)
+                    # P0: float accumulation (0.10/0.02 steps) leaves residues
+                    # ~1e-17 that `== 0.0` never matches — dead links would
+                    # pile up forever. EPS threshold actually prunes them.
+                    if links[eid] <= STDP_PRUNE_EPS:
+                        del links[eid]
+
+            updates[prev_id] = links
+
+        # One transaction for the whole turn's weight updates (plan 2.3).
+        self._db.update_synaptic_links_batch(updates)
+
+    # ----------------------------------------------------------
+    # STATE MANAGEMENT
+    # ----------------------------------------------------------
+
+    @_synchronized
+    def reinforce(self, memory_id: str) -> MemoryEntry:
+        self._db.update_state(memory_id, MemoryState.REINFORCED)
+        m = self._db.load_memory(memory_id)
+        if not m:
+            raise KeyError(f"Memory {memory_id} not found")
+        # A memory may have been FORGOTTEN (removed from the KDTree) before being
+        # reinforced — the API allows that transition. Re-register it as a live
+        # cell and rebuild the index, otherwise a reinforced memory would stay
+        # invisible to recall forever.
+        if m.cell_id not in self._active_cells:
+            self._points[m.cell_id] = m.embedding.copy()
+            self._active_cells.add(m.cell_id)
+            self._cell_to_memid[m.cell_id] = m.memory_id
+            self._kdtree_dirty = True
+        logger.info(f"Reinforced: {memory_id}")
+        return m
+
+    @_synchronized
+    def forget(self, memory_id: str) -> MemoryEntry:
+        self._db.update_state(memory_id, MemoryState.FORGOTTEN)
+        m = self._db.load_memory(memory_id)
+        if not m:
+            raise KeyError(f"Memory {memory_id} not found")
+        # P0-1e: remove from active cells so KDTree excludes this ghost
+        self._active_cells.discard(m.cell_id)
+        self._kdtree_dirty = True
+        # Remove from topic index to prevent ghost contradictions
+        for topic, entries in list(self._topic_index.items()):
+            self._topic_index[topic] = [e for e in entries if e[1] != m.cell_id]
+            if not self._topic_index[topic]:
+                del self._topic_index[topic]
+        logger.info(f"Forgotten: {memory_id}")
+        return m
+
+    @_synchronized
+    def create_cell_link(self, from_cell_id: int, to_cell_id: int, link_type: LinkType):
+        """Manually create a ternary cell link."""
+        self._db.store_cell_link(from_cell_id, to_cell_id, link_type, auto=False)
+        self._linked_pairs.add((from_cell_id, to_cell_id, link_type.name))
+        self._cell_links_index.setdefault(from_cell_id, []).append((to_cell_id, link_type))
+        if link_type == LinkType.RESONANT:
+            self._resonant_neighbors.setdefault(from_cell_id, []).append((to_cell_id, link_type))
+            self._resonant_neighbors.setdefault(to_cell_id, []).append((from_cell_id, link_type))
+
+    # ----------------------------------------------------------
+    # STATS & EXPORT
+    # ----------------------------------------------------------
+
+    @_synchronized
+    def get_stats(self) -> Dict:
+        # Bug #24: aggregate in SQL instead of materialising every row.
+        # This runs on every recall / broadcast / dashboard tick, so it must
+        # not scale with corpus size.
+        agg = self._db.count_stats()
+        state_dist = agg["state_distribution"]
+        layer_dist = agg["layer_distribution"]
+
+        reinforced_w = state_dist["REINFORCED"] * 1.5
+        neutral_w = state_dist["NEUTRAL"] * 1.0
+        total_w = reinforced_w + neutral_w
+        mss = round(reinforced_w / total_w, 4) if total_w > 0 else 0.0
+
+        # P1: MSS is computed over LIVE memories only — with 1 REINFORCED and
+        # 99 FORGOTTEN it reads 1.0, which is technically true but misleading.
+        # retention_ratio exposes the denominator the MSS silently drops.
+        total_all = agg["total_memories"]
+        live = state_dist["REINFORCED"] + state_dist["NEUTRAL"]
+        retention = round(live / total_all, 4) if total_all > 0 else 0.0
+
+        avg_neighbors = float(np.mean([len(n) for n in self.cell_neighbors.values()])) \
+            if self.cell_neighbors else 0.0
+
+        return {
+            "total_memories": agg["total_memories"],
+            "voronoi_cells": len(self._active_cells),
+            "state_distribution": state_dist,
+            "layer_distribution": layer_dist,
+            "memory_stability_score": mss,
+            "retention_ratio": retention,
+            "avg_neighbors": round(avg_neighbors, 2),
+            "total_recalls": agg["total_recalls"],
+            "cell_links": agg["cell_links"],
+            "authors": agg["authors"],
+        }
+
+    @_synchronized
+    def export_graph(self, max_nodes: int = 1000) -> Dict:
+        """
+        Export the memory graph for external visualisation.
+
+        Bug #22: capped. An uncapped export over 50k memories returns 50k nodes
+        and potentially far more edges — tens of MB of JSON that times out the
+        request. We return the most-recalled `max_nodes` cells and only the
+        edges between them, plus a `truncated` flag so the client knows.
+        """
+        # Plan 2.4: count + ORDER BY … LIMIT in SQL. The previous version
+        # loaded and deserialised every row (embedding blobs included) just
+        # to sort by recall_count in Python.
+        total = self._db.count_memories()
+        truncated = total > max_nodes
+        mems = self._db.load_top_recalled(max_nodes) if truncated else self._db.load_memories()
+
+        included = {m.cell_id for m in mems}
+        # Only load links between included cells — avoids O(total_links) load
+        # when max_nodes truncates a large corpus.
+        all_links = self._db.load_cell_links_for_cells(list(included))
+
+        nodes = [
+            {
+                "id": m.cell_id,
+                "memory_id": m.memory_id,
+                "label": m.content[:40] + "…",
+                "state": m.state.name,
+                "layer": m.layer,
+                "recall_count": m.recall_count,
+            }
+            for m in mems
+        ]
+        edges = [
+            {"from": f, "to": t, "type": lt}
+            for f, t, lt in all_links
+            if f in included and t in included
+        ]
+        return {"nodes": nodes, "edges": edges, "truncated": truncated, "total_nodes": total}
+
+    def list_memories(
+        self,
+        layer: Optional[str] = None,
+        state: Optional[str] = None,
+        limit: int = 50,
+        offset: int = 0,
+    ) -> List[MemoryEntry]:
+        return self._db.load_memories(layer=layer, state=state, limit=limit, offset=offset)
+
+    def get_audit_trail(self, limit: int = 100) -> List[Dict]:
+        return self._db.get_audit_trail(limit)
+
+    def get_alerts(self, limit: int = 50) -> List[ForensicAlert]:
+        return self._db.get_alerts(limit)
+
+    # ----------------------------------------------------------
+    # INTERNAL HELPERS
+    # ----------------------------------------------------------
+
+    @staticmethod
+    def _audit_mem_dicts(results) -> List[Dict]:
+        """Canonical per-result payload — the same shape on both branches of a
+        probe, so a sealed intervention is comparable entry to entry."""
+        return [
+            {
+                "memory_id": r.memory.memory_id,
+                "content_hash": r.memory.content_hash,
+                "content_preview": r.memory.content[:100],
+                "state": r.memory.state.name,
+                "base_score": round(r.base_score, 4),
+                "state_boost": r.state_boost,
+                "hop_decay": round(r.hop_decay, 4),
+                "synaptic_boost": round(r.synaptic_boost, 4),
+                "recency_bonus": round(r.recency_bonus, 4),
+                "final_score": round(r.final_score, 4),
+                "hop_distance": r.hop_distance,
+                "source": r.source,
+                "resonance_score": r.resonance_score,
+                "coherence_score": r.coherence_score,
+            }
+            for r in results
+        ]
+
+    def _build_audit(
+        self, query_text, query_embedding, cells, results,
+        total_cand, f_state, f_est, f_inhib, synaptic_act,
+        operation: str = "recall", intervention: Optional[Dict] = None,
+    ) -> AuditLog:
+        prev = self._db.get_prev_audit_hash()
+
+        # P0: capture ONE timestamp — it goes both into the hash payload and
+        # the stored row, so the chain is recomputable from persisted data.
+        ts = time.time()
+        cells_sorted = sorted(cells)
+
+        # P0: content_hash travels inside the hashed payload. Modifying a
+        # memory's text after it was audited now breaks hash recomputation.
+        mem_dicts = self._audit_mem_dicts(results)
+
+        # P0: .tolist() guard — query_embedding may arrive as ndarray or list.
+        # Plan 2.5: only its SHA-256 is persisted (schema v3); the derivation
+        # over str(list) is byte-identical to the legacy scheme so the same
+        # hash function covers both row generations.
+        qe = None
+        if query_embedding is not None:
+            qe = (query_embedding.tolist()
+                  if isinstance(query_embedding, np.ndarray)
+                  else list(query_embedding))
+        qemb_hash = hashlib.sha256(
+            str(qe).encode("utf-8") if qe is not None else b""
+        ).hexdigest()
+
+        audit_hash = compute_audit_hash(
+            ts, operation, query_text, cells_sorted, mem_dicts, prev,
+            qemb_hash=qemb_hash, intervention=intervention,
+        )
+
+        return AuditLog(
+            timestamp=ts, operation=operation, query_text=query_text,
+            query_embedding=None,
+            qemb_sha256=qemb_hash,
+            cells_activated=cells_sorted,
+            memories_retrieved=mem_dicts,
+            total_candidates=total_cand,
+            filtered_by_state=f_state,
+            filtered_by_estilometria=f_est,
+            filtered_by_inhibitory=f_inhib,
+            synaptic_activated=synaptic_act,
+            returned_to_agent=len(results),
+            audit_hash=audit_hash,
+            prev_hash=prev,
+            intervention=intervention,
+        )
+
+    @staticmethod
+    def _cosine_sim(a: np.ndarray, b: np.ndarray) -> float:
+        # P0-4: check norms independently; < (not <=) prevents the edge case
+        # where norm == 1e-10 passes the guard but div still produces NaN
+        norm_a = float(np.linalg.norm(a))
+        norm_b = float(np.linalg.norm(b))
+        if norm_a < 1e-10 or norm_b < 1e-10:
+            return 0.0
+        sim = float(np.dot(a, b)) / (norm_a * norm_b)
+        # Clamp to the mathematical range. Floating-point rounding can yield
+        # 1.0000000000002, which would otherwise leak into final_score and let
+        # a recall score drift above its state-boost ceiling.
+        return max(-1.0, min(1.0, sim))
+
+    def _hop_distance(self, from_cell: int, to_cell: int) -> int:
+        if from_cell == to_cell:
+            return 0
+        visited = {from_cell}
+        frontier = {from_cell}
+        hops = 0
+        while frontier and hops < MAX_HOP_SEARCH:
+            hops += 1
+            new_frontier: Set[int] = set()
+            for cell in frontier:
+                # k-NN neighbors
+                for n in self.cell_neighbors.get(cell, set()):
+                    if n == to_cell:
+                        return hops
+                    if n not in visited:
+                        visited.add(n)
+                        new_frontier.add(n)
+                # RESONANT cell_links — extend BFS through explicit links
+                for linked_cell, link_type in self._resonant_neighbors.get(cell, []):
+                    if linked_cell == to_cell:
+                        return hops
+                    if linked_cell not in visited:
+                        visited.add(linked_cell)
+                        new_frontier.add(linked_cell)
+            frontier = new_frontier
+        return -1  # unreachable
+
+
+    @_synchronized
+    def consolidate(self, threshold: float = 0.85, dry_run: bool = False) -> Dict:
+        """
+        Run sleep consolidation in-process and hot-reload the field (plan 3.1).
+
+        Unlike the offline CLI, this needs no engine restart: the engine lock
+        excludes recalls while rows are merged, then the in-memory structures
+        (KDTree, topic index, link index, profiles) are rebuilt from the DB
+        and the spectral field is refreshed.
+        """
+        from .sleep_consolidator import run_consolidation
+        result = run_consolidation(
+            self._db.db_path, threshold=threshold, dry_run=dry_run,
+            rebuild_spectral=False,   # rebuilt through the engine below
+        )
+        if not dry_run and result.get("created", 0) > 0:
+            self._load_from_db()
+            self._kdtree_dirty = False   # _load_from_db already rebuilt it
+            self.rebuild_spectral_field()
+        return result
+
+    @_synchronized
+    def rebuild_spectral_field(self) -> bool:
+        """
+        Rebuild the spectral field from current active memories and persist to DB.
+
+        Call after bulk store operations or sleep consolidation.
+        No-op (returns False) if the spectral module is not installed or fewer
+        than 2 active memories exist.
+
+        The field is stored in-process in self._spectral and persisted to the
+        same SQLite DB as the rest of raven-memory. On the next engine restart
+        it will be loaded automatically.
+        """
+        if not _SPECTRAL_AVAILABLE:
+            logger.warning("spectral module not available — install spectral.py to enable")
+            return False
+        mems = self._db.load_memories()
+        active_embs = [m.embedding for m in mems if m.state != MemoryState.FORGOTTEN]
+        if len(active_embs) < 2:
+            logger.info("Spectral rebuild skipped: fewer than 2 active memories")
+            return False
+        field = SpectralField(self.embedding_dim)
+        try:
+            ok = field.build_from_memories(active_embs)
+        except Exception as _e:
+            # spectral v2.5 raises TensorValidationError on corrupt embeddings;
+            # a corrupt row must not crash the engine — log and skip rebuild.
+            logger.warning(f"Spectral rebuild aborted: {_e}")
+            return False
+        if ok:
+            self._spectral = field
+            try:
+                SpectralStore(self._db.db_path).save(field)
+            except Exception as _e:
+                logger.warning(f"Could not persist spectral field: {_e}")
+            logger.info(f"Spectral field rebuilt: {field.summary()}")
+        return ok
+
+
+if __name__ == "__main__":
+    print("raven-memory v1.1 — Engine OK")
