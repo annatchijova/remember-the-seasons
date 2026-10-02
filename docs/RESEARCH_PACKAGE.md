@@ -216,6 +216,7 @@ and `research/PHASE7_STATISTICAL_TRIALS.md` for full results.
 | Exp32 (duration vs count) | COUNT EXPLAINS GRADIENT | Washout tracks suppressed transitions not elapsed hold; but early>late at equal k — count not sufficient statistic |
 | Exp33 (transition leverage) | REVISED DOWN | Position gradient was partly opportunity-selection (supp_rate 0.71→0.46); real early premium ~0.05 not 5x |
 | Exp34 (event-indexed leverage) | NEITHER DOMINATES | One realized block per arm: j≤3 gives ~0.15 vs ~0.10; shadow dead; accumulation > position |
+| Exp35 (dose x position factorial) | BOTH REAL, DESCRIPTIVE | Seed-demeaned (least confounded): dose and late-penalty real; early>late +0.31 at matched dose (n=7); no scalar summary sufficed |
 
 ### Hypothesis scoreboard
 

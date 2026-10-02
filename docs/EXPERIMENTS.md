@@ -62,6 +62,7 @@ measurable properties that retrieval alone does not represent?
 | `exp32_duration_vs_count.py` | Duration per se vs blocked-transition count? | COUNT EXPLAINS GRADIENT, NOT FULL EFFECT — equal count ≡ equal washout across arms, but early>late at same k; count is not a sufficient statistic |
 | `exp33_transition_leverage.py` | What makes a transition's causal leverage? | REVISED DOWN by Exp34 — supp_rate varied by position (opportunity selection); real early premium ~0.05 not 5x |
 | `exp34_event_indexed_leverage.py` | Event-indexed leverage, one realized block | NEITHER dominates — j≤3 premium ~0.15 vs ~0.10; shadow hypothesis dead; accumulation > position |
+| `exp35_dose_position_factorial.py` | Dose x position factorial | Seed-demeaned (least confounded fit): dose and late-penalty both real descriptively; early>late +0.31 at matched dose (n=7) |
 
 ## Supporting infrastructure
 

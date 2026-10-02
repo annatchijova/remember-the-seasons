@@ -1460,6 +1460,109 @@ early-premium is ~0.05 of washout, not 5x".
 
 ---
 
+## Exp35: Dose x Position factorial
+
+### Question
+
+Exp34 left "accumulation > position" inferred across different
+designs, not isolated factorially. Does dose (k realized blocks)
+and position (early/mid/late) contribute independently? Do they
+interact?
+
+### Design
+
+24 quiet seeds, ng=7. For each seed, enumerate the induced
+group's natural post-window G-events on a force-flagged-at-70
+baseline. Arms: k in {0..4} suppressed ordinals at:
+
+  early — ordinals 1..k
+  mid   — ordinals 4..3+k
+  late  — last k baseline ordinals
+
+Outcome: washout delta vs baseline (k=0). OLS:
+delta ~ k + position + k:position on treated cells.
+
+### Results
+
+```
+Factorial table (mean delta):
+ k    early    mid     late    realized blocks (e/m/l)
+ 0    0.000   0.000   0.000    0.00  0.00  0.00
+ 1    0.152   0.095   0.004    1.00  1.00  1.00
+ 2    0.229   0.172   0.024    1.71  1.75  1.38
+ 3    0.289   0.184   0.048    2.21  2.21  1.71
+ 4    0.323   0.228   0.070    2.62  2.62  2.00
+
+Initial OLS on PROGRAMMED k (n=288, R2=0.37):
+  k       +0.057  t= 4.78
+  late    -0.124  t=-2.68
+  k:late  -0.035  t=-2.06
+
+Paired early vs late at k=4: mean diff +0.253, share 92%.
+Realized-k gap in those pairs: early 2.62 vs late 2.00.
+At EQUAL realized dose (n=7 seeds): early-late = +0.31.
+```
+
+### Reanalysis on realized dose (correcting programmed-vs-realized)
+
+```
+OLS on REALIZED k, pooled (R2=0.29):
+  k_real  -0.012  ns        <- dose vanishes pooled
+  late    -0.238  t=-5.29   <- position dominates pooled
+
+Seed-demeaned (within-seed deltas):
+  k_real  +0.052            <- dose survives within-seed
+  late    -0.122            <- position survives too
+  k:late  -0.079            <- interaction survives
+```
+
+### Verdict: DOSE AND POSITION BOTH REAL — but the pooled model
+### was confounded
+
+The programmed-k OLS reported "+0.057 per block" — wrong framing.
+Realized k was systematically lower in late arms (2.00 vs 2.62 at
+k=4), so part of "position" was dose deficit.
+
+Corrected:
+- Pooled realized-k OLS makes dose vanish entirely — but that is
+  itself confounded: seeds with more G-events realize more blocks
+  AND differ in baseline dynamics.
+- The seed-demeaned analysis is the LEAST confounded of the three
+  fits (it separates seed-level heterogeneity), but it remains a
+  simple descriptive model of repeated measures — not "the correct
+  model". The matched-dose comparison (+0.31 early>late) is
+  conceptually clean but n=7. Treat +0.052 / -0.122 / -0.079 as
+  descriptive estimates for this protocol, not constants of the
+  mechanism.
+- Cleanest evidence for position: at EXACTLY equal realized dose,
+  early beats late by +0.31 (n=7 seeds where realized counts
+  matched).
+
+What does NOT survive: "each denial adds +0.057" as a clean
+per-block causal claim — the estimate is pooled-model dependent.
+What DOES survive: within-seed, more realized denials produce
+more divergence, and boundary-adjacent denials are worth more
+even at matched dose.
+
+The honest closing statement for this branch:
+
+> Simple summaries of history repeatedly failed to capture causal
+> leverage. Duration alone was confounded; count explained part
+> but not all; position effects survived some controls but were
+> entangled with realized dose. The system's present behavior
+> depends on persistent state produced by its trajectory, and
+> recovering why that state arose requires retaining more causal
+> structure than these scalar summaries provide.
+
+The 63% residual variance of the linear model is NOT evidence
+that "no scalar can summarize history" — it is unexplained
+variance of one particular model, which could contain
+nonlinearity, omitted variables, or protocol noise. The defensible
+claim is narrower and stronger: every compression WE TESTED lost
+explanatory structure.
+
+---
+
 ## Cross-experiment synthesis
 
 ### The amputation results
