@@ -425,6 +425,34 @@ compression curve is noisy and assignment-dependent. The "location
 matters" claim is falsified — scattered groups produce comparable
 or larger divergence at some budgets.
 
+### Why 7 groups works and 8 doesn't (Exp27, OBSERVED)
+
+Exp27 traced the ng=7 vs ng=8 difference query-by-query:
+
+```
+                        ng=7       ng=8
+mean washout            0.0805     0.0049
+total flips                24          3
+mean late flags (40-70)   0.23       0.03
+seeds w/ divergence        6          1
+feedback events             83          0
+```
+
+Mechanism: a group that stays unflagged through step 39 is the
+causal substrate — control flags it during the intervention window,
+intervention can't. Post-washout, flag difference → recall
+difference → different groups reinforced → flag sets diverge
+further (feedback loop).
+
+The 7-vs-8 difference is a partition accident: at ng=8, the
+boundaries land such that almost no group stays unflagged at
+step 39. No substrate → no divergence. It is not a property of
+"8 bits"; it is this particular partition's early saturation.
+
+Verdict: feedback loop confirmed (83 events at ng=7). The noisy
+Exp26b curve is a lottery of late-flagged groups — same structural
+phenomenon as Exp23's late bloomers, at the group level.
+
 ## Valid negative outcomes (any is a successful result)
 
 - RAG (B0/B1/B2) is sufficient for most tested properties.

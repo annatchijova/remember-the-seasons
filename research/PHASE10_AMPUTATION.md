@@ -556,7 +556,7 @@ state); decay wipes state (catastrophic reset).
 persistence across queries, the machinery is inert. Confirmed
 negative control.
 
-### Verdict: minimum sufficient state = persistent accumulating flag
+### Verdict: smallest tested sufficient state = persistent accumulating flag
 
 The minimum state for H8 is:
 
@@ -746,6 +746,87 @@ threshold.
 
 ---
 
+## Exp27: Why does 7 groups produce H8 and 8 does not?
+
+### Question
+
+Exp26b showed a noisy curve: 7 groups → 0.0805 (24 flips),
+8 groups → 0.0049 (3 flips). Two nearly identical capacities
+differ by 16x. Why?
+
+### Design
+
+Same protocol, n_groups ∈ {7,8}, same 30 seeds, with per-step
+logging: flag sets, recalls, boundary gap, margin groups.
+
+Key quantities:
+- flags set by step 39 (identical both arms)
+- "late flags": groups flagged in control during 40-70 (blocked
+  in intervention) — the direct causal substrate
+- per-event attribution: for each post-washout differing recall,
+  whether its group flag differed at that step
+- feedback events: intervention arm flags a group that control
+  never flags at the same step
+
+### Results
+
+```
+                        ng=7       ng=8
+mean washout            0.0805     0.0049
+total flips                24          3
+mean late flags (40-70)   0.23       0.03
+seeds w/ divergence>0.001   6          1
+state-explained diff      61.9%      50.0%
+feedback events              83          0
+```
+
+Per-seed washout at ng=7: [0.592, 0.532, 0.404, 0.336, 0.316,
+0.236, then zeros]. Divergence is driven by 6/30 seeds.
+
+### Mechanism confirmed
+
+1. A group stays unflagged through step 39 (partition accident +
+   query history).
+2. Control flags it during the intervention window; intervention
+   arm cannot.
+3. Post-washout: that group's members are boosted in control but
+   not in intervention → recall sets differ.
+4. Different recalls → different top-1 → different groups flagged
+   → flag sets diverge further (feedback loop: 83 events at ng=7,
+   0 at ng=8).
+
+The "38% unexplained by own-group flag" is indirect state
+explanation — a member enters/exits top-10 because OTHER groups'
+flag differences changed the ranking, not because its own flag
+differed. The full flag vector is the state; per-member attribution
+is too narrow.
+
+### Why 8 fails: partition accident
+
+At n_groups=8, the partition boundaries happen to land such that
+virtually all groups are flagged by step 39 (0.03 late flags vs
+0.23 at ng=7). No unflagged group at the intervention boundary →
+no substrate for divergence. It is not "8 bits insufficient" — it
+is "this particular partition happens to saturate early."
+
+### Verdict: feedback loop + partition accident
+
+The noisy Exp26b curve is a lottery: whether a flag survives
+unset through step 39 depends on query trajectory and where
+partition boundaries land. When it does, a feedback loop
+(flag diff → recall diff → flag diff) amplifies the divergence.
+
+There is no magic bit count. There is a threshold-dynamics
+phenomenon: **late-flagged groups are the causal substrate, and
+feedback amplifies their effect.**
+
+This connects Exp26/27 to Exp23: "late bloomers" (memories crossing
+threshold during the window) and "late flags" (groups flagged
+during the window) are the same structural phenomenon at different
+levels of the system.
+
+---
+
 ## Cross-experiment synthesis
 
 ### The amputation results
@@ -809,8 +890,9 @@ vs stateful adaptive retrieval.**
 
 And Exp25 dissected the state itself:
 
-**The minimum sufficient state is a persistent accumulating flag
-per memory — as little as 1 bit, updated on recall.**
+**The smallest tested sufficient state representation is a
+persistent accumulating flag per memory — as little as 1 bit,
+updated on recall.**
 
 - The missing ingredient is NOT graph propagation or STDP.
 - The missing ingredient is persistent adaptive state.

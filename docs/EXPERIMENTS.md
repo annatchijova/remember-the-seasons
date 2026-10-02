@@ -53,6 +53,7 @@ measurable properties that retrieval alone does not represent?
 | `exp25_state_amputation.py` | What is the minimum sufficient state? | Binary flag suffices; accumulation required; persistence across queries required |
 | `exp26_state_compression.py` | How many bits does H8 need? | PREMATURE — see Exp26b |
 | `exp26b_falsification.py` | Is the threshold real? Does location matter? | BOTH FALSIFIED — no clean threshold; scattered ≥ coherent |
+| `exp27_explain_7v8.py` | Why does ng=7 produce H8 and ng=8 not? | OBSERVED — late-flagged group + feedback loop; partition accident |
 
 ## Supporting infrastructure
 

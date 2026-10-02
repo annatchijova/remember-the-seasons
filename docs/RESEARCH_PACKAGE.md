@@ -206,6 +206,8 @@ and `research/PHASE7_STATISTICAL_TRIALS.md` for full results.
 | Exp23 (residual decomposition) | DERIVABLE | 100% of unexplained flips are late bloomers; no emergent mechanism |
 | Exp25 (state amputation) | SURVIVES | Minimum sufficient state: 1-bit accumulating persistent flag |
 | Exp26 (state compression) | FALSIFIED | Exp26b: no clean threshold; location claim not confirmed — noisy/non-monotonic |
+| Exp26b (falsification) | COMPLETE | No threshold; location claim falsified; scattered >= coherent |
+| Exp27 (why 7 vs 8) | OBSERVED | Late-flagged group + feedback loop; partition accident, not bit count |
 
 ### Hypothesis scoreboard
 
