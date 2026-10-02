@@ -1040,6 +1040,91 @@ rank-1-relevant groups unflagged at the intervention boundary.
 
 ---
 
+## Exp30: Causal mediator intervention
+
+### Question
+
+Exp27/29 described a correlational story: late flags -> recall
+diff -> flag diff. Does the chain actually mediate divergence?
+Manipulate each link directly.
+
+### Design
+
+ng=7, 30 seeds, intervention 40-70. Six arms:
+
+  natural    — Exp27/29 baseline
+  saturate   — all group flags True at t=40 in intervention arm
+  rescue     — flag only control's late groups at t=40 in int arm
+  induce     — on a quiet seed: unflag one active group at t=40
+  top1_block — natural until t=70, then no reinforcement
+  top1_swap  — natural until t=70, then reinforce control's top-1
+
+NOTE: first run produced 0 divergent seeds — build_field was called
+positionally, passing n_groups into n_memories. Fixed to keyword
+argument. This bug is why Exp30's first output showed all-quiet.
+
+### Results
+
+```
+DIVERGENT seeds (natural > 0.005, n=6):
+  seed  natural  saturate  rescue  t1block  t1swap  late
+     8   0.5320   0.9440  0.0000   0.3160   0.0160    1
+    14   0.3360   0.7840  0.0000   0.3360   0.0440    1
+    18   0.5920   0.9120  0.0000   0.3480   0.0160    1
+    19   0.2360   0.8000  0.0000   0.2360   0.0280    1
+    27   0.4040   0.9400  0.0000   0.4040   0.0360    1
+    28   0.3160   0.9080  0.0000   0.3160   0.0320    1
+
+  Means: natural=0.4027 saturate=0.8813 rescue=0.0000
+         t1block=0.3260 t1swap=0.0287
+
+QUIET seeds (n=24):
+  induce -> divergence in 21/24 seeds
+```
+
+### Causal interpretation
+
+**Necessity (rescue):** flagging exactly the groups that control
+late-flagged collapses divergence to 0.0000. The specific unset
+flags are necessary — the divergence does not come from generic
+state noise.
+
+**Sufficiency (induce):** on quiet seeds, unflagging one active
+group produces divergence in 21/24 cases. An unset flag is
+sufficient — the mechanism is not seed-specific.
+
+**Mediator (top1_swap):** post-washout, forcing the intervention
+arm to reinforce CONTROL's top-1 collapses divergence to 0.0287.
+The reinforcement-target channel mediates the amplification — when
+the int arm's flag choices follow control's, the flag sets converge.
+
+**Amplification vs base effect (top1_block):** with no reinforcement
+post-washout, divergence persists at 0.3260 (vs 0.4027 natural).
+The flag difference established during the window carries most of
+the effect; continued reinforcement amplifies it modestly.
+
+**Saturate is not a necessity test:** setting ALL flags True in the
+int arm creates a large artificial asymmetry vs control's sparse
+flags — it produces divergence (0.88) by construction, not by
+mechanism. Rescue is the surgical test.
+
+### Verdict: CAUSAL MEDIATION CONFIRMED
+
+The chain is:
+```
+unflagged group at t=39  -> necessary AND sufficient
+    -> top-1 differs post-washout -> reinforcement channel
+    -> flag sets diverge further  -> amplified by top-1 channel
+```
+
+This is now a manipulated causal claim, not a correlational one:
+we can turn the divergence OFF by flagging the late group (rescue)
+and turn it ON in a quiet seed by unflagging an active group
+(induce). The mediator is the reinforcement channel — swapping the
+reinforced memory to control's choice collapses the divergence.
+
+---
+
 ## Cross-experiment synthesis
 
 ### The amputation results

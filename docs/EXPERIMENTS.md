@@ -57,6 +57,7 @@ measurable properties that retrieval alone does not represent?
 | `exp26b_falsification.py` | Is the threshold real? Does location matter? | BOTH FALSIFIED — no clean threshold; scattered ≥ coherent |
 | `exp27_explain_7v8.py` | Why does ng=7 produce H8 and ng=8 not? | OBSERVED — late-flagged group + feedback loop; partition accident |
 | `exp29_feedback_mechanism.py` | When does flag divergence self-amplify? | WEAK FEEDBACK — top-1 flips 20% of flag-diff steps; ng=7 grows slowly, ng=11/25 self-correct |
+| `exp30_mediator_intervention.py` | Does the late-flag→top-1→reinforcement chain mediate? | CAUSAL MEDIATION — rescue kills it (necessary), induce creates it (sufficient), top1_swap converges (channel confirmed) |
 
 ## Supporting infrastructure
 
