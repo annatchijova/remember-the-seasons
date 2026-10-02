@@ -213,7 +213,9 @@ and `research/PHASE7_STATISTICAL_TRIALS.md` for full results.
 | Exp29 (feedback mechanism) | WEAK | Top-1 flips 20% of flag-diff steps; ng=7 grows slowly, ng=11/25 self-correct |
 | Exp30 (mediator intervention) | CONFIRMED (scoped) | Rescue=0.0000 (no hidden channel), induce=21/24 (sufficient when asymmetry persists), top1_swap=0.029 (reinforcement channel mediates); audited post-hoc |
 | Exp31 (asymmetry duration) | PERSISTENCE MODULATES | P(div) saturates d≥4, magnitude scales; duration vs blocked-count confound |
-| Exp32 (duration vs count) | COUNT NOT DURATION | Washout tracks suppressed re-flag transitions (n_blocked), not elapsed hold; early position modest bonus |
+| Exp32 (duration vs count) | COUNT EXPLAINS GRADIENT | Washout tracks suppressed transitions not elapsed hold; but early>late at equal k — count not sufficient statistic |
+| Exp33 (transition leverage) | REVISED DOWN | Position gradient was partly opportunity-selection (supp_rate 0.71→0.46); real early premium ~0.05 not 5x |
+| Exp34 (event-indexed leverage) | NEITHER DOMINATES | One realized block per arm: j≤3 gives ~0.15 vs ~0.10; shadow dead; accumulation > position |
 
 ### Hypothesis scoreboard
 

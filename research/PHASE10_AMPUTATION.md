@@ -1272,30 +1272,191 @@ arms produce similar washout. **Zero seeds** show washout growth
 between d=16 and d=50 at constant n_blocked. Within-duration
 correlations of washout ~ n_blocked are small/negative.
 
-### Verdict: COUNT, not duration
+### Verdict: TRANSITION COUNT EXPLAINS THE DURATION GRADIENT, BUT NOT THE FULL EFFECT
 
 The Exp31 "duration effect" decomposes to a dose-response on
 **suppressed state transitions**: longer holds block more re-flag
-attempts, and washout tracks that count. Elapsed asymmetry
-lifetime contributes nothing measurable once count is fixed —
-at equal n_blocked, d=4 and d=50 are indistinguishable.
+attempts, and washout tracks that count. At equal n_blocked,
+d=4 and d=50 are indistinguishable — elapsed asymmetry lifetime
+alone does not explain the gradient.
 
-Modest timing effect: early_k > late_k at k>=4 (0.43 vs 0.34) —
-asymmetry adjacent to the intervention window is somewhat more
-consequential than an equivalent count placed later, but the
-difference is small.
+But count is NOT a sufficient statistic either:
+
+- early_k=8 gives wash=0.427 vs late_k=8 gives 0.339 at the SAME
+  suppressed count — placement matters.
+- Within-duration correlations washout ~ n_blocked are small or
+  negative — count alone does not predict the outcome across
+  seeds.
+
+The defensible reading:
+
+```
+elapsed duration alone        -> does not explain the gradient
+outcome = f(n_blocked) only   -> does not explain the residuals
+
+effect = f(blocked transitions,
+            where/when they occur,
+            trajectory state)
+```
 
 The causal variable refines once more:
 
-> divergence scales with the number of times the system was
-> prevented from healing a state asymmetry — each blocked
-> re-flag is a repeated denial of self-correction, and each
-> denial extends the window in which the asymmetry can reach a
-> ranking boundary.
+> divergence scales with the number of denied self-corrections,
+> weighted by where in the trajectory each denial lands.
 
-This also re-reads Exp31 cleanly: the hold was a proxy for
-attempt count. The system's natural healing rate (how often the
-induced group becomes top-1) is what converts duration into dose.
+Which raises the next question — Exp33: what property of a
+transition determines its causal leverage? Not how many, not how
+long they persist — which, when, and in what system state.
+
+---
+
+## Exp33: What determines a transition's causal leverage?
+
+### Question
+
+Exp32 showed count explains the duration gradient but isn't a
+sufficient statistic (early > late at equal count). What property
+of a single denied transition determines its leverage?
+
+### Design
+
+Pulse intervention: exactly ONE denied transition per arm, at a
+chosen post-window position. At step t_p: unflag the induced
+group; the NEXT step where it lands top-1 has its reinforcement
+suppressed; normal dynamics resume. All arms share identical
+history to t_p and identical blocked count (1).
+
+Positions t_p ∈ {72,80,88,96,104,112}. 24 quiet seeds, ng=7.
+Baseline = same trajectory, no pulse. Per arm, log the score gap
+between the induced group's best member and actual top-1 at pulse
+time (rank-1 proximity hypothesis).
+
+### Results
+
+```
+t_p    washout   delta    P(div)   supp_rate
+ 72     0.251    +0.251    0.92      0.71
+ 80     0.247    +0.247    0.96      0.71
+ 88     0.177    +0.177    1.00      0.75
+ 96     0.153    +0.153    0.96      0.58
+104     0.097    +0.097    1.00      0.58
+112     0.054    +0.054    0.96      0.46
+
+baseline (no pulse): 0.0000
+
+corr(gap_at_pulse, washout) = -0.05   <- proximity to rank-1
+                                          boundary does NOT matter
+```
+
+### Verdict: POSITION, not proximity — REVISED DOWN by Exp34
+
+A single denied transition lands 5x more divergence at t=72 than
+at t=112, decaying nearly monotonically with distance from the
+intervention boundary. One early denial equals several late ones.
+
+**Downgraded by Exp34:** this gradient was partly an artifact —
+supp_rate fell from 0.71 to 0.46 across positions, so late pulses
+delivered the treatment less often (opportunity selection). The
+event-indexed version (Exp34) shows the real early premium is
+~0.05 of washout, not 5x.
+
+The proximity hypothesis FAILED: how close the group was to rank-1
+at pulse time is uncorrelated with leverage (r=-0.05). A denied
+transition doesn't need the group near a boundary at that instant
+— it needs to be denied EARLY.
+
+Why: a denial at t=72 delays the group's re-flag through many
+subsequent transitions it would otherwise have participated in —
+the asymmetry propagates forward from near the boundary and casts
+a long causal shadow. A denial at t=112 shadows few remaining
+steps.
+
+This is a clean answer to "which transitions matter":
+
+> causal leverage of a denied self-correction decays with its
+> distance from the intervention boundary — early denials shadow
+> more subsequent transitions.
+
+And it retro-explains Exp32's early>late at equal count: early
+blocks sit at higher-leverage positions.
+
+---
+
+## Exp34: Event-indexed leverage — one realized block per arm
+
+### The confound in Exp33
+
+Exp33's pulse had variable supp_rate (0.71 at t=72, 0.46 at
+t=112) — the block only fired if the induced group happened to
+land top-1 after the pulse. Late positions under-delivered the
+treatment, so part of the "position gradient" was differential
+intervention success, not leverage.
+
+### Design
+
+Work in EVENT space, not wall-clock. For each quiet seed:
+
+1. Baseline: force-flag the induced group at t=70 (kills natural
+   asymmetry); enumerate its natural G-events — post-window steps
+   where a member lands top-1.
+2. Arm(j): at the j-th G-event, unflag the group just before the
+   recall and suppress that one reinforcement. Every arm realizes
+   exactly ONE block; position = event index j, not a timestamp.
+
+Then compare leverage ~ j vs leverage ~ remaining downstream
+G-events (the "shadow" hypothesis: early matters because more
+future is still reachable).
+
+### Results
+
+```
+G-events per quiet seed: median ~13, range 7-25
+
+j     n   realized  mean delta
+1     24    24       0.152
+2     24    24       0.142
+3     24    24       0.148
+4     24    24       0.095
+5     24    24       0.101
+6     24    24       0.098
+7     24    24       0.096
+8     22    22       0.101
+
+corr(event index j, delta)            = -0.147
+corr(remaining events, delta)         = +0.050
+corr(residual delta | j, remaining)   = -0.022
+corr(residual delta | remaining, j)   = -0.123
+```
+
+### Verdict: NEITHER hypothesis dominates
+
+Single realized blocks produce real but modest divergence
+(~0.15 early, ~0.10 later) with a small early-event premium
+(j<=3 > j>=4, consistent with Exp31's d=4 saturation).
+
+- **Shadow dead**: remaining-opportunity count adds nothing
+  (residual corr -0.02 controlling for j).
+- **Position weak**: event index correlates only -0.15, and
+  -0.12 after controlling for remaining — a real but small
+  early premium, not the 5x gradient Exp33 implied.
+
+The Exp33 gradient partly reflected **selection on opportunity**:
+late pulses only fired when the group still landed top-1 (which
+requires the trajectory to still visit it), so they were
+delivered preferentially in seeds whose dynamics had already
+moved away — attenuating the effect measured there.
+
+The honest current answer to "which transitions matter":
+
+> accumulation of denied self-corrections is the main driver;
+> position confers a modest bonus on the first ~3 blocked
+> opportunities, and beyond that neither event index nor
+> remaining-shadow predicts leverage strongly.
+
+This scopes Exp33 down to "position correlates with leverage
+under a single-pulse intervention"; Exp34 refines it to "the
+gradient was partly opportunity-selection, and the true
+early-premium is ~0.05 of washout, not 5x".
 
 ---
 

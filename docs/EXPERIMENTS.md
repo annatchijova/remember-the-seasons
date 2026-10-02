@@ -59,7 +59,9 @@ measurable properties that retrieval alone does not represent?
 | `exp29_feedback_mechanism.py` | When does flag divergence self-amplify? | WEAK FEEDBACK — top-1 flips 20% of flag-diff steps; ng=7 grows slowly, ng=11/25 self-correct |
 | `exp30_mediator_intervention.py` | Does the late-flag→top-1→reinforcement chain mediate? | CONFIRMED (scoped) — rescue kills, induce creates, top1_swap converges; audited |
 | `exp31_asymmetry_duration.py` | Does asymmetry duration predict divergence? | PERSISTENCE MODULATES — P(div) saturates d≥4, magnitude scales with hold; duration vs blocked-transitions confound unresolved → Exp32 |
-| `exp32_duration_vs_count.py` | Duration per se vs blocked-transition count? | COUNT, NOT DURATION — washout tracks suppressed re-flag count; early_k≡hold at equal count; modest early-position bonus |
+| `exp32_duration_vs_count.py` | Duration per se vs blocked-transition count? | COUNT EXPLAINS GRADIENT, NOT FULL EFFECT — equal count ≡ equal washout across arms, but early>late at same k; count is not a sufficient statistic |
+| `exp33_transition_leverage.py` | What makes a transition's causal leverage? | REVISED DOWN by Exp34 — supp_rate varied by position (opportunity selection); real early premium ~0.05 not 5x |
+| `exp34_event_indexed_leverage.py` | Event-indexed leverage, one realized block | NEITHER dominates — j≤3 premium ~0.15 vs ~0.10; shadow hypothesis dead; accumulation > position |
 
 ## Supporting infrastructure
 
