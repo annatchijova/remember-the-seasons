@@ -389,28 +389,53 @@ if len(treated_r) > 10:
     print("\n  NOTE: cells from the same seed share a trajectory —")
     print("  treat t-values descriptively, not as strong inference.")
 
-# Seed-fixed-effects: within-seed deltas vs k_realized
-print("\n  Seed-demeaned check (each seed vs its own cell means):")
+# TRUE within estimator: de-mean y AND the FULL regressor vector
+# per seed (equivalent to seed fixed effects). Previous version
+# de-meaned only y and k_realized — wrong.
+print("\n  Within estimator (all regressors de-meaned per seed):")
 import collections
 by_seed = collections.defaultdict(list)
 for c in treated_r:
     by_seed[c["seed"]].append(c)
+
+def build_X(c):
+    pm = 1.0 if c["pos"] == "mid" else 0.0
+    pl = 1.0 if c["pos"] == "late" else 0.0
+    r = c["n_realized"]
+    return np.array([r, pm, pl, r * pm, r * pl])
+
 dm_X, dm_y = [], []
 for seed, cs in by_seed.items():
-    mk = np.mean([c["n_realized"] for c in cs])
-    md = np.mean([c["delta"] for c in cs])
-    for c in cs:
-        pm = 1.0 if c["pos"] == "mid" else 0.0
-        pl = 1.0 if c["pos"] == "late" else 0.0
-        dm_X.append([c["n_realized"] - mk, pm, pl,
-                     (c["n_realized"] - mk) * pl])
-        dm_y.append(c["delta"] - md)
+    if len(cs) < 2:
+        continue
+    Xs = np.array([build_X(c) for c in cs])
+    Xbar = Xs.mean(axis=0)
+    ybar = np.mean([c["delta"] for c in cs])
+    for c, x in zip(cs, Xs):
+        dm_X.append(x - Xbar)
+        dm_y.append(c["delta"] - ybar)
 dm_X = np.array(dm_X); dm_y = np.array(dm_y)
 if len(dm_y) > 10:
     b2, *_ = np.linalg.lstsq(dm_X, dm_y, rcond=None)
-    print(f"    within-seed beta_k_realized = {b2[0]:.4f}")
-    print(f"    within-seed beta_late       = {b2[2]:.4f}")
-    print(f"    within-seed beta_k:late     = {b2[3]:.4f}")
+    yhat = dm_X @ b2
+    ss_res = float(((dm_y - yhat) ** 2).sum())
+    ss_tot = float((dm_y ** 2).sum())
+    r2 = 1 - ss_res / ss_tot if ss_tot > 0 else 0.0
+    names = ["k_real", "mid", "late", "k:mid", "k:late"]
+    print(f"    n={len(dm_y)} cells, within R2={r2:.3f}")
+    for name, b in zip(names, b2):
+        print(f"    beta_{name:>8} = {b:+.4f}")
+    print("    (descriptive within-seed associations; realized_k is")
+    print("     post-treatment/trajectory-dependent — not exogenous dose)")
+
+# Cleanest descriptive contrast: k=1 arms realize exactly 1 block
+print("\n  Cleanest contrast — k=1, exactly one realized block each:")
+for pos in POSITIONS:
+    cs = [c for c in cells if c["k"] == 1 and c["pos"] == pos]
+    if cs:
+        print(f"    {pos:>5}: mean delta={np.mean([c['delta'] for c in cs]):.4f} "
+              f"(realized={np.mean([c['n_realized'] for c in cs]):.2f}, "
+              f"n={len(cs)})")
 
 print("\n" + "=" * 70)
 print("VERDICT")

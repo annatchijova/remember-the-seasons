@@ -1527,39 +1527,48 @@ Corrected:
 - Pooled realized-k OLS makes dose vanish entirely — but that is
   itself confounded: seeds with more G-events realize more blocks
   AND differ in baseline dynamics.
-- The seed-demeaned analysis is the LEAST confounded of the three
-  fits (it separates seed-level heterogeneity), but it remains a
-  simple descriptive model of repeated measures — not "the correct
-  model". The matched-dose comparison (+0.31 early>late) is
-  conceptually clean but n=7. Treat +0.052 / -0.122 / -0.079 as
-  descriptive estimates for this protocol, not constants of the
-  mechanism.
-- Cleanest evidence for position: at EXACTLY equal realized dose,
-  early beats late by +0.31 (n=7 seeds where realized counts
-  matched).
+- The within estimator (ALL regressors de-meaned per seed, the
+  algebraically correct fixed-effects form) gives: k_real +0.025,
+  mid -0.098, late -0.192, k:late -0.007 — descriptive within-seed
+  associations. The previous partial de-meaning (+0.052, -0.122,
+  -0.079) was not the true within estimator and is replaced.
+- IMPORTANT: realized_k is post-treatment and trajectory-dependent.
+  The causal objects in this simulator are the intervention
+  POLICIES (which ordinals we suppress), not the realized count —
+  which is a mediator the policy produces, not an exogenous dose.
+  So coefficients on realized_k are descriptive, not per-block
+  causal effects.
+- The cleanest position evidence needs no regression: at k=1,
+  all three arms realize exactly one block in all 24 seeds —
+  early 0.152, mid 0.095, late 0.004. Delta early-late = +0.148
+  at n=24. At k=4 matched-dose (n=7 seeds where realized counts
+  coincided), early>late by +0.31 — a matched-realized-dose
+  principal-stratum contrast, valid for that subpopulation.
 
 What does NOT survive: "each denial adds +0.057" as a clean
-per-block causal claim — the estimate is pooled-model dependent.
-What DOES survive: within-seed, more realized denials produce
-more divergence, and boundary-adjacent denials are worth more
-even at matched dose.
+per-block causal claim — realized dose is post-treatment, not
+randomized dose.
 
-The honest closing statement for this branch:
+The frozen closing statement for this branch:
 
-> Simple summaries of history repeatedly failed to capture causal
-> leverage. Duration alone was confounded; count explained part
-> but not all; position effects survived some controls but were
-> entangled with realized dose. The system's present behavior
-> depends on persistent state produced by its trajectory, and
-> recovering why that state arose requires retaining more causal
-> structure than these scalar summaries provide.
+> Phase 10 established that persistent adaptive state is
+> sufficient to carry path dependence in this retrieval system.
+> Across controlled follow-up interventions, elapsed duration,
+> transition count, and event position each captured some aspects
+> of downstream divergence, but none of the tested summaries fully
+> accounted for causal leverage. Exp35 further shows that
+> placement can matter even at equal realized block count, while
+> regression coefficients on realized dose remain descriptive
+> because realized dose is trajectory-dependent and post-treatment.
+> These results motivate separating the compact state needed to
+> change future behavior from the richer evidence needed to
+> reconstruct why that state arose. They do not establish that
+> full history is necessary, nor that no sufficient compression
+> exists.
 
-The 63% residual variance of the linear model is NOT evidence
-that "no scalar can summarize history" — it is unexplained
-variance of one particular model, which could contain
-nonlinearity, omitted variables, or protocol noise. The defensible
-claim is narrower and stronger: every compression WE TESTED lost
-explanatory structure.
+That paragraph survives even if every coefficient changes under
+a different estimator — the architectural result does not depend
+on three fragile numbers.
 
 ---
 
