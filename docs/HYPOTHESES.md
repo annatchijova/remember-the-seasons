@@ -453,6 +453,26 @@ Verdict: feedback loop confirmed (83 events at ng=7). The noisy
 Exp26b curve is a lottery of late-flagged groups — same structural
 phenomenon as Exp23's late bloomers, at the group level.
 
+### H11 done properly (Exp24, INCONCLUSIVE)
+
+Exp20 was inconclusive (n=1 seed, no equivalence test). Exp24
+preregistered the full design before any chess evaluation:
+
+- Candidate seeds 0..15; calibration gate mem_diff >= 0.02
+- 15 fixed positions (same FENs both arms), hermes3:8b temp=0
+- Stockfish 16 depth 15 ground truth; metric = regret (cp)
+- Equivalence margin delta = 30 cp; TOST alpha = 0.05
+- Sham: same context twice (noise floor)
+
+Results: 3/16 seeds selected (2, 7, 11). Sham 14/15 (1cp noise).
+Move agreement 39/45 (87%). Nonzero diffs symmetric: +1, +32, -20,
+-41, -639, +41. Mean -13.9 cp, 90% CI [-37.9, +10.1], TOST p=0.133.
+
+Verdict: INCONCLUSIVE — CI crosses -30cp. Most positions identical;
+diffs are symmetric (no systematic degradation); one -639 outlier
+prevents equivalence at delta=30. To resolve: more seeds, wider
+preregistered margin, or position filtering.
+
 ## Valid negative outcomes (any is a successful result)
 
 - RAG (B0/B1/B2) is sufficient for most tested properties.

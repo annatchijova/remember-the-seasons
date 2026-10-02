@@ -827,6 +827,68 @@ levels of the system.
 
 ---
 
+## Exp24: H11 done properly — preregistered + TOST
+
+### Why Exp20 was insufficient
+
+Exp20 selected seeds post hoc for divergence, n=1 informative
+condition, no equivalence test. A 0.0000 chess difference does not
+establish equivalence.
+
+### Preregistered design
+
+All parameters fixed BEFORE any chess evaluation:
+
+- Candidate seeds: 0..15 (fixed list)
+- Calibration gate: include seed iff post-washout recall divergence
+  >= 0.02 (selection on memory only, never on chess outcome)
+- Positions: 15 fixed FENs (seed 77777, same for all arms)
+- Same LLM (hermes3:8b, temp=0) both arms; only memory context
+  differs
+- Stockfish 16 depth 15 = ground truth; metric = regret in
+  centipawns (best_score - move_score)
+- Equivalence margin: delta = 30 cp (preregistered)
+- TOST: H0 |mean diff| >= delta vs H1 |mean diff| < delta
+- Sham: same context twice — measures LLM noise floor
+
+### Results
+
+**Calibration:** 3/16 seeds passed the gate (2, 7, 11 — all
+mem_diff = 0.0500). Selection made before chess evaluation.
+
+**Sham:** 14/15 agreement; the single flip cost 1 cp. Noise floor
+is small but nonzero — the LLM occasionally flips marginal
+decisions even with identical context.
+
+**Intervention (45 paired positions):**
+- Move agreement: 39/45 (87%)
+- Nonzero diffs: +1, +32, -20, -41, -639, +41
+- Mean paired diff: -13.9 cp
+- 90% CI: [-37.9, +10.1]
+- TOST p = 0.1332
+
+The nonzero diffs are symmetric in sign — no systematic
+degradation. The -639 outlier (intervention arm played a BETTER
+move, g4h5 vs blunder g4g7) dominates the CI width.
+
+### Verdict: INCONCLUSIVE (rigorously)
+
+The CI crosses the -30 boundary: cannot distinguish "no effect"
+from "insufficient data" at delta=30cp. This is now a principled
+inconclusive — not "we only had one seed" but "the equivalence
+margin was not met given observed variance."
+
+What the data supports: most positions (87%) produce identical
+moves; when moves differ, diffs are symmetric (mean ~0), not a
+degradation. What it does NOT establish: equivalence within 30cp —
+one large outlier (-639) prevents the CI from fitting the margin.
+
+To reach a verdict we need either: more seeds (narrow the CI), a
+wider preregistered delta, or position filtering (positions where
+the LLM is decisive vs marginal).
+
+---
+
 ## Cross-experiment synthesis
 
 ### The amputation results
