@@ -1,0 +1,372 @@
+# Research hypotheses (PROPOSED — to falsify)
+
+The overarching hypothesis under investigation:
+
+> **H0:** Retrieval is not necessarily a sufficient model of persistent agent
+> memory. Where retrieval stops being sufficient, additional mechanisms produce
+> measurable properties that retrieval alone does not represent.
+
+The job is to **falsify** H0, not confirm it. The null is "retrieval
+(competently done, with reasonable metadata) is sufficient for the tested
+properties." Each sub-hypothesis is independently falsifiable; H0 survives only
+if at least one sub-hypothesis survives its falsifier.
+
+## Sub-hypotheses
+
+- **H1 — dynamics over retrieval (raven mechanisms):** ternary states +
+  RESONANT/INHIBITORY links + BFS propagation produce contradiction resistance,
+  preference replacement, and forgetting properties that flat top-k + metadata
+  rerank (B1) does not. **Falsifier:** B1 reproduces collapse-around-truth and
+  preference replacement using only metadata flags.
+
+- **H2 — causal attribution requires intervention (raven):** suppressing a
+  memory produces a non-zero retrieval causal influence Δ that a retrieval-only
+  system cannot compute. **Falsifier:** Δ is always 0, OR removing the target
+  memory from the corpus and re-running B0 top-k produces the same result-set
+  delta as the intervention (the intervention is then equivalent to "retrieve
+  without this memory," a retrieval operation, not a distinct causal probe).
+
+- **H3 — decision causality requires closure (MNEME):** attributing a decision
+  to the memories that actually fed it requires recall→decision closure
+  (receipts + DECISION_USED_MEMORY), which retrieval alone does not provide.
+  **Falsifier:** a retrieval-only system can answer "which memories caused
+  this decision" as accurately as the closure layer.
+
+- **H4 — containment requires a gate, not a filter (MNEME):** preventing a
+  tainted memory from perturbing clean memories' rankings requires a graph-gate
+  (both endpoints CLEAN to traverse), not just a serve-time filter.
+  **Falsifier:** a serve-only metadata filter matches the graph-gate on
+  clean-memory ranking under contamination.
+
+- **H5 — exactness is a verifiability property, not a recall property (MNEME):**
+  exact Fraction ranking changes *verifiability* (bit-reproducible receipts)
+  but not *recall quality* vs float ranking. **Falsifier:** exact ranking
+  changes recall@k/nDCG measurably (either direction).
+
+- **H6 — collective memory requires shared state (STIGMERGY):** in a
+  multi-agent setting, experience propagates to late agents through shared
+  stigmergic state in a way per-agent retrieval cannot reproduce. **Falsifier:**
+  per-agent B0 retrieval matches stigmergic propagation on late-agent success.
+  Only testable on a real shared substrate (shim must be validated first).
+
+- **H7 — rescue rule is a post-hoc filter, not a propagation mechanism
+  (raven):** the rescue rule's effect on the result set is indistinguishable
+  from a post-hoc metadata filter that adds REINFORCED memories back if they
+  were excluded as INHIBITED. The rescue loop runs after BFS
+  (`memory_engine.py:1718-1730`), so the rescued cell's links are NOT
+  re-traversed — it re-enters scoring but not propagation. **Falsifier:**
+  ablate the rescue loop and replace it with a post-scoring filter that adds
+  REINFORCED memories back to results if excluded as INHIBITED. If outcomes
+  (result set + ranking) are identical across all test queries, the rescue
+  rule is a post-hoc filter in disguise and provides no property beyond what
+  B1 can do with metadata. If they differ, the rescue loop's modification of
+  `inhibited_cells` before scoring has a propagation effect worth
+  investigating.
+
+  **Experimental verdict (OBSERVED): FALSIFIED.** A == C bit-identically
+  (set, order, scores). The rescue rule is a post-hoc metadata filter.
+  See `research/PHASE6_TRIAL_RESULTS.md` Exp2.
+
+- **H8 — reinforcement consolidation produces path dependence (raven):**
+  a systemic intervention that blocks reinforcement during a temporal
+  window changes which memories get consolidated (REINFORCED state).
+  After the intervention is removed (washout), the different consolidated
+  state produces different recall results — the trajectory diverges and
+  the divergence grows. This is path dependence: the intervention altered
+  the memory system's future state, not just its current output. **Falsifier
+  (slider test):** if post-washout recall converges back to the control
+  trajectory (same result sets, same scores), the intervention was a slider
+  — parameter tuning with extra steps, not genuine pharmacology. If
+  post-washout recall diverges, the intervention changed consolidation and
+  the system follows a different trajectory. **Negative control:** the
+  nearest-memory probe (closest match by cosine) should be unaffected —
+  if the intervention degrades this, it's a general poison, not a
+  memory-specific drug.
+
+  **Experimental verdict (OBSERVED): SURVIVES.** Blocking reinforcement
+  produces 6/30 set differences after washout (growing from 1/30 during
+  intervention). STDP scaling alone is a slider (0 differences). Negative
+  control passes (0/30 nearest differences). See
+  `research/PHASE6B_EXTENDED_TRIALS.md` Exp5.
+
+## Pre-clinical trial verdicts (OBSERVED)
+
+| Hypothesis | Verdict | Strength | Experiment |
+|---|---|---|---|
+| H1 (dynamics over B1) | SURVIVES | bounded | Exp1b, Exp4, Exp6-BoW |
+| H2 (intervention vs removal) | SURVIVES | weak | Exp3 |
+| H7 (rescue is post-hoc) | FALSIFIED | strong | Exp2 |
+| H8 (path dependence) | SURVIVES | strong | Exp5-A, Exp7, Exp8, Exp9 |
+| H8a (domain specificity) | WEAK | leaks | Exp10 |
+| H8b (downstream impact) | WEAK | 2.3% flips | Exp11 |
+
+H1 survives the B2' challenge (Exp4): no retrieval-only variant recovers
+X. Generalizes to bag-of-words embeddings (Exp6-BoW) when cosine is
+positive. Does NOT generalize to orthogonal memories (Exp6-Gauss) — the
+RESONANT boost requires positive cosine.
+
+H2 survives weakly: suppression != removal, but the difference is in
+score magnitudes (graph topology), not in set or order (for non-seed
+targets).
+
+H7 is definitively falsified: rescue == post-hoc filter, bit-identical.
+
+H8 (path dependence) is confirmed as robust (Exp7: 53% of configs show
+divergence across seeds/sizes/durations/intensities/distributions),
+dose-dependent (Exp8: clean monotonic 0% to 100%), and persistent
+within the observed horizon (Exp9: no convergence in 130 steps of
+washout; whether this is permanent or merely very long-lived requires
+1000+ step testing). The negative control passes consistently
+(nearest_diff ~0.0003). STDP scaling alone is a slider (no path
+dependence). See `research/PHASE7_STATISTICAL_TRIALS.md`.
+
+H8a (domain specificity): the path dependence is NOT perfectly
+domain-specific. A domain-A intervention produces 56% washout set_diff
+in domain A but 20% in domain B (Exp10). This is a cross-domain /
+off-target memory-domain effect, NOT an orthogonal behavioral control.
+The nearest-memory probe passes in both domains (0% nearest_diff) —
+the leak is in lower-ranked memories, not the top match. A true
+orthogonal behavioral control (independent task with external ground
+truth, e.g., chess positions) is still owed.
+
+H8b (downstream impact): the memory change produces only 2.3% decision
+flips post-washout (Exp11). The effect is operationally real but modest
+in this simple weighted-vote decision model. We do not know whether
+2.3% is a lower bound — a more complex decision model could amplify,
+attenuate, or eliminate the differences.
+
+H3, H4, H5, H6 remain untested in the full MNEME system. Exp12 tested a
+minimal MNEME-style custody chain for per-instance causal closure (see
+below). Full MNEME custody/counterfactual verification (with SQLite,
+sealed receipts, trust propagation) was not implemented.
+
+### MNEME causal closure (Exp12, OBSERVED)
+
+A minimal MNEME-style custody chain (per-memory, append-only, hash-linked)
+was implemented on top of the minimal raven engine. For each decision
+that flipped between control and intervention, a counterfactual was run:
+restore the missing memories from control's evidence base to the
+intervention's, recompute the decision.
+
+Results: 56.5% of post-washout flips achieved causal closure (the
+counterfactual restored the control's decision). The remaining 43.5%
+were score-only flips (same evidence base, different scores) that the
+simple counterfactual cannot capture.
+
+Verdict: WEAK. The custody chain provides per-instance causal claims
+for set-difference flips but not for score-only flips. A complete
+counterfactual would need to restore both the memory set AND the scores.
+
+### STIGMERGY collective path dependence (Exp13, OBSERVED then CORRECTED)
+
+Exp13 initially reported collective path dependence (B 17.2%, C 16.6%
+washout divergence). However, Exp16 (per-agent provenance) FALSIFIED
+this: the effect was tautological. The de-reinforcement set
+mem.state = NEUTRAL globally, erasing B/C's contributions too. When we
+zero ONLY A's contributions (not B/C's), the collective effect
+disappears (B: 0.0025, C: 0.0015 — essentially zero).
+
+Exp15 (factorial decomposition) further showed:
+- Blocking alone produces ZERO divergence (de-reinforcement is the
+  active ingredient)
+- Shared state is the primary transport (somewhat tautological)
+- Shared STDP is NOT a transport channel (AB-noSTDP = AB)
+- The residual in AB-private-state cannot be attributed to STDP
+- Duration 30 vs 40 doesn't matter
+
+Verdict: FALSIFIED. The Exp13 "collective path dependence" was an
+artifact of global state mutation.
+
+### Collective resilience (Exp17, OBSERVED — NEW property)
+
+Exp16's per-agent provenance revealed a different property: the
+collective memory amortizes partial perturbations. With N agents,
+intervening a fraction of them produces near-zero divergence until
+the fraction approaches 1.0. The threshold scales with N:
+
+- N=2: 1 agent (50%) -> small divergence (0.0170)
+- N=5: 3 agents (60%) -> near zero (0.0037)
+- N=10: 7 agents (70%) -> near zero (0.0004)
+- All N: ALL agents -> full divergence (0.15-0.16)
+
+This is collective resilience: the non-intervened agents'
+contributions keep memories REINFORCED, compensating for the
+intervened agents' lost contributions.
+
+Verdict: SURVIVES. A genuine collective property, distinct from the
+falsified "collective path dependence." The reparametrized experiment
+(k_intervened directly, not fractions) shows the threshold is at
+k=N-1 (all but one agent), not a fixed fraction:
+- N=2: threshold at k=1 (50%)
+- N=5: threshold at k=4 (80%)
+- N=10: threshold at k=9 (90%)
+
+With 2+ non-intervened agents, the effect is zero or near-zero. The
+collective memory is resilient until only 1 agent is left
+non-intervened.
+
+### MNEME causal-state replay (Exp14, OBSERVED)
+
+Exp12's 56.5% closure rate (CF0: restore set membership) was upgraded
+by Exp14's deeper counterfactuals:
+
+- CF0 (set membership): 56.5%
+- CF1 (set + scores): 100% [partially circular]
+- CF2a (state only, re-run dynamics): 100% [proper causal CF]
+
+Restoring ONLY the REINFORCED/NEUTRAL state from control and
+re-running the recall dynamics restores the control decision in ALL
+cases. The memory state is the complete causal antecedent. STDP and
+explicit links are not needed.
+
+Verdict: SURVIVES (upgraded from WEAK). The causal chain is:
+intervention -> memory states -> state multiplier -> scores ->
+decision.
+
+### Orthogonal behavioral control — chess (Exp18, PIPELINE CHECK)
+
+Exp18 used python-chess for move quality evaluation. However, this is
+a pipeline negative control, NOT a behavioral off-target assay:
+
+1. The chess task is completely independent of the memory field (same
+   random seed for move selection in both arms), so identical chess
+   quality is almost expected by construction.
+2. `material + mobility` is NOT ground truth of optimal play. For true
+   ground truth we need Stockfish (fixed version, fixed nodes/depth) or
+   Syzygy tablebase positions.
+3. There is no general chess-playing capability to poison —
+   Frankenstein is just the memory engine. For a real off-target
+   cognitive test, we need a common agent (LLM) behind both arms with
+   the intervention as the only difference.
+
+Results: chess quality is identical (0.0000 difference). This confirms
+pipeline integrity (no general computation corruption) but does NOT
+demonstrate behavioral specificity.
+
+Verdict: PIPELINE CHECK PASS. Behavioral specificity still owed (Exp20).
+Frankenstein did not hang the queen, but mainly because we haven't
+given Frankenstein a queen yet.
+
+### Stateful retrieval baseline — the amputation (Exp19, OBSERVED)
+
+Exp14 found that the ENTIRE causal effect of decision flips is
+reproduced by restoring ONLY the REINFORCED/NEUTRAL state. This
+raised the question: does path dependence need Raven at all?
+
+The stateful retrieval baseline has:
+- vector retrieval (cosine similarity, top-k)
+- per-memory reinforcement state (REINFORCED/NEUTRAL)
+- same state transition rule and multiplier
+- same intervention and washout
+
+It does NOT have: graph propagation, RESONANT boost, STDP, rescue,
+explicit links, recency.
+
+Results (20 seeds):
+- Baseline washout: 0.0112 (11 flips)
+- Raven washout: 0.0214 (23 flips)
+- Both CF2a closure: 100%
+
+Verdict: BASELINE REPRODUCES — Raven AMPLIFIES (~2x). Path dependence
+is a property of retrieval + persistent adaptive state, NOT of
+Raven's machinery. The surviving organ is stateful retrieval.
+
+### Behavioral chess assay with LLM (Exp20, OBSERVED — INCONCLUSIVE)
+
+Real behavioral test: LLM (hermes3:8b, temperature=0) receives
+recalled memories + chess position in context. Stockfish 16 (depth
+15) evaluates move quality. The probe is memory-irrelevant (chess
+positions don't write to memory).
+
+Results (5 seeds, 20 positions each):
+- Only 1/5 seeds produced sufficient memory divergence (seed 7,
+  mem_diff=0.0500)
+- For that seed, chess quality was identical (0.0000 difference)
+
+INCONCLUSIVE — preliminary evidence consistent with specificity.
+n=1 informative condition. A result of 0.0000 does NOT establish
+equivalence — an equivalence test (TOST) with a predefined margin
+delta would be needed to claim "chess quality is preserved."
+
+The post-hoc seed selection (selecting seeds that produce
+divergence) is appropriate for exploration but not for a final
+experiment. A proper version should preregister conditions where
+control and intervention are known to produce divergent states
+before looking at chess performance.
+
+### Reinforcement threshold sweep (Exp21, OBSERVED)
+
+Exp17 found k* = N-1 (all but one agent intervened needed for
+divergence). Is this emergent or algebraic?
+
+Test: vary the reinforcement threshold T (distinct contributors
+needed for REINFORCED). If algebraic, k* = N - T.
+
+Results:
+- T=1: k* = N-1 exactly (N=3→2, N=5→4, N=8→7)
+- T=2: k* = N-2 exactly (N=3→1, N=5→3, N=8→6)
+- T=3: k* < N-T (observed lower than predicted because
+  contribution distribution is sparse)
+
+Verdict: MOSTLY ALGEBRAIC. The "collective resilience" is the
+algebraic consequence of the reinforcement threshold rule for low
+T. For high T, the transition is earlier than predicted because
+sparse contributions make the threshold fragile.
+
+### Per-memory topology decomposition (Exp22, OBSERVED)
+
+Exp22 decomposed the aggregate curve into per-memory predictions:
+for each memory, track its contributor set before intervention,
+predict which memories flip given the intervened set, and compare
+predicted vs observed recall divergence.
+
+Results:
+- Flip prediction: 91% precision, 71% recall (topology predicts
+  most flips but dynamics amplify during intervention)
+- Threshold prediction: 8/9 configs match (predicted k* from
+  topology vs observed k*)
+- Predicted divergence underestimates observed by ~30-70%
+- T=3 residual explained by sparse contributor topology: few
+  memories have 3+ contributors, so each flip is disproportionately
+  impactful
+
+Verdict: MOSTLY DERIVABLE. The "collective resilience" is derivable
+from per-memory contributor topology + the reinforcement threshold
+rule. The apparent emergence is an artifact of aggregating over a
+heterogeneous contributor distribution.
+
+### Residual decomposition (Exp23, OBSERVED)
+
+Exp22's static topology prediction missed ~29% of flips (71%
+recall). Exp23 decomposed the false negatives (F_obs \ F_pred)
+with full per-step logging.
+
+Key structural fact: in this model, a memory with |C_m(39) \ I| >= T
+can NEVER flip (non-intervened contributions are never removed).
+Therefore every false negative must be a "late bloomer": c_m(39) < T.
+
+Results (142 false negatives):
+- 100% are late bloomers (c39 < T)
+- A1 (direct loss of intervened contributions): 66%
+- A2 (cascade — non-intervened recall diverged): 0.7%
+- Both A1+A2: 33%
+- With cascade evidence: 34%
+- Unexplained: 0
+
+Verdict: DERIVABLE DYNAMICALLY. Every unexplained flip is a late
+bloomer explained by contributor loss during the intervention
+window. The dominant mechanism is direct loss (66%), not cascade
+(34%). No emergent mechanism needed.
+
+## Valid negative outcomes (any is a successful result)
+
+- RAG (B0/B1/B2) is sufficient for most tested properties.
+- Only one raven mechanism matters; the rest are overhead.
+- MNEME improves provenance but not memory performance.
+- STIGMERGY is useful only for multi-agent experiments and should not enter
+  the single-agent core.
+- "Pharmacological" systemic intervention is merely parameter tuning and adds
+  no research contribution.
+- The three systems should remain separate.
+- A very small new core is sufficient.
+- The entire project premise (H0) is unsupported.
