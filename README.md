@@ -3,9 +3,10 @@
 > You asked us to build the next frontier of AI. We cannot claim to
 > have revolutionized it. This is our best attempt in one month.
 
-> STATUS: research / archaeology phase. This is a LAB, not a product.
-> Do NOT build "Remember the Seasons" here. Do NOT integrate systems because
-> they look compatible. Inspect, compare, mutilate, and throw away ideas safely.
+> STATUS: Phase 10 closed — the falsification branch is done. A minimal
+> product skeleton now lives in `product/` (see `product/README.md`).
+> The rest of the repo remains a lab: sources are read-only, claims stay
+> labelled, no overclaiming.
 
 ## What this is
 

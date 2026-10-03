@@ -73,6 +73,12 @@ edit has lineage; and you can replay, verify, and excise any of it.
 `a.forget(id)` / `a.revive(id)` are deliberate forgetting as an
 audited transition — the note leaves recall but not the record.
 
+Contradictions surface themselves: `remember(content, topic=T,
+claim=C)` — two notes on the same topic with different claims get
+bidirectional INHIBITORY links and a `CONTRADICTED_BY` custody event
+on **both** chains, automatically. The field knows when its notes
+disagree; nobody has to declare it.
+
 Frontmatter: `---` blocks are stripped on import; `title:` names the
 note, `tags:` become the topic (minimal parse, not a YAML engine).
 
@@ -164,6 +170,22 @@ Tools: `remember` `ask` `season` `what_if_transition`
 agent" — it is forensic memory ANY agent can plug in.
 
 `server.py` is the human-facing demo UI (stdlib-only, :8420).
+
+## Latency (bench.py, offline embedder)
+
+| op | p50 @200 mem | p50 @1000 mem |
+|---|---:|---:|
+| recall | 38ms | 192ms |
+| provenance/summary | ~0 | ~0 |
+| provenance/counterfactual | 1ms | 4ms |
+| what_if_transition | 75ms | 379ms |
+| export_bundle | 12ms | 50ms |
+
+Recall is O(N) over a sequential sqlite scan (~190μs/memory); the
+counterfactual costs ~2× recall (recompute + one extra recall under
+the savepoint). At ~10k notes recall approaches seconds — an
+embedding index would fix it without changing the protocol. Named,
+not hidden.
 
 ## Status
 

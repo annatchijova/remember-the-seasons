@@ -48,7 +48,9 @@ def main(argv: list[str]) -> int:
 
     if cmd == "remember":
         need(1)
-        print(a.remember(args[0]))
+        topic = args[1] if len(args) > 1 else None
+        claim = args[2] if len(args) > 2 else None
+        print(a.remember(args[0], topic=topic, claim=claim))
     elif cmd == "ask":
         need(1)
         r = a.ask(args[0])
