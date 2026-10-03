@@ -116,6 +116,14 @@ def decision_what_if(decision_id: str, memory_id: str,
 
 
 @mcp.tool()
+def do_transition(memory_id: str, excise_seq: int) -> dict:
+    """`do(T_i = ∅)` — the cascade: which downstream receipts diverge,
+    which decisions unground, which events on other chains die.
+    Sealed, hypothetical, write-nothing."""
+    return A.do_transition(memory_id, excise_seq)
+
+
+@mcp.tool()
 def export_bundle() -> dict:
     """Sealed evidence bundle for offline verification (B0-B9)."""
     return {"bundle_json": A.export_bundle()}

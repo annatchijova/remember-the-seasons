@@ -95,6 +95,18 @@ def main(argv: list[str]) -> int:
         print(f"cf     : {r['counterfactual']['served']}")
         print(f"delta  : {r['delta']}")
         print(f"report {r['report_sha256'][:24]}… (hypothetical)")
+    elif cmd == "cascade":
+        need(2)
+        r = a.do_transition(args[0], int(args[1]))
+        print("counterfactual states:",
+              json.dumps(r["counterfactual_states"], indent=1))
+        print("divergent receipts:", len(r["divergent_receipts"]))
+        print("ungrounded decisions:",
+              [u["decision_id"] for u in r["ungrounded_decisions"]])
+        print("invalidated events:", r["invalidated"])
+        print("propagation:", r["propagation"])
+        print("report sha256:", r["report_sha256"],
+              "(hypothetical:", r["hypothetical"], ")")
     elif cmd == "search":
         need(1)
         hits, receipt = field.recall(

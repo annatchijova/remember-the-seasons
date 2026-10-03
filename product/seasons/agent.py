@@ -205,6 +205,16 @@ class SeasonsAgent:
             memory_id=memory_id, excise_seq=excise_seq, top_k=top_k,
             actor_id=actors.OPERATOR)
 
+    def do_transition(self, memory_id: str, excise_seq: int,
+                      top_k: int = 5,
+                      actor_id: str | None = None) -> dict:
+        """`do(T_i = ∅)` — the cascade: which downstream receipts
+        diverge, which decisions unground, which events on OTHER
+        chains die. See docs/CAUSAL_REWIND.md."""
+        return trajectory.do_transition(
+            self.cur, memory_id=memory_id, excise_seq=excise_seq,
+            top_k=top_k, actor_id=actor_id)
+
     def decision_what_if(self, decision_id: str, memory_id: str,
                          excise_seq: int, *, top_k: int = 5):
         """Would this decision's evidence base survive without that

@@ -180,6 +180,177 @@ def what_if_transition(cur, *, query_embedding, memory_id: str,
     return report
 
 
+def _replay_minus(chain: list[dict[str, Any]],
+                  dead: set[int]) -> tuple[str, str, Fraction]:
+    """Replay_excised generalized to a SET of dead events — same
+    recompute-never-trust rule, applied to the cascade's
+    invalidations, not only the excised event."""
+    status, fstate = "CLEAN", "NEUTRAL"
+    conf = Fraction(1, 2)
+    for ev in chain:
+        if ev["seq"] in dead:
+            continue
+        et = ev["event_type"]
+        if et == "QUARANTINED":
+            status = "QUARANTINED"
+        elif et == "SUPERSEDED_BY":
+            status = "SUPERSEDED"
+        elif et == "TAINT_FLAGGED":
+            if status == "CLEAN":
+                status = "TAINT_FLAGGED"
+        elif et == "REHABILITATED":
+            status = "CLEAN"
+        elif et == "REINFORCED":
+            conf = conf + _ALPHA * (1 - conf)
+        elif et == "STATE_CHANGED":
+            payload = json.loads(ev["payload_json"])
+            to = payload.get("to")
+            if payload.get("from") == "NEUTRAL" and to == "REINFORCED":
+                if conf >= _THRESHOLD:
+                    fstate = "REINFORCED"
+            elif to is not None:
+                fstate = to
+    return status, fstate, conf
+
+
+def _recall_in_world_multi(cur, query_embedding, cf: dict, top_k, hops):
+    """Recall against a cf world where MANY memories' rows are
+    replaced — the general form of _recall_in_world. Write-nothing."""
+    cur.execute("SAVEPOINT trajectory_cf")
+    try:
+        for mid, (st, fs, cf_conf) in cf.items():
+            conf_q = (Decimal(cf_conf.numerator) /
+                      Decimal(cf_conf.denominator)).quantize(
+                          Decimal("0.0000000001"))
+            cur.execute(
+                "UPDATE memories SET custody_status = ?, field_state = ?,"
+                " confidence = ? WHERE memory_id = ?",
+                (st, fs, str(conf_q), mid))
+        return field.recall(cur, query_embedding=query_embedding,
+                            top_k=top_k, hops=hops)
+    finally:
+        cur.execute("ROLLBACK TO trajectory_cf")
+        cur.execute("RELEASE trajectory_cf")
+
+
+def do_transition(cur, *, memory_id: str, excise_seq: int,
+                  top_k: int = 5, hops: int = field.DEFAULT_HOPS,
+                  actor_id: str | None = None) -> dict[str, Any]:
+    """`do(T_i = ∅)` — the cascade, per docs/CAUSAL_REWIND.md.
+
+    v1 asks "does one recall change". This asks what the v1 question
+    hides: which LATER receipts diverged, which decisions were
+    counterfactually ungrounded, and which events on OTHER chains die
+    as consequences. Forward pass over the decision timeline:
+
+      excise (mem, seq) at t_i -> for each decision citing a receipt
+      after t_i: replay its stored question under the cf world built
+      so far -> if its declared used set falls out of cf served, the
+      decision is cf-ungrounded and its consequences (DECISION_USED +
+      the reinforcement it caused on each used memory) join the dead
+      set -> their chains recompute -> the world shifts under the next
+      receipt.
+
+    The consequential subset is exactly the replayable subset: a
+    receipt stores query_sha256, not the query — but seasons_decisions
+    keeps the question, and receipts nobody acted on have no
+    downstream effect anyway. Stated, not hidden.
+
+    Output is sealed, hypothetical: true, write-nothing.
+    """
+    chain = load_chain(cur, memory_id)
+    if not chain:
+        raise ValueError(f"Unknown memory {memory_id!r}.")
+    excised = next((e for e in chain if e["seq"] == excise_seq), None)
+    if excised is None:
+        raise ValueError(f"{memory_id} has no custody event seq "
+                         f"{excise_seq}.")
+    if excised["event_type"] == "STORED":
+        raise ValueError("Excising STORED means 'never existed' — a "
+                         "different counterfactual.")
+    t_i = excised["created_at"]
+
+    # dead = the excised event plus every event the cascade kills.
+    dead: dict[str, set[int]] = {memory_id: {excise_seq}}
+    chains: dict[str, list] = {memory_id: chain}
+
+    def cf_world() -> dict:
+        """Recomputed states for chains that LOST events — the cascade's
+        exact causal boundary. Chains with no dead events recompute to
+        their actual state (up to confidence quantization), so touching
+        them would only inject noise."""
+        world = {}
+        for mid, dead_seqs in dead.items():
+            ch = chains.setdefault(mid, load_chain(cur, mid))
+            world[mid] = _replay_minus(ch, dead_seqs)
+        return world
+
+    divergent, ungrounded, invalidated, propagation = [], [], [], []
+
+    cur.execute(
+        "SELECT sd.decision_id, sd.question, d.receipt_sha256,"
+        " d.used_json, d.created_at FROM seasons_decisions sd"
+        " JOIN decisions d ON d.decision_id = sd.decision_id"
+        " WHERE d.created_at > ? ORDER BY d.created_at ASC", (t_i,))
+    for did, question, rsha, used_json, _ts in cur.fetchall():
+        if did in {u["decision_id"] for u in ungrounded}:
+            continue
+        world = cf_world()
+        qemb = field.quantize_embedding(_embed.embed(question))
+        hits_cf, _ = _recall_in_world_multi(cur, qemb, world,
+                                          top_k, hops)
+        cf_served = {h.memory_id for h in hits_cf}
+        used = json.loads(used_json)["used"]
+        fallen = sorted(m for m in used if m not in cf_served)
+        if not fallen:
+            continue
+        # The decision's evidence base did not survive: its consequences
+        # die — the bilateral DECISION_USED record naming it, and the
+        # REINFORCED event each used memory earned from that act (the
+        # write path appends it immediately after the DECISION_USED).
+        divergent.append(rsha)
+        kill = []
+        for mid in used:
+            ch = chains.setdefault(mid, load_chain(cur, mid))
+            for j, ev in enumerate(ch):
+                if (ev["event_type"] == "DECISION_USED_MEMORY" and
+                        json.loads(ev["payload_json"]).get(
+                            "decision_id") == did):
+                    dead.setdefault(mid, set()).add(ev["seq"])
+                    kill.append((mid, ev["seq"], "DECISION_USED_MEMORY"))
+                    if (j + 1 < len(ch)
+                            and ch[j + 1]["event_type"] == "REINFORCED"):
+                        dead[mid].add(ch[j + 1]["seq"])
+                        kill.append((mid, ch[j + 1]["seq"], "REINFORCED"))
+        ungrounded.append({"decision_id": did, "used": used,
+                           "fallen": fallen})
+        invalidated.extend(kill)
+        propagation.append({"decision_id": did,
+                            "invalidated": [(m, s) for m, s, _ in kill]})
+
+    final_world = cf_world()
+    report = {
+        "hypothetical": True,
+        "kind": "trajectory_counterfactual/v2_cascade",
+        "excised": {"memory_id": memory_id, "seq": excise_seq,
+                    "event_type": excised["event_type"],
+                    "created_at": t_i},
+        "counterfactual_states": {
+            m: {"custody_status": s[0], "field_state": s[1],
+                "confidence": str(s[2])}
+            for m, s in sorted(final_world.items())},
+        "divergent_receipts": divergent,
+        "ungrounded_decisions": ungrounded,
+        "invalidated": invalidated,
+        "propagation": propagation,
+        "scope_note": "consequential subset = decision-cited receipts;"
+                      " reads nobody acted on have no downstream effect",
+    }
+    report["report_sha256"] = hashlib.sha256(
+        canonical_json(report).encode("utf-8")).hexdigest()
+    return report
+
+
 def _recall_in_world(cur, query_embedding, memory_id, cf_state,
                      top_k, hops):
     """Run the UNMODIFIED production recall inside a savepoint with

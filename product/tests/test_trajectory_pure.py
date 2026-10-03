@@ -31,7 +31,7 @@ import sys
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 from seasons import agent, actors, trajectory
-from mneme import field, trust
+from mneme import custody, field, trust
 
 FAIL = []
 
@@ -155,6 +155,75 @@ check("I6 widening allowed with COUNTERFACTUAL",
       rep_w["counterfactual_state"]["custody_status"] == "CLEAN")
 check("I6 post-widening write-nothing still holds",
       snapshot(a.cur) == post_q)
+
+print()
+print("=" * 60)
+print("cascade (do_transition) invariants")
+print("=" * 60)
+
+# C-scenario: A tainted then rehabilitated; post-rehab decisions used
+# it. Excising REHABILITATED must unground them and kill their
+# consequences on every used chain.
+b = agent.SeasonsAgent()
+b.remember("The deploy gate requires staging to pass.")
+b.remember("Rollbacks run via ops rollback.")
+b.remember("Monitoring dashboards poll every 30s.")
+b.remember("Alerting routes to the on-call pager.")
+b.remember("Postmortems are written within 48h.")
+b.remember("Feature flags default off in prod.")
+b.ask("deploy gate staging?")
+for et in ("TAINT_FLAGGED", "REHABILITATED"):
+    custody.append_event(
+        b.cur, memory_id="mem-0000", event_type=et,
+        actor_id=actors.AGENT, reason="scenario",
+        created_at=custody.now_ts(), payload={})
+b.cur.execute("UPDATE memories SET custody_status='CLEAN'"
+              " WHERE memory_id='mem-0000'")
+b.conn.commit()
+for _ in range(3):
+    b.ask("deploy gate staging?")
+
+rseq = next(e[0] for e in b.chain("mem-0000")
+            if e[1] == "REHABILITATED")
+snap_c = snapshot(b.cur)
+rep_c = trajectory.do_transition(b.cur, memory_id="mem-0000",
+                                 excise_seq=rseq)
+
+check("C1 cf state keeps the taint (excision rewound the clean)",
+      rep_c["counterfactual_states"]["mem-0000"]["custody_status"]
+      == "TAINT_FLAGGED")
+check("C2 post-excision decisions ungrounded",
+      [u["decision_id"] for u in rep_c["ungrounded_decisions"]]
+      == ["dec-0001", "dec-0002", "dec-0003"])
+check("C3 divergent receipts counted",
+      len(rep_c["divergent_receipts"]) == 3)
+# every invalidated event is a DECISION_USED/REINFORCED pair killed
+# by an ungrounded decision — nothing else dies
+check("C4 invalidated are only decision consequences",
+      all(et in ("DECISION_USED_MEMORY", "REINFORCED")
+          for _, _, et in rep_c["invalidated"]))
+killed = {(m, s) for m, s, _ in rep_c["invalidated"]}
+prop = {(m, s) for p in rep_c["propagation"]
+        for m, s in p["invalidated"]}
+check("C5 every invalidation is propagated from an ungrounded"
+      " decision — no orphans", killed == prop)
+check("C6 hypothetical + sealed",
+      rep_c["hypothetical"] is True
+      and len(rep_c["report_sha256"]) == 64)
+check("C7 write-nothing", snapshot(b.cur) == snap_c)
+check("C8 deterministic",
+      trajectory.do_transition(
+          b.cur, memory_id="mem-0000",
+          excise_seq=rseq)["report_sha256"]
+      == rep_c["report_sha256"])
+# evidence-only excision produces no cascade
+rep_e = trajectory.do_transition(
+    b.cur, memory_id="mem-0000",
+    excise_seq=next(e[0] for e in b.chain("mem-0000")
+                    if e[1] == "DECISION_USED_MEMORY"))
+check("C9 evidence excision → empty cascade",
+      not rep_e["ungrounded_decisions"]
+      and not rep_e["invalidated"])
 
 print()
 if FAIL:
