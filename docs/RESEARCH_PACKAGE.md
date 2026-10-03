@@ -1,7 +1,11 @@
 # Remember the Seasons — Research Package
 
-> STATUS: research complete. STOP at the transition gate. This is NOT the
-> product. Implementation is NOT authorized. Awaiting maintainer review.
+**[Versión en español →](../README.es.md)** — construction levels in
+`NEXT_LEVELS.md` (destination-driven).
+
+> STATUS: research complete and the product skeleton exists in
+> `product/` — the transition gate passed. This document is the
+> research record; `NEXT_LEVELS.md` governs what gets built next.
 >
 > Epistemic convention throughout: **OBSERVED** (cited to `sources/` or
 > original commit), **INFERRED** (derived, not directly stated), **PROPOSED**

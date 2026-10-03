@@ -1,5 +1,7 @@
 # Remember the Seasons — Experimental Research Workspace
 
+**[Versión en español →](README.es.md)**
+
 > You asked us to build the next frontier of AI. We cannot claim to
 > have revolutionized it. This is our best attempt in one month.
 

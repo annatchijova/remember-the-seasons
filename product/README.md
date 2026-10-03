@@ -1,5 +1,7 @@
 # product/ — Remember the Seasons skeleton
 
+**[Versión en español →](README.es.md)**
+
 The research said:
 
 > state required to behave ≠ history required to explain the behavior
