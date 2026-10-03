@@ -274,15 +274,42 @@ def do_transition(cur, *, memory_id: str, excise_seq: int,
     dead: dict[str, set[int]] = {memory_id: {excise_seq}}
     chains: dict[str, list] = {memory_id: chain}
 
-    def cf_world() -> dict:
-        """Recomputed states for chains that LOST events — the cascade's
-        exact causal boundary. Chains with no dead events recompute to
-        their actual state (up to confidence quantization), so touching
-        them would only inject noise."""
+    def own_consequences(did: str) -> dict[str, set[int]]:
+        """Events that are THIS decision's consequences — identified
+        structurally (DECISION_USED naming it + the adjacent
+        REINFORCED), not by timestamp. Precedence must not rest on
+        clock equality: a decision's own effects never count toward
+        the world it was decided in, whatever created_at says."""
+        out: dict[str, set[int]] = {}
+        for mid, ch in chains.items():
+            for j, e in enumerate(ch):
+                if (e["event_type"] == "DECISION_USED_MEMORY"
+                        and json.loads(e["payload_json"]).get(
+                            "decision_id") == did):
+                    out.setdefault(mid, set()).add(e["seq"])
+                    if (j + 1 < len(ch)
+                            and ch[j + 1]["event_type"] == "REINFORCED"):
+                        out[mid].add(ch[j + 1]["seq"])
+        return out
+
+    def cf_world(as_of: str, exclude: dict[str, set[int]]) -> dict:
+        """Recomputed states for chains that LOST events — the
+        cascade's exact causal boundary — truncated at `as_of`.
+        Chains with no dead events recompute to their actual state
+        (up to confidence quantization), so touching them would only
+        inject noise.
+
+        Precedence rule: an event belongs to the world at as_of iff
+        created_at < as_of — same-timestamp events are conservatively
+        treated as concurrent/unknown and EXCLUDED — except that a
+        decision's own consequences are excluded structurally too,
+        even under timestamp collisions."""
         world = {}
-        for mid, dead_seqs in dead.items():
+        for mid in set(dead) | set(exclude):
             ch = chains.setdefault(mid, load_chain(cur, mid))
-            world[mid] = _replay_minus(ch, dead_seqs)
+            gone = dead.get(mid, set()) | exclude.get(mid, set())
+            prefix = [e for e in ch if e["created_at"] < as_of]
+            world[mid] = _replay_minus(prefix, gone)
         return world
 
     divergent, ungrounded, invalidated, propagation = [], [], [], []
@@ -291,11 +318,12 @@ def do_transition(cur, *, memory_id: str, excise_seq: int,
         "SELECT sd.decision_id, sd.question, d.receipt_sha256,"
         " d.used_json, d.created_at FROM seasons_decisions sd"
         " JOIN decisions d ON d.decision_id = sd.decision_id"
-        " WHERE d.created_at > ? ORDER BY d.created_at ASC", (t_i,))
-    for did, question, rsha, used_json, _ts in cur.fetchall():
+        " WHERE d.created_at > ?"
+        " ORDER BY d.created_at ASC, d.decision_id ASC", (t_i,))
+    for did, question, rsha, used_json, ts_d in cur.fetchall():
         if did in {u["decision_id"] for u in ungrounded}:
             continue
-        world = cf_world()
+        world = cf_world(ts_d, own_consequences(did))
         qemb = field.quantize_embedding(_embed.embed(question))
         hits_cf, _ = _recall_in_world_multi(cur, qemb, world,
                                           top_k, hops)
@@ -310,7 +338,7 @@ def do_transition(cur, *, memory_id: str, excise_seq: int,
         # write path appends it immediately after the DECISION_USED).
         divergent.append(rsha)
         kill = []
-        for mid in used:
+        for mid in sorted(used):
             ch = chains.setdefault(mid, load_chain(cur, mid))
             for j, ev in enumerate(ch):
                 if (ev["event_type"] == "DECISION_USED_MEMORY" and
@@ -328,7 +356,10 @@ def do_transition(cur, *, memory_id: str, excise_seq: int,
         propagation.append({"decision_id": did,
                             "invalidated": [(m, s) for m, s, _ in kill]})
 
-    final_world = cf_world()
+    final_world = {}
+    for mid, dead_seqs in dead.items():
+        ch = chains.setdefault(mid, load_chain(cur, mid))
+        final_world[mid] = _replay_minus(ch, dead_seqs)
     report = {
         "hypothetical": True,
         "kind": "trajectory_counterfactual/v2_cascade",
@@ -349,6 +380,109 @@ def do_transition(cur, *, memory_id: str, excise_seq: int,
     report["report_sha256"] = hashlib.sha256(
         canonical_json(report).encode("utf-8")).hexdigest()
     return report
+
+
+def export_cf_bundle(cur, *, memory_id: str, excise_seq: int,
+                     top_k: int = 5, hops: int = field.DEFAULT_HOPS,
+                     actor_id: str | None = None) -> dict[str, Any]:
+    """A SELF-CONTAINED counterfactual evidence bundle: everything an
+    independent verifier needs to recompute do(T_i=0) and reach the
+    same cascade — without trusting trajectory.py's account of it.
+
+    Contents per docs/CAUSAL_REWIND.md §5:
+      - intervention: (memory_id, seq) — the do()
+      - actual-world evidence: memories (content+quantized embedding
+        + current row), full custody chains, cell_links, the
+        decision-cited receipts (served_json, top_k, hops, protocol)
+      - replay inputs: each decision's question AND its quantized
+        query embedding — the embedding is an exogenous model output,
+        carried as sealed input because a verifier cannot re-derive it
+      - the report whose claims the verifier recomputes
+
+    Deliberate: the bundle does not contain mneme code or the cascade
+    implementation. The verifier rebuilds a world from this evidence
+    and re-derives the cascade; divergence is detected, not asserted.
+    """
+    report = do_transition(cur, memory_id=memory_id,
+                           excise_seq=excise_seq, top_k=top_k,
+                           hops=hops, actor_id=actor_id)
+
+    cur.execute("SELECT memory_id, content, content_sha256,"
+                " embedding_json, embedding_model, topic, created_by,"
+                " created_at, field_state, custody_status, confidence,"
+                " superseded_by FROM memories ORDER BY memory_id")
+    mems = [dict(zip(["memory_id", "content", "content_sha256",
+                      "embedding_json", "embedding_model", "topic",
+                      "created_by", "created_at", "field_state",
+                      "custody_status", "confidence",
+                      "superseded_by"], r))
+            for r in cur.fetchall()]
+
+    cur.execute("SELECT actor_id, display_name, kind, status,"
+                " created_at FROM actors")
+    actor_rows = [dict(zip(["actor_id", "display_name", "kind",
+                            "status", "created_at"], r))
+                  for r in cur.fetchall()]
+
+    chains = {}
+    for m in mems:
+        chains[m["memory_id"]] = load_chain(cur, m["memory_id"])
+
+    cur.execute("SELECT from_id, to_id, link_type, auto FROM cell_links")
+    links = [dict(zip(["from_id", "to_id", "link_type", "auto"], r))
+             for r in cur.fetchall()]
+
+    cur.execute(
+        "SELECT sd.decision_id, sd.question, d.receipt_sha256,"
+        " d.used_json, d.created_at FROM seasons_decisions sd"
+        " JOIN decisions d ON d.decision_id = sd.decision_id"
+        " ORDER BY d.created_at ASC")
+    decisions = []
+    for did, question, rsha, used_json, ts in cur.fetchall():
+        qemb = field.quantize_embedding(_embed.embed(question))
+        decisions.append({
+            "decision_id": did, "question": question,
+            "receipt_sha256": rsha,
+            "used": json.loads(used_json)["used"],
+            "created_at": ts,
+            "query_embedding": json.loads(
+                field.embedding_to_json(qemb))["v"],
+            "query_embedding_sha256": field.embedding_sha256(qemb)})
+
+    cur.execute(
+        "SELECT receipt_sha256, query_sha256, served_json, top_k,"
+        " hops, ranking_protocol FROM recall_receipts")
+    receipts = {r[0]: {"query_sha256": r[1],
+                       "served": json.loads(r[2])["served"],
+                       "top_k": r[3], "hops": r[4],
+                       "ranking_protocol": r[5]}
+                for r in cur.fetchall()}
+
+    # Frozen semantics: the bundle declares exactly which protocol
+    # versions the result was computed under — mneme's own version
+    # registry plus the cf layers. A verifier that does not know these
+    # semantics must refuse, not silently apply new rules to old
+    # evidence.
+    from mneme import protocol
+    semantics = {
+        "bundle_protocol": "mneme-cf-bundle/v1",
+        "causal_rewind_protocol": "cf-cascade/v1",
+        **protocol.CURRENT_PROTOCOLS,
+    }
+
+    bundle = {
+        "protocol": "mneme-cf-bundle/v1",
+        "semantics": semantics,
+        "intervention": {"memory_id": memory_id, "seq": excise_seq},
+        "report": report,
+        "evidence": {
+            "memories": mems, "actors": actor_rows, "chains": chains,
+            "cell_links": links, "decisions": decisions,
+            "receipts": receipts},
+    }
+    bundle["bundle_sha256"] = hashlib.sha256(
+        canonical_json(bundle).encode("utf-8")).hexdigest()
+    return bundle
 
 
 def _recall_in_world(cur, query_embedding, memory_id, cf_state,

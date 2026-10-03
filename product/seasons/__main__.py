@@ -107,6 +107,10 @@ def main(argv: list[str]) -> int:
         print("propagation:", r["propagation"])
         print("report sha256:", r["report_sha256"],
               "(hypothetical:", r["hypothetical"], ")")
+    elif cmd == "cfbundle":
+        need(2)
+        print(json.dumps(a.export_cf_bundle(args[0], int(args[1])),
+                         indent=1))
     elif cmd == "search":
         need(1)
         hits, receipt = field.recall(

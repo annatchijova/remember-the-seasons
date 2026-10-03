@@ -215,6 +215,16 @@ class SeasonsAgent:
             self.cur, memory_id=memory_id, excise_seq=excise_seq,
             top_k=top_k, actor_id=actor_id)
 
+    def export_cf_bundle(self, memory_id: str, excise_seq: int,
+                         top_k: int = 5) -> dict:
+        """Self-contained counterfactual evidence bundle — a third
+        party can recompute the cascade and reach the same result
+        without trusting this implementation (verify_cf_offline.py)."""
+        from . import trajectory
+        return trajectory.export_cf_bundle(
+            self.cur, memory_id=memory_id, excise_seq=excise_seq,
+            top_k=top_k)
+
     def decision_what_if(self, decision_id: str, memory_id: str,
                          excise_seq: int, *, top_k: int = 5):
         """Would this decision's evidence base survive without that

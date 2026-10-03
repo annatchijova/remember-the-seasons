@@ -90,16 +90,32 @@ report:         sealed, hypothetical: true
   does it still hold in the cf world? Tentatively: authority events
   are actor intent (historical fact), preserved.
 
-## 5. Verification
+## 5. Verification — built
 
-A cf bundle needs its own checks beyond B0–B9:
-- every invalidated event is reachable from the excised event via the
-  propagation edges — no orphan invalidations (the rewind can't
-  silently remove more than the cascade justifies);
-- every receipt marked divergent has a stored cf served set that the
-  verifier can independently recompute;
-- `hypothetical: true` on every artifact the rewind emits — nothing
-  produced by this pass can ever enter a real decision record.
+`trajectory.export_cf_bundle(mem, seq)` emits a self-contained
+bundle (`mneme-cf-bundle/v1`): intervention, actual-world evidence
+(memories with quantized embeddings, full chains, cell_links, actors,
+decision-cited receipts), and each decision's query embedding as a
+sealed exogenous input (a verifier cannot re-derive a model output).
+
+`verify_cf_offline.py` rebuilds the world from that evidence and
+RECOMPUTES the cascade — it imports `mneme.field` (the declared
+recall protocol) but never `trajectory.py`:
+
+- CF0 bundle digest;
+- CF1 chain linkage (genesis-bound prev_hash → entry_hash);
+- CF1.5 exogenous input integrity (query embedding digests);
+- CF2 actual-world consistency — every decision-cited receipt's
+  served set must recompute from the untampered evidence, or the
+  "actual world" in the bundle is theatre;
+- CF3 the cascade itself — divergent receipts, ungrounded decisions,
+  invalidated events, propagation edges, cf states, report digest.
+
+`tests/test_cf_bundle_pure.py` attacks it: 9 sealed mutants — wrong
+excision, tampered chain event, dropped edge, orphan invalidation,
+phantom ungrounding, missing kill, tampered exogenous input, swapped
+seqs, and a coherent-but-false cascade — all rejected. The verifier
+recomputes; it does not trust the propagation graph.
 
 ## 6. What this is NOT (yet)
 
