@@ -156,6 +156,13 @@ class SeasonsAgent:
             excise_seq=excise_seq, top_k=top_k,
             actor_id=actors.OPERATOR)
 
+    def request_provenance(self, trace_id: str, *, depth: str = "summary"):
+        """The facade: receipt / decision / memory -> bounded evidence
+        projection. depth: summary | direct | impact | counterfactual."""
+        from . import provenance
+        return provenance.request_provenance(
+            self.cur, trace_id=trace_id, depth=depth)
+
     # ---------- forensics ----------
 
     def chain(self, memory_id: str):

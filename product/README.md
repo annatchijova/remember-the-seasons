@@ -85,6 +85,13 @@ question text per decision (product table, outside mneme's verified
 schema); a receipt alone cannot be replayed — it seals the question's
 hash, not the question.
 
+`a.request_provenance(trace_id, depth=)` — the facade: resolve a
+decision, receipt, or memory and expand bounded evidence.
+`summary` (cheap) | `direct` (+chain events, decision links) |
+`impact` (+blast radius) | `counterfactual` (+excisable transition
+targets — expansion is a projection, not a replay). The projection
+itself carries `projection_sha256` so the answer is addressable.
+
 ## LLM wiring
 
 - `NEBIUS_API_KEY` + `NEBIUS_BASE_URL` (default

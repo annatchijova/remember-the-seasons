@@ -110,7 +110,20 @@ def main():
     print(f"    survived={d['survived']}  fallen={d['fallen']}  "
           f"intact={d['evidence_base_intact']}")
 
-    section("6. Bundle — sealed evidence for a distrusting auditor")
+    section("6. Provenance by levels — one facade, bounded depth")
+    for d in ["summary", "direct", "counterfactual"]:
+        p = b.request_provenance("mem-0000", depth=d)
+        extras = [k for k in p if k not in (
+            "trace_id", "depth", "anchor", "memories",
+            "projection_sha256")]
+        line = f"  depth={d}: anchor={p['anchor']['kind']}"
+        if "excisable" in p:
+            line += f"  excisable={p['excisable']['mem-0000']}"
+        elif extras:
+            line += f"  +{extras}"
+        print(line)
+
+    section("7. Bundle — sealed evidence for a distrusting auditor")
     bj = a.export_bundle()
     with tempfile.NamedTemporaryFile("w", suffix=".json",
                                      delete=False) as f:
