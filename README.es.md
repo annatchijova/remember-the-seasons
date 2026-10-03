@@ -3,8 +3,7 @@
 > Nos pidieron construir la próxima frontera de la IA. No podemos
 > afirmar que la revolucionamos. Este es nuestro mejor intento en un mes.
 
-*(English: `README.md` — este documento es la traducción; el canónico
-es el inglés.)*
+*(English: `README.md`)*
 
 ## Qué es esto
 
