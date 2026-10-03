@@ -44,12 +44,13 @@ class SeasonsAgent:
                  claim: str | None = None) -> str:
         mid = f"mem-{self._seq:04d}"
         self._seq += 1
+        qemb, prov = embed.embed_with_provenance(content)
         field.store(
             self.cur, memory_id=mid, actor_id=actors.AGENT,
             reason="agent observed/experienced this",
-            content=content,
-            embedding=field.quantize_embedding(embed.embed(content)),
-            embedding_model="seasons-local" if not _nebius() else "nebius",
+            content=content, embedding=qemb,
+            embedding_model=embed.model_name(),
+            embedding_provenance=prov,
             topic=topic, claim=claim)
         self.conn.commit()
         return mid
@@ -68,6 +69,15 @@ class SeasonsAgent:
         from . import vault
         vault.link(self.cur, from_id, to_id, link_type)
         self.conn.commit()
+
+    def backlinks(self, memory_id: str) -> list:
+        """What links TO this note — inbound edges = resonant boost."""
+        from . import vault
+        return vault.backlinks(self.cur, memory_id)
+
+    def outlinks(self, memory_id: str) -> list:
+        from . import vault
+        return vault.outlinks(self.cur, memory_id)
 
     def forget(self, memory_id: str, *, reason: str | None = None) -> None:
         """Deliberate forgetting: audited STATE_CHANGED to FORGOTTEN —
@@ -110,18 +120,22 @@ class SeasonsAgent:
 
         served = [h.memory_id for h in hits]
         # served != used != reinforced. The LLM declares which memories
-        # it actually relied on; only those enter the causal record and
-        # only those get reinforced. Retrieval is not causation, and the
-        # chain must not say otherwise.
-        answer, used = llm.answer_with_used(
+        # it relied on — that declaration is its CLAIM, recorded as such
+        # (even a steered one: the lie stays on the chain as evidence).
+        # Reinforcement, the payoff a memory-poisoning attack wants,
+        # follows only the DETERMINISTICALLY CORROBORATED subset.
+        answer, declared, violation = llm.answer_with_used(
             question, [(h.memory_id, h.content) for h in hits],
-            served_ids=served)
+            served_ids=served,
+            session_material=receipt.receipt_sha256)
+        reinforced = llm.corroborated(
+            answer, [(h.memory_id, h.content) for h in hits], declared)
 
         dec_id = None
-        if used:
+        if declared:
             dec_id = f"dec-{self._decisions:04d}"
             causality.record_decision(
-                self.cur, receipt=receipt, used_memory_ids=used,
+                self.cur, receipt=receipt, used_memory_ids=declared,
                 decision_sha256=causality.decision_hash(answer),
                 policy_version=POLICY_VERSION, actor_id=actors.AGENT,
                 reason=f"answered: {question[:80]}",
@@ -132,10 +146,7 @@ class SeasonsAgent:
                 (dec_id, question, custody.now_ts()))
             self._decisions += 1
 
-            # Adaptive close: only memories the answer DECLARED as used
-            # get reinforced — an audited custody event, not a silent
-            # bump for everything that happened to be servable.
-            for mid in used:
+            for mid in reinforced:
                 field.reinforce(
                     self.cur, memory_id=mid, actor_id=actors.AGENT,
                     reason="used in a decision this turn")
@@ -144,8 +155,10 @@ class SeasonsAgent:
         return {"answer": answer,
                 "receipt": receipt.receipt_sha256,
                 "served": served,
-                "used": used,
-                "decision": dec_id if used else None,
+                "used": declared,
+                "reinforced": reinforced,
+                "integrity_violation": violation,
+                "decision": dec_id,
                 "withheld": {"custody": receipt.excluded_custody,
                              "forgotten": receipt.excluded_forgotten,
                              "inhibited": receipt.excluded_inhibited}}

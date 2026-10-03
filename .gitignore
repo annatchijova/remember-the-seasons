@@ -23,3 +23,6 @@ results/
 
 # Editor / OS
 .DS_Store
+*.db-shm
+*.db-wal
+seasons_demo.db

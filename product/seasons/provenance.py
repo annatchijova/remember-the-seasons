@@ -60,12 +60,19 @@ def _resolve(cur, trace_id: str) -> dict[str, Any]:
                 "hops": r[3], "as_of": r[4],
                 "counterfactual": bool(json.loads(r[5])["override"])}
     cur.execute(
-        "SELECT memory_id, custody_status, field_state, confidence"
-        " FROM memories WHERE memory_id = ?", (trace_id,))
+        "SELECT memory_id, custody_status, field_state, confidence,"
+        " superseded_by FROM memories WHERE memory_id = ?", (trace_id,))
     if r := cur.fetchone():
-        return {"kind": "memory", "memory_id": r[0],
-                "custody_status": r[1], "field_state": r[2],
-                "confidence": r[3]}
+        ref = {"kind": "memory", "memory_id": r[0],
+               "custody_status": r[1], "field_state": r[2],
+               "confidence": r[3], "superseded_by": r[4]}
+        cur.execute(
+            "SELECT payload_json FROM custody_chain WHERE memory_id = ?"
+            " AND seq = 0", (trace_id,))
+        birth = cur.fetchone()
+        if birth:
+            ref["supersedes"] = json.loads(birth[0]).get("supersedes")
+        return ref
     raise ValueError(f"Unresolvable trace_id {trace_id!r} — not a "
                      "decision, receipt, or memory on record.")
 

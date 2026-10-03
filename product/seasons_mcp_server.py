@@ -85,6 +85,37 @@ def update(memory_id: str, new_content: str) -> dict:
 
 
 @mcp.tool()
+def forget(memory_id: str, reason: str = "deliberately forgotten") -> dict:
+    """Audited STATE_CHANGED to FORGOTTEN — leaves recall, not the
+    record. Revivable."""
+    A.forget(memory_id, reason=reason)
+    return {"memory_id": memory_id, "field_state": "FORGOTTEN"}
+
+
+@mcp.tool()
+def revive(memory_id: str) -> dict:
+    """Reverse of forget: audited STATE_CHANGED back to NEUTRAL."""
+    A.revive(memory_id)
+    return {"memory_id": memory_id, "field_state": "NEUTRAL"}
+
+
+@mcp.tool()
+def link(from_id: str, to_id: str, link_type: str = "RESONANT") -> dict:
+    """Explicit edge: RESONANT amplifies, INHIBITORY silences."""
+    A.link(from_id, to_id, link_type)
+    return {"from": from_id, "to": to_id, "link_type": link_type}
+
+
+@mcp.tool()
+def decision_what_if(decision_id: str, memory_id: str,
+                     excise_seq: int) -> dict:
+    """Does a recorded decision's evidence base survive the excision?
+    Reports survived / fallen / evidence_base_intact."""
+    return A.decision_what_if(decision_id, memory_id,
+                              excise_seq=excise_seq)
+
+
+@mcp.tool()
 def export_bundle() -> dict:
     """Sealed evidence bundle for offline verification (B0-B9)."""
     return {"bundle_json": A.export_bundle()}

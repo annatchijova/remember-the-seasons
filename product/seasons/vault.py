@@ -75,17 +75,20 @@ def import_vault(cur, path: str, *, actor_id: str = actors.AGENT
         raw = open(f, encoding="utf-8").read()
         meta, text = _frontmatter(raw)
         name = str(meta.get("title") or _note_name(f))
+        body = text.strip()
+        qemb, prov = _embed.embed_with_provenance(body)
         mid = field.store(
             cur,
             memory_id=f"note-{len(name_to_id):04d}",
-            content=text.strip(),
-            embedding=field.quantize_embedding(_embed.embed(text)),
+            content=body,
+            embedding=qemb,
             embedding_model=_embed.model_name(),
+            embedding_provenance=prov,
             actor_id=actor_id,
             reason=f"vault import: {name}",
             topic=name).memory_id
         name_to_id[name] = mid
-        pending.append((mid, WIKILINK_RE.findall(text)))
+        pending.append((mid, WIKILINK_RE.findall(body)))
 
     n_links = 0
     for mid, targets in pending:
@@ -108,6 +111,9 @@ def link(cur, from_id: str, to_id: str,
     if link_type not in ("RESONANT", "INHIBITORY"):
         raise ValueError(f"link_type must be RESONANT|INHIBITORY, "
                          f"got {link_type!r}")
+    if from_id == to_id:
+        raise ValueError("self-links are refused — a memory may not "
+                         "boost itself.")
     cur.execute("SELECT 1 FROM memories WHERE memory_id IN (?, ?)",
                 (from_id, to_id))
     if len(cur.fetchall()) != 2:
@@ -125,14 +131,15 @@ def update(cur, old_memory_id: str, new_content: str,
     """An 'edit' is a supersession: NEW memory names its predecessor,
     the predecessor gains SUPERSEDED_BY — lineage, not overwrite.
     The old note stays visible as evidence (M4), invisible to recall."""
-    emb = field.quantize_embedding(_embed.embed(new_content))
+    qemb, prov = _embed.embed_with_provenance(new_content)
     mid = field.supersede(
         cur,
         old_memory_id=old_memory_id,
         memory_id=_next_id(cur),
         content=new_content,
-        embedding=emb,
+        embedding=qemb,
         embedding_model=_embed.model_name(),
+        embedding_provenance=prov,
         actor_id=actor_id,
         reason=reason or f"update of {old_memory_id}").memory_id
     return mid
@@ -188,6 +195,26 @@ def revive(cur, memory_id: str, *, actor_id: str = actors.AGENT,
         created_at=ts)
     cur.execute("UPDATE memories SET field_state = 'NEUTRAL' "
                 "WHERE memory_id = ?", (memory_id,))
+
+
+def backlinks(cur, memory_id: str) -> list[dict[str, Any]]:
+    """What links TO this note — Obsidian's key panel, except here
+    each inbound edge is also a resonant boost on recall."""
+    cur.execute(
+        "SELECT l.from_id, l.link_type, l.auto, m.field_state,"
+        " m.custody_status FROM cell_links l"
+        " JOIN memories m ON m.memory_id = l.from_id"
+        " WHERE l.to_id = ? ORDER BY l.from_id", (memory_id,))
+    return [{"from": r[0], "link_type": r[1], "auto": bool(r[2]),
+             "field_state": r[3], "custody_status": r[4]}
+            for r in cur.fetchall()]
+
+
+def outlinks(cur, memory_id: str) -> list[dict[str, Any]]:
+    cur.execute(
+        "SELECT l.to_id, l.link_type FROM cell_links l"
+        " WHERE l.from_id = ? ORDER BY l.to_id", (memory_id,))
+    return [{"to": r[0], "link_type": r[1]} for r in cur.fetchall()]
 
 
 def _next_id(cur) -> str:

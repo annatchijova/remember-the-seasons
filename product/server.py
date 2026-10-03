@@ -12,6 +12,7 @@ counterfactually — the UI shows exactly that, nothing else.
 from __future__ import annotations
 
 import json
+import os
 import sys
 from http.server import BaseHTTPRequestHandler, HTTPServer
 from urllib.parse import parse_qs, urlparse
@@ -19,7 +20,8 @@ from urllib.parse import parse_qs, urlparse
 sys.path.insert(0, __file__.rsplit("/", 1)[0])
 from seasons import agent
 
-A = agent.SeasonsAgent()
+A = agent.SeasonsAgent(
+    db_path=os.environ.get("RTS_DB_PATH", "seasons_demo.db"))
 
 
 def seed():
@@ -76,6 +78,7 @@ a{color:var(--g)}
 <button onclick="ask()">ask</button>
 <button class="ghost" onclick="learn()">remember something new</button>
 <button class="ghost" onclick="season()">replay a past season</button>
+<button class="ghost" onclick="search()">search</button>
 </div>
 <div id="answer"></div></div>
 
@@ -83,6 +86,9 @@ a{color:var(--g)}
 <div class="panel"><h2>Memories — operational state</h2><div id="mems"></div></div>
 <div class="panel"><h2>Provenance — click a memory</h2><div id="prov">select a memory to open its chain.</div></div>
 </div>
+
+<div class="panel"><h2>Decisions — sealed acts with declared evidence</h2>
+<div id="decs"></div></div>
 
 <div class="panel"><h2>Trajectory counterfactual — what if it hadn't happened?</h2>
 <div class="row"><select id="ev" disabled><option>select a memory above to inspect excisable events</option></select>
@@ -112,6 +118,12 @@ async function learn(){
   await fetch('/api/remember?content='+encodeURIComponent(NEW_MEMORIES[mi++]));
   refresh();
 }
+async function search(){
+  const r=await fetch('/api/search?q='+encodeURIComponent($('q').value));
+  const d=await r.json();
+  $('answer').innerHTML=`<div class="ans"><b>search (no answer, no decision):</b> ${d.hits.map(h=>`<div class="mem"><span class="id">${h.memory_id}</span> ${esc(h.content.slice(0,90))} <span class="badge b-${h.field_state}">${h.field_state}</span></div>`).join('')}</div>
+    <div class="hash">recall computed, receipt NOT persisted — a browse, not an act</div>`;
+}
 async function season(){
   const r=await fetch('/api/season?q='+encodeURIComponent($('q').value));
   const d=await r.json();
@@ -120,15 +132,38 @@ async function season(){
 }
 async function refresh(){
   const ms=await (await fetch('/api/memories')).json();
-  $('mems').innerHTML=ms.map(m=>`<div class="mem" onclick="prov('${m.memory_id}')">
-    <span class="id">${m.memory_id}</span>${esc(m.content)}
-    <span class="badge b-${m.field_state}">${m.field_state}</span></div>`).join('');
+  const ds=await (await fetch('/api/decisions')).json();
+  $('decs').innerHTML=ds.map(d=>`<div class="ev"><b>${d.decision_id}</b>
+    used ${JSON.stringify(d.used)} · ${esc(d.reason.slice(0,50))}
+    <span class="hash">${d.receipt_sha256.slice(0,16)}…</span></div>`).join('')||'<span class="ctl">no decisions yet</span>';
+  $('mems').innerHTML=ms.map(m=>`<div class="mem">
+    <span class="id" onclick="prov('${m.memory_id}')" style="cursor:pointer">${m.memory_id}</span>${esc(m.content)}
+    <span class="badge b-${m.field_state}">${m.field_state}</span>
+    <span class="badge b-${m.custody_status}" style="border-color:#446;color:#99b">${m.custody_status}</span>
+    <span style="float:right">
+      ${m.field_state==='FORGOTTEN'
+        ?`<button class="ghost" style="padding:1px 7px;font-size:11px" onclick="act('revive','${m.memory_id}')">revive</button>`
+        :`<button class="ghost" style="padding:1px 7px;font-size:11px" onclick="act('forget','${m.memory_id}')">forget</button>`}
+      <button class="ghost" style="padding:1px 7px;font-size:11px" onclick="edit('${m.memory_id}')">edit</button>
+    </span></div>`).join('');
+}
+async function act(op,mid){await fetch(`/api/${op}?id=${mid}`);refresh();}
+async function edit(mid){
+  const t=prompt('new content (edit = supersession: the old note stays as evidence):');
+  if(t){await fetch(`/api/update?id=${mid}&content=${encodeURIComponent(t)}`);refresh();}
 }
 async function prov(mid){
   const p=await (await fetch(`/api/provenance?id=${mid}&depth=counterfactual`)).json();
   const evs=p.chains[mid].map(e=>`<div class="ev"><span class="seq">${e.seq}</span>
     <b>${e.event_type}</b> by ${e.actor_id}</div>`).join('');
-  $('prov').innerHTML=`<div class="id" style="color:var(--g)">${mid}</div>${evs}
+  const lk=await (await fetch('/api/links?id='+mid)).json();
+  const outs=lk.outlinks.map(o=>`<span class="badge b-NEUTRAL" style="border-color:var(--g);color:var(--g)">→ ${o.to}</span>`).join(' ');
+  const ins=lk.backlinks.map(b=>`<span class="badge b-NEUTRAL" style="border-color:var(--warn);color:var(--warn)">← ${b.from}</span>`).join(' ');
+  const lin=(p.anchor.supersedes?`<span style="color:var(--dim)">← supersedes ${p.anchor.supersedes}</span> `:'')
+    +(p.anchor.superseded_by?`<span style="color:var(--warn)">→ superseded by ${p.anchor.superseded_by}</span>`:'');
+  $('prov').innerHTML=`<div class="id" style="color:var(--g)">${mid}</div>
+    <div style="margin:6px 0">${outs}${ins}</div>
+    ${lin?`<div style="font-size:12px;margin:4px 0">${lin}</div>`:''}${evs}
     <div class="hash">impact: receipts ${p.impact[mid].direct_receipts.length}, decisions ${p.impact[mid].direct_decisions.length}</div>`;
   const opts=p.excisable[mid].map(e=>`<option value="${mid}:${e.seq}">excise ${mid} seq ${e.seq} (${e.event_type})</option>`).join('');
   $('ev').innerHTML=opts||'<option>no excisable transitions on this chain</option>';
@@ -191,6 +226,17 @@ class H(BaseHTTPRequestHandler):
                 d = A.season(q["q"][0], as_of=rows[0])
                 self._j({"served": [h[0] for h in d["hits"]],
                          "hits": d["hits"], "receipt": d["receipt"]})
+            elif u.path == "/api/search":
+                from seasons import embed
+                from mneme import field
+                hits, _ = field.recall(
+                    A.cur,
+                    query_embedding=field.quantize_embedding(
+                        embed.embed(q["q"][0])))
+                self._j({"hits": [{"memory_id": h.memory_id,
+                                   "content": h.content,
+                                   "field_state": h.field_state}
+                                  for h in hits]})
             elif u.path == "/api/memories":
                 A.cur.execute(
                     "SELECT memory_id, content, custody_status,"
@@ -200,6 +246,33 @@ class H(BaseHTTPRequestHandler):
                           "custody_status": r[2], "field_state": r[3],
                           "confidence": r[4]}
                          for r in A.cur.fetchall()])
+            elif u.path == "/api/forget":
+                A.forget(q["id"][0])
+                self._j({"ok": True})
+            elif u.path == "/api/revive":
+                A.revive(q["id"][0])
+                self._j({"ok": True})
+            elif u.path == "/api/update":
+                self._j({"memory_id": A.update(
+                    q["id"][0], q["content"][0])})
+            elif u.path == "/api/decisions":
+                A.cur.execute(
+                    "SELECT decision_id, receipt_sha256, used_json,"
+                    " reason, created_at FROM decisions"
+                    " ORDER BY created_at DESC LIMIT 30")
+                self._j([{"decision_id": r[0],
+                          "receipt_sha256": r[1],
+                          "used": json.loads(r[2])["used"],
+                          "reason": r[3], "created_at": r[4]}
+                         for r in A.cur.fetchall()])
+            elif u.path == "/api/decision_whatif":
+                self._j(A.decision_what_if(
+                    q["decision"][0], q["mid"][0],
+                    excise_seq=int(q["seq"][0])))
+            elif u.path == "/api/links":
+                mid = q["id"][0]
+                self._j({"backlinks": A.backlinks(mid),
+                         "outlinks": A.outlinks(mid)})
             elif u.path == "/api/provenance":
                 self._j(A.request_provenance(
                     q["id"][0], depth=q.get("depth", ["summary"])[0]))

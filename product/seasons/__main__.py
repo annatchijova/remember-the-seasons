@@ -10,7 +10,8 @@
     link <a> <b>                explicit RESONANT edge
     chain <mem>                 the memory's biography
     provenance <trace> [depth]  summary|direct|impact|counterfactual
-    whatif <mem> <seq>          excise transition + replay last question
+    whatif <mem> <seq> "q"      excise transition, replay recall
+    search "text"               recall without answering (browse)
     memories                    list the field
     bundle > out.json           sealed evidence for offline audit
     serve [port]                the demo UI
@@ -28,6 +29,8 @@ import sys
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 from seasons import agent
+from mneme import field
+from seasons import embed
 
 
 def main(argv: list[str]) -> int:
@@ -69,10 +72,35 @@ def main(argv: list[str]) -> int:
         need(2)
         a.link(args[0], args[1])
         print(f"{args[0]} -> {args[1]} RESONANT")
+    elif cmd == "backlinks":
+        need(1)
+        for b in a.backlinks(args[0]):
+            print(f"  {b['from']} -{b['link_type']}-> {args[0]} "
+                  f"({'auto' if b['auto'] else 'manual'})")
+    elif cmd == "outlinks":
+        need(1)
+        for o in a.outlinks(args[0]):
+            print(f"  {args[0]} -{o['link_type']}-> {o['to']}")
     elif cmd == "chain":
         need(1)
         for e in a.chain(args[0]):
             print(f"  {e[0]:>3} {e[1]:<22} {e[2]:<14} {e[4][:60]}")
+    elif cmd == "whatif":
+        need(3)
+        r = a.what_if_transition(args[2], args[0],
+                                 excise_seq=int(args[1]))
+        print(f"actual : {r['actual']['served']}")
+        print(f"cf     : {r['counterfactual']['served']}")
+        print(f"delta  : {r['delta']}")
+        print(f"report {r['report_sha256'][:24]}… (hypothetical)")
+    elif cmd == "search":
+        need(1)
+        hits, receipt = field.recall(
+            a.cur,
+            query_embedding=field.quantize_embedding(embed.embed(args[0])))
+        for h in hits:
+            print(f"  {h.memory_id}  [{h.field_state}]  {h.content[:60]}")
+        print(f"  receipt {receipt.receipt_sha256[:24]}… (not persisted — browse)")
     elif cmd == "provenance":
         need(1)
         print(json.dumps(

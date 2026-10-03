@@ -59,3 +59,20 @@ def embed(text: str) -> list[float]:
 
 def model_name() -> str:
     return "nebius" if os.environ.get("NEBIUS_API_KEY") else "seasons-local"
+
+
+def embed_with_provenance(text: str):
+    """Quantized embedding + declared provenance: who embedded, which
+    model, hashes of model input and stored vector. B3 re-checks it —
+    without this, embedding drift is undetectable by construction."""
+    from mneme import field
+    qemb = field.quantize_embedding(embed(text))
+    prov = field.declare_embedding(
+        provider="nebius" if os.environ.get("NEBIUS_API_KEY")
+        else "local-deterministic",
+        model=os.environ.get("SEASONS_EMBED_MODEL",
+                             "Qwen/Qwen3-Embedding-8B")
+        if os.environ.get("NEBIUS_API_KEY") else "seasons-local-hash",
+        revision=os.environ.get("NEBIUS_MODEL_REVISION", "unknown"),
+        embedding=qemb, model_input=text, preprocessing="none")
+    return qemb, prov

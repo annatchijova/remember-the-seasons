@@ -34,10 +34,13 @@ product/
 
 `ask()` does not conflate them. Recall serves candidates (sealed
 receipt); the model answers and declares which ids it actually relied
-on (`USED:` line, clamped to what was served — hallucinated ids are
-dropped, not recorded); only declared ids enter the decision record
-and get reinforced. A memory that was servable but ignored leaves no
-false causal trace and no reinforcement.
+on; only declared ids enter the decision record — and only the
+**deterministically corroborated** subset earns reinforcement
+(content-answer overlap; the payoff of steering the declaration dies
+there). The declaration channel carries a Kassandra-style session
+nonce (HMAC of the sealed receipt hash under `RTS_KASSANDRA_SALT`):
+a `USED:` line without it is a forged declaration — flagged, ignored,
+deterministic fallback. See `REDTEAM.md` for the audit that found it.
 
 ## The loop
 
