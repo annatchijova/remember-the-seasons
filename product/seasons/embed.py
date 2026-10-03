@@ -55,3 +55,7 @@ def embed(text: str) -> list[float]:
     if os.environ.get("NEBIUS_API_KEY"):
         return embed_nebius(text)
     return embed_local(text)
+
+
+def model_name() -> str:
+    return "nebius" if os.environ.get("NEBIUS_API_KEY") else "seasons-local"

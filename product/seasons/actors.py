@@ -20,8 +20,8 @@ def bootstrap(cur) -> None:
         issuer_id=ROOT, reason="the product's memory-owning agent")
     authority.grant(
         cur, subject_id=AGENT,
-        capabilities=["STORE", "REINFORCE", "DECIDE"],
-        issuer_id=ROOT, reason="remember, adapt, and answer")
+        capabilities=["STORE", "REINFORCE", "DECIDE", "SUPERSEDE"],
+        issuer_id=ROOT, reason="remember, adapt, answer, and update")
     authority.register_actor(
         cur, actor_id=OPERATOR, display_name="Seasons Operator", kind="HUMAN",
         issuer_id=ROOT, reason="forensic/counterfactual review")

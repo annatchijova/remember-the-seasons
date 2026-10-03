@@ -54,6 +54,24 @@ decision record (`DECISION_USED_MEMORY` on each used chain), and a
 of a memory *is* its biography — `a.chain(mid)` shows exactly what
 happened to it and when.
 
+## The vault layer — the PKM surface
+
+`a.import_vault(path)` turns an Obsidian-style vault into the field:
+every `.md` becomes a custody-chained memory, every `[[wikilink]]`
+becomes a RESONANT edge that actually changes what recall serves
+(resonant boost — not a visual graph). `a.link(a, b)` adds an
+explicit edge. `a.update(id, text)` is an "edit" done right:
+supersession — the successor names its predecessor, the old note
+becomes SUPERSEDED (invisible to recall, preserved as evidence).
+
+What Obsidian gives you: notes, links, a graph. What this adds:
+every note is provable history; every link changes behavior; every
+edit has lineage; and you can replay, verify, and excise any of it.
+
+Honest gap: mneme's custody vocabulary has no link-event type, so
+explicit links (`auto=0`) affect recall but aren't custody-evidenced
+the way auto-contradiction links are. Named, not hidden.
+
 ## The product primitive
 
 ```python
@@ -105,6 +123,26 @@ The LLM is a *narrator*, never the decision path: recall ranking,
 receipts, and custody events are sealed before the model sees them
 (§5.1 of the repo rules). Swapping the backend changes the wording —
 never the verdict.
+
+## MCP — the product IS the tool
+
+`seasons_mcp_server.py` exposes the loop over FastMCP stdio — the
+same transport as mneme, raven-memory, CRONOS, CORVUS. Any
+MCP-capable agent that registers it gets verifiable memory:
+
+```json
+{"mcpServers": {"remember-the-seasons": {
+  "command": "python3",
+  "args": ["product/seasons_mcp_server.py"],
+  "env": {"RTS_DB_PATH": "seasons.db",
+          "NEBIUS_API_KEY": "..."}}}}
+```
+
+Tools: `remember` `ask` `season` `what_if_transition`
+`request_provenance` `export_bundle`. The pitch is not "another
+agent" — it is forensic memory ANY agent can plug in.
+
+`server.py` is the human-facing demo UI (stdlib-only, :8420).
 
 ## Status
 

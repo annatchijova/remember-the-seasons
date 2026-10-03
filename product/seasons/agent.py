@@ -50,6 +50,31 @@ class SeasonsAgent:
         self.conn.commit()
         return mid
 
+    def import_vault(self, path: str) -> dict[str, Any]:
+        """Obsidian-style vault: .md -> memories, [[links]] -> RESONANT
+        edges that actually change recall. Returns name->id map."""
+        from . import vault
+        out = vault.import_vault(self.cur, path)
+        self.conn.commit()
+        return out
+
+    def link(self, from_id: str, to_id: str,
+             link_type: str = "RESONANT") -> None:
+        """Explicit edge: RESONANT amplifies, INHIBITORY silences."""
+        from . import vault
+        vault.link(self.cur, from_id, to_id, link_type)
+        self.conn.commit()
+
+    def update(self, old_memory_id: str, new_content: str,
+               *, reason: str | None = None) -> str:
+        """An 'edit' is a supersession: new memory names its
+        predecessor; the old one stays as evidence (M4)."""
+        from . import vault
+        mid = vault.update(self.cur, old_memory_id, new_content,
+                           reason=reason)
+        self.conn.commit()
+        return mid
+
     # ---------- the loop ----------
 
     def ask(self, question: str, *, top_k: int = 5) -> dict[str, Any]:
@@ -73,6 +98,7 @@ class SeasonsAgent:
             question, [(h.memory_id, h.content) for h in hits],
             served_ids=served)
 
+        dec_id = None
         if used:
             dec_id = f"dec-{self._decisions:04d}"
             causality.record_decision(
@@ -99,6 +125,8 @@ class SeasonsAgent:
         return {"answer": answer,
                 "receipt": receipt.receipt_sha256,
                 "served": served,
+                "used": used,
+                "decision": dec_id if used else None,
                 "withheld": {"custody": receipt.excluded_custody,
                              "forgotten": receipt.excluded_forgotten,
                              "inhibited": receipt.excluded_inhibited}}
