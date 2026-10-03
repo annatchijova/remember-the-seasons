@@ -90,12 +90,15 @@ def import_vault(cur, path: str, *, actor_id: str = actors.AGENT
         name_to_id[name] = mid
         pending.append((mid, WIKILINK_RE.findall(body)))
 
+    # Obsidian resolves [[wikilinks]] case-insensitively — a link to
+    # [[Rollback]] means rollback.md, not a new note.
+    fold = {n.casefold(): mid for n, mid in name_to_id.items()}
     n_links = 0
     for mid, targets in pending:
         for t in targets:
-            t = t.strip()
-            if t in name_to_id and name_to_id[t] != mid:
-                link(cur, mid, name_to_id[t])
+            tgt = fold.get(t.strip().casefold())
+            if tgt and tgt != mid:
+                link(cur, mid, tgt)
                 n_links += 1
     return {"imported": len(files), "links": n_links,
             "name_to_id": name_to_id}
