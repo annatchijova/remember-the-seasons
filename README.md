@@ -58,3 +58,8 @@ truth; claims about mechanisms must point to code/tests/docs in `sources/`.
 See `AGENTS.md`. In particular: no commit/push without explicit authorization;
 `sources/` is read-only; every claim is labelled OBSERVED / INFERRED / PROPOSED /
 UNKNOWN; no inference is silently promoted into a fact.
+
+## License & attribution
+
+Apache-2.0, Copyright 2026 Anna Tchijova — see `LICENSE`. Credits for
+the source systems, method corpus, and runtime are in `NOTICE`.

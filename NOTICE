@@ -1,0 +1,46 @@
+NOTICE — Remember the Seasons
+
+Copyright 2026 Anna Tchijova
+Licensed under the Apache License, Version 2.0 (see LICENSE).
+
+This repository was built on, and alongside, the following work.
+Unless noted otherwise, the named projects are also authored by
+Anna Tchijova and licensed Apache-2.0; each source snapshot carries
+its own PROVENANCE.md with the exact revision used.
+
+Source systems (read-only snapshots under sources/, ported into
+product/):
+
+  mneme        — https://github.com/annatchijova/mneme
+                 per-memory custody chains, authority provenance,
+                 recall receipts, decisions, claims, counterfactual
+                 worlds, sealed bundles, offline verification.
+                 The forensic core the product runs on.
+
+  raven-memory — https://github.com/annatchijova/raven-memory
+                 adaptive field dynamics (reinforcement, inhibition,
+                 forgetting, rescue) — the mechanics the experiments
+                 amputated and the field semantics mneme implements.
+
+  stigmergy    — https://github.com/annatchijova/stigmergy
+                 shared-memory coordination substrate; source of the
+                 reinforcement closed form c' = c + alpha(1-c).
+
+Method / tooling corpus:
+
+  SKILLS       — https://github.com/annatchijova/SKILLS
+                 the skill corpus used during development —
+                 abductive reasoning, adversarial audit, invariant
+                 hunting, falsifiable testing, tamper-evident chains,
+                 deterministic-core discipline. The audits in this
+                 repository ran through those skills.
+
+Runtime:
+
+  Nebius Token Factory — LLM + embeddings backend
+    (nvidia/NVIDIA-Nemotron-3-Nano-30B-A3B chat,
+     Qwen/Qwen3-Embedding-8B embeddings).
+
+Everything in this repository is research material. The claims it
+makes are experimental results on synthetic fields — not production
+guarantees.
