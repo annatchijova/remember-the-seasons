@@ -149,7 +149,8 @@ class SeasonsAgent:
             for mid in reinforced:
                 field.reinforce(
                     self.cur, memory_id=mid, actor_id=actors.AGENT,
-                    reason="used in a decision this turn")
+                    reason="used in a decision this turn",
+                    caused_by_decision_id=dec_id)
         self.conn.commit()
 
         return {"answer": answer,

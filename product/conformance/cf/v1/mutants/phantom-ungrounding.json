@@ -1,0 +1,1231 @@
+{
+ "bundle_sha256": "f69502810888a75e5d9bee7f1ea181d9fe208a26881ea14e255bf39dfbfb9352",
+ "evidence": {
+  "actors": [
+   {
+    "actor_id": "seasons-root",
+    "created_at": "2026-01-01T00:00:00.000000+00:00",
+    "display_name": "Seasons Root",
+    "kind": "HUMAN",
+    "status": "ACTIVE"
+   },
+   {
+    "actor_id": "seasons-agent",
+    "created_at": "2026-01-01T00:00:00.000001+00:00",
+    "display_name": "Seasons Agent",
+    "kind": "AGENT",
+    "status": "ACTIVE"
+   },
+   {
+    "actor_id": "seasons-operator",
+    "created_at": "2026-01-01T00:00:00.000003+00:00",
+    "display_name": "Seasons Operator",
+    "kind": "HUMAN",
+    "status": "ACTIVE"
+   }
+  ],
+  "cell_links": [],
+  "chains": {
+   "mem-0000": [
+    {
+     "actor_id": "seasons-agent",
+     "created_at": "2026-01-01T00:00:00.000005+00:00",
+     "entry_hash": "3750c71992006b06c79b65050f4574c23dde9d8fadf483c23c35be4e234a2ce5",
+     "event_type": "STORED",
+     "memory_id": "mem-0000",
+     "payload_json": "{\"content_sha256\":\"1d1cedfb88861b2daa16074dffccf8ec1181f72e2854874c4255354bc1444335\",\"embedding_model\":\"seasons-local\",\"embedding_provenance\":{\"dimension\":64,\"input_content_hash\":\"1d1cedfb88861b2daa16074dffccf8ec1181f72e2854874c4255354bc1444335\",\"model\":\"seasons-local-hash\",\"output_vector_hash\":\"b34dd8df8e31895f860e2d6440124bd6f39263cf2bdfd28a4bc0b10a61c191ce\",\"preprocessing\":\"none\",\"provider\":\"local-deterministic\",\"quantization_protocol\":\"canonical-decimal/scale=10/rounding=ROUND_HALF_EVEN\",\"revision\":\"unknown\"},\"grant_id\":\"grant-000000000001\"}",
+     "prev_hash": "8444fa56e78b62aa65102902d96b77cafbf456cd097bfb77ffc06609f79a3bfd",
+     "reason": "agent observed/experienced this",
+     "seq": 0
+    },
+    {
+     "actor_id": "seasons-agent",
+     "created_at": "2026-01-01T00:00:00.000010+00:00",
+     "entry_hash": "3803563fd6120bc33fede1e969707d2b2e4a1539249e18bbfd4a6b754e18bf22",
+     "event_type": "TAINT_FLAGGED",
+     "memory_id": "mem-0000",
+     "payload_json": "{}",
+     "prev_hash": "3750c71992006b06c79b65050f4574c23dde9d8fadf483c23c35be4e234a2ce5",
+     "reason": "tainted",
+     "seq": 1
+    },
+    {
+     "actor_id": "seasons-agent",
+     "created_at": "2026-01-01T00:00:00.000011+00:00",
+     "entry_hash": "23e3d7595bca19de5f5831b7432d52cdc4458e56bedae9046354a94f20a2c7df",
+     "event_type": "REHABILITATED",
+     "memory_id": "mem-0000",
+     "payload_json": "{}",
+     "prev_hash": "3803563fd6120bc33fede1e969707d2b2e4a1539249e18bbfd4a6b754e18bf22",
+     "reason": "reviewed",
+     "seq": 2
+    },
+    {
+     "actor_id": "seasons-agent",
+     "created_at": "2026-01-01T00:00:00.000013+00:00",
+     "entry_hash": "547dd8b1809943e9f65b534d583192133a761a61cac3d99f93d99a4b0fb0f92a",
+     "event_type": "DECISION_USED_MEMORY",
+     "memory_id": "mem-0000",
+     "payload_json": "{\"decision_id\":\"dec-0000\",\"decision_sha256\":\"3536c1955a42a8dc548be62d7b26afa5750a6ba021cc5144c231f3838664f825\",\"grant_id\":\"grant-000000000001\",\"policy_version\":\"seasons/0.1\",\"receipt_sha256\":\"ab1e0792a2300ec893540a09a1e34fe2ac02c15fad404e0dc736dccbb7cbd1b6\"}",
+     "prev_hash": "23e3d7595bca19de5f5831b7432d52cdc4458e56bedae9046354a94f20a2c7df",
+     "reason": "answered: deploy gate staging?",
+     "seq": 3
+    },
+    {
+     "actor_id": "seasons-agent",
+     "created_at": "2026-01-01T00:00:00.000015+00:00",
+     "entry_hash": "41bcb323cd82e876407d96a5b873bab91a381f32187a54f972cafc0db4f90c88",
+     "event_type": "REINFORCED",
+     "memory_id": "mem-0000",
+     "payload_json": "{\"caused_by_decision_id\":\"dec-0000\",\"confidence_after\":\"0.6250000000\",\"confidence_before\":\"0.5000000000\",\"grant_id\":\"grant-000000000001\"}",
+     "prev_hash": "547dd8b1809943e9f65b534d583192133a761a61cac3d99f93d99a4b0fb0f92a",
+     "reason": "used in a decision this turn",
+     "seq": 4
+    },
+    {
+     "actor_id": "seasons-agent",
+     "created_at": "2026-01-01T00:00:00.000020+00:00",
+     "entry_hash": "500dfeb4f564e02826d792bf217159294e1f5a341dc112640762c50d08866f94",
+     "event_type": "DECISION_USED_MEMORY",
+     "memory_id": "mem-0000",
+     "payload_json": "{\"decision_id\":\"dec-0001\",\"decision_sha256\":\"3536c1955a42a8dc548be62d7b26afa5750a6ba021cc5144c231f3838664f825\",\"grant_id\":\"grant-000000000001\",\"policy_version\":\"seasons/0.1\",\"receipt_sha256\":\"ab1e0792a2300ec893540a09a1e34fe2ac02c15fad404e0dc736dccbb7cbd1b6\"}",
+     "prev_hash": "41bcb323cd82e876407d96a5b873bab91a381f32187a54f972cafc0db4f90c88",
+     "reason": "answered: deploy gate staging?",
+     "seq": 5
+    },
+    {
+     "actor_id": "seasons-agent",
+     "created_at": "2026-01-01T00:00:00.000022+00:00",
+     "entry_hash": "b214a26841b4da0068315c02f34b2e8ded516cd1e4334d1ddeedf9fb63ee5521",
+     "event_type": "REINFORCED",
+     "memory_id": "mem-0000",
+     "payload_json": "{\"caused_by_decision_id\":\"dec-0001\",\"confidence_after\":\"0.7187500000\",\"confidence_before\":\"0.6250000000\",\"grant_id\":\"grant-000000000001\"}",
+     "prev_hash": "500dfeb4f564e02826d792bf217159294e1f5a341dc112640762c50d08866f94",
+     "reason": "used in a decision this turn",
+     "seq": 6
+    },
+    {
+     "actor_id": "seasons-agent",
+     "created_at": "2026-01-01T00:00:00.000027+00:00",
+     "entry_hash": "d1d55d51661c1c67679d683e5ba30da6f237ec8d026eba6d8fbcc3b9e5989abd",
+     "event_type": "DECISION_USED_MEMORY",
+     "memory_id": "mem-0000",
+     "payload_json": "{\"decision_id\":\"dec-0002\",\"decision_sha256\":\"3536c1955a42a8dc548be62d7b26afa5750a6ba021cc5144c231f3838664f825\",\"grant_id\":\"grant-000000000001\",\"policy_version\":\"seasons/0.1\",\"receipt_sha256\":\"ab1e0792a2300ec893540a09a1e34fe2ac02c15fad404e0dc736dccbb7cbd1b6\"}",
+     "prev_hash": "b214a26841b4da0068315c02f34b2e8ded516cd1e4334d1ddeedf9fb63ee5521",
+     "reason": "answered: deploy gate staging?",
+     "seq": 7
+    },
+    {
+     "actor_id": "seasons-agent",
+     "created_at": "2026-01-01T00:00:00.000029+00:00",
+     "entry_hash": "25faebf7c6bffb3cbf62420ad9c39108910d084367fd2a1de7c28600e2efc768",
+     "event_type": "REINFORCED",
+     "memory_id": "mem-0000",
+     "payload_json": "{\"caused_by_decision_id\":\"dec-0002\",\"confidence_after\":\"0.7890625000\",\"confidence_before\":\"0.7187500000\",\"grant_id\":\"grant-000000000001\"}",
+     "prev_hash": "d1d55d51661c1c67679d683e5ba30da6f237ec8d026eba6d8fbcc3b9e5989abd",
+     "reason": "used in a decision this turn",
+     "seq": 8
+    },
+    {
+     "actor_id": "seasons-agent",
+     "created_at": "2026-01-01T00:00:00.000029+00:00",
+     "entry_hash": "f080c36cfb839b3eb55dfc2f0ffe87d17481a03dffbeea05a86d9c05566673f5",
+     "event_type": "STATE_CHANGED",
+     "memory_id": "mem-0000",
+     "payload_json": "{\"from\":\"NEUTRAL\",\"grant_id\":\"grant-000000000001\",\"to\":\"REINFORCED\"}",
+     "prev_hash": "25faebf7c6bffb3cbf62420ad9c39108910d084367fd2a1de7c28600e2efc768",
+     "reason": "confidence crossed promotion threshold 3/4",
+     "seq": 9
+    }
+   ],
+   "mem-0001": [
+    {
+     "actor_id": "seasons-agent",
+     "created_at": "2026-01-01T00:00:00.000006+00:00",
+     "entry_hash": "f5f9351aa1a0e0142d4123f301d7b5436be11c5e64ebddf8c9e88b393bb36fee",
+     "event_type": "STORED",
+     "memory_id": "mem-0001",
+     "payload_json": "{\"content_sha256\":\"97dc1bd2c07a14c3442c8e099bb5c6de54dedb723e649e5d44a1c1c9b67bf9ea\",\"embedding_model\":\"seasons-local\",\"embedding_provenance\":{\"dimension\":64,\"input_content_hash\":\"97dc1bd2c07a14c3442c8e099bb5c6de54dedb723e649e5d44a1c1c9b67bf9ea\",\"model\":\"seasons-local-hash\",\"output_vector_hash\":\"d865589b203eb207aafca29eca1a706f3f8f096709b63178c22324e3b8e69916\",\"preprocessing\":\"none\",\"provider\":\"local-deterministic\",\"quantization_protocol\":\"canonical-decimal/scale=10/rounding=ROUND_HALF_EVEN\",\"revision\":\"unknown\"},\"grant_id\":\"grant-000000000001\"}",
+     "prev_hash": "12308d7db8fb128bdf0c9c8a507fde5366d21bbd7d4f91757e4f4a48a7a176bc",
+     "reason": "agent observed/experienced this",
+     "seq": 0
+    },
+    {
+     "actor_id": "seasons-agent",
+     "created_at": "2026-01-01T00:00:00.000013+00:00",
+     "entry_hash": "990dbc2f8760576a2c4e0187c2d65559c376eed58be8e954a0348ddb734dcd1d",
+     "event_type": "DECISION_USED_MEMORY",
+     "memory_id": "mem-0001",
+     "payload_json": "{\"decision_id\":\"dec-0000\",\"decision_sha256\":\"3536c1955a42a8dc548be62d7b26afa5750a6ba021cc5144c231f3838664f825\",\"grant_id\":\"grant-000000000001\",\"policy_version\":\"seasons/0.1\",\"receipt_sha256\":\"ab1e0792a2300ec893540a09a1e34fe2ac02c15fad404e0dc736dccbb7cbd1b6\"}",
+     "prev_hash": "f5f9351aa1a0e0142d4123f301d7b5436be11c5e64ebddf8c9e88b393bb36fee",
+     "reason": "answered: deploy gate staging?",
+     "seq": 1
+    },
+    {
+     "actor_id": "seasons-agent",
+     "created_at": "2026-01-01T00:00:00.000016+00:00",
+     "entry_hash": "435b1503ee488c63789ac8fe9167171657f93ba4b8ea21e5e090f7c624e31f3b",
+     "event_type": "REINFORCED",
+     "memory_id": "mem-0001",
+     "payload_json": "{\"caused_by_decision_id\":\"dec-0000\",\"confidence_after\":\"0.6250000000\",\"confidence_before\":\"0.5000000000\",\"grant_id\":\"grant-000000000001\"}",
+     "prev_hash": "990dbc2f8760576a2c4e0187c2d65559c376eed58be8e954a0348ddb734dcd1d",
+     "reason": "used in a decision this turn",
+     "seq": 2
+    },
+    {
+     "actor_id": "seasons-agent",
+     "created_at": "2026-01-01T00:00:00.000020+00:00",
+     "entry_hash": "481c1a628eefe927b82c0142e13a63408e82cf56f554f5fcff830e963787b649",
+     "event_type": "DECISION_USED_MEMORY",
+     "memory_id": "mem-0001",
+     "payload_json": "{\"decision_id\":\"dec-0001\",\"decision_sha256\":\"3536c1955a42a8dc548be62d7b26afa5750a6ba021cc5144c231f3838664f825\",\"grant_id\":\"grant-000000000001\",\"policy_version\":\"seasons/0.1\",\"receipt_sha256\":\"ab1e0792a2300ec893540a09a1e34fe2ac02c15fad404e0dc736dccbb7cbd1b6\"}",
+     "prev_hash": "435b1503ee488c63789ac8fe9167171657f93ba4b8ea21e5e090f7c624e31f3b",
+     "reason": "answered: deploy gate staging?",
+     "seq": 3
+    },
+    {
+     "actor_id": "seasons-agent",
+     "created_at": "2026-01-01T00:00:00.000023+00:00",
+     "entry_hash": "024c6025d8092c640f061d41f64a1d7c50e1bab1e7497abed7020e73e8cf4b91",
+     "event_type": "REINFORCED",
+     "memory_id": "mem-0001",
+     "payload_json": "{\"caused_by_decision_id\":\"dec-0001\",\"confidence_after\":\"0.7187500000\",\"confidence_before\":\"0.6250000000\",\"grant_id\":\"grant-000000000001\"}",
+     "prev_hash": "481c1a628eefe927b82c0142e13a63408e82cf56f554f5fcff830e963787b649",
+     "reason": "used in a decision this turn",
+     "seq": 4
+    },
+    {
+     "actor_id": "seasons-agent",
+     "created_at": "2026-01-01T00:00:00.000027+00:00",
+     "entry_hash": "9401ad420067f714d20f33509aac624f30c37ff116990a2487db066edf13f65d",
+     "event_type": "DECISION_USED_MEMORY",
+     "memory_id": "mem-0001",
+     "payload_json": "{\"decision_id\":\"dec-0002\",\"decision_sha256\":\"3536c1955a42a8dc548be62d7b26afa5750a6ba021cc5144c231f3838664f825\",\"grant_id\":\"grant-000000000001\",\"policy_version\":\"seasons/0.1\",\"receipt_sha256\":\"ab1e0792a2300ec893540a09a1e34fe2ac02c15fad404e0dc736dccbb7cbd1b6\"}",
+     "prev_hash": "024c6025d8092c640f061d41f64a1d7c50e1bab1e7497abed7020e73e8cf4b91",
+     "reason": "answered: deploy gate staging?",
+     "seq": 5
+    },
+    {
+     "actor_id": "seasons-agent",
+     "created_at": "2026-01-01T00:00:00.000030+00:00",
+     "entry_hash": "022e07e2617cd442fbda3ada9480c1262310dc9bad8d02ba0836b54ab3d5dc5a",
+     "event_type": "REINFORCED",
+     "memory_id": "mem-0001",
+     "payload_json": "{\"caused_by_decision_id\":\"dec-0002\",\"confidence_after\":\"0.7890625000\",\"confidence_before\":\"0.7187500000\",\"grant_id\":\"grant-000000000001\"}",
+     "prev_hash": "9401ad420067f714d20f33509aac624f30c37ff116990a2487db066edf13f65d",
+     "reason": "used in a decision this turn",
+     "seq": 6
+    },
+    {
+     "actor_id": "seasons-agent",
+     "created_at": "2026-01-01T00:00:00.000030+00:00",
+     "entry_hash": "c6e73151f0d5c04a177c55988115f5d9ad2625345cd3f6ffb5b586bb45251a2b",
+     "event_type": "STATE_CHANGED",
+     "memory_id": "mem-0001",
+     "payload_json": "{\"from\":\"NEUTRAL\",\"grant_id\":\"grant-000000000001\",\"to\":\"REINFORCED\"}",
+     "prev_hash": "022e07e2617cd442fbda3ada9480c1262310dc9bad8d02ba0836b54ab3d5dc5a",
+     "reason": "confidence crossed promotion threshold 3/4",
+     "seq": 7
+    }
+   ],
+   "mem-0002": [
+    {
+     "actor_id": "seasons-agent",
+     "created_at": "2026-01-01T00:00:00.000007+00:00",
+     "entry_hash": "3438ce31dff2b7e21432e357d5d28298d7b78499250e3c4206a8120fab9db36d",
+     "event_type": "STORED",
+     "memory_id": "mem-0002",
+     "payload_json": "{\"content_sha256\":\"dbf413b8ea6ed0328c13527113581e0071ffd8af82c0a1dcbbe904d4cc5eff80\",\"embedding_model\":\"seasons-local\",\"embedding_provenance\":{\"dimension\":64,\"input_content_hash\":\"dbf413b8ea6ed0328c13527113581e0071ffd8af82c0a1dcbbe904d4cc5eff80\",\"model\":\"seasons-local-hash\",\"output_vector_hash\":\"78d087991a48cd58576d2ec8546e47778e83896cf7318f36bd7912bb00e11683\",\"preprocessing\":\"none\",\"provider\":\"local-deterministic\",\"quantization_protocol\":\"canonical-decimal/scale=10/rounding=ROUND_HALF_EVEN\",\"revision\":\"unknown\"},\"grant_id\":\"grant-000000000001\"}",
+     "prev_hash": "a4a416360a60daf1fec05430a282833a70ace629daae190fe2294821b932c675",
+     "reason": "agent observed/experienced this",
+     "seq": 0
+    },
+    {
+     "actor_id": "seasons-agent",
+     "created_at": "2026-01-01T00:00:00.000013+00:00",
+     "entry_hash": "7b4b2e17755d246923f56d5bb36f6cfd3df33ab950d0d83ceee22a828d9e88b9",
+     "event_type": "DECISION_USED_MEMORY",
+     "memory_id": "mem-0002",
+     "payload_json": "{\"decision_id\":\"dec-0000\",\"decision_sha256\":\"3536c1955a42a8dc548be62d7b26afa5750a6ba021cc5144c231f3838664f825\",\"grant_id\":\"grant-000000000001\",\"policy_version\":\"seasons/0.1\",\"receipt_sha256\":\"ab1e0792a2300ec893540a09a1e34fe2ac02c15fad404e0dc736dccbb7cbd1b6\"}",
+     "prev_hash": "3438ce31dff2b7e21432e357d5d28298d7b78499250e3c4206a8120fab9db36d",
+     "reason": "answered: deploy gate staging?",
+     "seq": 1
+    },
+    {
+     "actor_id": "seasons-agent",
+     "created_at": "2026-01-01T00:00:00.000017+00:00",
+     "entry_hash": "1439f6d2cc9a1d10831ea9934698ce12c3cc92295c3ab1ca5912a6f06002323d",
+     "event_type": "REINFORCED",
+     "memory_id": "mem-0002",
+     "payload_json": "{\"caused_by_decision_id\":\"dec-0000\",\"confidence_after\":\"0.6250000000\",\"confidence_before\":\"0.5000000000\",\"grant_id\":\"grant-000000000001\"}",
+     "prev_hash": "7b4b2e17755d246923f56d5bb36f6cfd3df33ab950d0d83ceee22a828d9e88b9",
+     "reason": "used in a decision this turn",
+     "seq": 2
+    },
+    {
+     "actor_id": "seasons-agent",
+     "created_at": "2026-01-01T00:00:00.000020+00:00",
+     "entry_hash": "193afe8433be5af9574e167182fb3753d4777f61266992e84b928e1631eee573",
+     "event_type": "DECISION_USED_MEMORY",
+     "memory_id": "mem-0002",
+     "payload_json": "{\"decision_id\":\"dec-0001\",\"decision_sha256\":\"3536c1955a42a8dc548be62d7b26afa5750a6ba021cc5144c231f3838664f825\",\"grant_id\":\"grant-000000000001\",\"policy_version\":\"seasons/0.1\",\"receipt_sha256\":\"ab1e0792a2300ec893540a09a1e34fe2ac02c15fad404e0dc736dccbb7cbd1b6\"}",
+     "prev_hash": "1439f6d2cc9a1d10831ea9934698ce12c3cc92295c3ab1ca5912a6f06002323d",
+     "reason": "answered: deploy gate staging?",
+     "seq": 3
+    },
+    {
+     "actor_id": "seasons-agent",
+     "created_at": "2026-01-01T00:00:00.000024+00:00",
+     "entry_hash": "2378ca66ec611b2b1fdf0c1204b05325bb687fc21a023b0f823a7742b49df396",
+     "event_type": "REINFORCED",
+     "memory_id": "mem-0002",
+     "payload_json": "{\"caused_by_decision_id\":\"dec-0001\",\"confidence_after\":\"0.7187500000\",\"confidence_before\":\"0.6250000000\",\"grant_id\":\"grant-000000000001\"}",
+     "prev_hash": "193afe8433be5af9574e167182fb3753d4777f61266992e84b928e1631eee573",
+     "reason": "used in a decision this turn",
+     "seq": 4
+    },
+    {
+     "actor_id": "seasons-agent",
+     "created_at": "2026-01-01T00:00:00.000027+00:00",
+     "entry_hash": "cb3b1b2cf2646ed2584b4cd695b55fdffc440c52233fbb7870736774d64b80ae",
+     "event_type": "DECISION_USED_MEMORY",
+     "memory_id": "mem-0002",
+     "payload_json": "{\"decision_id\":\"dec-0002\",\"decision_sha256\":\"3536c1955a42a8dc548be62d7b26afa5750a6ba021cc5144c231f3838664f825\",\"grant_id\":\"grant-000000000001\",\"policy_version\":\"seasons/0.1\",\"receipt_sha256\":\"ab1e0792a2300ec893540a09a1e34fe2ac02c15fad404e0dc736dccbb7cbd1b6\"}",
+     "prev_hash": "2378ca66ec611b2b1fdf0c1204b05325bb687fc21a023b0f823a7742b49df396",
+     "reason": "answered: deploy gate staging?",
+     "seq": 5
+    },
+    {
+     "actor_id": "seasons-agent",
+     "created_at": "2026-01-01T00:00:00.000031+00:00",
+     "entry_hash": "f60250a1130be04fdcca1e710f39bb4c081c0862e034f67ca124ea88689be56e",
+     "event_type": "REINFORCED",
+     "memory_id": "mem-0002",
+     "payload_json": "{\"caused_by_decision_id\":\"dec-0002\",\"confidence_after\":\"0.7890625000\",\"confidence_before\":\"0.7187500000\",\"grant_id\":\"grant-000000000001\"}",
+     "prev_hash": "cb3b1b2cf2646ed2584b4cd695b55fdffc440c52233fbb7870736774d64b80ae",
+     "reason": "used in a decision this turn",
+     "seq": 6
+    },
+    {
+     "actor_id": "seasons-agent",
+     "created_at": "2026-01-01T00:00:00.000031+00:00",
+     "entry_hash": "864b7cd571029b5a50829aaa8b199e552f502ed81da727589da80d25c850478d",
+     "event_type": "STATE_CHANGED",
+     "memory_id": "mem-0002",
+     "payload_json": "{\"from\":\"NEUTRAL\",\"grant_id\":\"grant-000000000001\",\"to\":\"REINFORCED\"}",
+     "prev_hash": "f60250a1130be04fdcca1e710f39bb4c081c0862e034f67ca124ea88689be56e",
+     "reason": "confidence crossed promotion threshold 3/4",
+     "seq": 7
+    }
+   ],
+   "mem-0003": [
+    {
+     "actor_id": "seasons-agent",
+     "created_at": "2026-01-01T00:00:00.000008+00:00",
+     "entry_hash": "608f60a51ffbe542cb3643be5c179f38753ffef2a41fd2d149a5c0cbc309bc55",
+     "event_type": "STORED",
+     "memory_id": "mem-0003",
+     "payload_json": "{\"content_sha256\":\"5e3a67da02023e9e0e9b56c9ac61383e4647db94b8c6c996d6e3621dec267b87\",\"embedding_model\":\"seasons-local\",\"embedding_provenance\":{\"dimension\":64,\"input_content_hash\":\"5e3a67da02023e9e0e9b56c9ac61383e4647db94b8c6c996d6e3621dec267b87\",\"model\":\"seasons-local-hash\",\"output_vector_hash\":\"6923ee73d799ee4d2c48b9b88ad0b5b7428e486e01f207ad5f33426ceab1ceb3\",\"preprocessing\":\"none\",\"provider\":\"local-deterministic\",\"quantization_protocol\":\"canonical-decimal/scale=10/rounding=ROUND_HALF_EVEN\",\"revision\":\"unknown\"},\"grant_id\":\"grant-000000000001\"}",
+     "prev_hash": "d14279508693df4a4c803c22652b854ab9c0a9a36e37388593eea3c37ee3bf10",
+     "reason": "agent observed/experienced this",
+     "seq": 0
+    },
+    {
+     "actor_id": "seasons-agent",
+     "created_at": "2026-01-01T00:00:00.000013+00:00",
+     "entry_hash": "561940a3c3dbcbe6479667e9dd494373e21c4ba869ec173ab9571b00531efa1d",
+     "event_type": "DECISION_USED_MEMORY",
+     "memory_id": "mem-0003",
+     "payload_json": "{\"decision_id\":\"dec-0000\",\"decision_sha256\":\"3536c1955a42a8dc548be62d7b26afa5750a6ba021cc5144c231f3838664f825\",\"grant_id\":\"grant-000000000001\",\"policy_version\":\"seasons/0.1\",\"receipt_sha256\":\"ab1e0792a2300ec893540a09a1e34fe2ac02c15fad404e0dc736dccbb7cbd1b6\"}",
+     "prev_hash": "608f60a51ffbe542cb3643be5c179f38753ffef2a41fd2d149a5c0cbc309bc55",
+     "reason": "answered: deploy gate staging?",
+     "seq": 1
+    },
+    {
+     "actor_id": "seasons-agent",
+     "created_at": "2026-01-01T00:00:00.000018+00:00",
+     "entry_hash": "53a1b4b3c80873e590befecc811caa5515570be59a5f1849c076711d5d911aa6",
+     "event_type": "REINFORCED",
+     "memory_id": "mem-0003",
+     "payload_json": "{\"caused_by_decision_id\":\"dec-0000\",\"confidence_after\":\"0.6250000000\",\"confidence_before\":\"0.5000000000\",\"grant_id\":\"grant-000000000001\"}",
+     "prev_hash": "561940a3c3dbcbe6479667e9dd494373e21c4ba869ec173ab9571b00531efa1d",
+     "reason": "used in a decision this turn",
+     "seq": 2
+    },
+    {
+     "actor_id": "seasons-agent",
+     "created_at": "2026-01-01T00:00:00.000020+00:00",
+     "entry_hash": "79f9af1c7c48ef1688d37056999929a697cca5f0084f7f94fb838590fe9c1e29",
+     "event_type": "DECISION_USED_MEMORY",
+     "memory_id": "mem-0003",
+     "payload_json": "{\"decision_id\":\"dec-0001\",\"decision_sha256\":\"3536c1955a42a8dc548be62d7b26afa5750a6ba021cc5144c231f3838664f825\",\"grant_id\":\"grant-000000000001\",\"policy_version\":\"seasons/0.1\",\"receipt_sha256\":\"ab1e0792a2300ec893540a09a1e34fe2ac02c15fad404e0dc736dccbb7cbd1b6\"}",
+     "prev_hash": "53a1b4b3c80873e590befecc811caa5515570be59a5f1849c076711d5d911aa6",
+     "reason": "answered: deploy gate staging?",
+     "seq": 3
+    },
+    {
+     "actor_id": "seasons-agent",
+     "created_at": "2026-01-01T00:00:00.000025+00:00",
+     "entry_hash": "ef80ed96cf6b4fd8b02b57cd93bc0b7a896c9ba4796f20b31808230deca41fd6",
+     "event_type": "REINFORCED",
+     "memory_id": "mem-0003",
+     "payload_json": "{\"caused_by_decision_id\":\"dec-0001\",\"confidence_after\":\"0.7187500000\",\"confidence_before\":\"0.6250000000\",\"grant_id\":\"grant-000000000001\"}",
+     "prev_hash": "79f9af1c7c48ef1688d37056999929a697cca5f0084f7f94fb838590fe9c1e29",
+     "reason": "used in a decision this turn",
+     "seq": 4
+    },
+    {
+     "actor_id": "seasons-agent",
+     "created_at": "2026-01-01T00:00:00.000027+00:00",
+     "entry_hash": "d5487137fee40a6d731fa3a7a7bea2a326c7176ea60db4f660b55f479cba5a78",
+     "event_type": "DECISION_USED_MEMORY",
+     "memory_id": "mem-0003",
+     "payload_json": "{\"decision_id\":\"dec-0002\",\"decision_sha256\":\"3536c1955a42a8dc548be62d7b26afa5750a6ba021cc5144c231f3838664f825\",\"grant_id\":\"grant-000000000001\",\"policy_version\":\"seasons/0.1\",\"receipt_sha256\":\"ab1e0792a2300ec893540a09a1e34fe2ac02c15fad404e0dc736dccbb7cbd1b6\"}",
+     "prev_hash": "ef80ed96cf6b4fd8b02b57cd93bc0b7a896c9ba4796f20b31808230deca41fd6",
+     "reason": "answered: deploy gate staging?",
+     "seq": 5
+    },
+    {
+     "actor_id": "seasons-agent",
+     "created_at": "2026-01-01T00:00:00.000032+00:00",
+     "entry_hash": "2987440e7742867e03a20567cdc3876264da9241ddb1b740bfa649e270e71b90",
+     "event_type": "REINFORCED",
+     "memory_id": "mem-0003",
+     "payload_json": "{\"caused_by_decision_id\":\"dec-0002\",\"confidence_after\":\"0.7890625000\",\"confidence_before\":\"0.7187500000\",\"grant_id\":\"grant-000000000001\"}",
+     "prev_hash": "d5487137fee40a6d731fa3a7a7bea2a326c7176ea60db4f660b55f479cba5a78",
+     "reason": "used in a decision this turn",
+     "seq": 6
+    },
+    {
+     "actor_id": "seasons-agent",
+     "created_at": "2026-01-01T00:00:00.000032+00:00",
+     "entry_hash": "a6cb822ec74ea13baf9cd24f226cbd4c1924312e7b8bc3a970464e9108d7b00f",
+     "event_type": "STATE_CHANGED",
+     "memory_id": "mem-0003",
+     "payload_json": "{\"from\":\"NEUTRAL\",\"grant_id\":\"grant-000000000001\",\"to\":\"REINFORCED\"}",
+     "prev_hash": "2987440e7742867e03a20567cdc3876264da9241ddb1b740bfa649e270e71b90",
+     "reason": "confidence crossed promotion threshold 3/4",
+     "seq": 7
+    }
+   ],
+   "mem-0004": [
+    {
+     "actor_id": "seasons-agent",
+     "created_at": "2026-01-01T00:00:00.000009+00:00",
+     "entry_hash": "80db596ba33a559f372a74ace2faef1adfdc2ff9c33cfd586cad5ab4cc4ae4e8",
+     "event_type": "STORED",
+     "memory_id": "mem-0004",
+     "payload_json": "{\"content_sha256\":\"70e2f930211ece6ef78d2bf16eb5ec3fd1f1f6a59bfb978321f53ffe5357d5d5\",\"embedding_model\":\"seasons-local\",\"embedding_provenance\":{\"dimension\":64,\"input_content_hash\":\"70e2f930211ece6ef78d2bf16eb5ec3fd1f1f6a59bfb978321f53ffe5357d5d5\",\"model\":\"seasons-local-hash\",\"output_vector_hash\":\"008c96bf10bfd4e482f04c035e872abb00fc6e30a785dd46ed1189822cebf268\",\"preprocessing\":\"none\",\"provider\":\"local-deterministic\",\"quantization_protocol\":\"canonical-decimal/scale=10/rounding=ROUND_HALF_EVEN\",\"revision\":\"unknown\"},\"grant_id\":\"grant-000000000001\"}",
+     "prev_hash": "05993dbd21dba9d5191cc48d855e75f8559dd588f8a946e80e13ee0d6b6c13ff",
+     "reason": "agent observed/experienced this",
+     "seq": 0
+    },
+    {
+     "actor_id": "seasons-agent",
+     "created_at": "2026-01-01T00:00:00.000013+00:00",
+     "entry_hash": "ce67ffb7b3ba63a5217195abb7086dee22b98e2ece77bdbd5c8ea26d668357a8",
+     "event_type": "DECISION_USED_MEMORY",
+     "memory_id": "mem-0004",
+     "payload_json": "{\"decision_id\":\"dec-0000\",\"decision_sha256\":\"3536c1955a42a8dc548be62d7b26afa5750a6ba021cc5144c231f3838664f825\",\"grant_id\":\"grant-000000000001\",\"policy_version\":\"seasons/0.1\",\"receipt_sha256\":\"ab1e0792a2300ec893540a09a1e34fe2ac02c15fad404e0dc736dccbb7cbd1b6\"}",
+     "prev_hash": "80db596ba33a559f372a74ace2faef1adfdc2ff9c33cfd586cad5ab4cc4ae4e8",
+     "reason": "answered: deploy gate staging?",
+     "seq": 1
+    },
+    {
+     "actor_id": "seasons-agent",
+     "created_at": "2026-01-01T00:00:00.000019+00:00",
+     "entry_hash": "3b7af39bc3e9277648088ba643f5acc543307f0124e75defbffd2170681e0b34",
+     "event_type": "REINFORCED",
+     "memory_id": "mem-0004",
+     "payload_json": "{\"caused_by_decision_id\":\"dec-0000\",\"confidence_after\":\"0.6250000000\",\"confidence_before\":\"0.5000000000\",\"grant_id\":\"grant-000000000001\"}",
+     "prev_hash": "ce67ffb7b3ba63a5217195abb7086dee22b98e2ece77bdbd5c8ea26d668357a8",
+     "reason": "used in a decision this turn",
+     "seq": 2
+    },
+    {
+     "actor_id": "seasons-agent",
+     "created_at": "2026-01-01T00:00:00.000020+00:00",
+     "entry_hash": "eebcf21ddde5a28bb7fa6003a973fa1f003147f7dca71724c9ebbb13b0a75c9b",
+     "event_type": "DECISION_USED_MEMORY",
+     "memory_id": "mem-0004",
+     "payload_json": "{\"decision_id\":\"dec-0001\",\"decision_sha256\":\"3536c1955a42a8dc548be62d7b26afa5750a6ba021cc5144c231f3838664f825\",\"grant_id\":\"grant-000000000001\",\"policy_version\":\"seasons/0.1\",\"receipt_sha256\":\"ab1e0792a2300ec893540a09a1e34fe2ac02c15fad404e0dc736dccbb7cbd1b6\"}",
+     "prev_hash": "3b7af39bc3e9277648088ba643f5acc543307f0124e75defbffd2170681e0b34",
+     "reason": "answered: deploy gate staging?",
+     "seq": 3
+    },
+    {
+     "actor_id": "seasons-agent",
+     "created_at": "2026-01-01T00:00:00.000026+00:00",
+     "entry_hash": "924e415369efdee299cac4185cfae5bd1928e2ea16353d6fc84ba075dcc7e6b0",
+     "event_type": "REINFORCED",
+     "memory_id": "mem-0004",
+     "payload_json": "{\"caused_by_decision_id\":\"dec-0001\",\"confidence_after\":\"0.7187500000\",\"confidence_before\":\"0.6250000000\",\"grant_id\":\"grant-000000000001\"}",
+     "prev_hash": "eebcf21ddde5a28bb7fa6003a973fa1f003147f7dca71724c9ebbb13b0a75c9b",
+     "reason": "used in a decision this turn",
+     "seq": 4
+    },
+    {
+     "actor_id": "seasons-agent",
+     "created_at": "2026-01-01T00:00:00.000027+00:00",
+     "entry_hash": "9e712d3830cd8a292f701bc52092177f4e0ce3dd73fefadc2b3dccacd7f568bc",
+     "event_type": "DECISION_USED_MEMORY",
+     "memory_id": "mem-0004",
+     "payload_json": "{\"decision_id\":\"dec-0002\",\"decision_sha256\":\"3536c1955a42a8dc548be62d7b26afa5750a6ba021cc5144c231f3838664f825\",\"grant_id\":\"grant-000000000001\",\"policy_version\":\"seasons/0.1\",\"receipt_sha256\":\"ab1e0792a2300ec893540a09a1e34fe2ac02c15fad404e0dc736dccbb7cbd1b6\"}",
+     "prev_hash": "924e415369efdee299cac4185cfae5bd1928e2ea16353d6fc84ba075dcc7e6b0",
+     "reason": "answered: deploy gate staging?",
+     "seq": 5
+    },
+    {
+     "actor_id": "seasons-agent",
+     "created_at": "2026-01-01T00:00:00.000033+00:00",
+     "entry_hash": "91d4f3b9d478b205f9e8a048b34f369b1527b9a1c3da3db743864b1feb31859a",
+     "event_type": "REINFORCED",
+     "memory_id": "mem-0004",
+     "payload_json": "{\"caused_by_decision_id\":\"dec-0002\",\"confidence_after\":\"0.7890625000\",\"confidence_before\":\"0.7187500000\",\"grant_id\":\"grant-000000000001\"}",
+     "prev_hash": "9e712d3830cd8a292f701bc52092177f4e0ce3dd73fefadc2b3dccacd7f568bc",
+     "reason": "used in a decision this turn",
+     "seq": 6
+    },
+    {
+     "actor_id": "seasons-agent",
+     "created_at": "2026-01-01T00:00:00.000033+00:00",
+     "entry_hash": "2106098d36869a9b2ee378bfb07c5e0a56a30bf58e8348278037b5edba6b6daa",
+     "event_type": "STATE_CHANGED",
+     "memory_id": "mem-0004",
+     "payload_json": "{\"from\":\"NEUTRAL\",\"grant_id\":\"grant-000000000001\",\"to\":\"REINFORCED\"}",
+     "prev_hash": "91d4f3b9d478b205f9e8a048b34f369b1527b9a1c3da3db743864b1feb31859a",
+     "reason": "confidence crossed promotion threshold 3/4",
+     "seq": 7
+    }
+   ]
+  },
+  "decisions": [
+   {
+    "created_at": "2026-01-01T00:00:00.000013+00:00",
+    "decision_id": "dec-0000",
+    "query_embedding": [
+     "0.0000000000",
+     "0.0000000000",
+     "0.0000000000",
+     "0.0000000000",
+     "0.0000000000",
+     "0.0000000000",
+     "0.0000000000",
+     "0.0000000000",
+     "0.0000000000",
+     "0.0000000000",
+     "0.0000000000",
+     "0.0000000000",
+     "0.0000000000",
+     "0.0000000000",
+     "0.0000000000",
+     "0.0000000000",
+     "0.0000000000",
+     "0.0000000000",
+     "0.0000000000",
+     "0.0000000000",
+     "0.0000000000",
+     "0.0000000000",
+     "0.0000000000",
+     "0.0000000000",
+     "0.0000000000",
+     "0.0000000000",
+     "0.0000000000",
+     "0.0000000000",
+     "0.0000000000",
+     "0.0000000000",
+     "0.5773502692",
+     "0.0000000000",
+     "0.0000000000",
+     "0.0000000000",
+     "0.0000000000",
+     "0.0000000000",
+     "0.0000000000",
+     "0.0000000000",
+     "0.0000000000",
+     "0.0000000000",
+     "0.0000000000",
+     "0.0000000000",
+     "0.0000000000",
+     "0.0000000000",
+     "0.0000000000",
+     "0.0000000000",
+     "0.0000000000",
+     "0.0000000000",
+     "0.0000000000",
+     "0.5773502692",
+     "0.0000000000",
+     "0.0000000000",
+     "0.0000000000",
+     "0.0000000000",
+     "0.0000000000",
+     "0.0000000000",
+     "0.0000000000",
+     "0.0000000000",
+     "0.0000000000",
+     "0.5773502692",
+     "0.0000000000",
+     "0.0000000000",
+     "0.0000000000",
+     "0.0000000000"
+    ],
+    "query_embedding_sha256": "0e4090d38ad3bbec5c060e7f69e2cf4c0e7bc87ef1157fde0b25d2dcc4a97c48",
+    "question": "deploy gate staging?",
+    "receipt_sha256": "ab1e0792a2300ec893540a09a1e34fe2ac02c15fad404e0dc736dccbb7cbd1b6",
+    "used": [
+     "mem-0000",
+     "mem-0001",
+     "mem-0002",
+     "mem-0003",
+     "mem-0004"
+    ]
+   },
+   {
+    "created_at": "2026-01-01T00:00:00.000020+00:00",
+    "decision_id": "dec-0001",
+    "query_embedding": [
+     "0.0000000000",
+     "0.0000000000",
+     "0.0000000000",
+     "0.0000000000",
+     "0.0000000000",
+     "0.0000000000",
+     "0.0000000000",
+     "0.0000000000",
+     "0.0000000000",
+     "0.0000000000",
+     "0.0000000000",
+     "0.0000000000",
+     "0.0000000000",
+     "0.0000000000",
+     "0.0000000000",
+     "0.0000000000",
+     "0.0000000000",
+     "0.0000000000",
+     "0.0000000000",
+     "0.0000000000",
+     "0.0000000000",
+     "0.0000000000",
+     "0.0000000000",
+     "0.0000000000",
+     "0.0000000000",
+     "0.0000000000",
+     "0.0000000000",
+     "0.0000000000",
+     "0.0000000000",
+     "0.0000000000",
+     "0.5773502692",
+     "0.0000000000",
+     "0.0000000000",
+     "0.0000000000",
+     "0.0000000000",
+     "0.0000000000",
+     "0.0000000000",
+     "0.0000000000",
+     "0.0000000000",
+     "0.0000000000",
+     "0.0000000000",
+     "0.0000000000",
+     "0.0000000000",
+     "0.0000000000",
+     "0.0000000000",
+     "0.0000000000",
+     "0.0000000000",
+     "0.0000000000",
+     "0.0000000000",
+     "0.5773502692",
+     "0.0000000000",
+     "0.0000000000",
+     "0.0000000000",
+     "0.0000000000",
+     "0.0000000000",
+     "0.0000000000",
+     "0.0000000000",
+     "0.0000000000",
+     "0.0000000000",
+     "0.5773502692",
+     "0.0000000000",
+     "0.0000000000",
+     "0.0000000000",
+     "0.0000000000"
+    ],
+    "query_embedding_sha256": "0e4090d38ad3bbec5c060e7f69e2cf4c0e7bc87ef1157fde0b25d2dcc4a97c48",
+    "question": "deploy gate staging?",
+    "receipt_sha256": "ab1e0792a2300ec893540a09a1e34fe2ac02c15fad404e0dc736dccbb7cbd1b6",
+    "used": [
+     "mem-0000",
+     "mem-0001",
+     "mem-0002",
+     "mem-0003",
+     "mem-0004"
+    ]
+   },
+   {
+    "created_at": "2026-01-01T00:00:00.000027+00:00",
+    "decision_id": "dec-0002",
+    "query_embedding": [
+     "0.0000000000",
+     "0.0000000000",
+     "0.0000000000",
+     "0.0000000000",
+     "0.0000000000",
+     "0.0000000000",
+     "0.0000000000",
+     "0.0000000000",
+     "0.0000000000",
+     "0.0000000000",
+     "0.0000000000",
+     "0.0000000000",
+     "0.0000000000",
+     "0.0000000000",
+     "0.0000000000",
+     "0.0000000000",
+     "0.0000000000",
+     "0.0000000000",
+     "0.0000000000",
+     "0.0000000000",
+     "0.0000000000",
+     "0.0000000000",
+     "0.0000000000",
+     "0.0000000000",
+     "0.0000000000",
+     "0.0000000000",
+     "0.0000000000",
+     "0.0000000000",
+     "0.0000000000",
+     "0.0000000000",
+     "0.5773502692",
+     "0.0000000000",
+     "0.0000000000",
+     "0.0000000000",
+     "0.0000000000",
+     "0.0000000000",
+     "0.0000000000",
+     "0.0000000000",
+     "0.0000000000",
+     "0.0000000000",
+     "0.0000000000",
+     "0.0000000000",
+     "0.0000000000",
+     "0.0000000000",
+     "0.0000000000",
+     "0.0000000000",
+     "0.0000000000",
+     "0.0000000000",
+     "0.0000000000",
+     "0.5773502692",
+     "0.0000000000",
+     "0.0000000000",
+     "0.0000000000",
+     "0.0000000000",
+     "0.0000000000",
+     "0.0000000000",
+     "0.0000000000",
+     "0.0000000000",
+     "0.0000000000",
+     "0.5773502692",
+     "0.0000000000",
+     "0.0000000000",
+     "0.0000000000",
+     "0.0000000000"
+    ],
+    "query_embedding_sha256": "0e4090d38ad3bbec5c060e7f69e2cf4c0e7bc87ef1157fde0b25d2dcc4a97c48",
+    "question": "deploy gate staging?",
+    "receipt_sha256": "ab1e0792a2300ec893540a09a1e34fe2ac02c15fad404e0dc736dccbb7cbd1b6",
+    "used": [
+     "mem-0000",
+     "mem-0001",
+     "mem-0002",
+     "mem-0003",
+     "mem-0004"
+    ]
+   }
+  ],
+  "memories": [
+   {
+    "confidence": "0.7890625000",
+    "content": "The deploy gate requires staging to pass.",
+    "content_sha256": "1d1cedfb88861b2daa16074dffccf8ec1181f72e2854874c4255354bc1444335",
+    "created_at": "2026-01-01T00:00:00.000005+00:00",
+    "created_by": "seasons-agent",
+    "custody_status": "CLEAN",
+    "embedding_json": "{\"v\":[\"0.0000000000\",\"0.0000000000\",\"-0.3779644730\",\"0.0000000000\",\"0.0000000000\",\"0.0000000000\",\"0.0000000000\",\"0.0000000000\",\"0.0000000000\",\"0.0000000000\",\"0.3779644730\",\"0.0000000000\",\"0.0000000000\",\"0.0000000000\",\"0.0000000000\",\"0.0000000000\",\"0.0000000000\",\"0.0000000000\",\"0.0000000000\",\"0.0000000000\",\"0.0000000000\",\"0.0000000000\",\"0.0000000000\",\"0.0000000000\",\"0.0000000000\",\"0.0000000000\",\"0.0000000000\",\"0.0000000000\",\"0.0000000000\",\"0.0000000000\",\"0.3779644730\",\"0.0000000000\",\"0.0000000000\",\"0.0000000000\",\"0.0000000000\",\"0.0000000000\",\"0.0000000000\",\"0.0000000000\",\"0.0000000000\",\"0.0000000000\",\"0.0000000000\",\"0.0000000000\",\"0.0000000000\",\"0.0000000000\",\"0.0000000000\",\"0.0000000000\",\"0.0000000000\",\"0.0000000000\",\"0.0000000000\",\"0.3779644730\",\"0.0000000000\",\"-0.3779644730\",\"0.0000000000\",\"0.0000000000\",\"0.0000000000\",\"0.0000000000\",\"-0.3779644730\",\"0.0000000000\",\"0.0000000000\",\"0.3779644730\",\"0.0000000000\",\"0.0000000000\",\"0.0000000000\",\"0.0000000000\"]}",
+    "embedding_model": "seasons-local",
+    "field_state": "REINFORCED",
+    "memory_id": "mem-0000",
+    "superseded_by": null,
+    "topic": null
+   },
+   {
+    "confidence": "0.7890625000",
+    "content": "Rollbacks run via ops rollback.",
+    "content_sha256": "97dc1bd2c07a14c3442c8e099bb5c6de54dedb723e649e5d44a1c1c9b67bf9ea",
+    "created_at": "2026-01-01T00:00:00.000006+00:00",
+    "created_by": "seasons-agent",
+    "custody_status": "CLEAN",
+    "embedding_json": "{\"v\":[\"0.0000000000\",\"0.0000000000\",\"0.0000000000\",\"0.0000000000\",\"0.0000000000\",\"0.0000000000\",\"0.0000000000\",\"0.0000000000\",\"-0.3779644730\",\"0.0000000000\",\"0.3779644730\",\"0.0000000000\",\"0.0000000000\",\"0.0000000000\",\"0.0000000000\",\"0.0000000000\",\"0.0000000000\",\"0.0000000000\",\"0.3779644730\",\"0.0000000000\",\"0.0000000000\",\"0.0000000000\",\"0.0000000000\",\"0.0000000000\",\"0.0000000000\",\"0.0000000000\",\"0.0000000000\",\"0.0000000000\",\"0.0000000000\",\"0.0000000000\",\"0.0000000000\",\"0.0000000000\",\"0.0000000000\",\"0.0000000000\",\"0.0000000000\",\"0.0000000000\",\"0.0000000000\",\"-0.7559289460\",\"0.0000000000\",\"0.0000000000\",\"0.0000000000\",\"0.0000000000\",\"0.0000000000\",\"0.0000000000\",\"0.0000000000\",\"0.0000000000\",\"0.0000000000\",\"0.0000000000\",\"0.0000000000\",\"0.0000000000\",\"0.0000000000\",\"0.0000000000\",\"0.0000000000\",\"0.0000000000\",\"0.0000000000\",\"0.0000000000\",\"0.0000000000\",\"0.0000000000\",\"0.0000000000\",\"0.0000000000\",\"0.0000000000\",\"0.0000000000\",\"0.0000000000\",\"0.0000000000\"]}",
+    "embedding_model": "seasons-local",
+    "field_state": "REINFORCED",
+    "memory_id": "mem-0001",
+    "superseded_by": null,
+    "topic": null
+   },
+   {
+    "confidence": "0.7890625000",
+    "content": "Auth tokens expire after one hour.",
+    "content_sha256": "dbf413b8ea6ed0328c13527113581e0071ffd8af82c0a1dcbbe904d4cc5eff80",
+    "created_at": "2026-01-01T00:00:00.000007+00:00",
+    "created_by": "seasons-agent",
+    "custody_status": "CLEAN",
+    "embedding_json": "{\"v\":[\"0.0000000000\",\"0.0000000000\",\"0.0000000000\",\"0.0000000000\",\"0.4082482905\",\"0.0000000000\",\"0.0000000000\",\"0.0000000000\",\"0.0000000000\",\"0.4082482905\",\"0.0000000000\",\"0.0000000000\",\"0.0000000000\",\"0.0000000000\",\"0.0000000000\",\"0.0000000000\",\"0.0000000000\",\"0.0000000000\",\"0.0000000000\",\"0.0000000000\",\"0.4082482905\",\"0.0000000000\",\"0.0000000000\",\"0.0000000000\",\"0.0000000000\",\"0.0000000000\",\"0.0000000000\",\"0.0000000000\",\"0.0000000000\",\"0.0000000000\",\"0.0000000000\",\"0.0000000000\",\"0.0000000000\",\"0.0000000000\",\"0.0000000000\",\"0.4082482905\",\"0.0000000000\",\"0.0000000000\",\"0.0000000000\",\"0.0000000000\",\"0.0000000000\",\"0.0000000000\",\"0.0000000000\",\"0.0000000000\",\"0.0000000000\",\"0.0000000000\",\"0.0000000000\",\"0.0000000000\",\"0.0000000000\",\"0.0000000000\",\"0.0000000000\",\"0.0000000000\",\"0.0000000000\",\"0.0000000000\",\"0.4082482905\",\"0.0000000000\",\"0.0000000000\",\"0.0000000000\",\"0.0000000000\",\"-0.4082482905\",\"0.0000000000\",\"0.0000000000\",\"0.0000000000\",\"0.0000000000\"]}",
+    "embedding_model": "seasons-local",
+    "field_state": "REINFORCED",
+    "memory_id": "mem-0002",
+    "superseded_by": null,
+    "topic": null
+   },
+   {
+    "confidence": "0.7890625000",
+    "content": "Cache TTL is five minutes.",
+    "content_sha256": "5e3a67da02023e9e0e9b56c9ac61383e4647db94b8c6c996d6e3621dec267b87",
+    "created_at": "2026-01-01T00:00:00.000008+00:00",
+    "created_by": "seasons-agent",
+    "custody_status": "CLEAN",
+    "embedding_json": "{\"v\":[\"0.0000000000\",\"0.0000000000\",\"0.0000000000\",\"0.0000000000\",\"0.0000000000\",\"0.0000000000\",\"0.0000000000\",\"0.0000000000\",\"0.0000000000\",\"0.0000000000\",\"0.0000000000\",\"0.0000000000\",\"0.0000000000\",\"0.0000000000\",\"0.0000000000\",\"-0.3779644730\",\"0.0000000000\",\"0.0000000000\",\"0.0000000000\",\"0.0000000000\",\"0.0000000000\",\"0.0000000000\",\"0.0000000000\",\"0.0000000000\",\"0.0000000000\",\"0.0000000000\",\"0.0000000000\",\"0.0000000000\",\"0.0000000000\",\"0.0000000000\",\"0.0000000000\",\"0.0000000000\",\"0.0000000000\",\"0.0000000000\",\"0.7559289460\",\"0.0000000000\",\"0.0000000000\",\"0.3779644730\",\"0.0000000000\",\"0.0000000000\",\"0.0000000000\",\"0.0000000000\",\"0.0000000000\",\"0.0000000000\",\"0.0000000000\",\"-0.3779644730\",\"0.0000000000\",\"0.0000000000\",\"0.0000000000\",\"0.0000000000\",\"0.0000000000\",\"0.0000000000\",\"0.0000000000\",\"0.0000000000\",\"0.0000000000\",\"0.0000000000\",\"0.0000000000\",\"0.0000000000\",\"0.0000000000\",\"0.0000000000\",\"0.0000000000\",\"0.0000000000\",\"0.0000000000\",\"0.0000000000\"]}",
+    "embedding_model": "seasons-local",
+    "field_state": "REINFORCED",
+    "memory_id": "mem-0003",
+    "superseded_by": null,
+    "topic": null
+   },
+   {
+    "confidence": "0.7890625000",
+    "content": "Queue depth alerts at ten thousand.",
+    "content_sha256": "70e2f930211ece6ef78d2bf16eb5ec3fd1f1f6a59bfb978321f53ffe5357d5d5",
+    "created_at": "2026-01-01T00:00:00.000009+00:00",
+    "created_by": "seasons-agent",
+    "custody_status": "CLEAN",
+    "embedding_json": "{\"v\":[\"0.4082482905\",\"0.0000000000\",\"0.0000000000\",\"0.0000000000\",\"0.0000000000\",\"-0.4082482905\",\"0.0000000000\",\"0.0000000000\",\"0.0000000000\",\"0.0000000000\",\"0.0000000000\",\"0.0000000000\",\"0.0000000000\",\"0.0000000000\",\"0.0000000000\",\"0.4082482905\",\"0.4082482905\",\"0.0000000000\",\"0.0000000000\",\"0.0000000000\",\"0.0000000000\",\"0.0000000000\",\"0.0000000000\",\"0.0000000000\",\"0.0000000000\",\"0.0000000000\",\"0.0000000000\",\"0.0000000000\",\"0.0000000000\",\"0.0000000000\",\"0.0000000000\",\"0.0000000000\",\"0.0000000000\",\"0.0000000000\",\"-0.4082482905\",\"0.0000000000\",\"0.0000000000\",\"0.0000000000\",\"0.0000000000\",\"0.0000000000\",\"0.0000000000\",\"-0.4082482905\",\"0.0000000000\",\"0.0000000000\",\"0.0000000000\",\"0.0000000000\",\"0.0000000000\",\"0.0000000000\",\"0.0000000000\",\"0.0000000000\",\"0.0000000000\",\"0.0000000000\",\"0.0000000000\",\"0.0000000000\",\"0.0000000000\",\"0.0000000000\",\"0.0000000000\",\"0.0000000000\",\"0.0000000000\",\"0.0000000000\",\"0.0000000000\",\"0.0000000000\",\"0.0000000000\",\"0.0000000000\"]}",
+    "embedding_model": "seasons-local",
+    "field_state": "REINFORCED",
+    "memory_id": "mem-0004",
+    "superseded_by": null,
+    "topic": null
+   }
+  ],
+  "receipts": {
+   "ab1e0792a2300ec893540a09a1e34fe2ac02c15fad404e0dc736dccbb7cbd1b6": {
+    "hops": 2,
+    "query_sha256": "0e4090d38ad3bbec5c060e7f69e2cf4c0e7bc87ef1157fde0b25d2dcc4a97c48",
+    "ranking_protocol": "1.0.0",
+    "served": [
+     "mem-0000",
+     "mem-0001",
+     "mem-0002",
+     "mem-0003",
+     "mem-0004"
+    ],
+    "top_k": 5
+   }
+  }
+ },
+ "intervention": {
+  "memory_id": "mem-0000",
+  "seq": 2
+ },
+ "protocol": "mneme-cf-bundle/v1",
+ "report": {
+  "counterfactual_states": {
+   "mem-0000": {
+    "confidence": "1/2",
+    "custody_status": "TAINT_FLAGGED",
+    "field_state": "NEUTRAL"
+   },
+   "mem-0001": {
+    "confidence": "1/2",
+    "custody_status": "CLEAN",
+    "field_state": "NEUTRAL"
+   },
+   "mem-0002": {
+    "confidence": "1/2",
+    "custody_status": "CLEAN",
+    "field_state": "NEUTRAL"
+   },
+   "mem-0003": {
+    "confidence": "1/2",
+    "custody_status": "CLEAN",
+    "field_state": "NEUTRAL"
+   },
+   "mem-0004": {
+    "confidence": "1/2",
+    "custody_status": "CLEAN",
+    "field_state": "NEUTRAL"
+   }
+  },
+  "divergent_receipts": [
+   "ab1e0792a2300ec893540a09a1e34fe2ac02c15fad404e0dc736dccbb7cbd1b6",
+   "ab1e0792a2300ec893540a09a1e34fe2ac02c15fad404e0dc736dccbb7cbd1b6",
+   "ab1e0792a2300ec893540a09a1e34fe2ac02c15fad404e0dc736dccbb7cbd1b6"
+  ],
+  "excised": {
+   "created_at": "2026-01-01T00:00:00.000011+00:00",
+   "event_type": "REHABILITATED",
+   "memory_id": "mem-0000",
+   "seq": 2
+  },
+  "hypothetical": true,
+  "invalidated": [
+   [
+    "mem-0000",
+    3,
+    "DECISION_USED_MEMORY"
+   ],
+   [
+    "mem-0000",
+    4,
+    "REINFORCED"
+   ],
+   [
+    "mem-0001",
+    1,
+    "DECISION_USED_MEMORY"
+   ],
+   [
+    "mem-0001",
+    2,
+    "REINFORCED"
+   ],
+   [
+    "mem-0002",
+    1,
+    "DECISION_USED_MEMORY"
+   ],
+   [
+    "mem-0002",
+    2,
+    "REINFORCED"
+   ],
+   [
+    "mem-0003",
+    1,
+    "DECISION_USED_MEMORY"
+   ],
+   [
+    "mem-0003",
+    2,
+    "REINFORCED"
+   ],
+   [
+    "mem-0004",
+    1,
+    "DECISION_USED_MEMORY"
+   ],
+   [
+    "mem-0004",
+    2,
+    "REINFORCED"
+   ],
+   [
+    "mem-0000",
+    5,
+    "DECISION_USED_MEMORY"
+   ],
+   [
+    "mem-0000",
+    6,
+    "REINFORCED"
+   ],
+   [
+    "mem-0001",
+    3,
+    "DECISION_USED_MEMORY"
+   ],
+   [
+    "mem-0001",
+    4,
+    "REINFORCED"
+   ],
+   [
+    "mem-0002",
+    3,
+    "DECISION_USED_MEMORY"
+   ],
+   [
+    "mem-0002",
+    4,
+    "REINFORCED"
+   ],
+   [
+    "mem-0003",
+    3,
+    "DECISION_USED_MEMORY"
+   ],
+   [
+    "mem-0003",
+    4,
+    "REINFORCED"
+   ],
+   [
+    "mem-0004",
+    3,
+    "DECISION_USED_MEMORY"
+   ],
+   [
+    "mem-0004",
+    4,
+    "REINFORCED"
+   ],
+   [
+    "mem-0000",
+    7,
+    "DECISION_USED_MEMORY"
+   ],
+   [
+    "mem-0000",
+    8,
+    "REINFORCED"
+   ],
+   [
+    "mem-0001",
+    5,
+    "DECISION_USED_MEMORY"
+   ],
+   [
+    "mem-0001",
+    6,
+    "REINFORCED"
+   ],
+   [
+    "mem-0002",
+    5,
+    "DECISION_USED_MEMORY"
+   ],
+   [
+    "mem-0002",
+    6,
+    "REINFORCED"
+   ],
+   [
+    "mem-0003",
+    5,
+    "DECISION_USED_MEMORY"
+   ],
+   [
+    "mem-0003",
+    6,
+    "REINFORCED"
+   ],
+   [
+    "mem-0004",
+    5,
+    "DECISION_USED_MEMORY"
+   ],
+   [
+    "mem-0004",
+    6,
+    "REINFORCED"
+   ]
+  ],
+  "kind": "trajectory_counterfactual/v2_cascade",
+  "propagation": [
+   {
+    "decision_id": "dec-0000",
+    "invalidated": [
+     [
+      "mem-0000",
+      3
+     ],
+     [
+      "mem-0000",
+      4
+     ],
+     [
+      "mem-0001",
+      1
+     ],
+     [
+      "mem-0001",
+      2
+     ],
+     [
+      "mem-0002",
+      1
+     ],
+     [
+      "mem-0002",
+      2
+     ],
+     [
+      "mem-0003",
+      1
+     ],
+     [
+      "mem-0003",
+      2
+     ],
+     [
+      "mem-0004",
+      1
+     ],
+     [
+      "mem-0004",
+      2
+     ]
+    ]
+   },
+   {
+    "decision_id": "dec-0001",
+    "invalidated": [
+     [
+      "mem-0000",
+      5
+     ],
+     [
+      "mem-0000",
+      6
+     ],
+     [
+      "mem-0001",
+      3
+     ],
+     [
+      "mem-0001",
+      4
+     ],
+     [
+      "mem-0002",
+      3
+     ],
+     [
+      "mem-0002",
+      4
+     ],
+     [
+      "mem-0003",
+      3
+     ],
+     [
+      "mem-0003",
+      4
+     ],
+     [
+      "mem-0004",
+      3
+     ],
+     [
+      "mem-0004",
+      4
+     ]
+    ]
+   },
+   {
+    "decision_id": "dec-0002",
+    "invalidated": [
+     [
+      "mem-0000",
+      7
+     ],
+     [
+      "mem-0000",
+      8
+     ],
+     [
+      "mem-0001",
+      5
+     ],
+     [
+      "mem-0001",
+      6
+     ],
+     [
+      "mem-0002",
+      5
+     ],
+     [
+      "mem-0002",
+      6
+     ],
+     [
+      "mem-0003",
+      5
+     ],
+     [
+      "mem-0003",
+      6
+     ],
+     [
+      "mem-0004",
+      5
+     ],
+     [
+      "mem-0004",
+      6
+     ]
+    ]
+   }
+  ],
+  "report_sha256": "e48efddb6ab108bda7aa2e579ddc07ced53d2b00e863d8a32e305a744862e4a8",
+  "scope_note": "consequential subset = decision-cited receipts; reads nobody acted on have no downstream effect",
+  "ungrounded_decisions": [
+   {
+    "decision_id": "dec-0000",
+    "fallen": [
+     "mem-0000"
+    ],
+    "used": [
+     "mem-0000",
+     "mem-0001",
+     "mem-0002",
+     "mem-0003",
+     "mem-0004"
+    ]
+   },
+   {
+    "decision_id": "dec-0001",
+    "fallen": [
+     "mem-0000"
+    ],
+    "used": [
+     "mem-0000",
+     "mem-0001",
+     "mem-0002",
+     "mem-0003",
+     "mem-0004"
+    ]
+   },
+   {
+    "decision_id": "dec-0002",
+    "fallen": [
+     "mem-0000"
+    ],
+    "used": [
+     "mem-0000",
+     "mem-0001",
+     "mem-0002",
+     "mem-0003",
+     "mem-0004"
+    ]
+   },
+   {
+    "decision_id": "dec-x",
+    "used": [
+     "mem-0000"
+    ],
+    "fallen": [
+     "mem-0000"
+    ]
+   }
+  ]
+ },
+ "semantics": {
+  "authority_protocol": "1.3.0",
+  "bundle_protocol": "mneme-cf-bundle/v1",
+  "causal_rewind_protocol": "cf-cascade/v1",
+  "claim_protocol": "1.1.0",
+  "custody_protocol": "1.1.0",
+  "ranking_protocol": "1.0.0",
+  "receipt_protocol": "2.0.0",
+  "replay_protocol": "1.1.0",
+  "taint_protocol": "2.0.0"
+ }
+}

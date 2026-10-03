@@ -111,11 +111,37 @@ recall protocol) but never `trajectory.py`:
 - CF3 the cascade itself — divergent receipts, ungrounded decisions,
   invalidated events, propagation edges, cf states, report digest.
 
-`tests/test_cf_bundle_pure.py` attacks it: 9 sealed mutants — wrong
-excision, tampered chain event, dropped edge, orphan invalidation,
-phantom ungrounding, missing kill, tampered exogenous input, swapped
-seqs, and a coherent-but-false cascade — all rejected. The verifier
-recomputes; it does not trust the propagation graph.
+`tests/test_cf_bundle_pure.py` attacks it: 17 sealed mutants —
+wrong excision, tampered events, dropped edges, orphan invalidations,
+phantom ungroundings, missing kills, tampered exogenous inputs,
+swapped seqs, envelope tampering, recommitted embeddings, unknown
+protocols, timestamp collisions, coherent-but-false cascades, and
+full-history recommit under an attacker's signature — all rejected.
+
+Independence levels, honestly graded:
+
+- **Implementation-independent**: the verifier transcribes
+  canonical_json, the custody envelope, the replay state machine,
+  and ranking_protocol/1.0.0 — zero imports from the producing
+  codebase. Agreement proven by `test_recall_conformance.py`:
+  180 generated worlds, byte-identical served sets.
+- **Authenticated**: `export_cf_bundle_signed` wraps the bundle in a
+  DSSE envelope signed Ed25519 (`seasons/signing.py`, pynacl). The
+  verifier carries its own pure-python RFC 8032 verify — crypto is
+  inside the independence claim too. Verdicts are two-mode:
+  `VERIFIED_AUTHENTICATED` vs `VERIFIED_INTEGRITY_AND_SEMANTICS —
+  ORIGIN_UNTRUSTED` — an unsigned or untrusted bundle never says
+  simply "verified".
+- **Structural causality**: REINFORCED events written by decisions
+  carry `caused_by_decision_id` in the payload (additive change to
+  `mneme/field.py`). The cascade prefers explicit references;
+  adjacency is a legacy fallback, not the rule.
+
+Open per the spec's own roadmap: RFC 8785 JCS for the outer
+canonicalization (currently mneme-canonical everywhere — declared in
+the semantics block), cross-language verifier diversity, and the
+remaining mutant classes (chain insertion/deletion, protocol
+downgrade, reinforcement interleaving, duplicate JSON keys).
 
 ## 6. What this is NOT (yet)
 

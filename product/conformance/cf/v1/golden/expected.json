@@ -1,0 +1,13 @@
+{
+ "verdict": "VERIFIED_AUTHENTICATED",
+ "signer": "conformance-key",
+ "divergent_receipts": 3,
+ "ungrounded_decisions": 3,
+ "invalidated_events": 30,
+ "counterfactual_state": {
+  "confidence": "1/2",
+  "custody_status": "TAINT_FLAGGED",
+  "field_state": "NEUTRAL"
+ },
+ "report_sha256": "e48efddb6ab108bda7aa2e579ddc07ced53d2b00e863d8a32e305a744862e4a8"
+}

@@ -1176,6 +1176,16 @@ module carried two complete implementations of its chain, one shadowing
 the other, producing identical bytes. Pinned bytes prove the protocol did
 not move; they say nothing about whether the code that moved it is gone.
 
+### 12.1 Counterfactual bundle vectors
+
+The counterfactual layer has its own normative document —
+`spec/cf-bundle-v1.md`, incorporated here by reference — and its own
+corpus under `conformance/cf/v1/`: an `operations.json` whose replay
+under a frozen clock regenerates every artifact byte-for-byte
+(`generate.py --check`), a signed golden bundle, the test trust root,
+and the expected verdict. The corpus answers to that spec exactly as
+`mneme-1.json` answers to this one.
+
 ---
 
 ## 13. What this specification does not specify

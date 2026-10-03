@@ -276,20 +276,29 @@ def do_transition(cur, *, memory_id: str, excise_seq: int,
 
     def own_consequences(did: str) -> dict[str, set[int]]:
         """Events that are THIS decision's consequences — identified
-        structurally (DECISION_USED naming it + the adjacent
-        REINFORCED), not by timestamp. Precedence must not rest on
-        clock equality: a decision's own effects never count toward
-        the world it was decided in, whatever created_at says."""
+        structurally: DECISION_USED naming it, plus the REINFORCED it
+        caused. The causal link prefers the explicit
+        caused_by_decision_id payload reference; adjacency is only a
+        legacy fallback for events written before it existed.
+        Precedence must not rest on clock equality: a decision's own
+        effects never count toward the world it was decided in."""
         out: dict[str, set[int]] = {}
         for mid, ch in chains.items():
             for j, e in enumerate(ch):
-                if (e["event_type"] == "DECISION_USED_MEMORY"
-                        and json.loads(e["payload_json"]).get(
-                            "decision_id") == did):
+                et = e["event_type"]
+                p = json.loads(e["payload_json"])
+                if (et == "DECISION_USED_MEMORY"
+                        and p.get("decision_id") == did):
                     out.setdefault(mid, set()).add(e["seq"])
                     if (j + 1 < len(ch)
-                            and ch[j + 1]["event_type"] == "REINFORCED"):
+                            and ch[j + 1]["event_type"] == "REINFORCED"
+                            and json.loads(
+                                ch[j + 1]["payload_json"]).get(
+                                    "caused_by_decision_id") is None):
                         out[mid].add(ch[j + 1]["seq"])
+                elif (et == "REINFORCED"
+                        and p.get("caused_by_decision_id") == did):
+                    out.setdefault(mid, set()).add(e["seq"])
         return out
 
     def cf_world(as_of: str, exclude: dict[str, set[int]]) -> dict:
@@ -341,15 +350,22 @@ def do_transition(cur, *, memory_id: str, excise_seq: int,
         for mid in sorted(used):
             ch = chains.setdefault(mid, load_chain(cur, mid))
             for j, ev in enumerate(ch):
+                ep = json.loads(ev["payload_json"])
                 if (ev["event_type"] == "DECISION_USED_MEMORY" and
-                        json.loads(ev["payload_json"]).get(
-                            "decision_id") == did):
+                        ep.get("decision_id") == did):
                     dead.setdefault(mid, set()).add(ev["seq"])
                     kill.append((mid, ev["seq"], "DECISION_USED_MEMORY"))
                     if (j + 1 < len(ch)
-                            and ch[j + 1]["event_type"] == "REINFORCED"):
+                            and ch[j + 1]["event_type"] == "REINFORCED"
+                            and json.loads(
+                                ch[j + 1]["payload_json"]).get(
+                                    "caused_by_decision_id") is None):
                         dead[mid].add(ch[j + 1]["seq"])
                         kill.append((mid, ch[j + 1]["seq"], "REINFORCED"))
+                elif (ev["event_type"] == "REINFORCED"
+                        and ep.get("caused_by_decision_id") == did):
+                    dead.setdefault(mid, set()).add(ev["seq"])
+                    kill.append((mid, ev["seq"], "REINFORCED"))
         ungrounded.append({"decision_id": did, "used": used,
                            "fallen": fallen})
         invalidated.extend(kill)
@@ -483,6 +499,19 @@ def export_cf_bundle(cur, *, memory_id: str, excise_seq: int,
     bundle["bundle_sha256"] = hashlib.sha256(
         canonical_json(bundle).encode("utf-8")).hexdigest()
     return bundle
+
+
+def export_cf_bundle_signed(cur, *, memory_id: str, excise_seq: int,
+                            sign_seed_hex: str, keyid: str = "",
+                            top_k: int = 5) -> dict[str, Any]:
+    """The bundle as a signed DSSE envelope — the trust anchor that
+    makes full-history recommit detectable: an attacker can recompute
+    every hash, but not a signature under a key they don't hold."""
+    from . import signing
+    bundle = export_cf_bundle(cur, memory_id=memory_id,
+                              excise_seq=excise_seq, top_k=top_k)
+    payload = canonical_json(bundle).encode("utf-8")
+    return signing.sign_envelope(payload, sign_seed_hex, keyid=keyid)
 
 
 def _recall_in_world(cur, query_embedding, memory_id, cf_state,

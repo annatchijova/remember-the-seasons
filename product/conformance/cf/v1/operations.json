@@ -1,0 +1,25 @@
+{
+  "comment": "mneme-cf-bundle/v1 conformance operations — the world is a function of this list. No clock, no randomness: every timestamp derives from a fixed base counter, embeddings are the deterministic local tokenizer, the signing seed is a fixed TEST-ONLY key. Regenerating must produce byte-identical artifacts.",
+  "clock": "DISABLED",
+  "time_base": "2026-01-01T00:00:00.000000+00:00",
+  "time_step_us": 1,
+  "embedding_protocol": "deterministic local tokenizer (embed_local, sha256-token-hash, dim=64)",
+  "signing_seed_test_only": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+  "keyid": "conformance-key",
+  "top_k": 5,
+  "hops": 2,
+  "operations": [
+    {"op": "remember", "text": "The deploy gate requires staging to pass."},
+    {"op": "remember", "text": "Rollbacks run via ops rollback."},
+    {"op": "remember", "text": "Auth tokens expire after one hour."},
+    {"op": "remember", "text": "Cache TTL is five minutes."},
+    {"op": "remember", "text": "Queue depth alerts at ten thousand."},
+    {"op": "taint", "memory_id": "mem-0000", "reason": "tainted"},
+    {"op": "rehabilitate", "memory_id": "mem-0000", "reason": "reviewed"},
+    {"op": "ask", "question": "deploy gate staging?"},
+    {"op": "ask", "question": "deploy gate staging?"},
+    {"op": "ask", "question": "deploy gate staging?"},
+    {"op": "export_signed_bundle", "memory_id": "mem-0000",
+     "excise_event_type": "REHABILITATED"}
+  ]
+}

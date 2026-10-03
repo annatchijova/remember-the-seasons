@@ -578,7 +578,9 @@ def supersede(
 
 def reinforce(cur, *, memory_id: str, actor_id: str, reason: str,
               created_at: str | None = None,
-              grant_id: str | None = None) -> tuple[Decimal, str]:
+              grant_id: str | None = None,
+              caused_by_decision_id: str | None = None
+              ) -> tuple[Decimal, str]:
     """
     STIGMERGY's closed form c' = c + α(1−c), exact, plus custody event.
     Returns (new_confidence, field_state). Promotion to REINFORCED at
@@ -616,6 +618,11 @@ def reinforce(cur, *, memory_id: str, actor_id: str, reason: str,
 
     rpayload: dict[str, Any] = {"confidence_before": quantize(c),
                                 "confidence_after": conf_q}
+    if caused_by_decision_id is not None:
+        # Explicit causal reference — adjacency is a write-path
+        # convenience, not evidence. The counterfactual verifier must
+        # not have to guess which act produced this reinforcement.
+        rpayload["caused_by_decision_id"] = caused_by_decision_id
     if reinforce_grant is not None:
         rpayload["grant_id"] = reinforce_grant
     custody.append_event(

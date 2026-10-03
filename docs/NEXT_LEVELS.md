@@ -29,7 +29,7 @@ agent-memory auditing).
 | **Causal reconstruction** | Can we intervene on a trajectory and correctly recompute its consequences? | **built at field scale** — `do_transition` cascade + independently verifiable cf bundles (CF0–CF3, 9 mutants rejected); spec in CAUSAL_REWIND.md |
 | **Counterfactual integrity** | Do actual and counterfactual worlds stay explicitly separated? | **built** — hypothetical flags, write-nothing, laundering refusals, Kassandra |
 | **Shared state** | Does it still work with multiple agents/authorities on one field? | **not attacked** — H10's strong collective claim stays falsified |
-| **Interoperability** | Can another system produce/consume/verify evidence without trusting our implementation? | **partial** — spec + conformance vectors + stdlib verifier exist |
+| **Interoperability** | Can another system produce/consume/verify evidence without trusting our implementation? | **built (single-impl)** — SPEC + golden vectors + implementation-independent verifier (0 producer imports, 180-vector conformance); cross-language diversity still open |
 | **Operations** | Does it survive persistence, concurrency, scale, failure, real deployment? | **partial** — persistence + benchmarks measured; hosted deployment open |
 
 ## The open core — causal reconstruction

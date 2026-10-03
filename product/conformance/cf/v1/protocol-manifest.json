@@ -1,0 +1,39 @@
+{
+ "protocol_manifest": "mneme-cf-manifest/1",
+ "comment": "exact semantic versions this corpus is sealed under \u2014 a verifier answers only for versions it implemented and tested",
+ "semantics": {
+  "bundle_protocol": "mneme-cf-bundle/v1",
+  "causal_rewind_protocol": "cf-cascade/v1",
+  "canonicalization_protocol": "mneme-cjson/1.0.0",
+  "payload_type": "application/vnd.mneme.cf-bundle+json;version=1",
+  "signature_profile": "dsse-ed25519-rfc8032/v1"
+ },
+ "artifacts": {
+  "golden/canonical.dsse.json": "7e60c7ae5cdc01f8fe044380ff8fe0e3ee2ecd36d20e9d86acb25e23610d6f70",
+  "golden/expected.json": "f8b42bb1e0c608913458a53cb9916171d07f4385b3ea1020d0e66a86cc095ac3",
+  "golden/trusted-keys.json": "1fcdd9a46fce21953ad66d730faf2d648da83851f0172f886c9c171dd4002854",
+  "positive/base64url.dsse.json": "5984e618ac0b72ebdc1906846e1e80526f72fed968a75f8080887661e37caef5",
+  "positive/empty-keyid.dsse.json": "0fa30315e262a576d67774aad6ab15b6f151fd15ab57330fb4fc8b9d47285e41",
+  "positive/extra-field.dsse.json": "0ae7bb88f52fbcb2d33514043f45db5489808096be4f667c053667534a14aef5",
+  "mutants/chain-deletion.expected.json": "d43bc0abc90e6049e6bedc55d06b4c4cda61257b41e701e675dbd0f5e0f1467a",
+  "mutants/chain-deletion.json": "bcc31ab1d44d1d55bd258b26e154e8bf58ce73431644ce8b13fc66829871721b",
+  "mutants/coherent-false.expected.json": "5c48ac87ac3cf9793df6a0b97ce5ed0e64c3e454b3d086e86c3cd6f502662614",
+  "mutants/coherent-false.json": "15b5f899f9c3628c90fcff382c58bc057651ecd2f5a7b4efefb9e540ad3fc054",
+  "mutants/dropped-edge.expected.json": "5c48ac87ac3cf9793df6a0b97ce5ed0e64c3e454b3d086e86c3cd6f502662614",
+  "mutants/dropped-edge.json": "43e36e31231cd0a426d0a6fb6a13566e390d87a2ca294895f8188a08cc58a6f2",
+  "mutants/dup-keys.expected.json": "1b65022d058e5033b741b6c227984100a0677743de373d2863425e0be3be96b2",
+  "mutants/dup-keys.json": "cb8b1e8c90d5705230b040f7db826936f62dfd911f52496451a49e0941623f6b",
+  "mutants/missing-payloadtype.expected.json": "950c71b301e205f7fa8d33c1b0deaad9e1a424ff642d9afef93867972c941eb4",
+  "mutants/missing-payloadtype.json": "efe59928d6f6bdd39365850ed1893b4433e2cbc5ec382df83a6808cfe228d72b",
+  "mutants/orphan-invalidation.expected.json": "5c48ac87ac3cf9793df6a0b97ce5ed0e64c3e454b3d086e86c3cd6f502662614",
+  "mutants/orphan-invalidation.json": "80a5939f96e8666e480821220082ba54bc66135cd886b8c88fea37f46355bd29",
+  "mutants/phantom-ungrounding.expected.json": "5c48ac87ac3cf9793df6a0b97ce5ed0e64c3e454b3d086e86c3cd6f502662614",
+  "mutants/phantom-ungrounding.json": "a673ec9cc8645973828ad45400aa5c8e444d463275c8c3460d17cf27ffe41de6",
+  "mutants/tampered-event.expected.json": "d43bc0abc90e6049e6bedc55d06b4c4cda61257b41e701e675dbd0f5e0f1467a",
+  "mutants/tampered-event.json": "b1f8100dbbd520e7ae1aa0fa95e1794541dffc1813583606a2958992b66e3771",
+  "mutants/unknown-protocol.expected.json": "e5db160da83d3603d6f11b1cea40b2ccdb9a7533e2165e5a8f62f4dec6c2eeae",
+  "mutants/unknown-protocol.json": "d051650711dfbb78f788db5125f5da9e9ff0fbfb83406e9c0d821f5e2ee8e73e",
+  "mutants/wrong-seq.expected.json": "5c48ac87ac3cf9793df6a0b97ce5ed0e64c3e454b3d086e86c3cd6f502662614",
+  "mutants/wrong-seq.json": "562bfb5593bcc4447981a54f693b1af8a61734912d9eebce96e1c2f1401e5e3a"
+ }
+}
