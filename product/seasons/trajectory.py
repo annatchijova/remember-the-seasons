@@ -43,6 +43,8 @@ from typing import Any
 from mneme import authority, custody, field
 from mneme.canonical import canonical_json
 
+from . import embed as _embed
+
 CHAIN_COLS = ["memory_id", "seq", "event_type", "actor_id", "reason",
               "created_at", "payload_json", "prev_hash", "entry_hash"]
 
@@ -144,21 +146,9 @@ def what_if_transition(cur, *, query_embedding, memory_id: str,
 
     hits_a, rec_a = field.recall(
         cur, query_embedding=query_embedding, top_k=top_k, hops=hops)
-
-    cur.execute("SAVEPOINT trajectory_cf")
-    try:
-        conf_q = (Decimal(cf_conf.numerator) /
-                  Decimal(cf_conf.denominator)).quantize(
-                      Decimal("0.0000000001"))
-        cur.execute(
-            "UPDATE memories SET custody_status = ?, field_state = ?,"
-            " confidence = ? WHERE memory_id = ?",
-            (cf_status, cf_fstate, str(conf_q), memory_id))
-        hits_b, rec_b = field.recall(
-            cur, query_embedding=query_embedding, top_k=top_k, hops=hops)
-    finally:
-        cur.execute("ROLLBACK TO trajectory_cf")
-        cur.execute("RELEASE trajectory_cf")
+    hits_b, rec_b = _recall_in_world(
+        cur, query_embedding, memory_id,
+        (cf_status, cf_fstate, cf_conf), top_k, hops)
 
     rank_a = {h.memory_id: i for i, h in enumerate(hits_a)}
     rank_b = {h.memory_id: i for i, h in enumerate(hits_b)}
@@ -188,3 +178,76 @@ def what_if_transition(cur, *, query_embedding, memory_id: str,
     report["report_sha256"] = hashlib.sha256(
         canonical_json(report).encode("utf-8")).hexdigest()
     return report
+
+
+def _recall_in_world(cur, query_embedding, memory_id, cf_state,
+                     top_k, hops):
+    """Run the UNMODIFIED production recall inside a savepoint with
+    one memory's row replaced by counterfactual state; roll back."""
+    cf_status, cf_fstate, cf_conf = cf_state
+    cur.execute("SAVEPOINT trajectory_cf")
+    try:
+        conf_q = (Decimal(cf_conf.numerator) /
+                  Decimal(cf_conf.denominator)).quantize(
+                      Decimal("0.0000000001"))
+        cur.execute(
+            "UPDATE memories SET custody_status = ?, field_state = ?,"
+            " confidence = ? WHERE memory_id = ?",
+            (cf_status, cf_fstate, str(conf_q), memory_id))
+        return field.recall(cur, query_embedding=query_embedding,
+                            top_k=top_k, hops=hops)
+    finally:
+        cur.execute("ROLLBACK TO trajectory_cf")
+        cur.execute("RELEASE trajectory_cf")
+
+
+def decision_what_if(cur, *, decision_id: str, memory_id: str,
+                     excise_seq: int, top_k: int = 5,
+                     actor_id: str | None = None) -> dict[str, Any]:
+    """Would this decision's evidence base survive without that
+    transition?
+
+    Replays the question that fed the decision in the world where
+    (memory_id, excise_seq) never happened, then asks the only thing
+    that matters: does the recall still serve the memories the decision
+    actually used? If not, the decision depended on that transition —
+    and the sealed report says which ones fell out.
+    """
+    row = cur.execute(
+        "SELECT question FROM seasons_decisions WHERE decision_id = ?",
+        (decision_id,)).fetchone()
+    if row is None:
+        raise ValueError(f"Unknown decision {decision_id!r} — seasons "
+                         "stores the question so the recall can be "
+                         "replayed; a receipt alone cannot.")
+    question = row[0]
+
+    cur.execute(
+        "SELECT used_json FROM decisions WHERE decision_id = ?",
+        (decision_id,))
+    drow = cur.fetchone()
+    if drow is None:
+        raise ValueError(f"Decision {decision_id!r} not in the causal "
+                         "record — cannot replay its evidence base.")
+    used = sorted(json.loads(drow[0])["used"])
+
+    qemb = field.quantize_embedding(_embed.embed(question))
+    rep = what_if_transition(
+        cur, query_embedding=qemb, memory_id=memory_id,
+        excise_seq=excise_seq, top_k=top_k, actor_id=actor_id)
+
+    cf_served = set(rep["counterfactual"]["served"])
+    still_served = sorted(m for m in used if m in cf_served)
+    fallen = sorted(m for m in used if m not in cf_served)
+    rep["decision"] = {
+        "decision_id": decision_id,
+        "used_memory_ids": used,
+        "survived": still_served,
+        "fallen": fallen,
+        "evidence_base_intact": not fallen,
+    }
+    rep["report_sha256"] = hashlib.sha256(
+        canonical_json(
+            {k: v for k, v in rep.items() if k != "report_sha256"}
+        ).encode("utf-8")).hexdigest()
+    return rep

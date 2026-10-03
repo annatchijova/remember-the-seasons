@@ -68,6 +68,14 @@ excised REINFORCED means the promotion may never fire), the recall
 runs unmodified inside a savepoint, and the sealed report is marked
 `hypothetical: true`.
 
+`a.decision_what_if(decision_id, memory_id, seq)` — replays the
+question that fed a recorded decision in the excised world and names
+which of the decision's used memories would still have been served
+(`fallen` vs `survived`, `evidence_base_intact`). Seasons stores the
+question text per decision (product table, outside mneme's verified
+schema); a receipt alone cannot be replayed — it seals the question's
+hash, not the question.
+
 ## LLM wiring
 
 - `NEBIUS_API_KEY` + `NEBIUS_BASE_URL` (default

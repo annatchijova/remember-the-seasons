@@ -137,6 +137,16 @@ try:
 except ValueError:
     check("I6 widening refused without COUNTERFACTUAL", True)
 
+# I10: decision counterfactual — does the evidence base survive?
+rep_dec = trajectory.decision_what_if(
+    a.cur, decision_id="dec-0000", memory_id="mem-0000", excise_seq=7)
+check("I10 decision block present",
+      rep_dec["decision"]["decision_id"] == "dec-0000")
+check("I10 evidence base evaluated",
+      "evidence_base_intact" in rep_dec["decision"])
+check("I10 report resealed with decision block",
+      rep_dec["report_sha256"] != rep["report_sha256"])
+
 post_q = snapshot(a.cur)   # quarantine legitimately added one event
 rep_w = trajectory.what_if_transition(
     a.cur, query_embedding=q, memory_id="mem-0000", excise_seq=qseq,

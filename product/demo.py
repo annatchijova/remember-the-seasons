@@ -101,6 +101,15 @@ def main():
     print("  that world would have been different, and the report seals")
     print("  exactly which transition did it.")
 
+    # decision counterfactual: would a recorded decision's evidence
+    # base survive without that transition?
+    rep_d = b.decision_what_if("dec-0002", "mem-0000", excise_seq=7)
+    d = rep_d["decision"]
+    print(f"  decision {d['decision_id']} used {d['used_memory_ids']}:")
+    print(f"    in the excised world, served={rep_d['counterfactual']['served']}")
+    print(f"    survived={d['survived']}  fallen={d['fallen']}  "
+          f"intact={d['evidence_base_intact']}")
+
     section("6. Bundle — sealed evidence for a distrusting auditor")
     bj = a.export_bundle()
     with tempfile.NamedTemporaryFile("w", suffix=".json",

@@ -75,12 +75,17 @@ class SeasonsAgent:
                          if hits else "(none)")}])
 
         if served:
+            dec_id = f"dec-{self._decisions:04d}"
             causality.record_decision(
                 self.cur, receipt=receipt, used_memory_ids=served,
                 decision_sha256=causality.decision_hash(answer),
                 policy_version=POLICY_VERSION, actor_id=actors.AGENT,
                 reason=f"answered: {question[:80]}",
-                decision_id=f"dec-{self._decisions:04d}")
+                decision_id=dec_id)
+            self.cur.execute(
+                "INSERT INTO seasons_decisions (decision_id, question,"
+                " created_at) VALUES (?, ?, ?)",
+                (dec_id, question, custody.now_ts()))
             self._decisions += 1
 
             # Adaptive close: memories that shaped an answer get
@@ -138,6 +143,17 @@ class SeasonsAgent:
             self.cur,
             query_embedding=field.quantize_embedding(embed.embed(question)),
             memory_id=memory_id, excise_seq=excise_seq, top_k=top_k,
+            actor_id=actors.OPERATOR)
+
+    def decision_what_if(self, decision_id: str, memory_id: str,
+                         excise_seq: int, *, top_k: int = 5):
+        """Would this decision's evidence base survive without that
+        transition? Replays the question that fed the decision in the
+        excised world; the report names which used memories fall out."""
+        from . import trajectory
+        return trajectory.decision_what_if(
+            self.cur, decision_id=decision_id, memory_id=memory_id,
+            excise_seq=excise_seq, top_k=top_k,
             actor_id=actors.OPERATOR)
 
     # ---------- forensics ----------
