@@ -139,7 +139,8 @@ def what_if_transition(cur, *, query_embedding, memory_id: str,
                 "custody gate withholds. Requires actor_id holding "
                 "COUNTERFACTUAL.")
         authority.require(cur, actor_id=actor_id,
-                          capability="COUNTERFACTUAL")
+                          capability="COUNTERFACTUAL",
+                          at_ts=custody.now_ts())
 
     hits_a, rec_a = field.recall(
         cur, query_embedding=query_embedding, top_k=top_k, hops=hops)
