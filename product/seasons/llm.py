@@ -15,7 +15,7 @@ import json
 import os
 import urllib.request
 
-DEFAULT_MODEL = "nvidia/Llama-3.1-Nemotron-70B-Instruct-HF"
+DEFAULT_MODEL = "nvidia/NVIDIA-Nemotron-3-Nano-30B-A3B"
 
 
 def chat(messages: list[dict], model: str | None = None,

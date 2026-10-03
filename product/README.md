@@ -92,8 +92,10 @@ never the verdict.
 
 ## Status
 
-Skeleton. The core forensic loop works end-to-end offline, including
-the trajectory counterfactual v1 (single-event excision on one
-memory's chain; cross-effects through decisions/links not rewound —
-documented in `seasons/trajectory.py`). Not wired: MCP server, and
-the Nebius deployment path.
+Skeleton, verified end-to-end on Nebius Token Factory
+(`nvidia/NVIDIA-Nemotron-3-Nano-30B-A3B` chat +
+`Qwen/Qwen3-Embedding-8B` embeddings — hackathon requirement met:
+Nebius execution + NVIDIA open-source model). Trajectory
+counterfactual v1 live (single-event excision on one chain;
+cross-effects through decisions/links not rewound). Not wired:
+MCP server, hosted demo.
