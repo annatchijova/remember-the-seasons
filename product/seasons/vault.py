@@ -24,22 +24,43 @@ import os
 import re
 from typing import Any
 
-from mneme import custody, field
+from mneme import authority, custody, field
 
 from . import actors, embed as _embed
 
 WIKILINK_RE = re.compile(r"\[\[([^\]|#]+)(?:#[^\]|]*)?(?:\|[^\]]*)?\]\]")
+_FRONTMATTER_RE = re.compile(r"\A---\s*\n(.*?)\n---\s*\n", re.DOTALL)
 
 
 def _note_name(path: str) -> str:
     return os.path.splitext(os.path.basename(path))[0]
 
 
+def _frontmatter(text: str) -> tuple[dict[str, Any], str]:
+    """Strip Obsidian YAML frontmatter; return (meta, body).
+    Stdlib-only minimal parse: 'key: value' and 'key: [a, b]' lines —
+    enough for tags/title, not a YAML engine."""
+    m = _FRONTMATTER_RE.match(text)
+    if not m:
+        return {}, text
+    meta: dict[str, Any] = {}
+    for ln in m.group(1).splitlines():
+        if ":" not in ln:
+            continue
+        k, v = ln.split(":", 1)
+        v = v.strip()
+        if v.startswith("[") and v.endswith("]"):
+            v = [x.strip() for x in v[1:-1].split(",") if x.strip()]
+        meta[k.strip()] = v
+    return meta, text[m.end():]
+
+
 def import_vault(cur, path: str, *, actor_id: str = actors.AGENT
                  ) -> dict[str, Any]:
     """Import an Obsidian-style vault: every .md becomes a memory,
     every [[wikilink]] becomes a RESONANT cell_link (directional,
-    file -> target). Returns the name->id map and link count."""
+    file -> target). Frontmatter 'tags:' become topics; 'title:'
+    overrides the filename as the note name."""
     files = []
     for root, _, names in os.walk(path):
         for n in sorted(names):
@@ -51,12 +72,13 @@ def import_vault(cur, path: str, *, actor_id: str = actors.AGENT
     name_to_id: dict[str, str] = {}
     pending: list[tuple[str, list[str]]] = []
     for f in files:
-        text = open(f, encoding="utf-8").read()
-        name = _note_name(f)
+        raw = open(f, encoding="utf-8").read()
+        meta, text = _frontmatter(raw)
+        name = str(meta.get("title") or _note_name(f))
         mid = field.store(
             cur,
             memory_id=f"note-{len(name_to_id):04d}",
-            content=text,
+            content=text.strip(),
             embedding=field.quantize_embedding(_embed.embed(text)),
             embedding_model=_embed.model_name(),
             actor_id=actor_id,
@@ -114,6 +136,58 @@ def update(cur, old_memory_id: str, new_content: str,
         actor_id=actor_id,
         reason=reason or f"update of {old_memory_id}").memory_id
     return mid
+
+
+def forget(cur, memory_id: str, *, actor_id: str = actors.AGENT,
+           reason: str = "deliberately forgotten") -> None:
+    """Deliberate forgetting: an audited STATE_CHANGED to FORGOTTEN —
+    invisible to recall, evidence preserved (M4), revivable. Rides
+    the REINFORCE grant the way automatic promotion does (no dedicated
+    FORGET capability exists; named, not hidden)."""
+    cur.execute("SELECT field_state FROM memories WHERE memory_id = ?",
+                (memory_id,))
+    r = cur.fetchone()
+    if r is None:
+        raise ValueError(f"unknown memory {memory_id!r}")
+    ts = custody.now_ts()
+    grant = authority.gate(cur, actor_id=actor_id,
+                           capability="REINFORCE", at_ts=ts)
+    payload = {"from": r[0], "to": "FORGOTTEN"}
+    if grant is not None:
+        payload["grant_id"] = grant
+    custody.append_event(
+        cur, memory_id=memory_id, event_type="STATE_CHANGED",
+        actor_id=actor_id, reason=reason, payload=payload,
+        created_at=ts)
+    cur.execute("UPDATE memories SET field_state = 'FORGOTTEN' "
+                "WHERE memory_id = ?", (memory_id,))
+
+
+def revive(cur, memory_id: str, *, actor_id: str = actors.AGENT,
+           reason: str = "brought back to the field") -> None:
+    """Reverse of forget: audited STATE_CHANGED back to NEUTRAL.
+    Confidence is preserved — the memory returns as it was, not at
+    full strength."""
+    cur.execute("SELECT field_state FROM memories WHERE memory_id = ?",
+                (memory_id,))
+    r = cur.fetchone()
+    if r is None:
+        raise ValueError(f"unknown memory {memory_id!r}")
+    if r[0] != "FORGOTTEN":
+        raise ValueError(f"{memory_id} is {r[0]}, not FORGOTTEN — "
+                         "nothing to revive.")
+    ts = custody.now_ts()
+    grant = authority.gate(cur, actor_id=actor_id,
+                           capability="REINFORCE", at_ts=ts)
+    payload = {"from": "FORGOTTEN", "to": "NEUTRAL"}
+    if grant is not None:
+        payload["grant_id"] = grant
+    custody.append_event(
+        cur, memory_id=memory_id, event_type="STATE_CHANGED",
+        actor_id=actor_id, reason=reason, payload=payload,
+        created_at=ts)
+    cur.execute("UPDATE memories SET field_state = 'NEUTRAL' "
+                "WHERE memory_id = ?", (memory_id,))
 
 
 def _next_id(cur) -> str:

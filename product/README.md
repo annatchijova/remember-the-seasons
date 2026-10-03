@@ -67,10 +67,28 @@ becomes SUPERSEDED (invisible to recall, preserved as evidence).
 What Obsidian gives you: notes, links, a graph. What this adds:
 every note is provable history; every link changes behavior; every
 edit has lineage; and you can replay, verify, and excise any of it.
+`a.forget(id)` / `a.revive(id)` are deliberate forgetting as an
+audited transition — the note leaves recall but not the record.
+
+Frontmatter: `---` blocks are stripped on import; `title:` names the
+note, `tags:` become the topic (minimal parse, not a YAML engine).
 
 Honest gap: mneme's custody vocabulary has no link-event type, so
 explicit links (`auto=0`) affect recall but aren't custody-evidenced
 the way auto-contradiction links are. Named, not hidden.
+
+## CLI
+
+```bash
+RTS_DB_PATH=seasons.db python3 -m seasons remember "a fact"
+RTS_DB_PATH=seasons.db python3 -m seasons import ~/vault
+RTS_DB_PATH=seasons.db python3 -m seasons ask "deploy?"
+RTS_DB_PATH=seasons.db python3 -m seasons chain note-0000
+```
+
+Also: `update` `forget` `revive` `link` `provenance` `memories`
+`bundle` `serve`. Same sqlite field across invocations — the agent
+reopens it, bootstrap is idempotent.
 
 ## The product primitive
 

@@ -29,10 +29,14 @@ class SeasonsAgent:
     def __init__(self, db_path: str = ":memory:"):
         self.conn: sqlite3.Connection = db.open_db(db_path)
         self.cur = self.conn.cursor()
-        actors.bootstrap(self.cur)
-        self.conn.commit()
-        self._seq = 0
-        self._decisions = 0
+        self.cur.execute("SELECT COUNT(*) FROM actors")
+        if self.cur.fetchone()[0] == 0:
+            actors.bootstrap(self.cur)
+            self.conn.commit()
+        self.cur.execute("SELECT COUNT(*) FROM memories")
+        self._seq = self.cur.fetchone()[0]
+        self.cur.execute("SELECT COUNT(*) FROM decisions")
+        self._decisions = self.cur.fetchone()[0]
 
     # ---------- write path ----------
 
@@ -63,6 +67,21 @@ class SeasonsAgent:
         """Explicit edge: RESONANT amplifies, INHIBITORY silences."""
         from . import vault
         vault.link(self.cur, from_id, to_id, link_type)
+        self.conn.commit()
+
+    def forget(self, memory_id: str, *, reason: str | None = None) -> None:
+        """Deliberate forgetting: audited STATE_CHANGED to FORGOTTEN —
+        invisible to recall, evidence preserved, revivable."""
+        from . import vault
+        vault.forget(self.cur, memory_id,
+                     reason=reason or "deliberately forgotten")
+        self.conn.commit()
+
+    def revive(self, memory_id: str, *, reason: str | None = None) -> None:
+        """Reverse of forget: audited STATE_CHANGED back to NEUTRAL."""
+        from . import vault
+        vault.revive(self.cur, memory_id,
+                     reason=reason or "brought back to the field")
         self.conn.commit()
 
     def update(self, old_memory_id: str, new_content: str,
