@@ -13,6 +13,7 @@ from __future__ import annotations
 
 import json
 import os
+import re
 import urllib.request
 
 DEFAULT_MODEL = "nvidia/NVIDIA-Nemotron-3-Nano-30B-A3B"
@@ -51,3 +52,50 @@ def _stub(messages: list[dict]) -> str:
     if not items or items == ["(none)"]:
         return "I have no verified memories on record for that."
     return ("From sealed memory, I know: " + " | ".join(items[:5]))
+
+
+_USED_RE = re.compile(r"^USED\s*:\s*(.*)$", re.IGNORECASE | re.MULTILINE)
+
+
+def answer_with_used(question: str,
+                     hits: list[tuple[str, str]],
+                     served_ids: list[str],
+                     model: str | None = None) -> tuple[str, list[str]]:
+    """Ask the model to answer AND declare which memories it used.
+
+    Returns (answer_text, used_ids). used_ids is clamped to served_ids —
+    the model can only declare use of what recall actually served, and
+    a hallucinated id is silently dropped rather than recorded. In stub
+    mode, used = served (the stub literally consumed them all)."""
+    if not os.environ.get("NEBIUS_API_KEY"):
+        return _stub_answer(question, hits), list(served_ids) if hits else []
+
+    listing = "\n".join(f"{mid}: {content}" for mid, content in hits) \
+        if hits else "(none)"
+    raw = chat([
+        {"role": "system",
+         "content": "Answer only from the provided memories. If none "
+                    "apply, say you have no record. After the answer, on "
+                    "a new line, write 'USED: ' followed by the memory "
+                    "ids you actually relied on (or 'USED: none')."},
+        {"role": "user",
+         "content": f"QUESTION: {question}\nMEMORIES:\n{listing}"}],
+        model=model)
+
+    used = []
+    m = _USED_RE.search(raw)
+    answer = raw
+    if m:
+        answer = raw[:m.start()].rstrip()
+        used = [t.strip() for t in m.group(1).split(",")
+                if t.strip() in set(served_ids)]
+    else:
+        used = list(served_ids)   # model didn't declare; all served
+    return answer, used
+
+
+def _stub_answer(question: str, hits: list[tuple[str, str]]) -> str:
+    if not hits:
+        return "I have no verified memories on record for that."
+    return ("From sealed memory, I know: " +
+            " | ".join(c for _, c in hits[:5]))

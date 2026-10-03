@@ -65,19 +65,18 @@ class SeasonsAgent:
         field.persist_receipt(self.cur, receipt)
 
         served = [h.memory_id for h in hits]
-        answer = llm.chat([
-            {"role": "system",
-             "content": "Answer only from the provided memories. If none "
-                        "apply, say you have no record."},
-            {"role": "user",
-             "content": f"QUESTION: {question}\nMEMORIES:\n" +
-                        ("\n".join(f"- {h.content}" for h in hits)
-                         if hits else "(none)")}])
+        # served != used != reinforced. The LLM declares which memories
+        # it actually relied on; only those enter the causal record and
+        # only those get reinforced. Retrieval is not causation, and the
+        # chain must not say otherwise.
+        answer, used = llm.answer_with_used(
+            question, [(h.memory_id, h.content) for h in hits],
+            served_ids=served)
 
-        if served:
+        if used:
             dec_id = f"dec-{self._decisions:04d}"
             causality.record_decision(
-                self.cur, receipt=receipt, used_memory_ids=served,
+                self.cur, receipt=receipt, used_memory_ids=used,
                 decision_sha256=causality.decision_hash(answer),
                 policy_version=POLICY_VERSION, actor_id=actors.AGENT,
                 reason=f"answered: {question[:80]}",
@@ -88,9 +87,10 @@ class SeasonsAgent:
                 (dec_id, question, custody.now_ts()))
             self._decisions += 1
 
-            # Adaptive close: memories that shaped an answer get
-            # reinforced — an audited custody event, not a silent bump.
-            for mid in served:
+            # Adaptive close: only memories the answer DECLARED as used
+            # get reinforced — an audited custody event, not a silent
+            # bump for everything that happened to be servable.
+            for mid in used:
                 field.reinforce(
                     self.cur, memory_id=mid, actor_id=actors.AGENT,
                     reason="used in a decision this turn")

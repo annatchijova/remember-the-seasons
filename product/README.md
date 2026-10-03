@@ -30,6 +30,15 @@ product/
                    difference explained from sealed chains
 ```
 
+## served ≠ used ≠ reinforced
+
+`ask()` does not conflate them. Recall serves candidates (sealed
+receipt); the model answers and declares which ids it actually relied
+on (`USED:` line, clamped to what was served — hallucinated ids are
+dropped, not recorded); only declared ids enter the decision record
+and get reinforced. A memory that was servable but ignored leaves no
+false causal trace and no reinforcement.
+
 ## The loop
 
 ```python
