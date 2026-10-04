@@ -9,7 +9,13 @@ SCHEMA = os.path.join(os.path.dirname(__file__), "..", "mneme", "schema.sql")
 
 
 def open_db(path: str = ":memory:") -> sqlite3.Connection:
-    conn = sqlite3.connect(path)
+    conn = sqlite3.connect(path, timeout=10)
+    if path != ":memory:":
+        # the field is a multi-writer substrate: WAL lets a reader
+        # coexist with a writer, and busy_timeout makes a contended
+        # write wait instead of instantly failing
+        conn.execute("PRAGMA journal_mode=WAL")
+        conn.execute("PRAGMA busy_timeout=10000")
     with open(os.path.abspath(SCHEMA)) as f:
         conn.executescript(f.read())
     # Product-owned tables — outside mneme's schema and its verifier

@@ -284,8 +284,53 @@ def append_event(
     return CustodyEntry(
         memory_id=memory_id, seq=seq, event_type=event_type,
         actor_id=actor_id, reason=reason, created_at=ts,
-        payload_json=payload_canon, prev_hash=prev_hash, entry_hash=entry_hash,
+        payload_json=payload_canon, prev_hash=prev_hash,
+        entry_hash=entry_hash,
     )
+
+
+# Custody-status transitions that are only legal from specific
+# pre-states. Events NOT listed are unconditional on custody_status.
+# The write side must enforce this atomically — a chain that is
+# structurally valid can still record an illegal transition if the
+# writer checked a stale pre-state (or checked nothing, which is what
+# the raw append_event below does: legality is replay-time otherwise).
+_STATUS_LEGAL_FROM = {
+    "TAINT_FLAGGED": {"CLEAN"},
+    "REHABILITATED": {"TAINT_FLAGGED"},
+}
+
+
+def current_status(cur, memory_id: str) -> str:
+    """Replay the chain to its current custody status inside the
+    CALLER'S transaction — the state this new event would extend.
+    Includes the caller's own uncommitted writes, which is what
+    atomicity requires."""
+    ch = [{"memory_id": r[0], "seq": r[1], "event_type": r[2],
+           "payload_json": r[3]} for r in
+          cur.execute(
+              "SELECT memory_id, seq, event_type, payload_json "
+              "FROM custody_chain WHERE memory_id=? ORDER BY seq",
+              (memory_id,))]
+    status, _, _, _ = replay_state(ch)
+    return status
+
+
+def append_legal_event(cur, **kw):
+    """append_event + transition legality, checked atomically inside
+    the caller's transaction. Under concurrency the caller MUST hold
+    the write lock before reading state (BEGIN IMMEDIATE) — a check
+    against a pre-state nobody serialized is TOCTOU, not validation.
+    An illegal transition raises ValueError: no event is written."""
+    et = kw["event_type"]
+    allowed = _STATUS_LEGAL_FROM.get(et)
+    if allowed is not None:
+        st = current_status(cur, kw["memory_id"])
+        if st not in allowed:
+            raise ValueError(
+                f"{et} illegal from custody_status {st} — "
+                f"legal only from {sorted(allowed)}")
+    return append_event(cur, **kw)
 
 
 # ---------------------------------------------------------------------------

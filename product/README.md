@@ -194,7 +194,35 @@ not hidden.
 Skeleton, verified end-to-end on Nebius Token Factory
 (`nvidia/NVIDIA-Nemotron-3-Nano-30B-A3B` chat +
 `Qwen/Qwen3-Embedding-8B` embeddings — hackathon requirement met:
-Nebius execution + NVIDIA open-source model). Trajectory
-counterfactual v1 live (single-event excision on one chain;
-cross-effects through decisions/links not rewound). Not wired:
+Nebius execution + NVIDIA open-source model). Not wired:
 MCP server, hosted demo.
+
+**Counterfactual: causal-ontology 2.0.0 / cf-cascade/v2.** Events
+declare their antecedents in `payload.causes[]`; the cascade is a
+fixpoint closure over that declared graph (spec:
+`spec/causal-ontology-v2.md`). Conformance: Python↔Go differential,
+18/18 corpus artifacts agree; `cf/v1/generate.py --check`
+reproduces the corpus byte-for-byte. Legacy evidence (no `causes`)
+still verifies under the unified rule — the corpus carries a v1-form
+bundle to prove it. CI runs all three checks on every push.
+
+**Stigmergy series (tests/test_stigmergy_pure.py, 16 checks):**
+multi-authority operation on one shared field. Established, in
+order:
+
+- independent agents need no process-level coordination — ids and
+  counters are field state;
+- concurrent writes collide on ids and prev_hash — bounded retry
+  resolves races with zero loss under threads+SQLite+single-host;
+- serialization is not causality — concurrent same-chain writes stay
+  dense and linked, and the causal verdict is identical under both
+  serializations;
+- write-side transition legality is now enforced atomically
+  (`custody.append_legal_event` + `BEGIN IMMEDIATE`);
+- confluence is NOT a field property: unconditional transitions
+  (QUARANTINED vs SUPERSEDED_BY) are legal in both orders and
+  produce different states — `state = f(scheduler)`, demonstrated
+  9/7 in 16 runs;
+- the sealed record cannot distinguish concurrent from ordered —
+  observed-head is not recorded. Evidence loss, currently unfixed.
+

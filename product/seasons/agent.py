@@ -26,34 +26,51 @@ POLICY_VERSION = "seasons/0.1"
 
 
 class SeasonsAgent:
-    def __init__(self, db_path: str = ":memory:"):
+    def __init__(self, db_path: str = ":memory:",
+                 actor_id: str = actors.AGENT):
+        self.actor = actor_id
         self.conn: sqlite3.Connection = db.open_db(db_path)
         self.cur = self.conn.cursor()
         self.cur.execute("SELECT COUNT(*) FROM actors")
         if self.cur.fetchone()[0] == 0:
             actors.bootstrap(self.cur)
             self.conn.commit()
+
+    def _next_memory_id(self) -> str:
+        # the counter is a property of the FIELD, not of this process —
+        # two agents sharing the field must not hand each other state
         self.cur.execute("SELECT COUNT(*) FROM memories")
-        self._seq = self.cur.fetchone()[0]
-        self.cur.execute("SELECT COUNT(*) FROM decisions")
-        self._decisions = self.cur.fetchone()[0]
+        return f"mem-{self.cur.fetchone()[0]:04d}"
+
+    def _next_decision_id(self) -> str:
+        self.cur.execute("SELECT COUNT(*) FROM seasons_decisions")
+        return f"dec-{self.cur.fetchone()[0]:04d}"
 
     # ---------- write path ----------
 
     def remember(self, content: str, *, topic: str | None = None,
                  claim: str | None = None) -> str:
-        mid = f"mem-{self._seq:04d}"
-        self._seq += 1
+        # Concurrent writers may compute the same next id before either
+        # commits: UNIQUE rejects the loser, who must retry — the field
+        # assigns, the writer accepts. Bounded retries; a persistent
+        # collision is a real failure, not a retry storm.
         qemb, prov = embed.embed_with_provenance(content)
-        field.store(
-            self.cur, memory_id=mid, actor_id=actors.AGENT,
-            reason="agent observed/experienced this",
-            content=content, embedding=qemb,
-            embedding_model=embed.model_name(),
-            embedding_provenance=prov,
-            topic=topic, claim=claim)
-        self.conn.commit()
-        return mid
+        for _ in range(4):
+            mid = self._next_memory_id()
+            try:
+                field.store(
+                    self.cur, memory_id=mid, actor_id=self.actor,
+                    reason="agent observed/experienced this",
+                    content=content, embedding=qemb,
+                    embedding_model=embed.model_name(),
+                    embedding_provenance=prov,
+                    topic=topic, claim=claim)
+                self.conn.commit()
+                return mid
+            except sqlite3.IntegrityError:
+                self.conn.rollback()
+        raise RuntimeError("memory_id allocation kept colliding — the "
+                           "field's assignment is contested")
 
     def import_vault(self, path: str) -> dict[str, Any]:
         """Obsidian-style vault: .md -> memories, [[links]] -> RESONANT
@@ -115,7 +132,7 @@ class SeasonsAgent:
         hits, receipt = field.recall(
             self.cur,
             query_embedding=field.quantize_embedding(embed.embed(question)),
-            top_k=top_k, actor_id=actors.AGENT)
+            top_k=top_k, actor_id=self.actor)
         field.persist_receipt(self.cur, receipt)
 
         served = [h.memory_id for h in hits]
@@ -133,22 +150,32 @@ class SeasonsAgent:
 
         dec_id = None
         if declared:
-            dec_id = f"dec-{self._decisions:04d}"
-            causality.record_decision(
-                self.cur, receipt=receipt, used_memory_ids=declared,
-                decision_sha256=causality.decision_hash(answer),
-                policy_version=POLICY_VERSION, actor_id=actors.AGENT,
-                reason=f"answered: {question[:80]}",
-                decision_id=dec_id)
-            self.cur.execute(
-                "INSERT INTO seasons_decisions (decision_id, question,"
-                " created_at) VALUES (?, ?, ?)",
-                (dec_id, question, custody.now_ts()))
-            self._decisions += 1
+            for _ in range(4):
+                dec_id = self._next_decision_id()
+                try:
+                    causality.record_decision(
+                        self.cur, receipt=receipt,
+                        used_memory_ids=declared,
+                        decision_sha256=causality.decision_hash(answer),
+                        policy_version=POLICY_VERSION,
+                        actor_id=self.actor,
+                        reason=f"answered: {question[:80]}",
+                        decision_id=dec_id)
+                    self.cur.execute(
+                        "INSERT INTO seasons_decisions (decision_id,"
+                        " question, created_at) VALUES (?, ?, ?)",
+                        (dec_id, question, custody.now_ts()))
+                    break
+                except sqlite3.IntegrityError:
+                    self.conn.rollback()
+            else:
+                raise RuntimeError("decision_id allocation kept "
+                                   "colliding")
+
 
             for mid in reinforced:
                 field.reinforce(
-                    self.cur, memory_id=mid, actor_id=actors.AGENT,
+                    self.cur, memory_id=mid, actor_id=self.actor,
                     reason="used in a decision this turn",
                     caused_by_decision_id=dec_id)
         self.conn.commit()
