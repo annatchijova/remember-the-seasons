@@ -1,0 +1,23 @@
+name: conformance
+
+on: [push, pull_request]
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: {python-version: "3.12"}
+      - uses: actions/setup-go@v5
+        with: {go-version: "1.22"}
+      - name: deps
+        run: pip install pynacl
+      - name: python suite
+        run: |
+          cd product
+          for t in tests/test_*.py; do python3 "$t" || exit 1; done
+      - name: corpus determinism
+        run: python3 product/conformance/cf/v1/generate.py --check
+      - name: differential python-go
+        run: bash product/conformance/cf/v1/differential.sh
