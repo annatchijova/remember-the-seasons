@@ -17,6 +17,7 @@ deliberately, and show the diff.
 """
 
 import base64
+import hashlib
 import json
 import os
 import shutil
@@ -130,7 +131,8 @@ def build(out_dir):
                    "implemented and tested",
         "semantics": {
             "bundle_protocol": "mneme-cf-bundle/v1",
-            "causal_rewind_protocol": "cf-cascade/v1",
+            "causal_rewind_protocol": "cf-cascade/v2",
+            "causal_ontology": "2.0.0",
             "canonicalization_protocol": "mneme-cjson/1.0.0",
             "payload_type":
                 "application/vnd.mneme.cf-bundle+json;version=1",
@@ -172,6 +174,72 @@ def build(out_dir):
         + env["signatures"]
     json.dump(ms, open(os.path.join(
         out_dir, "positive", "multi-sig.dsse.json"), "w"), indent=1)
+
+    # legacy-v1 positive: the same world with every v2 antecedent
+    # field stripped (causes[] AND caused_by_decision_id) — evidence
+    # in the pre-ontology shape. Under the unified rule it must
+    # produce the SAME verdict: adjacency covers exactly the events
+    # the write path would have declared.
+    bundle_now = json.loads(base64.b64decode(env["payload"]))
+    legacy = _c.deepcopy(bundle_now)
+    for ch in legacy["evidence"]["chains"].values():
+        for e in ch:
+            p = json.loads(e["payload_json"])
+            p.pop("causes", None)
+            p.pop("caused_by_decision_id", None)
+            e["payload_json"] = canonical_json(p)
+    # A TRUE v1 bundle also carries a v1 report: the killed set under
+    # the adjacency rule excludes events whose only antecedent is an
+    # event-cause (STATE_CHANGED promotions). Replay's arithmetic
+    # guard makes the counterfactual states identical either way —
+    # the promotion fires, the threshold check fails, NEUTRAL — so
+    # only invalidated/propagation lists drop entries.
+    dead_types = {et for _, _, et in legacy["report"]["invalidated"]}
+    rep = legacy["report"]
+    rep["invalidated"] = [i for i in rep["invalidated"]
+                          if i[2] != "STATE_CHANGED"]
+    for edge in rep["propagation"]:
+        edge["invalidated"] = [
+            i for i in edge["invalidated"]
+            if legacy["evidence"]["chains"][i[0]][i[1]]
+               ["event_type"] != "STATE_CHANGED"]
+    rep["report_sha256"] = hashlib.sha256(
+        canonical_json({k: v for k, v in rep.items()
+                        if k != "report_sha256"}).encode()).hexdigest()
+    # and it declares what it is: a v1 bundle knows no causal ontology
+    legacy["semantics"]["causal_rewind_protocol"] = "cf-cascade/v1"
+    legacy["semantics"].pop("causal_ontology", None)
+    # recompute every entry_hash after the payload rewrite — a valid
+    # v1 chain, not a forgery
+    from mneme import chain as _chain
+    from mneme import custody as _cust
+    for mid, ch in legacy["evidence"]["chains"].items():
+        prev = _cust.genesis_hash(mid)
+        for e in ch:
+            e["prev_hash"] = prev
+            e["entry_hash"], _ = _chain.compute_hash(
+                _cust.SPEC, prev_hash=prev, subject_id=mid,
+                seq=e["seq"], event_type=e["event_type"],
+                actor_id=e["actor_id"], reason=e["reason"],
+                created_at=e["created_at"],
+                payload=json.loads(e["payload_json"]))
+            prev = e["entry_hash"]
+    legacy.pop("bundle_sha256", None)
+    legacy["bundle_sha256"] = hashlib.sha256(
+        canonical_json(legacy).encode()).hexdigest()
+    lb = json.dumps(legacy, indent=1).encode()
+    pt = env["payloadType"].encode()
+    pae = (b"DSSEv1 " + str(len(pt)).encode() + b" " + pt + b" " +
+           str(len(lb)).encode() + b" " + lb)
+    leg_env = _c.deepcopy(env)
+    leg_env["payload"] = base64.b64encode(lb).decode()
+    leg_env["signatures"] = [{
+        "keyid": OPS["keyid"],
+        "sig": base64.b64encode(
+            SigningKey(bytes.fromhex(seed)).sign(pae).signature
+        ).decode()}]
+    json.dump(leg_env, open(os.path.join(
+        out_dir, "positive", "legacy-v1.dsse.json"), "w"), indent=1)
 
     # Negative corpus — sealed mutants with their expected failure.
     # Each names the check that must kill it, not merely "rejected".
@@ -221,6 +289,35 @@ def build(out_dir):
            lambda bb: bb["semantics"].__setitem__(
                "causal_rewind_protocol", "cf-cascade/v99"),
            "CF0.5")
+    def _transitivity_break(bb):
+        # sever the event-cause: a promotion no longer names the
+        # REINFORCED that produced it — the recomputed cascade keeps
+        # it alive where the report claims it dead
+        for ch in bb["evidence"]["chains"].values():
+            for e in ch:
+                p = json.loads(e["payload_json"])
+                if (e["event_type"] == "STATE_CHANGED"
+                        and p.get("causes")):
+                    p["causes"] = []
+                    e["payload_json"] = canonical_json(p)
+                    return
+    mutant("transitivity-break", _transitivity_break, "CF3")
+
+    def _causes_stripped(bb):
+        # remove BOTH spellings of the decision-cause from a killed
+        # REINFORCED — recomputation keeps it alive, report claims
+        # it dead
+        dead_r = {m: s for m, s, et in
+                  bb["report"]["invalidated"] if et == "REINFORCED"}
+        for mid, s in dead_r.items():
+            e = bb["evidence"]["chains"][mid][s]
+            p = json.loads(e["payload_json"])
+            p.pop("causes", None)
+            p.pop("caused_by_decision_id", None)
+            e["payload_json"] = canonical_json(p)
+            return
+    mutant("causes-stripped", _causes_stripped, "CF1")
+
     mutant("coherent-false",
            lambda bb: (bb["report"].__setitem__(
                            "divergent_receipts", []),
@@ -261,7 +358,6 @@ def build(out_dir):
     for f in sorted(os.listdir(mut_dir2)):
         rels.append(f"mutants/{f}")
     for rel in rels:
-        import hashlib
         data = open(os.path.join(out_dir, rel), "rb").read()
         manifest["artifacts"][rel] = hashlib.sha256(data).hexdigest()
     json.dump(manifest, open(os.path.join(

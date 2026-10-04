@@ -3,7 +3,8 @@
  "comment": "exact semantic versions this corpus is sealed under \u2014 a verifier answers only for versions it implemented and tested",
  "semantics": {
   "bundle_protocol": "mneme-cf-bundle/v1",
-  "causal_rewind_protocol": "cf-cascade/v1",
+  "causal_rewind_protocol": "cf-cascade/v2",
+  "causal_ontology": "2.0.0",
   "canonicalization_protocol": "mneme-cjson/1.0.0",
   "payload_type": "application/vnd.mneme.cf-bundle+json;version=1",
   "signature_profile": "dsse-ed25519-rfc8032/v1"
@@ -15,6 +16,8 @@
   "positive/base64url.dsse.json": "00ffb32ded601c42f3e66f60b36154168a6bc88cc6e3e3ed113868448b0110a9",
   "positive/empty-keyid.dsse.json": "3eee8411435a7bf2dc7a0633669c5a23254a286253fcb1aff05a325bce6d7b95",
   "positive/extra-field.dsse.json": "72450e5b2d82249367b75d317f7f65ad44a4ee10a2f4067a321fb0920ae78800",
+  "mutants/causes-stripped.expected.json": "d43bc0abc90e6049e6bedc55d06b4c4cda61257b41e701e675dbd0f5e0f1467a",
+  "mutants/causes-stripped.json": "435fb015d26aa2fdbae20d629e75f6142649157543fdca2f52d4c8edc5fac8b4",
   "mutants/chain-deletion.expected.json": "d43bc0abc90e6049e6bedc55d06b4c4cda61257b41e701e675dbd0f5e0f1467a",
   "mutants/chain-deletion.json": "344e873867dfbdaa8eeb80a74c1aeaf43e18da3b9b5d99be8687cbe4780686d7",
   "mutants/coherent-false.expected.json": "5c48ac87ac3cf9793df6a0b97ce5ed0e64c3e454b3d086e86c3cd6f502662614",
@@ -31,6 +34,8 @@
   "mutants/phantom-ungrounding.json": "7cb925636d96388fcc3c5c2ea73fd6054196dd514794a165915ece56b10ca069",
   "mutants/tampered-event.expected.json": "d43bc0abc90e6049e6bedc55d06b4c4cda61257b41e701e675dbd0f5e0f1467a",
   "mutants/tampered-event.json": "15e41ddb4d311aea47b361f895334573715928ba6b1bfbb45438209d753bb869",
+  "mutants/transitivity-break.expected.json": "5c48ac87ac3cf9793df6a0b97ce5ed0e64c3e454b3d086e86c3cd6f502662614",
+  "mutants/transitivity-break.json": "203395a9b071b2877fbd7a7584d10316ccaea08be5717246ae5f2b457d457e02",
   "mutants/unknown-protocol.expected.json": "e5db160da83d3603d6f11b1cea40b2ccdb9a7533e2165e5a8f62f4dec6c2eeae",
   "mutants/unknown-protocol.json": "eda3b00cb736e32cae7ed2f9e37687942122fcff9a64e2e81176d4fe900af2f3",
   "mutants/wrong-seq.expected.json": "5c48ac87ac3cf9793df6a0b97ce5ed0e64c3e454b3d086e86c3cd6f502662614",
