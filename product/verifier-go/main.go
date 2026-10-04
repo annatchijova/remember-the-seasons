@@ -653,9 +653,17 @@ func checkSignature(env map[string]interface{},
 // the verifier
 // ------------------------------------------------------------------
 
-var knownSemantics = map[string]bool{
-	"mneme-cf-bundle/v1": true,
-	"cf-cascade/v1":      true,
+var knownSemantics = map[string]map[string]bool{
+	"bundle_protocol":         {"mneme-cf-bundle/v1": true},
+	"causal_rewind_protocol":  {"cf-cascade/v1": true, "cf-cascade/v2": true},
+	"custody_protocol":        {"1.1.0": true},
+	"replay_protocol":         {"1.1.0": true},
+	"ranking_protocol":        {"1.0.0": true},
+	"taint_protocol":          {"2.0.0": true},
+	"authority_protocol":      {"1.3.0": true},
+	"receipt_protocol":        {"2.0.0": true},
+	"claim_protocol":          {"1.1.0": true},
+	"causal_ontology":         {"2.0.0": true},
 }
 
 func main() {
@@ -741,9 +749,14 @@ func main() {
 	check("CF0", sha256hex([]byte(cj)) == seal)
 
 	sem, _ := b["semantics"].(map[string]interface{})
-	bp, _ := sem["bundle_protocol"].(string)
-	rp, _ := sem["causal_rewind_protocol"].(string)
-	check("CF0.5", knownSemantics[bp] && knownSemantics[rp])
+	semOK := len(sem) > 0
+	for k, v := range sem {
+		vs, _ := v.(string)
+		if !knownSemantics[k][vs] {
+			semOK = false
+		}
+	}
+	check("CF0.5", semOK)
 
 	ev, evOk := b["evidence"].(map[string]interface{})
 	iv, ivOk := b["intervention"].(map[string]interface{})
@@ -903,22 +916,37 @@ func main() {
 	}
 	check("CF2", consistent)
 
+	causedBy := func(p map[string]interface{}, did string) bool {
+		cs, _ := p["causes"].([]interface{})
+		for _, cv := range cs {
+			c, _ := cv.(map[string]interface{})
+			if c["kind"] == "decision" && c["id"] == did {
+				return true
+			}
+		}
+		return false
+	}
+
 	ownConseq := func(did string) map[string]map[int]bool {
 		out := map[string]map[int]bool{}
 		for mid, ch := range chains {
 			for j, e := range ch {
 				et := e["event_type"].(string)
 				p := payloadOf(e)
-				if et == "DECISION_USED_MEMORY" &&
-					p["decision_id"] == did {
+				if causedBy(p, did) ||
+					(et == "DECISION_USED_MEMORY" &&
+						p["decision_id"] == did) {
 					if out[mid] == nil {
 						out[mid] = map[int]bool{}
 					}
 					out[mid][seqOf(e)] = true
-					if j+1 < len(ch) &&
-						ch[j+1]["event_type"].(string) == "REINFORCED" &&
-						payloadOf(ch[j+1])["caused_by_decision_id"] == nil {
-						out[mid][seqOf(ch[j+1])] = true
+					if j+1 < len(ch) && p["causes"] == nil &&
+						ch[j+1]["event_type"].(string) == "REINFORCED" {
+						pn := payloadOf(ch[j+1])
+						if pn["caused_by_decision_id"] == nil &&
+							pn["causes"] == nil {
+							out[mid][seqOf(ch[j+1])] = true
+						}
 					}
 				} else if et == "REINFORCED" &&
 					p["caused_by_decision_id"] == did {
@@ -932,6 +960,54 @@ func main() {
 		return out
 	}
 
+	// causal-ontology/v2: fixpoint over declared causes — an event
+	// dies if any cause names a dead event or a dead decision.
+	closure := func(deadNodes map[string]map[int]bool,
+		deadDecisions map[string]bool) {
+		changed := true
+		for changed {
+			changed = false
+			for mid, ch := range chains {
+				for _, e := range ch {
+					if deadNodes[mid][seqOf(e)] {
+						continue
+					}
+					p := payloadOf(e)
+					if cbd, ok := p["caused_by_decision_id"].(string); ok &&
+						deadDecisions[cbd] {
+						if deadNodes[mid] == nil {
+							deadNodes[mid] = map[int]bool{}
+						}
+						deadNodes[mid][seqOf(e)] = true
+						changed = true
+						continue
+					}
+					cs, _ := p["causes"].([]interface{})
+					for _, cv := range cs {
+						c, _ := cv.(map[string]interface{})
+						die := false
+						if c["kind"] == "decision" {
+							_, die = deadDecisions[c["id"].(string)]
+						} else if c["kind"] == "event" {
+							cm, _ := c["memory_id"].(string)
+							cs2, _ := strconv.Atoi(
+								c["seq"].(json.Number).String())
+							die = deadNodes[cm][cs2]
+						}
+						if die {
+							if deadNodes[mid] == nil {
+								deadNodes[mid] = map[int]bool{}
+							}
+							deadNodes[mid][seqOf(e)] = true
+							changed = true
+							break
+						}
+					}
+				}
+			}
+		}
+	}
+
 	sort.Slice(decisions, func(i, j int) bool {
 		a, bb := decisions[i], decisions[j]
 		if a["created_at"] != bb["created_at"] {
@@ -943,6 +1019,7 @@ func main() {
 	})
 
 	dead := map[string]map[int]bool{midI: {seqI: true}}
+	deadDecisions := map[string]bool{}
 	divergent := []string{}
 	ungrounded := []interface{}{}
 	invalidated := [][]interface{}{}
@@ -988,43 +1065,66 @@ func main() {
 		}
 		divergent = append(divergent,
 			d["receipt_sha256"].(string))
-		kill := [][]interface{}{}
+		deadDecisions[d["decision_id"].(string)] = true
+		before := map[string]map[int]bool{}
+		for m, ds := range dead {
+			before[m] = map[int]bool{}
+			for s := range ds {
+				before[m][s] = true
+			}
+		}
+		// legacy fallback for pre-v2 events with no causes[]
 		sortedUsed := append([]string{}, used...)
 		sort.Strings(sortedUsed)
 		for _, mid := range sortedUsed {
 			ch := chains[mid]
 			for j, e := range ch {
-				et := e["event_type"].(string)
 				p := payloadOf(e)
-				if et == "DECISION_USED_MEMORY" &&
+				if e["event_type"].(string) == "DECISION_USED_MEMORY" &&
 					p["decision_id"] == d["decision_id"] {
 					if dead[mid] == nil {
 						dead[mid] = map[int]bool{}
 					}
 					dead[mid][seqOf(e)] = true
-					kill = append(kill, []interface{}{
-						mid, json.Number(strconv.Itoa(seqOf(e))),
-						"DECISION_USED_MEMORY"})
-					if j+1 < len(ch) &&
-						ch[j+1]["event_type"].(string) == "REINFORCED" &&
-						payloadOf(ch[j+1])["caused_by_decision_id"] == nil {
-						dead[mid][seqOf(ch[j+1])] = true
-						kill = append(kill, []interface{}{
-							mid,
-							json.Number(strconv.Itoa(seqOf(ch[j+1]))),
-							"REINFORCED"})
+					if j+1 < len(ch) && p["causes"] == nil &&
+						ch[j+1]["event_type"].(string) == "REINFORCED" {
+						pn := payloadOf(ch[j+1])
+						if pn["caused_by_decision_id"] == nil &&
+							pn["causes"] == nil {
+							dead[mid][seqOf(ch[j+1])] = true
+						}
 					}
-				} else if et == "REINFORCED" &&
-					p["caused_by_decision_id"] == d["decision_id"] {
-					if dead[mid] == nil {
-						dead[mid] = map[int]bool{}
-					}
-					dead[mid][seqOf(e)] = true
-					kill = append(kill, []interface{}{
-						mid, json.Number(strconv.Itoa(seqOf(e))),
-						"REINFORCED"})
 				}
 			}
+		}
+		closure(dead, deadDecisions)
+		var killPairs [][2]interface{}
+		for m, ds := range dead {
+			for s := range ds {
+				if !before[m][s] {
+					killPairs = append(killPairs,
+						[2]interface{}{m, s})
+				}
+			}
+		}
+		sort.Slice(killPairs, func(i, j int) bool {
+			if killPairs[i][0] != killPairs[j][0] {
+				return killPairs[i][0].(string) <
+					killPairs[j][0].(string)
+			}
+			return killPairs[i][1].(int) < killPairs[j][1].(int)
+		})
+		kill := [][]interface{}{}
+		for _, kp := range killPairs {
+			m, s := kp[0].(string), kp[1].(int)
+			var et string
+			for _, e := range chains[m] {
+				if seqOf(e) == s {
+					et = e["event_type"].(string)
+				}
+			}
+			kill = append(kill, []interface{}{
+				m, json.Number(strconv.Itoa(s)), et})
 		}
 		usedArr := []interface{}{}
 		for _, u := range used {

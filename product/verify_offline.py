@@ -128,7 +128,7 @@ AUTHORITY_EVENT_CAPABILITY = {
 }
 PROTOCOL_NAMES = ("custody_protocol", "replay_protocol", "ranking_protocol",
                   "taint_protocol", "authority_protocol", "receipt_protocol",
-                  "claim_protocol")
+                  "claim_protocol", "causal_ontology")
 CLAIM_GENESIS_PREFIX = b"MNEME_CLAIM_GENESIS:"
 CLAIM_EVENT_TYPES = frozenset({
     "CLAIM_ASSERTED", "EVIDENCE_LINKED", "RELATED_TO", "SET_MEMBERSHIP",
@@ -155,6 +155,7 @@ SUPPORTED_PROTOCOLS = {
     # verifier genuinely cannot check one.
     "receipt_protocol": frozenset({"2.0.0"}),
     "claim_protocol": frozenset({"1.0.0", "1.1.0"}),
+    "causal_ontology": frozenset({"2.0.0"}),
 }
 GRANT_ID_PATTERN = re.compile(r"^[a-zA-Z0-9_\-.:]{1,64}$")
 SUPPORTED_QUANTIZATION = frozenset({

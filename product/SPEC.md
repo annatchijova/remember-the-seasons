@@ -1070,6 +1070,7 @@ those bytes **mean**. So the meaning goes in the bundle.
 | `authority_protocol` | the capability vocabulary, chain rules, no-amplification, and the event→capability maps |
 | `receipt_protocol` | the receipt digest body and the decision record |
 | `claim_protocol` | the claim chain, state machine, relation bilaterality, and set constraints |
+| `causal_ontology` | the `causes[]` antecedent vocabulary in event payloads and the transitive-closure rule the counterfactual cascade applies (spec/causal-ontology-v2.md) |
 
 ### 11.2 Versioning discipline
 
@@ -1123,6 +1124,7 @@ These are the versions the reference implementation currently writes.
 | `authority_protocol` | 1.3.0 |
 | `receipt_protocol` | 2.0.0 |
 | `claim_protocol` | 1.1.0 |
+| `causal_ontology` | 2.0.0 |
 
 And these are the versions it can still **verify**:
 
@@ -1135,6 +1137,7 @@ And these are the versions it can still **verify**:
 | `authority_protocol` | 1.0.0, 1.1.0, 1.2.0, 1.3.0 |
 | `receipt_protocol` | 2.0.0 |
 | `claim_protocol` | 1.0.0, 1.1.0 |
+| `causal_ontology` | 2.0.0 |
 
 Two entries in the supported table are worth reading closely, because
 they are where the discipline of §11.3 costs something.

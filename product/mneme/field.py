@@ -623,9 +623,11 @@ def reinforce(cur, *, memory_id: str, actor_id: str, reason: str,
         # convenience, not evidence. The counterfactual verifier must
         # not have to guess which act produced this reinforcement.
         rpayload["caused_by_decision_id"] = caused_by_decision_id
+        rpayload["causes"] = [
+            {"kind": "decision", "id": caused_by_decision_id}]
     if reinforce_grant is not None:
         rpayload["grant_id"] = reinforce_grant
-    custody.append_event(
+    r_entry = custody.append_event(
         cur, memory_id=memory_id, event_type="REINFORCED", actor_id=actor_id,
         reason=reason, payload=rpayload, created_at=ts,
     )
@@ -635,7 +637,12 @@ def reinforce(cur, *, memory_id: str, actor_id: str, reason: str,
     new_state = state
     if state == "NEUTRAL" and c_new >= PROMOTION_THRESHOLD:
         new_state = "REINFORCED"
-        spayload: dict[str, Any] = {"from": "NEUTRAL", "to": "REINFORCED"}
+        spayload: dict[str, Any] = {
+            "from": "NEUTRAL", "to": "REINFORCED",
+            # the promotion exists because THAT reinforcement crossed
+            # the threshold — an event-cause, not a decision-cause.
+            "causes": [{"kind": "event", "memory_id": memory_id,
+                        "seq": r_entry.seq}]}
         if reinforce_grant is not None:
             spayload["grant_id"] = reinforce_grant
         custody.append_event(

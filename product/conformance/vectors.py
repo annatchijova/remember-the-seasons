@@ -169,8 +169,13 @@ def compute(w: World) -> list[dict[str, Any]]:
 
     # Chain heads — every event's bytes, transitively.
     for mid in ("m-1", "m-2", "m-3"):
+        # m-1's chain carries a DECISION_USED_MEMORY whose payload
+        # declares causes[] — the head digest now commits to the
+        # causal-ontology vocabulary too.
+        req = ["custody_protocol"] + (
+            ["causal_ontology"] if mid == "m-1" else [])
         vec(f"head.custody.{mid}", _head(cur, "custody_chain", "memory_id", mid),
-            ["custody_protocol"])
+            req)
     for aid in ("root", "scribe", "judge"):
         vec(f"head.authority.{aid}",
             _head(cur, "authority_chain", "subject_id", aid),

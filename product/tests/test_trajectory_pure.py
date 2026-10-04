@@ -26,6 +26,7 @@ Invariants under test:
 """
 
 import os
+import json
 import sys
 
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
@@ -199,9 +200,19 @@ check("C3 divergent receipts counted",
       len(rep_c["divergent_receipts"]) == 3)
 # every invalidated event is a DECISION_USED/REINFORCED pair killed
 # by an ungrounded decision — nothing else dies
-check("C4 invalidated are only decision consequences",
-      all(et in ("DECISION_USED_MEMORY", "REINFORCED")
-          for _, _, et in rep_c["invalidated"]))
+check("C4 invalidated are endogenous consequences — every one is "
+      "reachable from the intervention via declared causes",
+      all(et in ("DECISION_USED_MEMORY", "REINFORCED", "STATE_CHANGED")
+          for _, _, et in rep_c["invalidated"])
+      and all(
+          any(c.get("kind") in ("decision", "event")
+              for c in json.loads(e["payload_json"]).get("causes", []))
+          or json.loads(e["payload_json"]).get("caused_by_decision_id")
+          or e["event_type"] == "DECISION_USED_MEMORY"
+          for m, s, _ in rep_c["invalidated"]
+          for e in [x for x in
+                    trajectory.load_chain(b.cur, m)
+                    if x["seq"] == s]))
 killed = {(m, s) for m, s, _ in rep_c["invalidated"]}
 prop = {(m, s) for p in rep_c["propagation"]
         for m, s in p["invalidated"]}
@@ -229,5 +240,46 @@ print()
 if FAIL:
     print(f"{len(FAIL)} FAILED: {FAIL}")
     sys.exit(1)
+# NC-DISCORDIA — a clock is not a cause. A v2-form DU (declares
+# causes) followed IMMEDIATELY by an exogenous REINFORCED that declares
+# nothing: under v1-style adjacency it dies by position; under the
+# declared-cause rule it survives. Proximity is not causation.
+a5 = agent.SeasonsAgent()
+a5.remember("The deploy gate requires staging to pass.")
+mid5 = "mem-0000"
+for et, reason in (("TAINT_FLAGGED", "t"), ("REHABILITATED", "r")):
+    custody.append_event(
+        a5.cur, memory_id=mid5, event_type=et,
+        actor_id="seasons-agent", reason=reason,
+        created_at=custody.now_ts(), payload={})
+a5.cur.execute(
+    "UPDATE memories SET custody_status='CLEAN' WHERE memory_id=?",
+    (mid5,))
+a5.conn.commit()
+r5 = a5.ask("deploy gate staging?")
+did5 = r5["decision"]
+ch5 = trajectory.load_chain(a5.cur, mid5)
+# a second v2-form DU naming the same decision (declared causes) and
+# IMMEDIATELY after it an exogenous REINFORCED declaring nothing.
+custody.append_event(
+    a5.cur, memory_id=mid5, event_type="DECISION_USED_MEMORY",
+    actor_id="seasons-agent", reason="second record",
+    created_at=custody.now_ts(),
+    payload={"decision_id": did5,
+             "causes": [{"kind": "decision", "id": did5}]})
+exo_seq = custody.append_event(
+    a5.cur, memory_id=mid5, event_type="REINFORCED",
+    actor_id="seasons-agent", reason="exogenous bump",
+    created_at=custody.now_ts(), payload={}).seq
+a5.conn.commit()
+rehab5 = next(e["seq"] for e in trajectory.load_chain(a5.cur, mid5)
+              if e["event_type"] == "REHABILITATED")
+rep5 = trajectory.do_transition(a5.cur, memory_id=mid5,
+                                excise_seq=rehab5)
+dead5 = {(m, s) for m, s, _ in rep5["invalidated"]}
+check("NC-DISCORDIA exogenous REINFORCED survives — position is not "
+      "causation", (mid5, exo_seq) not in dead5)
+
 print("all trajectory invariants held.")
 sys.exit(0)
+

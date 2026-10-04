@@ -3,11 +3,11 @@
  "signer": "conformance-key",
  "divergent_receipts": 3,
  "ungrounded_decisions": 3,
- "invalidated_events": 30,
+ "invalidated_events": 35,
  "counterfactual_state": {
   "confidence": "1/2",
   "custody_status": "TAINT_FLAGGED",
   "field_state": "NEUTRAL"
  },
- "report_sha256": "e48efddb6ab108bda7aa2e579ddc07ced53d2b00e863d8a32e305a744862e4a8"
+ "report_sha256": "ef2fc48ff6979d86ced2cfef3315c013009187f6492c3a890248632c1aaa0c7f"
 }

@@ -174,6 +174,7 @@ PROTOCOL_NAMES = (
     "authority_protocol",
     "receipt_protocol",
     "claim_protocol",
+    "causal_ontology",
 )
 
 CURRENT_PROTOCOLS: dict[str, str] = {
@@ -184,6 +185,11 @@ CURRENT_PROTOCOLS: dict[str, str] = {
     "authority_protocol": AUTHORITY_PROTOCOL,
     "receipt_protocol": RECEIPT_PROTOCOL,
     "claim_protocol": CLAIM_PROTOCOL,
+    # causal-ontology/v2: events declare their antecedents in
+    # payload.causes[] (spec/causal-ontology-v2.md) — the counterfactual
+    # cascade closes over the declared graph instead of inferring it
+    # from event types.
+    "causal_ontology": "2.0.0",
 }
 
 # Every version this build can still verify, per protocol. A version is in
@@ -207,6 +213,9 @@ SUPPORTED_PROTOCOLS: dict[str, frozenset[str]] = {
     # otherwise would be the one kind of lie this table exists to prevent.
     "receipt_protocol": frozenset({"2.0.0"}),
     "claim_protocol": frozenset({"1.0.0", "1.1.0"}),
+    # v1 was implicit (event-type inference, never a declared version).
+    # v2 is the first causal ontology that exists as data.
+    "causal_ontology": frozenset({"2.0.0"}),
 }
 
 

@@ -7,7 +7,8 @@
     "taint_protocol": "2.0.0",
     "authority_protocol": "1.3.0",
     "receipt_protocol": "2.0.0",
-    "claim_protocol": "1.1.0"
+    "claim_protocol": "1.1.0",
+    "causal_ontology": "2.0.0"
   },
   "spec": "SPEC.md",
   "operations": [
@@ -304,9 +305,10 @@
     },
     {
       "name": "head.custody.m-1",
-      "value": "47f0d58dfcdf0bef7e098ebac431597035db68869f9abe725346fbabb5d67603",
+      "value": "e5c438e93bad8cea33db82199c6d98d5b0dcc9cabfb6e8f7c65d624b40b7c24e",
       "requires": [
-        "custody_protocol"
+        "custody_protocol",
+        "causal_ontology"
       ]
     },
     {
@@ -405,7 +407,7 @@
     },
     {
       "name": "root.heads_merkle",
-      "value": "fb796f3d0f915aaa3600007fa685727b1fff362f92575d4606dfece5709e29fe",
+      "value": "1da7bfa7687f4b0f800b15cc7f91026b78270e8fa0891b9e368f396411b844b0",
       "requires": [
         "custody_protocol"
       ]
@@ -419,7 +421,7 @@
     },
     {
       "name": "seal.bundle_body",
-      "value": "c0e82fccb033ece49e6a33f733f6d29dd9aa9e5dd2e4eefcb1b749e8945314f6",
+      "value": "16b67c47502bd10d7feadb669d2a1ba709edddca3fc7208cc6c497f8254d7625",
       "requires": [
         "custody_protocol",
         "replay_protocol",
@@ -433,7 +435,7 @@
     },
     {
       "name": "table.protocols",
-      "value": "7606951289558d3c9e6e0fa34293fe5d01fd51dfb4279084b5385e6048e0c5e9",
+      "value": "1847b52c7b707c3abbf89d630c8f72aa10d7cdb4fd3c82c5e2ee75a0edc6a93e",
       "requires": [],
       "note": "a change to any declared version changes this digest"
     }

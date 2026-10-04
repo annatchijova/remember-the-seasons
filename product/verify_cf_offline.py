@@ -252,7 +252,22 @@ def independent_recall(memories, links, query_vec, top_k, hops):
 # Verification
 # ----------------------------------------------------------------------
 
-KNOWN_SEMANTICS = {"mneme-cf-bundle/v1", "cf-cascade/v1"}
+# Every semantic version this transcription implements, per protocol.
+# cf-cascade/v2 = v1 + declared-causes closure; v1 evidence verifies
+# identically under the rule, so both are listed. A bundle declaring
+# anything not here fails closed — semantics never silently drift.
+KNOWN_SEMANTICS = {
+    "bundle_protocol": {"mneme-cf-bundle/v1"},
+    "causal_rewind_protocol": {"cf-cascade/v1", "cf-cascade/v2"},
+    "custody_protocol": {"1.1.0"},
+    "replay_protocol": {"1.1.0"},
+    "ranking_protocol": {"1.0.0"},
+    "taint_protocol": {"2.0.0"},
+    "authority_protocol": {"1.3.0"},
+    "receipt_protocol": {"2.0.0"},
+    "claim_protocol": {"1.1.0"},
+    "causal_ontology": {"2.0.0"},
+}
 
 
 def _ed25519_verify(payload: bytes, sig: bytes, vkey: bytes) -> bool:
@@ -413,10 +428,10 @@ def main(path, keys_path=None, fmt="text"):
               canonical_json(b).encode("utf-8")).hexdigest())
 
     sem = b.get("semantics", {})
+    unknown = {k: v for k, v in sem.items()
+               if v not in KNOWN_SEMANTICS.get(k, set())}
     check("CF0.5 declared semantics are implemented here",
-          sem.get("bundle_protocol") in KNOWN_SEMANTICS
-          and sem.get("causal_rewind_protocol") in KNOWN_SEMANTICS,
-          f"declared {sem.get('causal_rewind_protocol')!r}")
+          not unknown, f"unknown: {unknown}" if unknown else "all known")
 
     ev = b["evidence"]
     chains = ev["chains"]
@@ -498,30 +513,72 @@ def main(path, keys_path=None, fmt="text"):
     check("CF2 actual-world receipts self-consistent", consistent)
 
     def own_consequences(did):
-        """A decision's consequences — structural, not temporal:
-        DECISION_USED naming it + the REINFORCED it caused. The link
-        prefers explicit caused_by_decision_id payload references;
-        adjacency is only a legacy fallback."""
+        """A decision's consequences — declared causes naming it
+        (causal-ontology/v2), plus the legacy DU + adjacent REINFORCED
+        pair for pre-v2 events with no causes."""
         out = {}
         for mid, ch in chains.items():
             sch = sorted(ch, key=lambda x: x["seq"])
             for j, e in enumerate(sch):
                 et = e["event_type"]
                 p = strict_loads(e["payload_json"])
-                if (et == "DECISION_USED_MEMORY"
-                        and p.get("decision_id") == did):
+                caused = any(
+                    c.get("kind") == "decision" and c.get("id") == did
+                    for c in p.get("causes", []))
+                if caused or (et == "DECISION_USED_MEMORY"
+                              and p.get("decision_id") == did):
                     out.setdefault(mid, set()).add(e["seq"])
                     if (j + 1 < len(sch)
+                            and not p.get("causes")
                             and sch[j + 1]["event_type"] == "REINFORCED"
                             and strict_loads(
                                 sch[j + 1]["payload_json"]).get(
-                                    "caused_by_decision_id") is None):
+                                    "caused_by_decision_id") is None
+                            and not strict_loads(
+                                sch[j + 1]["payload_json"]).get(
+                                    "causes")):
                         out[mid].add(sch[j + 1]["seq"])
                 elif (et == "REINFORCED"
                         and p.get("caused_by_decision_id") == did):
                     out.setdefault(mid, set()).add(e["seq"])
         return out
 
+    def closure(dead_nodes, dead_decisions):
+        """Fixpoint over declared causes: an event dies if any cause
+        names a dead event or dead decision — the dependency graph,
+        not event types."""
+        changed = True
+        while changed:
+            changed = False
+            for mid, ch in chains.items():
+                for e in ch:
+                    if e["seq"] in dead_nodes.get(mid, set()):
+                        continue
+                    p = strict_loads(e["payload_json"])
+                    if (p.get("caused_by_decision_id")
+                            in dead_decisions
+                            and p.get("caused_by_decision_id")
+                            is not None):
+                        dead_nodes.setdefault(mid, set()).add(
+                            e["seq"])
+                        changed = True
+                        continue
+                    for c in p.get("causes", []):
+                        if (c.get("kind") == "decision"
+                                and c.get("id") in dead_decisions):
+                            dead_nodes.setdefault(mid, set()).add(
+                                e["seq"])
+                            changed = True
+                            break
+                        if (c.get("kind") == "event"
+                                and c.get("seq") in dead_nodes.get(
+                                    c.get("memory_id"), set())):
+                            dead_nodes.setdefault(mid, set()).add(
+                                e["seq"])
+                            changed = True
+                            break
+
+    dead_decisions = set()
     dead = {mid_i: {seq_i}}
     divergent, ungrounded, invalidated, propagation = [], [], [], []
     for d in sorted(ev["decisions"],
@@ -537,29 +594,32 @@ def main(path, keys_path=None, fmt="text"):
         if not fallen:
             continue
         divergent.append(d["receipt_sha256"])
-        kill = []
+        dead_decisions.add(d["decision_id"])
+        before = {m: set(s) for m, s in dead.items()}
+        # legacy fallback for pre-v2 events with no causes[]
         for mid in sorted(d["used"]):
             sch = sorted(chains.get(mid, []), key=lambda x: x["seq"])
             for j, e in enumerate(sch):
-                et = e["event_type"]
                 p = strict_loads(e["payload_json"])
-                if (et == "DECISION_USED_MEMORY"
+                if (e["event_type"] == "DECISION_USED_MEMORY"
                         and p.get("decision_id") == d["decision_id"]):
                     dead.setdefault(mid, set()).add(e["seq"])
-                    kill.append((mid, e["seq"], "DECISION_USED_MEMORY"))
                     if (j + 1 < len(sch)
+                            and not p.get("causes")
                             and sch[j + 1]["event_type"] == "REINFORCED"
                             and strict_loads(
                                 sch[j + 1]["payload_json"]).get(
-                                    "caused_by_decision_id") is None):
+                                    "caused_by_decision_id") is None
+                            and not strict_loads(
+                                sch[j + 1]["payload_json"]).get(
+                                    "causes")):
                         dead[mid].add(sch[j + 1]["seq"])
-                        kill.append((mid, sch[j + 1]["seq"],
-                                     "REINFORCED"))
-                elif (et == "REINFORCED"
-                        and p.get("caused_by_decision_id")
-                        == d["decision_id"]):
-                    dead.setdefault(mid, set()).add(e["seq"])
-                    kill.append((mid, e["seq"], "REINFORCED"))
+        closure(dead, dead_decisions)
+        kill = sorted(
+            (m, s) for m, ds in dead.items() for s in ds
+            if s not in before.get(m, set()))
+        kill = [(m, s, next(e["event_type"] for e in chains[m]
+                            if e["seq"] == s)) for m, s in kill]
         ungrounded.append({"decision_id": d["decision_id"],
                            "used": d["used"], "fallen": fallen})
         invalidated.extend(kill)

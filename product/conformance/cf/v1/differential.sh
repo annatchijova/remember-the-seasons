@@ -7,7 +7,9 @@
 set -u
 HERE="$(cd "$(dirname "$0")" && pwd)"
 PY="$HERE/../../../verify_cf_offline.py"
-GO="${1:-$HOME/mneme-verifier-go/mneme-verify}"
+GO="${1:-$HERE/../../../verifier-go/mneme-verify}"
+[ -x "$GO" ] || (cd "$HERE/../../../verifier-go" && \
+    go build -buildvcs=false -o mneme-verify .)
 KEYS="$HERE/golden/trusted-keys.json"
 fail=0
 

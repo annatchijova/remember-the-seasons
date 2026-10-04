@@ -276,30 +276,82 @@ def do_transition(cur, *, memory_id: str, excise_seq: int,
 
     def own_consequences(did: str) -> dict[str, set[int]]:
         """Events that are THIS decision's consequences — identified
-        structurally: DECISION_USED naming it, plus the REINFORCED it
-        caused. The causal link prefers the explicit
-        caused_by_decision_id payload reference; adjacency is only a
-        legacy fallback for events written before it existed.
-        Precedence must not rest on clock equality: a decision's own
+        structurally by declared causes: anything whose payload's
+        causes[] names the decision, plus the legacy pair (DECISION_USED
+        naming it + an adjacent REINFORCED with no explicit reference)
+        for events written before causal-ontology/v2. A decision's own
         effects never count toward the world it was decided in."""
         out: dict[str, set[int]] = {}
         for mid, ch in chains.items():
             for j, e in enumerate(ch):
-                et = e["event_type"]
                 p = json.loads(e["payload_json"])
-                if (et == "DECISION_USED_MEMORY"
-                        and p.get("decision_id") == did):
+                caused = any(
+                    c.get("kind") == "decision" and c.get("id") == did
+                    for c in p.get("causes", []))
+                et = e["event_type"]
+                if caused or (et == "DECISION_USED_MEMORY"
+                              and p.get("decision_id") == did):
                     out.setdefault(mid, set()).add(e["seq"])
+                    # legacy adjacency fires only in a fully-legacy
+                    # world: the DU itself declares no causes AND the
+                    # neighbour has no explicit cause either. With v2
+                    # evidence, proximity is never causal — the
+                    # DISCORDIA lesson: a clock is not a cause.
                     if (j + 1 < len(ch)
+                            and not p.get("causes")
                             and ch[j + 1]["event_type"] == "REINFORCED"
                             and json.loads(
                                 ch[j + 1]["payload_json"]).get(
-                                    "caused_by_decision_id") is None):
+                                    "caused_by_decision_id") is None
+                            and not json.loads(
+                                ch[j + 1]["payload_json"]).get("causes")):
                         out[mid].add(ch[j + 1]["seq"])
                 elif (et == "REINFORCED"
                         and p.get("caused_by_decision_id") == did):
                     out.setdefault(mid, set()).add(e["seq"])
         return out
+
+    def closure(dead_nodes: dict[str, set[int]],
+                dead_decisions: set[str]) -> None:
+        """causal-ontology/v2 fixpoint: an event dies if ANY declared
+        cause names a dead event or a dead decision. Runs to fixpoint —
+        a dead promotion kills the events it caused, and so on. This
+        replaces per-type kill rules with the declared dependency
+        graph."""
+        changed = True
+        while changed:
+            changed = False
+            for mid, ch in chains.items():
+                for e in ch:
+                    if e["seq"] in dead_nodes.get(mid, set()):
+                        continue
+                    p = json.loads(e["payload_json"])
+                    # caused_by_decision_id is the pre-v2 spelling of
+                    # a decision-cause; the closure treats both
+                    # uniformly.
+                    if (p.get("caused_by_decision_id")
+                            in dead_decisions
+                            and p.get("caused_by_decision_id")
+                            is not None):
+                        dead_nodes.setdefault(mid, set()).add(
+                            e["seq"])
+                        changed = True
+                        continue
+                    for c in p.get("causes", []):
+                        if (c.get("kind") == "decision"
+                                and c.get("id") in dead_decisions):
+                            dead_nodes.setdefault(mid, set()).add(
+                                e["seq"])
+                            changed = True
+                            break
+                        if (c.get("kind") == "event"
+                                and c.get("seq") in
+                                dead_nodes.get(
+                                    c.get("memory_id"), set())):
+                            dead_nodes.setdefault(mid, set()).add(
+                                e["seq"])
+                            changed = True
+                            break
 
     def cf_world(as_of: str, exclude: dict[str, set[int]]) -> dict:
         """Recomputed states for chains that LOST events — the
@@ -322,6 +374,7 @@ def do_transition(cur, *, memory_id: str, excise_seq: int,
         return world
 
     divergent, ungrounded, invalidated, propagation = [], [], [], []
+    dead_decisions: set[str] = set()
 
     cur.execute(
         "SELECT sd.decision_id, sd.question, d.receipt_sha256,"
@@ -346,26 +399,38 @@ def do_transition(cur, *, memory_id: str, excise_seq: int,
         # REINFORCED event each used memory earned from that act (the
         # write path appends it immediately after the DECISION_USED).
         divergent.append(rsha)
-        kill = []
+        dead_decisions.add(did)
+        before = {m: set(s) for m, s in dead.items()}
+        for mid in used:                      # chains must be loaded
+            chains.setdefault(mid, load_chain(cur, mid))  # BEFORE
+        # legacy fallback for pre-v2 events with no causes[]:
         for mid in sorted(used):
-            ch = chains.setdefault(mid, load_chain(cur, mid))
+            ch = chains[mid]
             for j, ev in enumerate(ch):
                 ep = json.loads(ev["payload_json"])
                 if (ev["event_type"] == "DECISION_USED_MEMORY" and
                         ep.get("decision_id") == did):
                     dead.setdefault(mid, set()).add(ev["seq"])
-                    kill.append((mid, ev["seq"], "DECISION_USED_MEMORY"))
                     if (j + 1 < len(ch)
+                            and not ep.get("causes")
                             and ch[j + 1]["event_type"] == "REINFORCED"
                             and json.loads(
                                 ch[j + 1]["payload_json"]).get(
-                                    "caused_by_decision_id") is None):
+                                    "caused_by_decision_id") is None
+                            and not json.loads(
+                                ch[j + 1]["payload_json"]).get(
+                                    "causes")):
                         dead[mid].add(ch[j + 1]["seq"])
-                        kill.append((mid, ch[j + 1]["seq"], "REINFORCED"))
-                elif (ev["event_type"] == "REINFORCED"
-                        and ep.get("caused_by_decision_id") == did):
-                    dead.setdefault(mid, set()).add(ev["seq"])
-                    kill.append((mid, ev["seq"], "REINFORCED"))
+        # causal-ontology/v2: the closure walks declared causes, not
+        # event-type rules — a dead decision kills everything it
+        # caused, and a dead event kills whatever it caused, to
+        # fixpoint.
+        closure(dead, dead_decisions)
+        kill = sorted(
+            (m, s) for m, ds in dead.items() for s in ds
+            if s not in before.get(m, set()))
+        kill = [(m, s, next(e["event_type"] for e in chains[m]
+                            if e["seq"] == s)) for m, s in kill]
         ungrounded.append({"decision_id": did, "used": used,
                            "fallen": fallen})
         invalidated.extend(kill)
@@ -482,7 +547,7 @@ def export_cf_bundle(cur, *, memory_id: str, excise_seq: int,
     from mneme import protocol
     semantics = {
         "bundle_protocol": "mneme-cf-bundle/v1",
-        "causal_rewind_protocol": "cf-cascade/v1",
+        "causal_rewind_protocol": "cf-cascade/v2",
         **protocol.CURRENT_PROTOCOLS,
     }
 

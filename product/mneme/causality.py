@@ -263,6 +263,11 @@ def record_decision(
             "receipt_sha256": rsha,
             "decision_sha256": decision_sha256,
             "policy_version": policy_version,
+            # causal-ontology/v2: explicit antecedents, not inference.
+            # The receipt ref is informational (grounding is recomputed,
+            # never propagated); the decision ref is causal.
+            "causes": [{"kind": "decision", "id": did},
+                       {"kind": "receipt", "id": rsha}],
         }
         if decide_grant is not None:
             payload["grant_id"] = decide_grant

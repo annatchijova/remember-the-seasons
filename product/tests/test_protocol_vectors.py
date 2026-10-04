@@ -209,7 +209,7 @@ vector("claim genesis for claim-0001", claims.claim_genesis_hash("claim-0001"),
        "b816f2c50bb2dd33beea71ce5c868a28cf99c94f55f7983edc3786e0c52e3d2a")
 
 print("\n[chain heads — every event's bytes, transitively]")
-vector("custody head m-1", head("custody_chain", "memory_id", "m-1"), "865f02f776affb9a8d3c1502744c4c91a968d42535019239065f7ce6bcea99be")
+vector("custody head m-1", head("custody_chain", "memory_id", "m-1"), "dd15bfeed5ed983fdfe140e742ae3225a535ef3aa450eb0cfbc9bf6903e43c0b")
 vector("custody head m-2", head("custody_chain", "memory_id", "m-2"), "ab5d9f7af197baf5df9ab03666158a5f9442dc37deda2c1872b79c87023007d7")
 vector("custody head m-3", head("custody_chain", "memory_id", "m-3"), "22aca97b500841efc427738cbcebdaec2824ab474a5904cf106a19d4829fa9af")
 vector("authority head root", head("authority_chain", "subject_id", "root"), "3f387d9faf53b86f6c4fde47f70e63a278feb09898842dc5360cdeebd97020c0")
@@ -230,16 +230,16 @@ vector("counterfactual delta seal",
 
 print("\n[the bundle]")
 doc = json.loads(bundle.export_bundle(cur))
-vector("heads Merkle root", doc["body"]["heads_merkle_root"], "2ac9965bf8f5f5a7b7c79e63c4c2de52a1e79fb831122e39674956b7fd497d12")
+vector("heads Merkle root", doc["body"]["heads_merkle_root"], "83301e28409ad8e950bc775be7e6d82aecd7faf05ab4688f730b49c4258c1237")
 vector("authority Merkle root", doc["body"]["authority_merkle_root"], "0546cde2ec8dd1d7c9bb1e6a37d3e739d507d8d8fc972a869fe3f8bde168bfdb")
 del doc["body"]["created_at"]          # the one wall-clock field
 vector("bundle body seal (created_at removed)",
-       hashlib.sha256(bundle.canonical_json(doc["body"]).encode("utf-8")).hexdigest(), "24d982df601842b36de80ed17ac5fef0e41cb1678bf95b15e215400d2fa019da")
+       hashlib.sha256(bundle.canonical_json(doc["body"]).encode("utf-8")).hexdigest(), "3f204fbdcd8e508325e1903906771fe4f0b0d0224050118f8bbb4332ec013bfb")
 
 print("\n[the protocol version table is itself part of the protocol]")
 vector("declared protocol versions",
        hashlib.sha256(bundle.canonical_json(
-           dict(protocol.CURRENT_PROTOCOLS)).encode("utf-8")).hexdigest(), "7606951289558d3c9e6e0fa34293fe5d01fd51dfb4279084b5385e6048e0c5e9")
+           dict(protocol.CURRENT_PROTOCOLS)).encode("utf-8")).hexdigest(), "1847b52c7b707c3abbf89d630c8f72aa10d7cdb4fd3c82c5e2ee75a0edc6a93e")
 
 print("\n[no module carries two implementations of the same thing]")
 # The check the vectors above cannot perform. A refactor that extracts
