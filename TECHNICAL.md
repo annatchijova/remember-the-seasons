@@ -31,8 +31,10 @@ Three decoupled layers, each independently inspectable:
 ```
 
 The write path never lets the model touch state: `ask()` calls the
-LLM, takes its declared `used` set, and only the *deterministically
-corroborated* subset is reinforced. `served ≠ used ≠ reinforced` is
+LLM (NVIDIA Nemotron-3-Nano-30B-A3B on Nebius Token Factory, or the
+deterministic stub when unconfigured; Qwen3-Embedding-8B serves
+retrieval embeddings), takes its declared `used` set, and only the
+*deterministically corroborated* subset is reinforced. `served ≠ used ≠ reinforced` is
 load-bearing — reinforcement is the payoff a memory-poisoning attack
 wants, so it follows evidence, not narrative.
 

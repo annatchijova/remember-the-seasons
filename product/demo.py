@@ -33,6 +33,11 @@ def now() -> str:
 
 def main():
     a = agent.SeasonsAgent()
+    live = bool(os.environ.get("NEBIUS_API_KEY"))
+    path_desc = ("Nebius Token Factory — Nemotron-3-Nano (chat) + "
+                 "Qwen3-Embedding-8B" if live else
+                 "offline deterministic stub (no NEBIUS_API_KEY)")
+    print(f"inference path: {path_desc}")
 
     section("1. Season 1 — the field learns")
     a.remember("The deploy gate requires staging to pass.",

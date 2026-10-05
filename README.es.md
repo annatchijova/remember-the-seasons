@@ -26,6 +26,32 @@ Este repositorio investiga — y luego construye — memoria que conserva
 las dos cosas: el estado que necesita para comportarse, y la historia
 que necesita para explicar ese estado.
 
+**Quién lo necesita**: equipos que despliegan agentes de vida larga y
+ven el comportamiento derivar con semanas de memoria acumulada — sin
+poder explicar qué cambio lo produjo. El retrieval actual muestra qué
+se recuperó; no puede probar qué transición histórica alteró al
+agente. Acá la prueba es el producto.
+
+## NVIDIA Nemotron + Nebius — la interfaz de razonamiento, no un ornamento
+
+Dos dependencias de modelo son partes estructurales de la solución,
+ambas servidas por **Nebius Token Factory**:
+
+- **`nvidia/NVIDIA-Nemotron-3-Nano-30B-A3B`** interpreta la consulta,
+  razona sobre las memorias recuperadas, declara cuáles usó y redacta
+  la respuesta.
+- **`Qwen/Qwen3-Embedding-8B`** produce los embeddings de retrieval
+  sobre los que el campo adaptativo rankea.
+
+Ninguno toca el estado. La declaración `used` del modelo es un
+*claim*, registrado como tal; solo el motor determinístico decide
+qué pasa a `reinforced` y cambia el campo. Esa frontera no es un
+workaround de la constraint del hackathon — es la respuesta del
+producto a la pregunta real "¿cómo metés un modelo generativo dentro
+de memoria persistente sin dejar que su propia narrativa reescriba el
+pasado que narra?". Nemotron participa causalmente; el protocolo
+conserva la autoridad.
+
 ## Qué hace — observable primero
 
 `product/demo.py` corre el claim completo (offline, determinístico;
