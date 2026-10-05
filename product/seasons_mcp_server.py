@@ -13,6 +13,9 @@ Run
 
 Env
     RTS_DB_PATH      sqlite path (default: seasons.db in cwd)
+    RTS_KEY_SEED     Ed25519 seed hex — if set, every write this
+                     server authors is signed under the agent's key
+                     (attribution; CF1.8-verifiable on export)
     NEBIUS_API_KEY   enables live LLM + embeddings; absent = stub
 """
 
@@ -29,7 +32,8 @@ from seasons import agent
 
 mcp = FastMCP("remember-the-seasons")
 A = agent.SeasonsAgent(
-    db_path=os.environ.get("RTS_DB_PATH", "seasons.db"))
+    db_path=os.environ.get("RTS_DB_PATH", "seasons.db"),
+    key_seed=os.environ.get("RTS_KEY_SEED"))
 
 
 @mcp.tool()
@@ -124,9 +128,79 @@ def do_transition(memory_id: str, excise_seq: int) -> dict:
 
 
 @mcp.tool()
-def export_bundle() -> dict:
-    """Sealed evidence bundle for offline verification (B0-B9)."""
-    return {"bundle_json": A.export_bundle()}
+def chain(memory_id: str) -> dict:
+    """Raw custody chain for a memory — the forensic read."""
+    from seasons import trajectory
+    rows = trajectory.load_chain(A.cur, memory_id)
+    if not rows:
+        return {"memory_id": memory_id, "events": [],
+                "error": "no such memory"}
+    return {"memory_id": memory_id, "events": rows}
+
+
+@mcp.tool()
+def impact(memory_id: str) -> dict:
+    """Blast radius: which recalls served it, which decisions used
+    it, which derived claims stand on it."""
+    rep = A.impact(memory_id)
+    return {"memory_id": memory_id,
+            "direct_receipts": list(rep.direct_receipts),
+            "direct_decisions": list(rep.direct_decisions),
+            "derived_memories": list(rep.derived_memories),
+            "derived_decisions": list(rep.derived_decisions),
+            "possible_memories": list(rep.possible_memories),
+            "impact_sha256": rep.impact_sha256}
+
+
+@mcp.tool()
+def field_integrity() -> dict:
+    """Audit sweep over the whole field: every sealed reference must
+    resolve, every event signature must verify under the actor's
+    registered key. A clean field returns empty lists — failures are
+    integrity errors, never silently inert."""
+    from mneme import custody
+    from seasons import trajectory, signing
+    dangling = custody.check_dangling_references(A.cur)
+    vkeys = {r[0]: r[1] for r in A.cur.execute(
+        "SELECT keyid, verify_key_hex FROM actor_keys")}
+    hashes = {}
+    for mid, in A.cur.execute(
+            "SELECT DISTINCT memory_id FROM custody_chain"):
+        hashes[mid] = {r["seq"]: r["entry_hash"]
+                       for r in trajectory.load_chain(A.cur, mid)}
+    bad_sigs = []
+    sigged = {(r[0], r[1]) for r in A.cur.execute(
+        "SELECT memory_id, seq FROM event_sigs")}
+    for mid, seq, keyid, sig in A.cur.execute(
+            "SELECT memory_id, seq, keyid, sig FROM event_sigs"):
+        eh = hashes.get(mid, {}).get(seq)
+        vk = vkeys.get(keyid)
+        if eh is None or vk is None:
+            bad_sigs.append(f"{mid}#{seq}: unattributable")
+            continue
+        try:
+            signing.VerifyKey(bytes.fromhex(vk)).verify(
+                eh.encode("ascii"), bytes.fromhex(sig))
+        except Exception:
+            bad_sigs.append(f"{mid}#{seq}: invalid signature")
+    # and the inverse: an UNSIGNED event by a keyed actor — CF1.8's
+    # rule applied to the live field, not only to exports
+    keyed_actors = {r[0] for r in A.cur.execute(
+        "SELECT DISTINCT actor_id FROM actor_keys")}
+    for mid, seqs in hashes.items():
+        for r in trajectory.load_chain(A.cur, mid):
+            if r["actor_id"] in keyed_actors \
+                    and (mid, r["seq"]) not in sigged:
+                bad_sigs.append(
+                    f"{mid}#{r['seq']}: keyed actor {r['actor_id']} "
+                    f"wrote unsigned")
+    return {"dangling_references": dangling,
+            "bad_signatures": bad_sigs,
+            "events_checked": sum(len(c) for c in hashes.values()),
+            "sigs_checked": sum(1 for _ in A.cur.execute(
+                "SELECT 1 FROM event_sigs")),
+            "verdict": "CLEAN" if not dangling and not bad_sigs
+            else "INTEGRITY_ERRORS"}
 
 
 if __name__ == "__main__":
