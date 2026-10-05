@@ -280,6 +280,43 @@ dead5 = {(m, s) for m, s, _ in rep5["invalidated"]}
 check("NC-DISCORDIA exogenous REINFORCED survives — position is not "
       "causation", (mid5, exo_seq) not in dead5)
 
+
+# R1/R2 — referential integrity (H16, adapted from memory-graveyard's
+# Hallucinated/BROKEN_REFERENCE pattern): a sealed cause pointing at
+# something that does not exist is an integrity failure, not an
+# inert dependency. The phantom is caught; a real-but-irrelevant
+# reference stays legal.
+a6 = agent.SeasonsAgent()
+mid6 = a6.remember("substrate fact")
+custody.append_event(
+    a6.cur, memory_id=mid6, event_type="REINFORCED",
+    actor_id="seasons-agent", reason="phantom cause",
+    created_at=custody.now_ts(),
+    payload={"causes": [{"kind": "event", "memory_id": mid6,
+                         "seq": 4000000}]})
+a6.conn.commit()
+errs6 = custody.check_dangling_references(a6.cur)
+check("R1 phantom event-cause is an integrity error — silence was "
+      "the bug", any("4000000" in x for x in errs6))
+
+# a REAL event referenced but causally irrelevant: legal — only
+# existence is checked, not meaning. Fresh field so the R1 phantom
+# doesn't bleed into this assertion.
+a7 = agent.SeasonsAgent()
+mid7a = a7.remember("substrate fact")
+mid7b = a7.remember("another fact")
+custody.append_event(
+    a7.cur, memory_id=mid7b, event_type="REINFORCED",
+    actor_id="seasons-agent", reason="irrelevant but real cause",
+    created_at=custody.now_ts(),
+    payload={"causes": [{"kind": "event", "memory_id": mid7a,
+                         "seq": 0}]})
+a7.conn.commit()
+errs7 = custody.check_dangling_references(a7.cur)
+check("R2 real-but-irrelevant reference stays legal",
+      not errs7, str(errs7))
+
+
 print("all trajectory invariants held.")
 sys.exit(0)
 

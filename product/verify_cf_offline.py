@@ -468,6 +468,50 @@ def main(path, keys_path=None, fmt="text"):
         for d in ev["decisions"])
     check("CF1.5 embeddings committed at recall time", inputs_ok)
 
+    # CF1.7 — every sealed reference must resolve to an existing
+    # object in the evidence universe of its reference type. A
+    # dangling cause is an integrity failure, not an inert
+    # dependency: "this cause does not exist" is not "this cause has
+    # no effect". A cause pointing at an event that was later excised
+    # is NOT dangling — excision is counterfactual semantics; the
+    # event exists in the committed history.
+    seqs = {mid: {e["seq"] for e in ch}
+            for mid, ch in chains.items()}
+    decs = {d["decision_id"] for d in ev["decisions"]}
+    recs = set(ev["receipts"].keys())
+    mids = {m["memory_id"] for m in ev["memories"]}
+    dangling = []
+    for mid, ch in chains.items():
+        for e in ch:
+            try:
+                p = strict_loads(e["payload_json"])
+            except (ValueError, TypeError):
+                continue
+            for c in p.get("causes") or []:
+                k = c.get("kind")
+                if k == "event":
+                    tmid, tseq = c.get("memory_id"), c.get("seq")
+                    if tmid not in seqs \
+                            or tseq not in seqs.get(tmid, set()):
+                        dangling.append(
+                            f"{mid}#{e['seq']} -> event({tmid},{tseq})")
+                elif k == "decision" and c.get("id") not in decs:
+                    dangling.append(
+                        f"{mid}#{e['seq']} -> decision({c.get('id')})")
+                elif k == "receipt" and c.get("id") not in recs:
+                    dangling.append(
+                        f"{mid}#{e['seq']} -> receipt({c.get('id')})")
+            cb = p.get("caused_by_decision_id")
+            if cb is not None and cb not in decs:
+                dangling.append(
+                    f"{mid}#{e['seq']} caused_by_decision({cb})")
+    for link in ev["cell_links"]:
+        for end in ("from_id", "to_id"):
+            if link.get(end) not in mids:
+                dangling.append(f"cell_links.{end}={link.get(end)}")
+    check("CF1.7 every sealed reference resolves", not dangling,
+          f"{len(dangling)} dangling: {dangling[:4]}")
+
     # The world as data: memory dicts whose states the verifier sets.
     memories = []
     for m in ev["memories"]:

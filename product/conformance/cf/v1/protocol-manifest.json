@@ -30,6 +30,8 @@
   "mutants/missing-payloadtype.json": "075aa4fd430725a86e049eda563343bb3a4cd3f7a4b7004cd42b1d736b5857f5",
   "mutants/orphan-invalidation.expected.json": "5c48ac87ac3cf9793df6a0b97ce5ed0e64c3e454b3d086e86c3cd6f502662614",
   "mutants/orphan-invalidation.json": "ad288d7fbd6a61d3fb0c924111c951bae46239f71d96578ddf15d4efbd232e6c",
+  "mutants/phantom-cause.expected.json": "f144862ef7adf7b10bf3ebe0f7728b5a369657e6f4ebcbae097f8dce2276154d",
+  "mutants/phantom-cause.json": "8441553ceb3446e4b5fd94b5f2d19d37abe7699c29fba4e978328eb88180b2f9",
   "mutants/phantom-ungrounding.expected.json": "5c48ac87ac3cf9793df6a0b97ce5ed0e64c3e454b3d086e86c3cd6f502662614",
   "mutants/phantom-ungrounding.json": "7cb925636d96388fcc3c5c2ea73fd6054196dd514794a165915ece56b10ca069",
   "mutants/tampered-event.expected.json": "d43bc0abc90e6049e6bedc55d06b4c4cda61257b41e701e675dbd0f5e0f1467a",

@@ -318,6 +318,40 @@ def build(out_dir):
             return
     mutant("causes-stripped", _causes_stripped, "CF1")
 
+    def _phantom_cause(bb):
+        # a well-formed, correctly-hashed chain whose declared cause
+        # resolves to NOTHING — the malicious producer's trick: sign a
+        # lie properly. The event-cause points at a seq that does not
+        # exist; every hash is recomputed so CF1 passes and only
+        # referential integrity (CF1.7) can reject it.
+        for mid, ch in bb["evidence"]["chains"].items():
+            for e in ch:
+                p = json.loads(e["payload_json"])
+                if e["event_type"] == "STATE_CHANGED" \
+                        and p.get("causes"):
+                    p["causes"] = [{"kind": "event",
+                                    "memory_id": mid, "seq": 4000000}]
+                    e["payload_json"] = canonical_json(p)
+                    break
+            else:
+                continue
+            break
+        # recompute the whole chain's hashes — the forgery must be
+        # structurally impeccable, failing only at reference check
+        from mneme import chain as _ch
+        from mneme import custody as _cu
+        prev = _cu.genesis_hash(mid)
+        for e in bb["evidence"]["chains"][mid]:
+            e["prev_hash"] = prev
+            e["entry_hash"], _ = _ch.compute_hash(
+                _cu.SPEC, prev_hash=prev, subject_id=mid,
+                seq=e["seq"], event_type=e["event_type"],
+                actor_id=e["actor_id"], reason=e["reason"],
+                created_at=e["created_at"],
+                payload=json.loads(e["payload_json"]))
+            prev = e["entry_hash"]
+    mutant("phantom-cause", _phantom_cause, "CF1.7")
+
     mutant("coherent-false",
            lambda bb: (bb["report"].__setitem__(
                            "divergent_receipts", []),

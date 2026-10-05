@@ -27,3 +27,4 @@ results/
 *.db-wal
 seasons_demo.db
 product/verifier-go/mneme-verify
+verifier-go/verifier-go

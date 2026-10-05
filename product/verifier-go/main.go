@@ -835,6 +835,84 @@ func main() {
 	}
 	check("CF1.5", embOK)
 
+	// CF1.7 — every sealed reference resolves to an existing object.
+	// A dangling cause is an integrity failure, not an inert dep.
+	seqSet := map[string]map[float64]bool{}
+	for mid, ch := range chains {
+		seqSet[mid] = map[float64]bool{}
+		for _, e := range ch {
+			seqSet[mid][float64(seqOf(e))] = true
+		}
+	}
+	decSet := map[string]bool{}
+	for _, d := range decisions {
+		decSet[d["decision_id"].(string)] = true
+	}
+	recSet := map[string]bool{}
+	for k := range ev["receipts"].(map[string]interface{}) {
+		recSet[k] = true
+	}
+	midSet := map[string]bool{}
+	for _, mv := range ev["memories"].([]interface{}) {
+		midSet[mv.(map[string]interface{})["memory_id"].(string)] = true
+	}
+	dangling := 0
+	for mid, ch := range chains {
+		for _, e := range ch {
+			var p map[string]interface{}
+			raw, ok := e["payload_json"].(string)
+			if !ok {
+				continue
+			}
+			v, err := strictJSON([]byte(raw))
+			if err != nil {
+				continue
+			}
+			p, _ = v.(map[string]interface{})
+			if p == nil {
+				continue
+			}
+			if cs, ok := p["causes"].([]interface{}); ok {
+				for _, cv := range cs {
+					c, _ := cv.(map[string]interface{})
+					if c == nil {
+						continue
+					}
+					switch c["kind"] {
+					case "event":
+						tmid, _ := c["memory_id"].(string)
+						tseq, _ := c["seq"].(float64)
+						if !seqSet[tmid][tseq] {
+							dangling++
+						}
+					case "decision":
+						if !decSet[c["id"].(string)] {
+							dangling++
+						}
+					case "receipt":
+						if !recSet[c["id"].(string)] {
+							dangling++
+						}
+					}
+				}
+			}
+			if cb, ok := p["caused_by_decision_id"].(string); ok {
+				if !decSet[cb] {
+					dangling++
+				}
+			}
+			_ = mid
+		}
+	}
+	for _, lv := range ev["cell_links"].([]interface{}) {
+		l := lv.(map[string]interface{})
+		if !midSet[l["from_id"].(string)] ||
+			!midSet[l["to_id"].(string)] {
+			dangling++
+		}
+	}
+	check("CF1.7", dangling == 0)
+
 	// world as data
 	mems := []memory{}
 	for _, mv := range ev["memories"].([]interface{}) {

@@ -484,6 +484,73 @@ def verify_custody_rows(memory_id: str, rows: list[dict[str, Any]],
     return _chain.verify_rows(SPEC, memory_id, rows, event_types)
 
 
+def check_dangling_references(cur) -> list[str]:
+    """Every sealed reference must resolve to an object in the
+    evidence universe of its reference type. A dangling sealed
+    reference is an integrity failure, not an inert dependency —
+    "this cause does not exist" and "this cause has no effect" are
+    different epistemic states, and silent empty-set resolution
+    conflates them.
+
+    Reference classes checked:
+      causes[] {kind:"event"}     -> (memory_id, seq) in custody_chain
+      causes[] {kind:"decision"}  -> decisions.decision_id
+      causes[] {kind:"receipt"}   -> recall_receipts.receipt_sha256
+      caused_by_decision_id       -> decisions.decision_id
+      cell_links from_id/to_id    -> memories.memory_id
+
+    An event that existed and was later excised counterfactually is
+    NOT dangling — this check runs over the committed history, and
+    do() operates on live references only. Returns error strings."""
+    import json
+    errors: list[str] = []
+    seqs: dict[str, set] = {}
+    for mid, in cur.execute(
+            "SELECT DISTINCT memory_id FROM custody_chain"):
+        seqs[mid] = {r[0] for r in cur.execute(
+            "SELECT seq FROM custody_chain WHERE memory_id=?", (mid,))}
+    decs = {r[0] for r in cur.execute("SELECT decision_id FROM decisions")}
+    recs = {r[0] for r in cur.execute(
+        "SELECT receipt_sha256 FROM recall_receipts")}
+    mids = {r[0] for r in cur.execute("SELECT memory_id FROM memories")}
+
+    for mid, seq, pj in cur.execute(
+            "SELECT memory_id, seq, payload_json FROM custody_chain "
+            "ORDER BY memory_id, seq"):
+        p = json.loads(pj)
+        for c in p.get("causes") or []:
+            kind = c.get("kind")
+            if kind == "event":
+                tmid, tseq = c.get("memory_id"), c.get("seq")
+                if tmid not in seqs or tseq not in seqs.get(tmid, set()):
+                    errors.append(
+                        f"{mid} seq {seq}: dangling event-cause "
+                        f"({tmid}, seq {tseq}) — no such event")
+            elif kind == "decision":
+                if c.get("id") not in decs:
+                    errors.append(
+                        f"{mid} seq {seq}: dangling decision-cause "
+                        f"{c.get('id')!r} — no such decision")
+            elif kind == "receipt":
+                if c.get("id") not in recs:
+                    errors.append(
+                        f"{mid} seq {seq}: dangling receipt-cause "
+                        f"{c.get('id')!r} — no such receipt")
+        cb = p.get("caused_by_decision_id")
+        if cb is not None and cb not in decs:
+            errors.append(
+                f"{mid} seq {seq}: caused_by_decision_id {cb!r} "
+                f"references no recorded decision")
+    for fid, tid, lt in cur.execute(
+            "SELECT from_id, to_id, link_type FROM cell_links"):
+        for end, label in ((fid, "from_id"), (tid, "to_id")):
+            if end not in mids:
+                errors.append(
+                    f"cell_links {lt} {label}={end!r} references no "
+                    f"memory")
+    return errors
+
+
 def verify_custody_chain(cur, memory_id: str) -> tuple[bool, list[str]]:
     """Load and verify one memory's full custody chain."""
     return verify_custody_rows(memory_id, _chain.load_rows(cur, SPEC, memory_id))

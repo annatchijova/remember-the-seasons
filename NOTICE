@@ -35,6 +35,19 @@ Method / tooling corpus:
                  deterministic-core discipline. The audits in this
                  repository ran through those skills.
 
+External landscape references (read, not imported):
+
+  skill-graveyard / memory-graveyard
+               — https://github.com/sfrangulov/skill-graveyard (MIT)
+                 usage-audit tools for Claude Code skills, MCP
+                 servers, and memory files. Its Hallucinated/
+                 BROKEN_REFERENCE pattern (an index pointer to a
+                 file that does not exist) was adapted into
+                 MNEME as the dangling-reference integrity check:
+                 a sealed cause or link pointing at a nonexistent
+                 object is now an integrity error, never a silent
+                 inert dependency.
+
 Runtime:
 
   Nebius Token Factory — LLM + embeddings backend
