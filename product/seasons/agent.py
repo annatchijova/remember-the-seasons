@@ -59,7 +59,7 @@ class SeasonsAgent:
                     " sig) VALUES (?, ?, ?, ?)",
                     (entry.memory_id, entry.seq, self.keyid,
                      signing.sign_entry_hash(entry.entry_hash, _seed)))
-            custody.entry_signers[actor_id] = _sign
+            custody.entry_signers[actor_id] = (self.conn, _sign)
 
     def _next_memory_id(self) -> str:
         # the counter is a property of the FIELD, not of this process —

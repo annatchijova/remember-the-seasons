@@ -19,7 +19,7 @@ import tempfile
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 
-from seasons import agent
+from seasons import agent, trajectory
 
 
 def section(t):
@@ -31,8 +31,11 @@ def now() -> str:
         "%Y-%m-%dT%H:%M:%S.%f+00:00")
 
 
+DEMO_KEY_SEED = "dd" * 32  # fixed test-only Ed25519 seed
+
+
 def main():
-    a = agent.SeasonsAgent()
+    a = agent.SeasonsAgent(key_seed=DEMO_KEY_SEED)
     live = bool(os.environ.get("NEBIUS_API_KEY"))
     path_desc = ("Nebius Token Factory — Nemotron-3-Nano (chat) + "
                  "Qwen3-Embedding-8B" if live else
@@ -143,6 +146,29 @@ def main():
                        capture_output=True, text=True)
     print(r.stdout.strip() or r.stderr.strip())
     os.unlink(path)
+
+    section("8. Attribution — every write signed by its actor's key")
+    n_events = a.cur.execute(
+        "SELECT COUNT(*) FROM custody_chain").fetchone()[0]
+    n_sigs = a.cur.execute(
+        "SELECT COUNT(*) FROM event_sigs").fetchone()[0]
+    print(f"agent keyid: {a.keyid}")
+    print(f"custody events: {n_events}   event signatures: {n_sigs}")
+    row = a.cur.execute(
+        "SELECT seq, sig FROM event_sigs WHERE memory_id='mem-0000' "
+        "ORDER BY seq DESC LIMIT 1").fetchone()
+    vk_hex = a.cur.execute(
+        "SELECT verify_key_hex FROM actor_keys WHERE actor_id=?",
+        (a.actor,)).fetchone()[0]
+    last = trajectory.load_chain(a.cur, "mem-0000")[-1]
+    from nacl.signing import VerifyKey
+    ok = VerifyKey(bytes.fromhex(vk_hex)).verify(
+        last["entry_hash"].encode("ascii"),
+        bytes.fromhex(row[1])) is not None
+    print(f"latest entry on mem-0000 verifies under the agent's key:"
+          f" {ok}")
+    print("  'who wrote this' is a cryptographic answer — CF1.8 in the"
+          " verifiers enforces it on exported bundles too")
 
 
 if __name__ == "__main__":

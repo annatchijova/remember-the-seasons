@@ -287,7 +287,8 @@ def append_event(
         payload_json=payload_canon, prev_hash=prev_hash,
         entry_hash=entry_hash,
     )
-    _sig_fn = entry_signers.get(actor_id)
+    _reg = entry_signers.get(actor_id)
+    _sig_fn = _reg[1] if _reg and _reg[0] is cur.connection else None
     if _sig_fn is not None:
         # Per-actor Ed25519 attribution: the signer observes the sealed
         # entry inside the same transaction and may write an event_sigs
@@ -358,9 +359,11 @@ PROMOTION_THRESHOLD = Fraction(3, 4)
 
 # Per-actor Ed25519 attribution hooks, dispatched by the event's
 # actor_id so multiple agents sharing one process each sign with
-# their own key. A field that wants signed evidence registers a
-# callable(entry) -> None per actor. Empty = unsigned evidence (the
-# default, valid — unsigned is ORIGIN_UNTRUSTED, not invalid).
+# their own key. Values are (conn, callable): a signer fires ONLY for
+# appends on its own connection — two agents with the same actor_id
+# on different connections must not sign into each other's field.
+# Empty = unsigned evidence (the default, valid — unsigned is
+# ORIGIN_UNTRUSTED, not invalid).
 entry_signers: dict = {}
 
 
