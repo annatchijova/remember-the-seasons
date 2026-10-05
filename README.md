@@ -158,7 +158,11 @@ bash conformance/cf/v1/differential.sh          # Python ↔ Go, 21/21
 Deep architecture, protocol versions, threat model, determinism
 scope, and the honest list of what this does not guarantee:
 **[TECHNICAL.md](TECHNICAL.md)**. A section-by-section reading of the
-demo: **[docs/DEMO.md](docs/DEMO.md)**.
+demo: **[docs/DEMO.md](docs/DEMO.md)**. A sealed evidence artifact the
+judges can verify without running anything: open
+**`product/bundle_viewer.html`**, drop in
+**`docs/demo-bundle.dsse.json`** — the page recomputes every seal in
+the browser (digest, chains, references, Ed25519 attribution).
 
 ## Rules in force here
 
