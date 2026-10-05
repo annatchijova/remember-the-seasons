@@ -42,7 +42,12 @@ def main():
     r1 = a.ask(q)
     print(f"ask: {q!r}")
     print(f"answer: {r1['answer']}")
-    print(f"served: {r1['served']}")
+    print(f"served:    {r1['served']}  <- what retrieval offered")
+    print(f"used:      {r1['used']}     <- the model's claim")
+    print(f"reinforced:{r1['reinforced']}  <- what the deterministic "
+          f"engine honored")
+    print("  the model may declare; it cannot manufacture authority —")
+    print("  only corroborated use changes the field")
     print(f"receipt: {r1['receipt'][:24]}…")
     t1 = now()   # the cut between seasons
 
