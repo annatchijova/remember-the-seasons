@@ -1,5 +1,7 @@
 # Remember the Seasons
 
+![Remember the Seasons](visual/banner.png)
+
 **[English](README.md)** · **Español** · **[Technical README](TECHNICAL.md)**
 
 > Nos pidieron construir la próxima frontera de la IA. No podemos

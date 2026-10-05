@@ -1,5 +1,7 @@
 # Technical README — Remember the Seasons
 
+![Remember the Seasons](visual/banner.png)
+
 Deep architecture, protocol contracts, invariants, determinism scope,
 and the honest list of what this system does not guarantee. Audience:
 the reader auditing or extending the product layer (`product/`).

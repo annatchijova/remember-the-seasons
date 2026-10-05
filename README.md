@@ -1,5 +1,7 @@
 # Remember the Seasons
 
+![Remember the Seasons](visual/banner.png)
+
 **English** · **[Español](README.es.md)** · **[Technical README](TECHNICAL.md)**
 
 > We were asked to build the next frontier of AI. We cannot claim to
