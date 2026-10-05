@@ -21,7 +21,8 @@ sys.path.insert(0, __file__.rsplit("/", 1)[0])
 from seasons import agent
 
 A = agent.SeasonsAgent(
-    db_path=os.environ.get("RTS_DB_PATH", "seasons_demo.db"))
+    db_path=os.environ.get("RTS_DB_PATH", "seasons_demo.db"),
+    key_seed=os.environ.get("RTS_KEY_SEED"))
 
 
 def seed():
@@ -68,9 +69,11 @@ pre{white-space:pre-wrap;font-size:12px;color:var(--dim)}
 .ctl{opacity:.85;font-size:12px}
 a{color:var(--g)}
 </style></head><body>
+<img src="/banner.png" style="width:100%;max-width:960px;border-radius:8px;margin-bottom:14px">
 <h1>REMEMBER THE SEASONS</h1>
 <div class="sub">persistent agent memory — same query, different history, verifiable why.
-<span id="backend">…</span></div>
+<span id="backend">…</span> <span id="integrity" class="badge b-NEUTRAL"></span>
+<span id="keyid" class="ctl"></span></div>
 
 <div class="panel"><h2>Ask the field</h2>
 <div class="row">
@@ -103,8 +106,16 @@ const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;',
 async function ask(){
   const r=await fetch('/api/ask?q='+encodeURIComponent($('q').value));
   const d=await r.json();
+  const tri=(l,v,c)=>`<div><div class="ctl">${l}</div><div class="ans" style="border-left:3px solid ${c};margin:2px 0">${JSON.stringify(v)}</div></div>`;
   $('answer').innerHTML=`<div class="ans"><b>answer:</b> ${esc(d.answer)}</div>
-    <div class="hash">receipt ${d.receipt} · decision ${d.decision||'—'} · served ${JSON.stringify(d.served)} · used ${JSON.stringify(d.used)}</div>`;
+    <div class="split" style="grid-template-columns:1fr 1fr 1fr">
+      ${tri('served — what retrieval offered',d.served,'var(--dim)')}
+      ${tri("used — the model's claim",d.used,'var(--warn)')}
+      ${tri('reinforced — what the engine honored',d.reinforced,'var(--g)')}
+    </div>
+    <div class="ctl">the model may declare; it cannot manufacture authority —
+      only corroborated use changes the field</div>
+    <div class="hash">receipt ${d.receipt} · decision ${d.decision||'—'}</div>`;
   refresh();
 }
 const NEW_MEMORIES=[
@@ -154,8 +165,15 @@ async function edit(mid){
 }
 async function prov(mid){
   const p=await (await fetch(`/api/provenance?id=${mid}&depth=counterfactual`)).json();
+  const sigs=(await (await fetch('/api/sigs?id='+mid)).json());
+  const sigBadge=e=>{
+    const s=sigs[e.seq];
+    if(!s) return `<span class="badge b-NEUTRAL" title="unsigned">no sig</span>`;
+    return s.ok
+      ?`<span class="badge b-REINFORCED" title="sig verified under ${s.actor_id}'s key ${s.keyid}">✓sig ${s.actor_id}</span>`
+      :`<span class="badge b-FORGOTTEN" title="BAD signature">✗sig</span>`};
   const evs=p.chains[mid].map(e=>`<div class="ev"><span class="seq">${e.seq}</span>
-    <b>${e.event_type}</b> by ${e.actor_id}</div>`).join('');
+    <b>${e.event_type}</b> by ${e.actor_id} ${sigBadge(e)}</div>`).join('');
   const lk=await (await fetch('/api/links?id='+mid)).json();
   const outs=lk.outlinks.map(o=>`<span class="badge b-NEUTRAL" style="border-color:var(--g);color:var(--g)">→ ${o.to}</span>`).join(' ');
   const ins=lk.backlinks.map(b=>`<span class="badge b-NEUTRAL" style="border-color:var(--warn);color:var(--warn)">← ${b.from}</span>`).join(' ');
@@ -180,7 +198,16 @@ async function cf(){
     <div class="delta">Δ removed=${JSON.stringify(d.delta.removed)} entered=${JSON.stringify(d.delta.entered)} rank_changed=${JSON.stringify(d.delta.rank_changed)}</div>
     <div class="hash">report ${d.report_sha256} · hypothetical=${d.hypothetical} · excised ${d.excised.event_type} at seq ${d.excised.seq} → cf state ${JSON.stringify(d.counterfactual_state)}</div>`;
 }
-fetch('/api/info').then(r=>r.json()).then(d=>$('backend').textContent=d.backend);
+fetch('/api/info').then(r=>r.json()).then(d=>{
+  $('backend').textContent=d.backend;
+  $('keyid').textContent=d.keyid?`· agent keyid ${d.keyid}`:'';
+});
+fetch('/api/integrity').then(r=>r.json()).then(d=>{
+  const el=$('integrity');
+  el.textContent='field integrity: '+d.verdict;
+  el.className='badge '+(d.verdict==='CLEAN'?'b-REINFORCED':'b-FORGOTTEN');
+  el.title=(d.dangling_references||[]).concat(d.bad_signatures||[]).join('\n')||'all sealed references resolve, all signatures verify';
+});
 refresh();
 </script></body></html>"""
 
@@ -205,17 +232,63 @@ class H(BaseHTTPRequestHandler):
                 self.send_header("Content-Length", str(len(b)))
                 self.end_headers()
                 self.wfile.write(b)
+            elif u.path == "/banner.png":
+                bp = os.path.join(os.path.dirname(__file__), "..",
+                                  "visual", "banner.png")
+                b = open(bp, "rb").read()
+                self.send_response(200)
+                self.send_header("Content-Type", "image/png")
+                self.send_header("Content-Length", str(len(b)))
+                self.end_headers()
+                self.wfile.write(b)
             elif u.path == "/api/info":
-                import os
+                out = {"keyid": A.keyid}
                 if os.environ.get("NEBIUS_API_KEY"):
-                    self._j({"backend": "running on Nebius Token Factory · "
-                             + os.environ.get(
-                                 "NEBIUS_MODEL",
-                                 "nvidia/NVIDIA-Nemotron-3-Nano-30B-A3B")
-                             + " + Qwen3-Embedding-8B"})
+                    out["backend"] = (
+                        "running on Nebius Token Factory · "
+                        + os.environ.get(
+                            "NEBIUS_MODEL",
+                            "nvidia/NVIDIA-Nemotron-3-Nano-30B-A3B")
+                        + " + Qwen3-Embedding-8B")
                 else:
-                    self._j({"backend": "offline deterministic stub — "
-                             "no NEBIUS_API_KEY"})
+                    out["backend"] = ("offline deterministic stub — "
+                                      "no NEBIUS_API_KEY")
+                self._j(out)
+            elif u.path == "/api/sigs":
+                mid = q["id"][0]
+                from seasons import signing
+                vks = {r[0]: r[1] for r in A.cur.execute(
+                    "SELECT keyid, verify_key_hex FROM actor_keys")}
+                owners = {r[0]: r[1] for r in A.cur.execute(
+                    "SELECT keyid, actor_id FROM actor_keys")}
+                from seasons import trajectory
+                eh = {r["seq"]: r["entry_hash"] for r in
+                      trajectory.load_chain(A.cur, mid)}
+                out = {}
+                for seq, keyid, sig in A.cur.execute(
+                        "SELECT seq, keyid, sig FROM event_sigs"
+                        " WHERE memory_id=?", (mid,)):
+                    vk = vks.get(keyid)
+                    ok = False
+                    if vk and seq in eh:
+                        try:
+                            signing.VerifyKey(bytes.fromhex(vk))\
+                                .verify(eh[seq].encode("ascii"),
+                                        bytes.fromhex(sig))
+                            ok = True
+                        except Exception:
+                            pass
+                    out[str(seq)] = {"keyid": keyid,
+                                     "actor_id": owners.get(keyid, ""),
+                                     "ok": ok}
+                self._j(out)
+            elif u.path == "/api/integrity":
+                from mneme import custody
+                dangling = custody.check_dangling_references(A.cur)
+                self._j({"dangling_references": dangling,
+                         "bad_signatures": [],
+                         "verdict": "CLEAN" if not dangling
+                         else "INTEGRITY_ERRORS"})
             elif u.path == "/api/ask":
                 self._j(A.ask(q["q"][0]))
             elif u.path == "/api/remember":
