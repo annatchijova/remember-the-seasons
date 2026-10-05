@@ -20,21 +20,43 @@ from typing import Any
 
 from mneme import causality, counterfactual, custody, field
 
-from . import actors, db, embed, llm
+from . import actors, db, embed, llm, signing
 
 POLICY_VERSION = "seasons/0.1"
 
 
 class SeasonsAgent:
     def __init__(self, db_path: str = ":memory:",
-                 actor_id: str = actors.AGENT):
+                 actor_id: str = actors.AGENT,
+                 key_seed: str | None = None):
         self.actor = actor_id
+        self.keyid = None
         self.conn: sqlite3.Connection = db.open_db(db_path)
         self.cur = self.conn.cursor()
         self.cur.execute("SELECT COUNT(*) FROM actors")
         if self.cur.fetchone()[0] == 0:
             actors.bootstrap(self.cur)
             self.conn.commit()
+        if key_seed is not None:
+            # per-actor Ed25519: this agent's writes are attributable —
+            # the key registers in the field, the signer signs each of
+            # THIS actor's events inside their own transaction
+            vk = signing.verify_key_hex(key_seed)
+            self.keyid = vk[:16]
+            self.cur.execute(
+                "INSERT OR IGNORE INTO actor_keys "
+                "(actor_id, keyid, verify_key_hex, created_at) "
+                "VALUES (?, ?, ?, ?)",
+                (actor_id, self.keyid, vk, custody.now_ts()))
+            self.conn.commit()
+
+            def _sign(entry, _cur=self.cur, _seed=key_seed):
+                _cur.execute(
+                    "INSERT INTO event_sigs (memory_id, seq, keyid,"
+                    " sig) VALUES (?, ?, ?, ?)",
+                    (entry.memory_id, entry.seq, self.keyid,
+                     signing.sign_entry_hash(entry.entry_hash, _seed)))
+            custody.entry_signers[actor_id] = _sign
 
     def _next_memory_id(self) -> str:
         # the counter is a property of the FIELD, not of this process —

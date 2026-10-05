@@ -109,3 +109,19 @@ def load_trusted_keys(path: str | None = None) -> dict[str, str]:
         import json
         return json.loads(os.environ["RTS_TRUSTED_KEYS"])
     return {}
+
+
+def sign_entry_hash(entry_hash_hex: str, seed_hex: str) -> str:
+    """Ed25519 over the custody entry_hash (the hex string's ASCII
+    bytes — what the chain itself commits). Attribution, not
+    tamper-evidence: the chain proves integrity, the sig proves who."""
+    if not _HAVE_NACL:
+        raise RuntimeError("pynacl not available — cannot sign.")
+    sk = SigningKey(bytes.fromhex(seed_hex))
+    return sk.sign(entry_hash_hex.encode("ascii")).signature.hex()
+
+
+def verify_key_hex(seed_hex: str) -> str:
+    if not _HAVE_NACL:
+        raise RuntimeError("pynacl not available.")
+    return SigningKey(bytes.fromhex(seed_hex)).verify_key.encode().hex()

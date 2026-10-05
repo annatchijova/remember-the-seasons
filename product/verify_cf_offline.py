@@ -512,6 +512,34 @@ def main(path, keys_path=None, fmt="text"):
     check("CF1.7 every sealed reference resolves", not dangling,
           f"{len(dangling)} dangling: {dangling[:4]}")
 
+    # CF1.8 — per-actor attribution. If actor_keys declares a key for
+    # an actor, every event BY that actor must carry an event_sig that
+    # verifies over the entry_hash under one of that actor's keys.
+    # Events by keyless actors are unsigned and legal — attribution is
+    # declared capability, not global mandate. The bundle's DSSE
+    # envelope signs the whole; these sigs sign WHO WROTE WHAT inside.
+    _key_actor = {}
+    for k in ev.get("actor_keys") or []:
+        _key_actor.setdefault(k["actor_id"], {})[
+            k["keyid"]] = k["verify_key_hex"]
+    _sigs = {}
+    for s in ev.get("event_sigs") or []:
+        _sigs[(s["memory_id"], s["seq"])] = s
+    bad_sig = []
+    for mid, ch in chains.items():
+        for e in ch:
+            akeys = _key_actor.get(e["actor_id"])
+            if not akeys:
+                continue
+            s = _sigs.get((mid, e["seq"]))
+            vk = akeys.get(s["keyid"]) if s else None
+            if vk is None or not _ed25519_verify(
+                    e["entry_hash"].encode("ascii"),
+                    bytes.fromhex(s["sig"]), bytes.fromhex(vk)):
+                bad_sig.append((mid, e["seq"]))
+    check("CF1.8 every keyed actor's events carry valid signatures",
+          not bad_sig, f"{len(bad_sig)} bad: {bad_sig[:4]}")
+
     # The world as data: memory dicts whose states the verifier sets.
     memories = []
     for m in ev["memories"]:

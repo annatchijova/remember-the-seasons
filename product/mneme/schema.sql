@@ -211,6 +211,30 @@ CREATE TABLE IF NOT EXISTS cell_links (
     PRIMARY KEY (from_id, to_id)
 );
 
+-- actor_keys / event_sigs — per-actor Ed25519 attribution. The custody
+-- chain's hashes already give tamper-evidence; signatures add
+-- attribution: this actor's key signed this entry_hash. Sigs cover the
+-- entry_hash AFTER hashing — a side table, never inside the sealed
+-- payload (a signature cannot cover the bytes that contain it).
+-- -----------------------------------------------------------------------------
+CREATE TABLE IF NOT EXISTS actor_keys (
+    actor_id       TEXT NOT NULL REFERENCES actors(actor_id),
+    keyid          TEXT NOT NULL,
+    verify_key_hex TEXT NOT NULL CHECK (length(verify_key_hex) = 64),
+    created_at     TEXT NOT NULL,
+    PRIMARY KEY (actor_id, keyid)
+);
+
+CREATE TABLE IF NOT EXISTS event_sigs (
+    memory_id TEXT NOT NULL,
+    seq       INTEGER NOT NULL,
+    keyid     TEXT NOT NULL,
+    sig       TEXT NOT NULL,
+    PRIMARY KEY (memory_id, seq),
+    FOREIGN KEY (memory_id, seq)
+        REFERENCES custody_chain(memory_id, seq)
+);
+
 -- -----------------------------------------------------------------------------
 -- taint_sweeps — each quarantine of an actor produces ONE sweep row and
 -- N TAINT_FLAGGED custody events, all in one transaction. The sweep is

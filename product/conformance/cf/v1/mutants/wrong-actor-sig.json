@@ -1,5 +1,5 @@
 {
- "bundle_sha256": "b48d9a41a2df66c38374b5aa6c24afcb609bcb1eb392349b5be6a1d3b6764103",
+ "bundle_sha256": "9f860192943ea3db97e8625f0cefd1d024932f23304805a98daf8834a0f90dd1",
  "evidence": {
   "actor_keys": [
    {
@@ -128,7 +128,7 @@
      "entry_hash": "1c22fdcd2579c84f153d045ef423d41cae77f8adf6df9158bfa35f0a5b3acdeb",
      "event_type": "REINFORCED",
      "memory_id": "mem-0000",
-     "payload_json": "{\"confidence_after\":\"0.7890625000\",\"confidence_before\":\"0.7187500000\",\"grant_id\":\"grant-000000000001\"}",
+     "payload_json": "{\"caused_by_decision_id\":\"dec-0002\",\"causes\":[{\"id\":\"dec-0002\",\"kind\":\"decision\"}],\"confidence_after\":\"0.7890625000\",\"confidence_before\":\"0.7187500000\",\"grant_id\":\"grant-000000000001\"}",
      "prev_hash": "af45093d8eee43ecffa661e42df73b04b4dfe962de7552536da896d3245f2de3",
      "reason": "used in a decision this turn",
      "seq": 8
@@ -753,7 +753,7 @@
     "keyid": "7d59c5623dd40a74",
     "memory_id": "mem-0000",
     "seq": 0,
-    "sig": "679798f0d823009cd385218e1f9068c857edc3e872a9423cb23f1ea9f708a2efe3bbe0e9830a3818d34d8ccdbcf16dd61952bf3f76a1f2d7c4f2c66239d60806"
+    "sig": "5a39373fda3dfc2a7e414c9f821b8134a37847752d94b75cf7ceab4e2ceef0721b26b834dec67d205455ad2be42cbee3f637699236b778e8f2f1a31caa2c7d01"
    },
    {
     "keyid": "7d59c5623dd40a74",

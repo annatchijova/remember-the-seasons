@@ -455,6 +455,61 @@ print()
 if FAIL:
     print(f"{len(FAIL)} FAILED: {FAIL}")
     sys.exit(1)
+
+# S14 — attribution: each agent's writes are signed under ITS OWN
+# key. Two agents, two seeds, one shared field — a verifier can ask
+# "who wrote this?" and get a cryptographic answer, not a string in
+# a column.
+import tempfile
+db_sig = os.path.join(tempfile.mkdtemp(), "sig-field.db")
+field_boot = agent.SeasonsAgent(db_sig, actor_id="seasons-agent",
+                              key_seed="aa" * 32)
+authority.register_actor(
+    field_boot.cur, actor_id="agent-b", display_name="Agent B",
+    kind="AGENT", issuer_id=actors.ROOT,
+    reason="second keyed writer on the shared field")
+authority.grant(
+    field_boot.cur, subject_id="agent-b",
+    capabilities=["STORE", "REINFORCE", "DECIDE"],
+    issuer_id=actors.ROOT, reason="same capabilities")
+field_boot.conn.commit()
+
+mem_signed = field_boot.remember("signed by A")
+
+# second agent, same field file, own connection, own key — the
+# signer dispatch routes by actor_id, each writes on its own conn
+b2 = agent.SeasonsAgent(db_sig, actor_id="agent-b",
+                        key_seed="bb" * 32)
+mem_b = b2.remember("signed by B")
+
+sigs_a = field_boot.cur.execute(
+    "SELECT k.actor_id FROM event_sigs s JOIN actor_keys k "
+    "ON k.keyid = s.keyid WHERE s.memory_id=?",
+    (mem_signed,)).fetchall()
+sigs_b = b2.cur.execute(
+    "SELECT k.actor_id FROM event_sigs s JOIN actor_keys k "
+    "ON k.keyid = s.keyid WHERE s.memory_id=?",
+    (mem_b,)).fetchall()
+check("S14 every event signed, key belongs to its actor",
+      all(r[0] == "seasons-agent" for r in sigs_a)
+      and all(r[0] == "agent-b" for r in sigs_b)
+      and sigs_a and sigs_b)
+
+from nacl.signing import VerifyKey
+vka = VerifyKey(bytes.fromhex(field_boot.cur.execute(
+    "SELECT verify_key_hex FROM actor_keys "
+    "WHERE actor_id='seasons-agent'").fetchone()[0]))
+chain_a = trajectory.load_chain(field_boot.cur, mem_signed)
+sig_rows = field_boot.cur.execute(
+    "SELECT seq, sig FROM event_sigs WHERE memory_id=? ORDER BY seq",
+    (mem_signed,)).fetchall()
+ok_sig = all(
+    vka.verify(chain_a[s]["entry_hash"].encode("ascii"),
+               bytes.fromhex(sg)) is not None
+    for s, sg in sig_rows)
+check("S15 signatures verify over entry_hash under the actor's key",
+      ok_sig)
+
 print(f"all stigmergy invariants held — the field is the only "
       f"coordination substrate. ({PASS} checks)")
 sys.exit(0)

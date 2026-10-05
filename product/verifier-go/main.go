@@ -913,6 +913,54 @@ func main() {
 	}
 	check("CF1.7", dangling == 0)
 
+	// CF1.8 — per-actor attribution: when actor_keys declares a key
+	// for an actor, every event by that actor must carry an
+	// event_sig verifying over its entry_hash under one of the
+	// actor's keys. Keyless actors' events are unsigned and legal.
+	keyByActor := map[string]map[string]string{}
+	for _, kv := range ev["actor_keys"].([]interface{}) {
+		k := kv.(map[string]interface{})
+		aid := k["actor_id"].(string)
+		if keyByActor[aid] == nil {
+			keyByActor[aid] = map[string]string{}
+		}
+		keyByActor[aid][k["keyid"].(string)] =
+			k["verify_key_hex"].(string)
+	}
+	sigMap := map[string]map[string]interface{}{}
+	for _, sv := range ev["event_sigs"].([]interface{}) {
+		s := sv.(map[string]interface{})
+		sigMap[s["memory_id"].(string)+"/"+
+			fmt.Sprint(int64(s["seq"].(float64)))] = s
+	}
+	badSig := 0
+	for mid, ch := range chains {
+		for _, e := range ch {
+			akeys := keyByActor[e["actor_id"].(string)]
+			if len(akeys) == 0 {
+				continue
+			}
+			s := sigMap[mid+"/"+fmt.Sprint(int64(seqOf(e)))]
+			ok := false
+			if s != nil {
+				vkHex := akeys[s["keyid"].(string)]
+				vk, _ := hex.DecodeString(vkHex)
+				sigBytes, _ := hex.DecodeString(s["sig"].(string))
+				if len(vk) == ed25519.PublicKeySize &&
+					len(sigBytes) == ed25519.SignatureSize &&
+					ed25519.Verify(ed25519.PublicKey(vk),
+						[]byte(e["entry_hash"].(string)),
+						sigBytes) {
+					ok = true
+				}
+			}
+			if !ok {
+				badSig++
+			}
+		}
+	}
+	check("CF1.8", badSig == 0)
+
 	// world as data
 	mems := []memory{}
 	for _, mv := range ev["memories"].([]interface{}) {

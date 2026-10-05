@@ -551,6 +551,16 @@ def export_cf_bundle(cur, *, memory_id: str, excise_seq: int,
         **protocol.CURRENT_PROTOCOLS,
     }
 
+    # per-actor attribution: registered keys + per-event signatures
+    cur.execute(
+        "SELECT actor_id, keyid, verify_key_hex FROM actor_keys")
+    actor_keys = [dict(zip(["actor_id", "keyid", "verify_key_hex"], r))
+                  for r in cur.fetchall()]
+    cur.execute(
+        "SELECT memory_id, seq, keyid, sig FROM event_sigs")
+    event_sigs = [dict(zip(["memory_id", "seq", "keyid", "sig"], r))
+                  for r in cur.fetchall()]
+
     bundle = {
         "protocol": "mneme-cf-bundle/v1",
         "semantics": semantics,
@@ -559,7 +569,8 @@ def export_cf_bundle(cur, *, memory_id: str, excise_seq: int,
         "evidence": {
             "memories": mems, "actors": actor_rows, "chains": chains,
             "cell_links": links, "decisions": decisions,
-            "receipts": receipts},
+            "receipts": receipts, "actor_keys": actor_keys,
+            "event_sigs": event_sigs},
     }
     bundle["bundle_sha256"] = hashlib.sha256(
         canonical_json(bundle).encode("utf-8")).hexdigest()

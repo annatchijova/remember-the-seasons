@@ -63,7 +63,8 @@ def build(out_dir):
     from seasons import agent, trajectory
     from mneme.canonical import canonical_json
 
-    a = agent.SeasonsAgent()
+    a = agent.SeasonsAgent(
+        key_seed=OPS["agent_seed_test_only"])
     intervention = {}
     for op in OPS["operations"]:
         kind = op["op"]
@@ -224,6 +225,11 @@ def build(out_dir):
                 created_at=e["created_at"],
                 payload=json.loads(e["payload_json"]))
             prev = e["entry_hash"]
+    # a true v1 bundle predates the attribution layer — no per-actor
+    # keys, no per-event signatures (and the copied sigs would cover
+    # the pre-rewrite hashes anyway)
+    legacy["evidence"].pop("actor_keys", None)
+    legacy["evidence"].pop("event_sigs", None)
     legacy.pop("bundle_sha256", None)
     legacy["bundle_sha256"] = hashlib.sha256(
         canonical_json(legacy).encode()).hexdigest()
@@ -351,6 +357,20 @@ def build(out_dir):
                 payload=json.loads(e["payload_json"]))
             prev = e["entry_hash"]
     mutant("phantom-cause", _phantom_cause, "CF1.7")
+
+    def _wrong_actor_sig(bb):
+        # a real Ed25519 signature over the right entry_hash — but
+        # under a key that belongs to NOBODY here. The chain is
+        # untouched; attribution is the only lie.
+        from nacl.signing import SigningKey
+        rogue = SigningKey(bytes.fromhex("cc" * 32))
+        ev = bb["evidence"]
+        first = ev["event_sigs"][0]
+        e = next(e for e in ev["chains"][first["memory_id"]]
+                 if e["seq"] == first["seq"])
+        first["sig"] = rogue.sign(
+            e["entry_hash"].encode("ascii")).signature.hex()
+    mutant("wrong-actor-sig", _wrong_actor_sig, "CF1.8")
 
     mutant("coherent-false",
            lambda bb: (bb["report"].__setitem__(

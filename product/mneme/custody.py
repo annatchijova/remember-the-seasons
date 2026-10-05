@@ -281,12 +281,21 @@ def append_event(
         actor_id=actor_id, reason=reason, payload=payload,
         created_at=created_at)
 
-    return CustodyEntry(
+    entry = CustodyEntry(
         memory_id=memory_id, seq=seq, event_type=event_type,
         actor_id=actor_id, reason=reason, created_at=ts,
         payload_json=payload_canon, prev_hash=prev_hash,
         entry_hash=entry_hash,
     )
+    _sig_fn = entry_signers.get(actor_id)
+    if _sig_fn is not None:
+        # Per-actor Ed25519 attribution: the signer observes the sealed
+        # entry inside the same transaction and may write an event_sigs
+        # row — signatures cover the entry_hash AFTER hashing (a sig
+        # cannot cover the bytes that contain it), so attribution lives
+        # beside the chain, never inside it.
+        _sig_fn(entry)
+    return entry
 
 
 # Custody-status transitions that are only legal from specific
@@ -346,6 +355,13 @@ INITIAL_CONFIDENCE = "0.5000000000"
 # mutant that turns the comparison from >= into > is caught by this and by
 # nothing else, which is exactly how the mutation suite found it.
 PROMOTION_THRESHOLD = Fraction(3, 4)
+
+# Per-actor Ed25519 attribution hooks, dispatched by the event's
+# actor_id so multiple agents sharing one process each sign with
+# their own key. A field that wants signed evidence registers a
+# callable(entry) -> None per actor. Empty = unsigned evidence (the
+# default, valid — unsigned is ORIGIN_UNTRUSTED, not invalid).
+entry_signers: dict = {}
 
 
 def replay_state(chain: list[dict[str, Any]],

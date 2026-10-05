@@ -1,6 +1,13 @@
 {
- "bundle_sha256": "a83ca45f2e4ca7d511320da89f051fe13f8bb0a780c9fd2189072be9c7e49f4c",
+ "bundle_sha256": "62321abb40f3a23b3851cc24810aeded2b774c7d99aa3e0a229a83d72c54fa0d",
  "evidence": {
+  "actor_keys": [
+   {
+    "actor_id": "seasons-agent",
+    "keyid": "7d59c5623dd40a74",
+    "verify_key_hex": "7d59c5623dd40a74aa4d5a32ac645d3b3f95daeae4c22be25476dd6a486f7382"
+   }
+  ],
   "actors": [
    {
     "actor_id": "seasons-root",
@@ -29,8 +36,8 @@
    "mem-0000": [
     {
      "actor_id": "seasons-agent",
-     "created_at": "2026-01-01T00:00:00.000005+00:00",
-     "entry_hash": "3750c71992006b06c79b65050f4574c23dde9d8fadf483c23c35be4e234a2ce5",
+     "created_at": "2026-01-01T00:00:00.000006+00:00",
+     "entry_hash": "ad9536a676f5b4c659cd918972ec4af32fe8c8dc2448d368bfb0a88d19ab21b5",
      "event_type": "STORED",
      "memory_id": "mem-0000",
      "payload_json": "{\"content_sha256\":\"1d1cedfb88861b2daa16074dffccf8ec1181f72e2854874c4255354bc1444335\",\"embedding_model\":\"seasons-local\",\"embedding_provenance\":{\"dimension\":64,\"input_content_hash\":\"1d1cedfb88861b2daa16074dffccf8ec1181f72e2854874c4255354bc1444335\",\"model\":\"seasons-local-hash\",\"output_vector_hash\":\"b34dd8df8e31895f860e2d6440124bd6f39263cf2bdfd28a4bc0b10a61c191ce\",\"preprocessing\":\"none\",\"provider\":\"local-deterministic\",\"quantization_protocol\":\"canonical-decimal/scale=10/rounding=ROUND_HALF_EVEN\",\"revision\":\"unknown\"},\"grant_id\":\"grant-000000000001\"}",
@@ -40,89 +47,89 @@
     },
     {
      "actor_id": "seasons-agent",
-     "created_at": "2026-01-01T00:00:00.000011+00:00",
-     "entry_hash": "23e3d7595bca19de5f5831b7432d52cdc4458e56bedae9046354a94f20a2c7df",
+     "created_at": "2026-01-01T00:00:00.000012+00:00",
+     "entry_hash": "9193e3ede1ae9fa90664705842c2c29907b561d51be6eb63cf44f6b2c9a0c3e0",
      "event_type": "REHABILITATED",
      "memory_id": "mem-0000",
      "payload_json": "{}",
-     "prev_hash": "3803563fd6120bc33fede1e969707d2b2e4a1539249e18bbfd4a6b754e18bf22",
+     "prev_hash": "c34574ebb55c8768d0f14ef3b1fda36642c983657c7ef54b45040d44ccdad2b8",
      "reason": "reviewed",
      "seq": 2
     },
     {
      "actor_id": "seasons-agent",
-     "created_at": "2026-01-01T00:00:00.000013+00:00",
-     "entry_hash": "25e94b84083a11df5a9df547b395f834a1ca77e825d858227bf2a2aa09e78492",
+     "created_at": "2026-01-01T00:00:00.000014+00:00",
+     "entry_hash": "bee02c16ea0e189563100bdf87f78de97d06acd6060bb6705b37f696b5b2ec95",
      "event_type": "DECISION_USED_MEMORY",
      "memory_id": "mem-0000",
      "payload_json": "{\"causes\":[{\"id\":\"dec-0000\",\"kind\":\"decision\"},{\"id\":\"ab1e0792a2300ec893540a09a1e34fe2ac02c15fad404e0dc736dccbb7cbd1b6\",\"kind\":\"receipt\"}],\"decision_id\":\"dec-0000\",\"decision_sha256\":\"3536c1955a42a8dc548be62d7b26afa5750a6ba021cc5144c231f3838664f825\",\"grant_id\":\"grant-000000000001\",\"policy_version\":\"seasons/0.1\",\"receipt_sha256\":\"ab1e0792a2300ec893540a09a1e34fe2ac02c15fad404e0dc736dccbb7cbd1b6\"}",
-     "prev_hash": "23e3d7595bca19de5f5831b7432d52cdc4458e56bedae9046354a94f20a2c7df",
+     "prev_hash": "9193e3ede1ae9fa90664705842c2c29907b561d51be6eb63cf44f6b2c9a0c3e0",
      "reason": "answered: deploy gate staging?",
      "seq": 3
     },
     {
      "actor_id": "seasons-agent",
-     "created_at": "2026-01-01T00:00:00.000015+00:00",
-     "entry_hash": "a7ac6fd7d0cd47ce0568c009dc29cdc47e9d0600b468e1ab77e3d075275fce0f",
+     "created_at": "2026-01-01T00:00:00.000016+00:00",
+     "entry_hash": "ef73c1649f8d6d6ed3d6cdc3996b682a6e78b4096a0a5afec40a5aa61a5035ca",
      "event_type": "REINFORCED",
      "memory_id": "mem-0000",
      "payload_json": "{\"caused_by_decision_id\":\"dec-0000\",\"causes\":[{\"id\":\"dec-0000\",\"kind\":\"decision\"}],\"confidence_after\":\"0.6250000000\",\"confidence_before\":\"0.5000000000\",\"grant_id\":\"grant-000000000001\"}",
-     "prev_hash": "25e94b84083a11df5a9df547b395f834a1ca77e825d858227bf2a2aa09e78492",
+     "prev_hash": "bee02c16ea0e189563100bdf87f78de97d06acd6060bb6705b37f696b5b2ec95",
      "reason": "used in a decision this turn",
      "seq": 4
     },
     {
      "actor_id": "seasons-agent",
-     "created_at": "2026-01-01T00:00:00.000020+00:00",
-     "entry_hash": "2cb1a5787da773ae7f74aaeb78c56e31fd5418954716b5985e1e8733a22c826c",
+     "created_at": "2026-01-01T00:00:00.000021+00:00",
+     "entry_hash": "fe754d86213077d59d6ff5441d90de11b550b313d12565738bf5691b140ea12b",
      "event_type": "DECISION_USED_MEMORY",
      "memory_id": "mem-0000",
      "payload_json": "{\"causes\":[{\"id\":\"dec-0001\",\"kind\":\"decision\"},{\"id\":\"ab1e0792a2300ec893540a09a1e34fe2ac02c15fad404e0dc736dccbb7cbd1b6\",\"kind\":\"receipt\"}],\"decision_id\":\"dec-0001\",\"decision_sha256\":\"3536c1955a42a8dc548be62d7b26afa5750a6ba021cc5144c231f3838664f825\",\"grant_id\":\"grant-000000000001\",\"policy_version\":\"seasons/0.1\",\"receipt_sha256\":\"ab1e0792a2300ec893540a09a1e34fe2ac02c15fad404e0dc736dccbb7cbd1b6\"}",
-     "prev_hash": "a7ac6fd7d0cd47ce0568c009dc29cdc47e9d0600b468e1ab77e3d075275fce0f",
+     "prev_hash": "ef73c1649f8d6d6ed3d6cdc3996b682a6e78b4096a0a5afec40a5aa61a5035ca",
      "reason": "answered: deploy gate staging?",
      "seq": 5
     },
     {
      "actor_id": "seasons-agent",
-     "created_at": "2026-01-01T00:00:00.000022+00:00",
-     "entry_hash": "d6a88693bc2382407c81ce25daa964517aab06a58b48011118cae9a1cf2af9aa",
+     "created_at": "2026-01-01T00:00:00.000023+00:00",
+     "entry_hash": "48835d87993ecea5350284ccdb953fd0c9958539788a80a561368ee7a920867c",
      "event_type": "REINFORCED",
      "memory_id": "mem-0000",
      "payload_json": "{\"caused_by_decision_id\":\"dec-0001\",\"causes\":[{\"id\":\"dec-0001\",\"kind\":\"decision\"}],\"confidence_after\":\"0.7187500000\",\"confidence_before\":\"0.6250000000\",\"grant_id\":\"grant-000000000001\"}",
-     "prev_hash": "2cb1a5787da773ae7f74aaeb78c56e31fd5418954716b5985e1e8733a22c826c",
+     "prev_hash": "fe754d86213077d59d6ff5441d90de11b550b313d12565738bf5691b140ea12b",
      "reason": "used in a decision this turn",
      "seq": 6
     },
     {
      "actor_id": "seasons-agent",
-     "created_at": "2026-01-01T00:00:00.000027+00:00",
-     "entry_hash": "73ab5de07a3470e080dacb0d0489e5e64767509591ee8f68f6637d32031f3e7f",
+     "created_at": "2026-01-01T00:00:00.000028+00:00",
+     "entry_hash": "af45093d8eee43ecffa661e42df73b04b4dfe962de7552536da896d3245f2de3",
      "event_type": "DECISION_USED_MEMORY",
      "memory_id": "mem-0000",
      "payload_json": "{\"causes\":[{\"id\":\"dec-0002\",\"kind\":\"decision\"},{\"id\":\"ab1e0792a2300ec893540a09a1e34fe2ac02c15fad404e0dc736dccbb7cbd1b6\",\"kind\":\"receipt\"}],\"decision_id\":\"dec-0002\",\"decision_sha256\":\"3536c1955a42a8dc548be62d7b26afa5750a6ba021cc5144c231f3838664f825\",\"grant_id\":\"grant-000000000001\",\"policy_version\":\"seasons/0.1\",\"receipt_sha256\":\"ab1e0792a2300ec893540a09a1e34fe2ac02c15fad404e0dc736dccbb7cbd1b6\"}",
-     "prev_hash": "d6a88693bc2382407c81ce25daa964517aab06a58b48011118cae9a1cf2af9aa",
+     "prev_hash": "48835d87993ecea5350284ccdb953fd0c9958539788a80a561368ee7a920867c",
      "reason": "answered: deploy gate staging?",
      "seq": 7
     },
     {
      "actor_id": "seasons-agent",
-     "created_at": "2026-01-01T00:00:00.000029+00:00",
-     "entry_hash": "89ef1922c04a282903b1e5cce1a8f01373c87193062bc4b94d7f314218c1561a",
+     "created_at": "2026-01-01T00:00:00.000030+00:00",
+     "entry_hash": "1c22fdcd2579c84f153d045ef423d41cae77f8adf6df9158bfa35f0a5b3acdeb",
      "event_type": "REINFORCED",
      "memory_id": "mem-0000",
      "payload_json": "{\"caused_by_decision_id\":\"dec-0002\",\"causes\":[{\"id\":\"dec-0002\",\"kind\":\"decision\"}],\"confidence_after\":\"0.7890625000\",\"confidence_before\":\"0.7187500000\",\"grant_id\":\"grant-000000000001\"}",
-     "prev_hash": "73ab5de07a3470e080dacb0d0489e5e64767509591ee8f68f6637d32031f3e7f",
+     "prev_hash": "af45093d8eee43ecffa661e42df73b04b4dfe962de7552536da896d3245f2de3",
      "reason": "used in a decision this turn",
      "seq": 8
     },
     {
      "actor_id": "seasons-agent",
-     "created_at": "2026-01-01T00:00:00.000029+00:00",
-     "entry_hash": "21384ed22a0508be0520c04efa67f9415c443f2a4865c8911c27ff767a833240",
+     "created_at": "2026-01-01T00:00:00.000030+00:00",
+     "entry_hash": "3ab87a68488a53247d127b91bc254e9c7605b8cfe704298fc7a2e430269c4489",
      "event_type": "STATE_CHANGED",
      "memory_id": "mem-0000",
      "payload_json": "{\"causes\":[{\"kind\":\"event\",\"memory_id\":\"mem-0000\",\"seq\":8}],\"from\":\"NEUTRAL\",\"grant_id\":\"grant-000000000001\",\"to\":\"REINFORCED\"}",
-     "prev_hash": "89ef1922c04a282903b1e5cce1a8f01373c87193062bc4b94d7f314218c1561a",
+     "prev_hash": "1c22fdcd2579c84f153d045ef423d41cae77f8adf6df9158bfa35f0a5b3acdeb",
      "reason": "confidence crossed promotion threshold 3/4",
      "seq": 9
     }
@@ -130,8 +137,8 @@
    "mem-0001": [
     {
      "actor_id": "seasons-agent",
-     "created_at": "2026-01-01T00:00:00.000006+00:00",
-     "entry_hash": "f5f9351aa1a0e0142d4123f301d7b5436be11c5e64ebddf8c9e88b393bb36fee",
+     "created_at": "2026-01-01T00:00:00.000007+00:00",
+     "entry_hash": "2687fca1fab61d0d663715d6dfbd18ab4d5c75c7652ec14d4fd00d1dd4a72849",
      "event_type": "STORED",
      "memory_id": "mem-0001",
      "payload_json": "{\"content_sha256\":\"97dc1bd2c07a14c3442c8e099bb5c6de54dedb723e649e5d44a1c1c9b67bf9ea\",\"embedding_model\":\"seasons-local\",\"embedding_provenance\":{\"dimension\":64,\"input_content_hash\":\"97dc1bd2c07a14c3442c8e099bb5c6de54dedb723e649e5d44a1c1c9b67bf9ea\",\"model\":\"seasons-local-hash\",\"output_vector_hash\":\"d865589b203eb207aafca29eca1a706f3f8f096709b63178c22324e3b8e69916\",\"preprocessing\":\"none\",\"provider\":\"local-deterministic\",\"quantization_protocol\":\"canonical-decimal/scale=10/rounding=ROUND_HALF_EVEN\",\"revision\":\"unknown\"},\"grant_id\":\"grant-000000000001\"}",
@@ -141,78 +148,78 @@
     },
     {
      "actor_id": "seasons-agent",
-     "created_at": "2026-01-01T00:00:00.000013+00:00",
-     "entry_hash": "3a3a564c2aa02525c2d3ba755a9c0a63a4d6902d8fdc1cf7c4da8c860ec7db41",
+     "created_at": "2026-01-01T00:00:00.000014+00:00",
+     "entry_hash": "5554c6ccc7c7b3e35cd65e53a87059ed7626eb97dd6f82e10fe4c279ad0bf6d7",
      "event_type": "DECISION_USED_MEMORY",
      "memory_id": "mem-0001",
      "payload_json": "{\"causes\":[{\"id\":\"dec-0000\",\"kind\":\"decision\"},{\"id\":\"ab1e0792a2300ec893540a09a1e34fe2ac02c15fad404e0dc736dccbb7cbd1b6\",\"kind\":\"receipt\"}],\"decision_id\":\"dec-0000\",\"decision_sha256\":\"3536c1955a42a8dc548be62d7b26afa5750a6ba021cc5144c231f3838664f825\",\"grant_id\":\"grant-000000000001\",\"policy_version\":\"seasons/0.1\",\"receipt_sha256\":\"ab1e0792a2300ec893540a09a1e34fe2ac02c15fad404e0dc736dccbb7cbd1b6\"}",
-     "prev_hash": "f5f9351aa1a0e0142d4123f301d7b5436be11c5e64ebddf8c9e88b393bb36fee",
+     "prev_hash": "2687fca1fab61d0d663715d6dfbd18ab4d5c75c7652ec14d4fd00d1dd4a72849",
      "reason": "answered: deploy gate staging?",
      "seq": 1
     },
     {
      "actor_id": "seasons-agent",
-     "created_at": "2026-01-01T00:00:00.000016+00:00",
-     "entry_hash": "e04ab909c0263703c47d1fb28384dfc8669a78e992e33f46277764ff45f5131a",
+     "created_at": "2026-01-01T00:00:00.000017+00:00",
+     "entry_hash": "1307cff95691a2453d1a186d8aacd6eee9a40a64e74e51dafecd369c7450aefc",
      "event_type": "REINFORCED",
      "memory_id": "mem-0001",
      "payload_json": "{\"caused_by_decision_id\":\"dec-0000\",\"causes\":[{\"id\":\"dec-0000\",\"kind\":\"decision\"}],\"confidence_after\":\"0.6250000000\",\"confidence_before\":\"0.5000000000\",\"grant_id\":\"grant-000000000001\"}",
-     "prev_hash": "3a3a564c2aa02525c2d3ba755a9c0a63a4d6902d8fdc1cf7c4da8c860ec7db41",
+     "prev_hash": "5554c6ccc7c7b3e35cd65e53a87059ed7626eb97dd6f82e10fe4c279ad0bf6d7",
      "reason": "used in a decision this turn",
      "seq": 2
     },
     {
      "actor_id": "seasons-agent",
-     "created_at": "2026-01-01T00:00:00.000020+00:00",
-     "entry_hash": "8e38835fb7684eaa5be335d61eef59b047eb01d4b07ab41fd3f6b094207e89fb",
+     "created_at": "2026-01-01T00:00:00.000021+00:00",
+     "entry_hash": "966a7421580f6abaa7873733267151df21895e9e965405817d2bccfd6baad1e0",
      "event_type": "DECISION_USED_MEMORY",
      "memory_id": "mem-0001",
      "payload_json": "{\"causes\":[{\"id\":\"dec-0001\",\"kind\":\"decision\"},{\"id\":\"ab1e0792a2300ec893540a09a1e34fe2ac02c15fad404e0dc736dccbb7cbd1b6\",\"kind\":\"receipt\"}],\"decision_id\":\"dec-0001\",\"decision_sha256\":\"3536c1955a42a8dc548be62d7b26afa5750a6ba021cc5144c231f3838664f825\",\"grant_id\":\"grant-000000000001\",\"policy_version\":\"seasons/0.1\",\"receipt_sha256\":\"ab1e0792a2300ec893540a09a1e34fe2ac02c15fad404e0dc736dccbb7cbd1b6\"}",
-     "prev_hash": "e04ab909c0263703c47d1fb28384dfc8669a78e992e33f46277764ff45f5131a",
+     "prev_hash": "1307cff95691a2453d1a186d8aacd6eee9a40a64e74e51dafecd369c7450aefc",
      "reason": "answered: deploy gate staging?",
      "seq": 3
     },
     {
      "actor_id": "seasons-agent",
-     "created_at": "2026-01-01T00:00:00.000023+00:00",
-     "entry_hash": "d53cd8ca75365510e3e33f723692c8cf646188c33bf95557323d2d1a384babe5",
+     "created_at": "2026-01-01T00:00:00.000024+00:00",
+     "entry_hash": "43ed35ff72a8ed3ae29320b0f5ddf40b3b8790ea7921a261b14d76144af04fe0",
      "event_type": "REINFORCED",
      "memory_id": "mem-0001",
      "payload_json": "{\"caused_by_decision_id\":\"dec-0001\",\"causes\":[{\"id\":\"dec-0001\",\"kind\":\"decision\"}],\"confidence_after\":\"0.7187500000\",\"confidence_before\":\"0.6250000000\",\"grant_id\":\"grant-000000000001\"}",
-     "prev_hash": "8e38835fb7684eaa5be335d61eef59b047eb01d4b07ab41fd3f6b094207e89fb",
+     "prev_hash": "966a7421580f6abaa7873733267151df21895e9e965405817d2bccfd6baad1e0",
      "reason": "used in a decision this turn",
      "seq": 4
     },
     {
      "actor_id": "seasons-agent",
-     "created_at": "2026-01-01T00:00:00.000027+00:00",
-     "entry_hash": "dcdb91a379c1b6b6d0c34ff94be0d996c94f4ed123cff51a4e26fed86ab0f59e",
+     "created_at": "2026-01-01T00:00:00.000028+00:00",
+     "entry_hash": "536a11273d09f8dd8897d64ae37642b255df5790ea623852202864d8d23e6d20",
      "event_type": "DECISION_USED_MEMORY",
      "memory_id": "mem-0001",
      "payload_json": "{\"causes\":[{\"id\":\"dec-0002\",\"kind\":\"decision\"},{\"id\":\"ab1e0792a2300ec893540a09a1e34fe2ac02c15fad404e0dc736dccbb7cbd1b6\",\"kind\":\"receipt\"}],\"decision_id\":\"dec-0002\",\"decision_sha256\":\"3536c1955a42a8dc548be62d7b26afa5750a6ba021cc5144c231f3838664f825\",\"grant_id\":\"grant-000000000001\",\"policy_version\":\"seasons/0.1\",\"receipt_sha256\":\"ab1e0792a2300ec893540a09a1e34fe2ac02c15fad404e0dc736dccbb7cbd1b6\"}",
-     "prev_hash": "d53cd8ca75365510e3e33f723692c8cf646188c33bf95557323d2d1a384babe5",
+     "prev_hash": "43ed35ff72a8ed3ae29320b0f5ddf40b3b8790ea7921a261b14d76144af04fe0",
      "reason": "answered: deploy gate staging?",
      "seq": 5
     },
     {
      "actor_id": "seasons-agent",
-     "created_at": "2026-01-01T00:00:00.000030+00:00",
-     "entry_hash": "cffe36dd8e2ee14435c9c2b42bd46212edda09747354e9395b46f0d3bd8cd035",
+     "created_at": "2026-01-01T00:00:00.000031+00:00",
+     "entry_hash": "1f4e48d91aed2b8c6d23678a4e5d70e3e8791599fc2860be385659023d385761",
      "event_type": "REINFORCED",
      "memory_id": "mem-0001",
      "payload_json": "{\"caused_by_decision_id\":\"dec-0002\",\"causes\":[{\"id\":\"dec-0002\",\"kind\":\"decision\"}],\"confidence_after\":\"0.7890625000\",\"confidence_before\":\"0.7187500000\",\"grant_id\":\"grant-000000000001\"}",
-     "prev_hash": "dcdb91a379c1b6b6d0c34ff94be0d996c94f4ed123cff51a4e26fed86ab0f59e",
+     "prev_hash": "536a11273d09f8dd8897d64ae37642b255df5790ea623852202864d8d23e6d20",
      "reason": "used in a decision this turn",
      "seq": 6
     },
     {
      "actor_id": "seasons-agent",
-     "created_at": "2026-01-01T00:00:00.000030+00:00",
-     "entry_hash": "2e9ecf5af891f0335de2a47a026b05576f0b23c9c183fe54bf3e6795497c6f27",
+     "created_at": "2026-01-01T00:00:00.000031+00:00",
+     "entry_hash": "3b5b6e64623ebdc4dfb1aac952644e6cf91e7b5575b595a670649f41887ff41d",
      "event_type": "STATE_CHANGED",
      "memory_id": "mem-0001",
      "payload_json": "{\"causes\":[{\"kind\":\"event\",\"memory_id\":\"mem-0001\",\"seq\":6}],\"from\":\"NEUTRAL\",\"grant_id\":\"grant-000000000001\",\"to\":\"REINFORCED\"}",
-     "prev_hash": "cffe36dd8e2ee14435c9c2b42bd46212edda09747354e9395b46f0d3bd8cd035",
+     "prev_hash": "1f4e48d91aed2b8c6d23678a4e5d70e3e8791599fc2860be385659023d385761",
      "reason": "confidence crossed promotion threshold 3/4",
      "seq": 7
     }
@@ -220,8 +227,8 @@
    "mem-0002": [
     {
      "actor_id": "seasons-agent",
-     "created_at": "2026-01-01T00:00:00.000007+00:00",
-     "entry_hash": "3438ce31dff2b7e21432e357d5d28298d7b78499250e3c4206a8120fab9db36d",
+     "created_at": "2026-01-01T00:00:00.000008+00:00",
+     "entry_hash": "84f08d3bdfd75c9769ed905e05718b6822c65f621a4baf6b6efa35e452a4ad2e",
      "event_type": "STORED",
      "memory_id": "mem-0002",
      "payload_json": "{\"content_sha256\":\"dbf413b8ea6ed0328c13527113581e0071ffd8af82c0a1dcbbe904d4cc5eff80\",\"embedding_model\":\"seasons-local\",\"embedding_provenance\":{\"dimension\":64,\"input_content_hash\":\"dbf413b8ea6ed0328c13527113581e0071ffd8af82c0a1dcbbe904d4cc5eff80\",\"model\":\"seasons-local-hash\",\"output_vector_hash\":\"78d087991a48cd58576d2ec8546e47778e83896cf7318f36bd7912bb00e11683\",\"preprocessing\":\"none\",\"provider\":\"local-deterministic\",\"quantization_protocol\":\"canonical-decimal/scale=10/rounding=ROUND_HALF_EVEN\",\"revision\":\"unknown\"},\"grant_id\":\"grant-000000000001\"}",
@@ -231,78 +238,78 @@
     },
     {
      "actor_id": "seasons-agent",
-     "created_at": "2026-01-01T00:00:00.000013+00:00",
-     "entry_hash": "d8fef3f67481cc795e418118801f99d1afc4e3f746ccc28d2dbb2784635491a5",
+     "created_at": "2026-01-01T00:00:00.000014+00:00",
+     "entry_hash": "e7465069f3a9569f67b0003cbd250686bc1f69aa6d64b2d332a31ebd0bd801c7",
      "event_type": "DECISION_USED_MEMORY",
      "memory_id": "mem-0002",
      "payload_json": "{\"causes\":[{\"id\":\"dec-0000\",\"kind\":\"decision\"},{\"id\":\"ab1e0792a2300ec893540a09a1e34fe2ac02c15fad404e0dc736dccbb7cbd1b6\",\"kind\":\"receipt\"}],\"decision_id\":\"dec-0000\",\"decision_sha256\":\"3536c1955a42a8dc548be62d7b26afa5750a6ba021cc5144c231f3838664f825\",\"grant_id\":\"grant-000000000001\",\"policy_version\":\"seasons/0.1\",\"receipt_sha256\":\"ab1e0792a2300ec893540a09a1e34fe2ac02c15fad404e0dc736dccbb7cbd1b6\"}",
-     "prev_hash": "3438ce31dff2b7e21432e357d5d28298d7b78499250e3c4206a8120fab9db36d",
+     "prev_hash": "84f08d3bdfd75c9769ed905e05718b6822c65f621a4baf6b6efa35e452a4ad2e",
      "reason": "answered: deploy gate staging?",
      "seq": 1
     },
     {
      "actor_id": "seasons-agent",
-     "created_at": "2026-01-01T00:00:00.000017+00:00",
-     "entry_hash": "f812c705c769210e98ced72128563dd8ca63f58f74a8a7f6043b12e5abb90dcc",
+     "created_at": "2026-01-01T00:00:00.000018+00:00",
+     "entry_hash": "3c76344a28742d6dcf2d33f747a5856caa6dee0e73d3721317172371b083a44d",
      "event_type": "REINFORCED",
      "memory_id": "mem-0002",
      "payload_json": "{\"caused_by_decision_id\":\"dec-0000\",\"causes\":[{\"id\":\"dec-0000\",\"kind\":\"decision\"}],\"confidence_after\":\"0.6250000000\",\"confidence_before\":\"0.5000000000\",\"grant_id\":\"grant-000000000001\"}",
-     "prev_hash": "d8fef3f67481cc795e418118801f99d1afc4e3f746ccc28d2dbb2784635491a5",
+     "prev_hash": "e7465069f3a9569f67b0003cbd250686bc1f69aa6d64b2d332a31ebd0bd801c7",
      "reason": "used in a decision this turn",
      "seq": 2
     },
     {
      "actor_id": "seasons-agent",
-     "created_at": "2026-01-01T00:00:00.000020+00:00",
-     "entry_hash": "84f38e799c7d710d53f1c23ed58fc651d9865c72634ae51c22b4c3911bddcf1a",
+     "created_at": "2026-01-01T00:00:00.000021+00:00",
+     "entry_hash": "8ed1785dc1659965d21ad1280b2ceba11f597720556ceb46ac9ef321ac36fbbd",
      "event_type": "DECISION_USED_MEMORY",
      "memory_id": "mem-0002",
      "payload_json": "{\"causes\":[{\"id\":\"dec-0001\",\"kind\":\"decision\"},{\"id\":\"ab1e0792a2300ec893540a09a1e34fe2ac02c15fad404e0dc736dccbb7cbd1b6\",\"kind\":\"receipt\"}],\"decision_id\":\"dec-0001\",\"decision_sha256\":\"3536c1955a42a8dc548be62d7b26afa5750a6ba021cc5144c231f3838664f825\",\"grant_id\":\"grant-000000000001\",\"policy_version\":\"seasons/0.1\",\"receipt_sha256\":\"ab1e0792a2300ec893540a09a1e34fe2ac02c15fad404e0dc736dccbb7cbd1b6\"}",
-     "prev_hash": "f812c705c769210e98ced72128563dd8ca63f58f74a8a7f6043b12e5abb90dcc",
+     "prev_hash": "3c76344a28742d6dcf2d33f747a5856caa6dee0e73d3721317172371b083a44d",
      "reason": "answered: deploy gate staging?",
      "seq": 3
     },
     {
      "actor_id": "seasons-agent",
-     "created_at": "2026-01-01T00:00:00.000024+00:00",
-     "entry_hash": "ee1ca618ec2f3f188e26eef4f6eb6dd0561f7ad5ad13bd107a449c360d482859",
+     "created_at": "2026-01-01T00:00:00.000025+00:00",
+     "entry_hash": "fb4453257853740cce2cf9f875cafe3dcbb23332beee49c63e55ecd5b5d6fa43",
      "event_type": "REINFORCED",
      "memory_id": "mem-0002",
      "payload_json": "{\"caused_by_decision_id\":\"dec-0001\",\"causes\":[{\"id\":\"dec-0001\",\"kind\":\"decision\"}],\"confidence_after\":\"0.7187500000\",\"confidence_before\":\"0.6250000000\",\"grant_id\":\"grant-000000000001\"}",
-     "prev_hash": "84f38e799c7d710d53f1c23ed58fc651d9865c72634ae51c22b4c3911bddcf1a",
+     "prev_hash": "8ed1785dc1659965d21ad1280b2ceba11f597720556ceb46ac9ef321ac36fbbd",
      "reason": "used in a decision this turn",
      "seq": 4
     },
     {
      "actor_id": "seasons-agent",
-     "created_at": "2026-01-01T00:00:00.000027+00:00",
-     "entry_hash": "ef97a09442d06d6f8854a197de89222c7e4281f8a82a28be9bc9108a74896f72",
+     "created_at": "2026-01-01T00:00:00.000028+00:00",
+     "entry_hash": "7256a1b037eebc2b9e32b1ecced6a02bac7b19450960f41ac063120c4cc6a00c",
      "event_type": "DECISION_USED_MEMORY",
      "memory_id": "mem-0002",
      "payload_json": "{\"causes\":[{\"id\":\"dec-0002\",\"kind\":\"decision\"},{\"id\":\"ab1e0792a2300ec893540a09a1e34fe2ac02c15fad404e0dc736dccbb7cbd1b6\",\"kind\":\"receipt\"}],\"decision_id\":\"dec-0002\",\"decision_sha256\":\"3536c1955a42a8dc548be62d7b26afa5750a6ba021cc5144c231f3838664f825\",\"grant_id\":\"grant-000000000001\",\"policy_version\":\"seasons/0.1\",\"receipt_sha256\":\"ab1e0792a2300ec893540a09a1e34fe2ac02c15fad404e0dc736dccbb7cbd1b6\"}",
-     "prev_hash": "ee1ca618ec2f3f188e26eef4f6eb6dd0561f7ad5ad13bd107a449c360d482859",
+     "prev_hash": "fb4453257853740cce2cf9f875cafe3dcbb23332beee49c63e55ecd5b5d6fa43",
      "reason": "answered: deploy gate staging?",
      "seq": 5
     },
     {
      "actor_id": "seasons-agent",
-     "created_at": "2026-01-01T00:00:00.000031+00:00",
-     "entry_hash": "dc5e19904d0f6598d8e4dab4e031ea9ec099d8a8db8d19aec35379db79474d47",
+     "created_at": "2026-01-01T00:00:00.000032+00:00",
+     "entry_hash": "5b95cf3bbcf10cf5e1a326ead60aa560e5494113b5743d9963b51dd68e84f8cb",
      "event_type": "REINFORCED",
      "memory_id": "mem-0002",
      "payload_json": "{\"caused_by_decision_id\":\"dec-0002\",\"causes\":[{\"id\":\"dec-0002\",\"kind\":\"decision\"}],\"confidence_after\":\"0.7890625000\",\"confidence_before\":\"0.7187500000\",\"grant_id\":\"grant-000000000001\"}",
-     "prev_hash": "ef97a09442d06d6f8854a197de89222c7e4281f8a82a28be9bc9108a74896f72",
+     "prev_hash": "7256a1b037eebc2b9e32b1ecced6a02bac7b19450960f41ac063120c4cc6a00c",
      "reason": "used in a decision this turn",
      "seq": 6
     },
     {
      "actor_id": "seasons-agent",
-     "created_at": "2026-01-01T00:00:00.000031+00:00",
-     "entry_hash": "84e5a51c550861ed7cdcea66ff67ed98bcca13f7e0d0a830cae2453815761595",
+     "created_at": "2026-01-01T00:00:00.000032+00:00",
+     "entry_hash": "ab9b4bb91597ddfbbb1c09a71438b182281a20469120a99b38ccfdf5596326e1",
      "event_type": "STATE_CHANGED",
      "memory_id": "mem-0002",
      "payload_json": "{\"causes\":[{\"kind\":\"event\",\"memory_id\":\"mem-0002\",\"seq\":6}],\"from\":\"NEUTRAL\",\"grant_id\":\"grant-000000000001\",\"to\":\"REINFORCED\"}",
-     "prev_hash": "dc5e19904d0f6598d8e4dab4e031ea9ec099d8a8db8d19aec35379db79474d47",
+     "prev_hash": "5b95cf3bbcf10cf5e1a326ead60aa560e5494113b5743d9963b51dd68e84f8cb",
      "reason": "confidence crossed promotion threshold 3/4",
      "seq": 7
     }
@@ -310,8 +317,8 @@
    "mem-0003": [
     {
      "actor_id": "seasons-agent",
-     "created_at": "2026-01-01T00:00:00.000008+00:00",
-     "entry_hash": "608f60a51ffbe542cb3643be5c179f38753ffef2a41fd2d149a5c0cbc309bc55",
+     "created_at": "2026-01-01T00:00:00.000009+00:00",
+     "entry_hash": "4bcde02369b4e35ebd78d1742d87d4de431effc23d5bff0735e82814d2670e86",
      "event_type": "STORED",
      "memory_id": "mem-0003",
      "payload_json": "{\"content_sha256\":\"5e3a67da02023e9e0e9b56c9ac61383e4647db94b8c6c996d6e3621dec267b87\",\"embedding_model\":\"seasons-local\",\"embedding_provenance\":{\"dimension\":64,\"input_content_hash\":\"5e3a67da02023e9e0e9b56c9ac61383e4647db94b8c6c996d6e3621dec267b87\",\"model\":\"seasons-local-hash\",\"output_vector_hash\":\"6923ee73d799ee4d2c48b9b88ad0b5b7428e486e01f207ad5f33426ceab1ceb3\",\"preprocessing\":\"none\",\"provider\":\"local-deterministic\",\"quantization_protocol\":\"canonical-decimal/scale=10/rounding=ROUND_HALF_EVEN\",\"revision\":\"unknown\"},\"grant_id\":\"grant-000000000001\"}",
@@ -321,78 +328,78 @@
     },
     {
      "actor_id": "seasons-agent",
-     "created_at": "2026-01-01T00:00:00.000013+00:00",
-     "entry_hash": "90362aeb2dbf6896df97f8ff1fe6fb2f188563ef8baf3cb8d173cc8b92531944",
+     "created_at": "2026-01-01T00:00:00.000014+00:00",
+     "entry_hash": "67b75efdefb382a540d99303c7548318007a8cfdd5ce60706fb94342a01ad522",
      "event_type": "DECISION_USED_MEMORY",
      "memory_id": "mem-0003",
      "payload_json": "{\"causes\":[{\"id\":\"dec-0000\",\"kind\":\"decision\"},{\"id\":\"ab1e0792a2300ec893540a09a1e34fe2ac02c15fad404e0dc736dccbb7cbd1b6\",\"kind\":\"receipt\"}],\"decision_id\":\"dec-0000\",\"decision_sha256\":\"3536c1955a42a8dc548be62d7b26afa5750a6ba021cc5144c231f3838664f825\",\"grant_id\":\"grant-000000000001\",\"policy_version\":\"seasons/0.1\",\"receipt_sha256\":\"ab1e0792a2300ec893540a09a1e34fe2ac02c15fad404e0dc736dccbb7cbd1b6\"}",
-     "prev_hash": "608f60a51ffbe542cb3643be5c179f38753ffef2a41fd2d149a5c0cbc309bc55",
+     "prev_hash": "4bcde02369b4e35ebd78d1742d87d4de431effc23d5bff0735e82814d2670e86",
      "reason": "answered: deploy gate staging?",
      "seq": 1
     },
     {
      "actor_id": "seasons-agent",
-     "created_at": "2026-01-01T00:00:00.000018+00:00",
-     "entry_hash": "e74efd578d896fc8fe628e72aecc3b6cc8dec6ace30efbd2febafa6ca8c3d2b0",
+     "created_at": "2026-01-01T00:00:00.000019+00:00",
+     "entry_hash": "db0b908960ccc65f172d80a313452f12b5c8d18dd68a95b26353d37bc14c9563",
      "event_type": "REINFORCED",
      "memory_id": "mem-0003",
      "payload_json": "{\"caused_by_decision_id\":\"dec-0000\",\"causes\":[{\"id\":\"dec-0000\",\"kind\":\"decision\"}],\"confidence_after\":\"0.6250000000\",\"confidence_before\":\"0.5000000000\",\"grant_id\":\"grant-000000000001\"}",
-     "prev_hash": "90362aeb2dbf6896df97f8ff1fe6fb2f188563ef8baf3cb8d173cc8b92531944",
+     "prev_hash": "67b75efdefb382a540d99303c7548318007a8cfdd5ce60706fb94342a01ad522",
      "reason": "used in a decision this turn",
      "seq": 2
     },
     {
      "actor_id": "seasons-agent",
-     "created_at": "2026-01-01T00:00:00.000020+00:00",
-     "entry_hash": "c8b7b19a0a0d67dd8be1993f10df36aeb4920086e127566a3c921063dbb70a40",
+     "created_at": "2026-01-01T00:00:00.000021+00:00",
+     "entry_hash": "8f0556a356c88df1c94da85da4c0d7753d7da39146323b0f23b5ffabfea2b234",
      "event_type": "DECISION_USED_MEMORY",
      "memory_id": "mem-0003",
      "payload_json": "{\"causes\":[{\"id\":\"dec-0001\",\"kind\":\"decision\"},{\"id\":\"ab1e0792a2300ec893540a09a1e34fe2ac02c15fad404e0dc736dccbb7cbd1b6\",\"kind\":\"receipt\"}],\"decision_id\":\"dec-0001\",\"decision_sha256\":\"3536c1955a42a8dc548be62d7b26afa5750a6ba021cc5144c231f3838664f825\",\"grant_id\":\"grant-000000000001\",\"policy_version\":\"seasons/0.1\",\"receipt_sha256\":\"ab1e0792a2300ec893540a09a1e34fe2ac02c15fad404e0dc736dccbb7cbd1b6\"}",
-     "prev_hash": "e74efd578d896fc8fe628e72aecc3b6cc8dec6ace30efbd2febafa6ca8c3d2b0",
+     "prev_hash": "db0b908960ccc65f172d80a313452f12b5c8d18dd68a95b26353d37bc14c9563",
      "reason": "answered: deploy gate staging?",
      "seq": 3
     },
     {
      "actor_id": "seasons-agent",
-     "created_at": "2026-01-01T00:00:00.000025+00:00",
-     "entry_hash": "e4712c612c28c3174b818013ac9230a82a7148e198bb94837a3919f399e4c84e",
+     "created_at": "2026-01-01T00:00:00.000026+00:00",
+     "entry_hash": "bb852f3b97ec7fad66990286a89c84126d9ca667e19a9774fed4143a761ad7c4",
      "event_type": "REINFORCED",
      "memory_id": "mem-0003",
      "payload_json": "{\"caused_by_decision_id\":\"dec-0001\",\"causes\":[{\"id\":\"dec-0001\",\"kind\":\"decision\"}],\"confidence_after\":\"0.7187500000\",\"confidence_before\":\"0.6250000000\",\"grant_id\":\"grant-000000000001\"}",
-     "prev_hash": "c8b7b19a0a0d67dd8be1993f10df36aeb4920086e127566a3c921063dbb70a40",
+     "prev_hash": "8f0556a356c88df1c94da85da4c0d7753d7da39146323b0f23b5ffabfea2b234",
      "reason": "used in a decision this turn",
      "seq": 4
     },
     {
      "actor_id": "seasons-agent",
-     "created_at": "2026-01-01T00:00:00.000027+00:00",
-     "entry_hash": "6226ce1124f0cb24ffe572057b581769a02f2748173f412ae59929e5bb5f7368",
+     "created_at": "2026-01-01T00:00:00.000028+00:00",
+     "entry_hash": "a29510905f582116f137a22eb7365a97105b6924b21bfe506de864b1e6034530",
      "event_type": "DECISION_USED_MEMORY",
      "memory_id": "mem-0003",
      "payload_json": "{\"causes\":[{\"id\":\"dec-0002\",\"kind\":\"decision\"},{\"id\":\"ab1e0792a2300ec893540a09a1e34fe2ac02c15fad404e0dc736dccbb7cbd1b6\",\"kind\":\"receipt\"}],\"decision_id\":\"dec-0002\",\"decision_sha256\":\"3536c1955a42a8dc548be62d7b26afa5750a6ba021cc5144c231f3838664f825\",\"grant_id\":\"grant-000000000001\",\"policy_version\":\"seasons/0.1\",\"receipt_sha256\":\"ab1e0792a2300ec893540a09a1e34fe2ac02c15fad404e0dc736dccbb7cbd1b6\"}",
-     "prev_hash": "e4712c612c28c3174b818013ac9230a82a7148e198bb94837a3919f399e4c84e",
+     "prev_hash": "bb852f3b97ec7fad66990286a89c84126d9ca667e19a9774fed4143a761ad7c4",
      "reason": "answered: deploy gate staging?",
      "seq": 5
     },
     {
      "actor_id": "seasons-agent",
-     "created_at": "2026-01-01T00:00:00.000032+00:00",
-     "entry_hash": "aecd2a8ce516aa46241678f05ffd8e6aac434c01f3ac67739bcdddaa3eb9ac7d",
+     "created_at": "2026-01-01T00:00:00.000033+00:00",
+     "entry_hash": "65b30d2ede5133fbfa073d3f885185b502c0ce86c23380bf4b85fddb6d8d09cc",
      "event_type": "REINFORCED",
      "memory_id": "mem-0003",
      "payload_json": "{\"caused_by_decision_id\":\"dec-0002\",\"causes\":[{\"id\":\"dec-0002\",\"kind\":\"decision\"}],\"confidence_after\":\"0.7890625000\",\"confidence_before\":\"0.7187500000\",\"grant_id\":\"grant-000000000001\"}",
-     "prev_hash": "6226ce1124f0cb24ffe572057b581769a02f2748173f412ae59929e5bb5f7368",
+     "prev_hash": "a29510905f582116f137a22eb7365a97105b6924b21bfe506de864b1e6034530",
      "reason": "used in a decision this turn",
      "seq": 6
     },
     {
      "actor_id": "seasons-agent",
-     "created_at": "2026-01-01T00:00:00.000032+00:00",
-     "entry_hash": "b0cf91691c0e3cd756941be21f5f7f693a7d983f093bc942233d5967ce9c86a6",
+     "created_at": "2026-01-01T00:00:00.000033+00:00",
+     "entry_hash": "f93e9ddd0f417cbb9918ccc57be532e56b5fd4b9267c6c6336c90f096888b4f2",
      "event_type": "STATE_CHANGED",
      "memory_id": "mem-0003",
      "payload_json": "{\"causes\":[{\"kind\":\"event\",\"memory_id\":\"mem-0003\",\"seq\":6}],\"from\":\"NEUTRAL\",\"grant_id\":\"grant-000000000001\",\"to\":\"REINFORCED\"}",
-     "prev_hash": "aecd2a8ce516aa46241678f05ffd8e6aac434c01f3ac67739bcdddaa3eb9ac7d",
+     "prev_hash": "65b30d2ede5133fbfa073d3f885185b502c0ce86c23380bf4b85fddb6d8d09cc",
      "reason": "confidence crossed promotion threshold 3/4",
      "seq": 7
     }
@@ -400,8 +407,8 @@
    "mem-0004": [
     {
      "actor_id": "seasons-agent",
-     "created_at": "2026-01-01T00:00:00.000009+00:00",
-     "entry_hash": "80db596ba33a559f372a74ace2faef1adfdc2ff9c33cfd586cad5ab4cc4ae4e8",
+     "created_at": "2026-01-01T00:00:00.000010+00:00",
+     "entry_hash": "1b56e8c939737764303204491cd1b1894ccb752799a2156d0a1f78a43bb3554d",
      "event_type": "STORED",
      "memory_id": "mem-0004",
      "payload_json": "{\"content_sha256\":\"70e2f930211ece6ef78d2bf16eb5ec3fd1f1f6a59bfb978321f53ffe5357d5d5\",\"embedding_model\":\"seasons-local\",\"embedding_provenance\":{\"dimension\":64,\"input_content_hash\":\"70e2f930211ece6ef78d2bf16eb5ec3fd1f1f6a59bfb978321f53ffe5357d5d5\",\"model\":\"seasons-local-hash\",\"output_vector_hash\":\"008c96bf10bfd4e482f04c035e872abb00fc6e30a785dd46ed1189822cebf268\",\"preprocessing\":\"none\",\"provider\":\"local-deterministic\",\"quantization_protocol\":\"canonical-decimal/scale=10/rounding=ROUND_HALF_EVEN\",\"revision\":\"unknown\"},\"grant_id\":\"grant-000000000001\"}",
@@ -411,78 +418,78 @@
     },
     {
      "actor_id": "seasons-agent",
-     "created_at": "2026-01-01T00:00:00.000013+00:00",
-     "entry_hash": "740c2a77dc3da82d056150f57a501c28a7276fadd37a528148ff9ae81d77510b",
+     "created_at": "2026-01-01T00:00:00.000014+00:00",
+     "entry_hash": "b3cc1db55b740e5cf4ddc839943fd8a230f2bf87a3f4f45db1396da64993eacf",
      "event_type": "DECISION_USED_MEMORY",
      "memory_id": "mem-0004",
      "payload_json": "{\"causes\":[{\"id\":\"dec-0000\",\"kind\":\"decision\"},{\"id\":\"ab1e0792a2300ec893540a09a1e34fe2ac02c15fad404e0dc736dccbb7cbd1b6\",\"kind\":\"receipt\"}],\"decision_id\":\"dec-0000\",\"decision_sha256\":\"3536c1955a42a8dc548be62d7b26afa5750a6ba021cc5144c231f3838664f825\",\"grant_id\":\"grant-000000000001\",\"policy_version\":\"seasons/0.1\",\"receipt_sha256\":\"ab1e0792a2300ec893540a09a1e34fe2ac02c15fad404e0dc736dccbb7cbd1b6\"}",
-     "prev_hash": "80db596ba33a559f372a74ace2faef1adfdc2ff9c33cfd586cad5ab4cc4ae4e8",
+     "prev_hash": "1b56e8c939737764303204491cd1b1894ccb752799a2156d0a1f78a43bb3554d",
      "reason": "answered: deploy gate staging?",
      "seq": 1
     },
     {
      "actor_id": "seasons-agent",
-     "created_at": "2026-01-01T00:00:00.000019+00:00",
-     "entry_hash": "521ecfed99bd5b976df1e0a442d1847e458dacb062325bc2f4cbcf7ae0d5eaed",
+     "created_at": "2026-01-01T00:00:00.000020+00:00",
+     "entry_hash": "c4455b593f96a943f8115e24e0f7d681218bcf028da72aa451e7db5a121dce16",
      "event_type": "REINFORCED",
      "memory_id": "mem-0004",
      "payload_json": "{\"caused_by_decision_id\":\"dec-0000\",\"causes\":[{\"id\":\"dec-0000\",\"kind\":\"decision\"}],\"confidence_after\":\"0.6250000000\",\"confidence_before\":\"0.5000000000\",\"grant_id\":\"grant-000000000001\"}",
-     "prev_hash": "740c2a77dc3da82d056150f57a501c28a7276fadd37a528148ff9ae81d77510b",
+     "prev_hash": "b3cc1db55b740e5cf4ddc839943fd8a230f2bf87a3f4f45db1396da64993eacf",
      "reason": "used in a decision this turn",
      "seq": 2
     },
     {
      "actor_id": "seasons-agent",
-     "created_at": "2026-01-01T00:00:00.000020+00:00",
-     "entry_hash": "6a1514024f6aae6fe22d2ba5115ac2dd11587768b8e37b4935d5c850c1a16f5f",
+     "created_at": "2026-01-01T00:00:00.000021+00:00",
+     "entry_hash": "46a0115d9ed8c304e51d3facc84b4865a5fecc639b3a5a1aeae6ae696784535a",
      "event_type": "DECISION_USED_MEMORY",
      "memory_id": "mem-0004",
      "payload_json": "{\"causes\":[{\"id\":\"dec-0001\",\"kind\":\"decision\"},{\"id\":\"ab1e0792a2300ec893540a09a1e34fe2ac02c15fad404e0dc736dccbb7cbd1b6\",\"kind\":\"receipt\"}],\"decision_id\":\"dec-0001\",\"decision_sha256\":\"3536c1955a42a8dc548be62d7b26afa5750a6ba021cc5144c231f3838664f825\",\"grant_id\":\"grant-000000000001\",\"policy_version\":\"seasons/0.1\",\"receipt_sha256\":\"ab1e0792a2300ec893540a09a1e34fe2ac02c15fad404e0dc736dccbb7cbd1b6\"}",
-     "prev_hash": "521ecfed99bd5b976df1e0a442d1847e458dacb062325bc2f4cbcf7ae0d5eaed",
+     "prev_hash": "c4455b593f96a943f8115e24e0f7d681218bcf028da72aa451e7db5a121dce16",
      "reason": "answered: deploy gate staging?",
      "seq": 3
     },
     {
      "actor_id": "seasons-agent",
-     "created_at": "2026-01-01T00:00:00.000026+00:00",
-     "entry_hash": "3e82eef259e0749182b40ac1fb490fa0676ae83539e62f5900411414d98aee61",
+     "created_at": "2026-01-01T00:00:00.000027+00:00",
+     "entry_hash": "e13646756c28d23b3f488417f1a7e1fdf986d9a5ad926b76973fb832dc234eb7",
      "event_type": "REINFORCED",
      "memory_id": "mem-0004",
      "payload_json": "{\"caused_by_decision_id\":\"dec-0001\",\"causes\":[{\"id\":\"dec-0001\",\"kind\":\"decision\"}],\"confidence_after\":\"0.7187500000\",\"confidence_before\":\"0.6250000000\",\"grant_id\":\"grant-000000000001\"}",
-     "prev_hash": "6a1514024f6aae6fe22d2ba5115ac2dd11587768b8e37b4935d5c850c1a16f5f",
+     "prev_hash": "46a0115d9ed8c304e51d3facc84b4865a5fecc639b3a5a1aeae6ae696784535a",
      "reason": "used in a decision this turn",
      "seq": 4
     },
     {
      "actor_id": "seasons-agent",
-     "created_at": "2026-01-01T00:00:00.000027+00:00",
-     "entry_hash": "6ef47321c8947bbaa3b054e6d535682b5608b688c61bc8be48eccd6012c9a16b",
+     "created_at": "2026-01-01T00:00:00.000028+00:00",
+     "entry_hash": "ce432bc3b324bec4bb0203b3943146c62d213f6fadd28b1b78a737172520742f",
      "event_type": "DECISION_USED_MEMORY",
      "memory_id": "mem-0004",
      "payload_json": "{\"causes\":[{\"id\":\"dec-0002\",\"kind\":\"decision\"},{\"id\":\"ab1e0792a2300ec893540a09a1e34fe2ac02c15fad404e0dc736dccbb7cbd1b6\",\"kind\":\"receipt\"}],\"decision_id\":\"dec-0002\",\"decision_sha256\":\"3536c1955a42a8dc548be62d7b26afa5750a6ba021cc5144c231f3838664f825\",\"grant_id\":\"grant-000000000001\",\"policy_version\":\"seasons/0.1\",\"receipt_sha256\":\"ab1e0792a2300ec893540a09a1e34fe2ac02c15fad404e0dc736dccbb7cbd1b6\"}",
-     "prev_hash": "3e82eef259e0749182b40ac1fb490fa0676ae83539e62f5900411414d98aee61",
+     "prev_hash": "e13646756c28d23b3f488417f1a7e1fdf986d9a5ad926b76973fb832dc234eb7",
      "reason": "answered: deploy gate staging?",
      "seq": 5
     },
     {
      "actor_id": "seasons-agent",
-     "created_at": "2026-01-01T00:00:00.000033+00:00",
-     "entry_hash": "f374912296f8c95b9613cbec7a5e2c3415a61cfe2fede53f665783caca9924eb",
+     "created_at": "2026-01-01T00:00:00.000034+00:00",
+     "entry_hash": "0bea226fc26265bd278fc80cbb12de6e85eebbfb2052411fc6708cebc38a280c",
      "event_type": "REINFORCED",
      "memory_id": "mem-0004",
      "payload_json": "{\"caused_by_decision_id\":\"dec-0002\",\"causes\":[{\"id\":\"dec-0002\",\"kind\":\"decision\"}],\"confidence_after\":\"0.7890625000\",\"confidence_before\":\"0.7187500000\",\"grant_id\":\"grant-000000000001\"}",
-     "prev_hash": "6ef47321c8947bbaa3b054e6d535682b5608b688c61bc8be48eccd6012c9a16b",
+     "prev_hash": "ce432bc3b324bec4bb0203b3943146c62d213f6fadd28b1b78a737172520742f",
      "reason": "used in a decision this turn",
      "seq": 6
     },
     {
      "actor_id": "seasons-agent",
-     "created_at": "2026-01-01T00:00:00.000033+00:00",
-     "entry_hash": "4166510052a2fca2f6bb0e84d1e7ffba8c227a65764a74eafcf3dec6f4cab988",
+     "created_at": "2026-01-01T00:00:00.000034+00:00",
+     "entry_hash": "16f6afad198c455e20927ead2e8dad01c3ecc425add0d356b50790cf52af552d",
      "event_type": "STATE_CHANGED",
      "memory_id": "mem-0004",
      "payload_json": "{\"causes\":[{\"kind\":\"event\",\"memory_id\":\"mem-0004\",\"seq\":6}],\"from\":\"NEUTRAL\",\"grant_id\":\"grant-000000000001\",\"to\":\"REINFORCED\"}",
-     "prev_hash": "f374912296f8c95b9613cbec7a5e2c3415a61cfe2fede53f665783caca9924eb",
+     "prev_hash": "0bea226fc26265bd278fc80cbb12de6e85eebbfb2052411fc6708cebc38a280c",
      "reason": "confidence crossed promotion threshold 3/4",
      "seq": 7
     }
@@ -490,7 +497,7 @@
   },
   "decisions": [
    {
-    "created_at": "2026-01-01T00:00:00.000013+00:00",
+    "created_at": "2026-01-01T00:00:00.000014+00:00",
     "decision_id": "dec-0000",
     "query_embedding": [
      "0.0000000000",
@@ -570,7 +577,7 @@
     ]
    },
    {
-    "created_at": "2026-01-01T00:00:00.000020+00:00",
+    "created_at": "2026-01-01T00:00:00.000021+00:00",
     "decision_id": "dec-0001",
     "query_embedding": [
      "0.0000000000",
@@ -650,7 +657,7 @@
     ]
    },
    {
-    "created_at": "2026-01-01T00:00:00.000027+00:00",
+    "created_at": "2026-01-01T00:00:00.000028+00:00",
     "decision_id": "dec-0002",
     "query_embedding": [
      "0.0000000000",
@@ -730,12 +737,266 @@
     ]
    }
   ],
+  "event_sigs": [
+   {
+    "keyid": "7d59c5623dd40a74",
+    "memory_id": "mem-0000",
+    "seq": 0,
+    "sig": "679798f0d823009cd385218e1f9068c857edc3e872a9423cb23f1ea9f708a2efe3bbe0e9830a3818d34d8ccdbcf16dd61952bf3f76a1f2d7c4f2c66239d60806"
+   },
+   {
+    "keyid": "7d59c5623dd40a74",
+    "memory_id": "mem-0001",
+    "seq": 0,
+    "sig": "c26fb84d3eb9cf2782178991acf008310b9f6153885f27512bceb5597d553049b3e9208a62cdaf0db63c74a851b0b8d895312d49848b9b7bb64c619585b7fd08"
+   },
+   {
+    "keyid": "7d59c5623dd40a74",
+    "memory_id": "mem-0002",
+    "seq": 0,
+    "sig": "1b0dd4a5cf53990eb461cf0d221f11713a7ec6852d0fb3e4ffa2f482988a5392fd5a4e00f740a45137bc3171556b73932af639b52e57423982e1276d01488308"
+   },
+   {
+    "keyid": "7d59c5623dd40a74",
+    "memory_id": "mem-0003",
+    "seq": 0,
+    "sig": "26acb1e97b1cfceb358272d0979e11da9fdbb93397631c99b061e4860e3f53f750460bba6c14994e5244bfc436a72200ec5f4365a8e50bb2c1ae22a4551c1608"
+   },
+   {
+    "keyid": "7d59c5623dd40a74",
+    "memory_id": "mem-0004",
+    "seq": 0,
+    "sig": "a824bab545570361ca0c90c2d1ee9494db6cf2b88f3c721a154040f6c74fb1129a7b91fa384a22f7aee921facb5b3a64394f4e3d25c5835cd8d6d78d65c25401"
+   },
+   {
+    "keyid": "7d59c5623dd40a74",
+    "memory_id": "mem-0000",
+    "seq": 1,
+    "sig": "fecaa3c571d979d79fdd278b2782fd175f73b90807506207b643a591022d73f8bbeda85215c53607566bb15ffc69466b624785af5ec7c3af0e1d4d61d89fe008"
+   },
+   {
+    "keyid": "7d59c5623dd40a74",
+    "memory_id": "mem-0000",
+    "seq": 2,
+    "sig": "f03eb4002c86456560d478d820794441a56c5449f4621f72419a1d40a98a4ec137215ea0925d039f956f90510908d23aa14002e1f65f8f2962aa266ecae29c0f"
+   },
+   {
+    "keyid": "7d59c5623dd40a74",
+    "memory_id": "mem-0000",
+    "seq": 3,
+    "sig": "2682932a4115ed2d35d5658701f84320f932f29a575866d55f29274f760c0c416be1f23e9420a812d4593d6f133c8b88bbd85bff0d26444d53d04c140bbfe209"
+   },
+   {
+    "keyid": "7d59c5623dd40a74",
+    "memory_id": "mem-0001",
+    "seq": 1,
+    "sig": "cb72cfc6a1ebbedc78c1dcdbff06fa2c8867bf644a9a9e23bfa238a7bb522133618f1da571c138a030b68897dea03344c9ed356fa4c99b094772010882407703"
+   },
+   {
+    "keyid": "7d59c5623dd40a74",
+    "memory_id": "mem-0002",
+    "seq": 1,
+    "sig": "ddab6a9233638111d3d48979856d1534542c2da653ac62f72be2fc01278aaa3ffe0b8ce466119c4d2a6a0db4a232d56ecc3f8214ea191baf1de42b7e34b6a701"
+   },
+   {
+    "keyid": "7d59c5623dd40a74",
+    "memory_id": "mem-0003",
+    "seq": 1,
+    "sig": "428c909ad20d08b1eb88a55cdb0aa96bd615f1b56d6b58df71b282015b074cded881bb63164dfcbfbd6d02d969eaead638ff5fe507473e06f71b09f972980006"
+   },
+   {
+    "keyid": "7d59c5623dd40a74",
+    "memory_id": "mem-0004",
+    "seq": 1,
+    "sig": "83d2bc046d23ce245139b35425a54035f542ac9f2046f2e0cd8826935229d66cea28012cec076a5d254aa4de9b25b666079f76601b1bfbf9801c40742e92e60b"
+   },
+   {
+    "keyid": "7d59c5623dd40a74",
+    "memory_id": "mem-0000",
+    "seq": 4,
+    "sig": "45df5c597414246c867e95b84cb650bba10a967e8e240b72a98f51494231d05cfc179acc2e30b97aa7a30af96bde72a1d006ed00dfd4b48534d32a615d56fd0f"
+   },
+   {
+    "keyid": "7d59c5623dd40a74",
+    "memory_id": "mem-0001",
+    "seq": 2,
+    "sig": "1d5eecb244dbaf6b44eba32e745a74c7dd5e603c7fa71af9db6ec8e4052107899bb2ddaac322914686f450b07b592eeab593c1f64431cf3106577eec90ee620a"
+   },
+   {
+    "keyid": "7d59c5623dd40a74",
+    "memory_id": "mem-0002",
+    "seq": 2,
+    "sig": "da355e77b558daa29e1672f604ab652d0f521e004ff6262004429e31bbe1d551f8d4a573b6361f4da1d8463bb983d77142884a59789f4a3de1276aad3245c20b"
+   },
+   {
+    "keyid": "7d59c5623dd40a74",
+    "memory_id": "mem-0003",
+    "seq": 2,
+    "sig": "92eebee9b3bade71404848b39922df8b15b4bcafe91f991c013cb534798bf74d4c1188e6ccde683e23f3945817d1c00a802e409892d382463be2a57695e86a05"
+   },
+   {
+    "keyid": "7d59c5623dd40a74",
+    "memory_id": "mem-0004",
+    "seq": 2,
+    "sig": "2eddbd33c92e0e8f3ff529a821fc9a8366a7db186da26f3e9db27b5459f218cf4062a50f3db6b05947235623d704e418ec8489573e52902fafe0ff52efc13c04"
+   },
+   {
+    "keyid": "7d59c5623dd40a74",
+    "memory_id": "mem-0000",
+    "seq": 5,
+    "sig": "24712002681b5b216f2a625dbd52b1d063a1cd8eb75f40db4462f468e4eee119c893da0a991288fccb82392a6cddf9a8f5ce20e4b350f790b196a6bc1750ca01"
+   },
+   {
+    "keyid": "7d59c5623dd40a74",
+    "memory_id": "mem-0001",
+    "seq": 3,
+    "sig": "74f7db262c5dffdd3f0a312957524177511e01b527913b8e57039069e87cfd822658139f694e6263fd1a72c3afc77cb0c22caeb59127f49bfec25a48914a9107"
+   },
+   {
+    "keyid": "7d59c5623dd40a74",
+    "memory_id": "mem-0002",
+    "seq": 3,
+    "sig": "c41187d8f24384cd5b6faea53326593019c617f40d486a0de2e8bf691ab48dad359d626fbf8ef3b7e4e7a860511172dd10e7d658e163beb01fc4861b9777cf0c"
+   },
+   {
+    "keyid": "7d59c5623dd40a74",
+    "memory_id": "mem-0003",
+    "seq": 3,
+    "sig": "1337680881dfae4c1a23ef6ad2394758d3d7d00747e03a1bc798d0e47c76e25e73ffff7093348b8393942a023bfd166502b527812c1951cf0cd1453d3f2bea03"
+   },
+   {
+    "keyid": "7d59c5623dd40a74",
+    "memory_id": "mem-0004",
+    "seq": 3,
+    "sig": "04ecd2ce89f978a8707d7a90613bc637ff5f5c3f7f24f16ef5065cb25b20b7762f5f9cb26109501d2cdafa1f7643108dfd9a3a3eccdb777aa64f569cd8465501"
+   },
+   {
+    "keyid": "7d59c5623dd40a74",
+    "memory_id": "mem-0000",
+    "seq": 6,
+    "sig": "da7c64bac8981266ae9ca6a395e7a7a86c8bf6ff74c14e74065104a9ad5eb96584b98bfc781c8a47df348ac3a522e17339242e3616463ffab5310cd1c5cf1707"
+   },
+   {
+    "keyid": "7d59c5623dd40a74",
+    "memory_id": "mem-0001",
+    "seq": 4,
+    "sig": "b7ac952b010af7ac68216dc4508279469f78ef5a4c4998bb61db5010c5f3acd6f62acb44709932923e69940a55f4673d02226907109b7bc5888593ed47e69306"
+   },
+   {
+    "keyid": "7d59c5623dd40a74",
+    "memory_id": "mem-0002",
+    "seq": 4,
+    "sig": "ffc82e90a5cc72934481b1ba2d4dacc4da838505cb0632cf5dc1785d00db96016831e8f6f1ff7c732b2223b7c09af70d52886e027e3175ca1d96b800d051fb06"
+   },
+   {
+    "keyid": "7d59c5623dd40a74",
+    "memory_id": "mem-0003",
+    "seq": 4,
+    "sig": "7caf08e2fc46ab28d9eabe5f74f81ca007e3e03928331bd0fe26df522b83113b2de9c6c693feba0e8c8ba8767cc078a03cf87eb013fae77a0e6dc1bd36dd2900"
+   },
+   {
+    "keyid": "7d59c5623dd40a74",
+    "memory_id": "mem-0004",
+    "seq": 4,
+    "sig": "718e9b37235f90fa825a92740a44160c110fa01541a9e2984a82abc246f9b7848744be1060b99d0dc76f51d36422b834fec9209c900e1d4c600297ff0b9cbf0e"
+   },
+   {
+    "keyid": "7d59c5623dd40a74",
+    "memory_id": "mem-0000",
+    "seq": 7,
+    "sig": "6a9aa78c9429c0f231284e4654429d4ef3e0286b5a1e76b927aa31f716c7ef08cd4cc003c79d10cb69101a4aee3fd990a5575388419160d63467b6db9fe20d09"
+   },
+   {
+    "keyid": "7d59c5623dd40a74",
+    "memory_id": "mem-0001",
+    "seq": 5,
+    "sig": "2c69cd8d6164b347f1cd9502cad85238f306243b8898975f027dec7ed5b8154f74d3c0c4b46fa30cd633c0d3a37d04c5645e1435f3529e57bfcbb9d97963ef0e"
+   },
+   {
+    "keyid": "7d59c5623dd40a74",
+    "memory_id": "mem-0002",
+    "seq": 5,
+    "sig": "3c32aacbdf2d44a6115ca879914628b5b8633c9039ebe8c0c6dcfb1992ec59996b7fbad9feb415bfef825ce09752a02e1ed862f0d08512cf2cd613075461c302"
+   },
+   {
+    "keyid": "7d59c5623dd40a74",
+    "memory_id": "mem-0003",
+    "seq": 5,
+    "sig": "5d8b887999cd61b39d6fff88bfa32fe2650a974c6fda1ff2ed422fe6a7609ea27e88ca77d8078c333b517afa44cedbf5a5fa073fce838e94c712afb5c2b8e707"
+   },
+   {
+    "keyid": "7d59c5623dd40a74",
+    "memory_id": "mem-0004",
+    "seq": 5,
+    "sig": "870c662220f64f94e9bf2ddefe9514a86ab0bf4ccc5818247af42139ef68eb01b52fbb8ed1eef34baa5638b206be7a29960a81c720743328813b676fa98ccb00"
+   },
+   {
+    "keyid": "7d59c5623dd40a74",
+    "memory_id": "mem-0000",
+    "seq": 8,
+    "sig": "f8019a6398b4047cc9399521add9e3c516a144bd486e9911367e1668604e7a501a31e1478000ad7f77176be960c2db66287f17f749da19acd0037a145dedc505"
+   },
+   {
+    "keyid": "7d59c5623dd40a74",
+    "memory_id": "mem-0000",
+    "seq": 9,
+    "sig": "bbef3386c726a96918e1ff4c42cea931e35d5ac0d91c4f4a3b00c26f6acc2b8290eb39642dae20a55b137799fb7496145176ed370c2281aef45a1d98fc30d704"
+   },
+   {
+    "keyid": "7d59c5623dd40a74",
+    "memory_id": "mem-0001",
+    "seq": 6,
+    "sig": "7251fd0b4c2ccd09a3beac65031439319a313c4e9feec7b04bb282f2bd4ca94a5bbecc5eb311c0a48fdc304b4e4cff571a44b53e955413f3ed024d6171359d0b"
+   },
+   {
+    "keyid": "7d59c5623dd40a74",
+    "memory_id": "mem-0001",
+    "seq": 7,
+    "sig": "7187d31f201e8815eb8d26e73974a0358f1bee9d4d0285887d7eab2e5b3bd1be29b8efbad6404a0451e70b61d8cb318dcacabead38eadbdc05ef638d7f66750e"
+   },
+   {
+    "keyid": "7d59c5623dd40a74",
+    "memory_id": "mem-0002",
+    "seq": 6,
+    "sig": "54d96f931bde0481afd4540c730b29776e4333e81e292248b9a72751a544c245b7f023231ac58fa95da4bf30e192e17801501c809c4f01fb4c61784792225006"
+   },
+   {
+    "keyid": "7d59c5623dd40a74",
+    "memory_id": "mem-0002",
+    "seq": 7,
+    "sig": "1506f942f188e5678849c768087f5c60bb3aa70eedd3159df48766a0928eb6cd73013c2ca182d0eabac76df827da2d684ef4e04b12a7498acd9c7f0088333f0b"
+   },
+   {
+    "keyid": "7d59c5623dd40a74",
+    "memory_id": "mem-0003",
+    "seq": 6,
+    "sig": "06864f427e98196181cf574f1b25c88ef596049f6b2dddcb3983a84bb7099b589eae6ae170f95e28cd28e760332a1699f2250041dd37111f355cefb681891304"
+   },
+   {
+    "keyid": "7d59c5623dd40a74",
+    "memory_id": "mem-0003",
+    "seq": 7,
+    "sig": "e37e03f839bcb94b79a3b2cbb1909de51eb906b11bedc8d3ae42aad8b281b90f6647c9d845f181bb32f45167415e480f30543c3b2a083fba75ae83c7fa155303"
+   },
+   {
+    "keyid": "7d59c5623dd40a74",
+    "memory_id": "mem-0004",
+    "seq": 6,
+    "sig": "f0e798c434934db589eddf7730033753ec0f442a232e47df2ba63bdd44f223a22356488444c2167c1be0c614a2b19e6d7766a452f55abf62df1850e5e3077f07"
+   },
+   {
+    "keyid": "7d59c5623dd40a74",
+    "memory_id": "mem-0004",
+    "seq": 7,
+    "sig": "6863d16b05052280ddf6182efd8f33ef79be7dafc53911f70d82414c9023ad06a1ac7013ca0e45d40cc1527abcc53502d02ae7128eafb7249e66fa8e56266107"
+   }
+  ],
   "memories": [
    {
     "confidence": "0.7890625000",
     "content": "The deploy gate requires staging to pass.",
     "content_sha256": "1d1cedfb88861b2daa16074dffccf8ec1181f72e2854874c4255354bc1444335",
-    "created_at": "2026-01-01T00:00:00.000005+00:00",
+    "created_at": "2026-01-01T00:00:00.000006+00:00",
     "created_by": "seasons-agent",
     "custody_status": "CLEAN",
     "embedding_json": "{\"v\":[\"0.0000000000\",\"0.0000000000\",\"-0.3779644730\",\"0.0000000000\",\"0.0000000000\",\"0.0000000000\",\"0.0000000000\",\"0.0000000000\",\"0.0000000000\",\"0.0000000000\",\"0.3779644730\",\"0.0000000000\",\"0.0000000000\",\"0.0000000000\",\"0.0000000000\",\"0.0000000000\",\"0.0000000000\",\"0.0000000000\",\"0.0000000000\",\"0.0000000000\",\"0.0000000000\",\"0.0000000000\",\"0.0000000000\",\"0.0000000000\",\"0.0000000000\",\"0.0000000000\",\"0.0000000000\",\"0.0000000000\",\"0.0000000000\",\"0.0000000000\",\"0.3779644730\",\"0.0000000000\",\"0.0000000000\",\"0.0000000000\",\"0.0000000000\",\"0.0000000000\",\"0.0000000000\",\"0.0000000000\",\"0.0000000000\",\"0.0000000000\",\"0.0000000000\",\"0.0000000000\",\"0.0000000000\",\"0.0000000000\",\"0.0000000000\",\"0.0000000000\",\"0.0000000000\",\"0.0000000000\",\"0.0000000000\",\"0.3779644730\",\"0.0000000000\",\"-0.3779644730\",\"0.0000000000\",\"0.0000000000\",\"0.0000000000\",\"0.0000000000\",\"-0.3779644730\",\"0.0000000000\",\"0.0000000000\",\"0.3779644730\",\"0.0000000000\",\"0.0000000000\",\"0.0000000000\",\"0.0000000000\"]}",
@@ -749,7 +1010,7 @@
     "confidence": "0.7890625000",
     "content": "Rollbacks run via ops rollback.",
     "content_sha256": "97dc1bd2c07a14c3442c8e099bb5c6de54dedb723e649e5d44a1c1c9b67bf9ea",
-    "created_at": "2026-01-01T00:00:00.000006+00:00",
+    "created_at": "2026-01-01T00:00:00.000007+00:00",
     "created_by": "seasons-agent",
     "custody_status": "CLEAN",
     "embedding_json": "{\"v\":[\"0.0000000000\",\"0.0000000000\",\"0.0000000000\",\"0.0000000000\",\"0.0000000000\",\"0.0000000000\",\"0.0000000000\",\"0.0000000000\",\"-0.3779644730\",\"0.0000000000\",\"0.3779644730\",\"0.0000000000\",\"0.0000000000\",\"0.0000000000\",\"0.0000000000\",\"0.0000000000\",\"0.0000000000\",\"0.0000000000\",\"0.3779644730\",\"0.0000000000\",\"0.0000000000\",\"0.0000000000\",\"0.0000000000\",\"0.0000000000\",\"0.0000000000\",\"0.0000000000\",\"0.0000000000\",\"0.0000000000\",\"0.0000000000\",\"0.0000000000\",\"0.0000000000\",\"0.0000000000\",\"0.0000000000\",\"0.0000000000\",\"0.0000000000\",\"0.0000000000\",\"0.0000000000\",\"-0.7559289460\",\"0.0000000000\",\"0.0000000000\",\"0.0000000000\",\"0.0000000000\",\"0.0000000000\",\"0.0000000000\",\"0.0000000000\",\"0.0000000000\",\"0.0000000000\",\"0.0000000000\",\"0.0000000000\",\"0.0000000000\",\"0.0000000000\",\"0.0000000000\",\"0.0000000000\",\"0.0000000000\",\"0.0000000000\",\"0.0000000000\",\"0.0000000000\",\"0.0000000000\",\"0.0000000000\",\"0.0000000000\",\"0.0000000000\",\"0.0000000000\",\"0.0000000000\",\"0.0000000000\"]}",
@@ -763,7 +1024,7 @@
     "confidence": "0.7890625000",
     "content": "Auth tokens expire after one hour.",
     "content_sha256": "dbf413b8ea6ed0328c13527113581e0071ffd8af82c0a1dcbbe904d4cc5eff80",
-    "created_at": "2026-01-01T00:00:00.000007+00:00",
+    "created_at": "2026-01-01T00:00:00.000008+00:00",
     "created_by": "seasons-agent",
     "custody_status": "CLEAN",
     "embedding_json": "{\"v\":[\"0.0000000000\",\"0.0000000000\",\"0.0000000000\",\"0.0000000000\",\"0.4082482905\",\"0.0000000000\",\"0.0000000000\",\"0.0000000000\",\"0.0000000000\",\"0.4082482905\",\"0.0000000000\",\"0.0000000000\",\"0.0000000000\",\"0.0000000000\",\"0.0000000000\",\"0.0000000000\",\"0.0000000000\",\"0.0000000000\",\"0.0000000000\",\"0.0000000000\",\"0.4082482905\",\"0.0000000000\",\"0.0000000000\",\"0.0000000000\",\"0.0000000000\",\"0.0000000000\",\"0.0000000000\",\"0.0000000000\",\"0.0000000000\",\"0.0000000000\",\"0.0000000000\",\"0.0000000000\",\"0.0000000000\",\"0.0000000000\",\"0.0000000000\",\"0.4082482905\",\"0.0000000000\",\"0.0000000000\",\"0.0000000000\",\"0.0000000000\",\"0.0000000000\",\"0.0000000000\",\"0.0000000000\",\"0.0000000000\",\"0.0000000000\",\"0.0000000000\",\"0.0000000000\",\"0.0000000000\",\"0.0000000000\",\"0.0000000000\",\"0.0000000000\",\"0.0000000000\",\"0.0000000000\",\"0.0000000000\",\"0.4082482905\",\"0.0000000000\",\"0.0000000000\",\"0.0000000000\",\"0.0000000000\",\"-0.4082482905\",\"0.0000000000\",\"0.0000000000\",\"0.0000000000\",\"0.0000000000\"]}",
@@ -777,7 +1038,7 @@
     "confidence": "0.7890625000",
     "content": "Cache TTL is five minutes.",
     "content_sha256": "5e3a67da02023e9e0e9b56c9ac61383e4647db94b8c6c996d6e3621dec267b87",
-    "created_at": "2026-01-01T00:00:00.000008+00:00",
+    "created_at": "2026-01-01T00:00:00.000009+00:00",
     "created_by": "seasons-agent",
     "custody_status": "CLEAN",
     "embedding_json": "{\"v\":[\"0.0000000000\",\"0.0000000000\",\"0.0000000000\",\"0.0000000000\",\"0.0000000000\",\"0.0000000000\",\"0.0000000000\",\"0.0000000000\",\"0.0000000000\",\"0.0000000000\",\"0.0000000000\",\"0.0000000000\",\"0.0000000000\",\"0.0000000000\",\"0.0000000000\",\"-0.3779644730\",\"0.0000000000\",\"0.0000000000\",\"0.0000000000\",\"0.0000000000\",\"0.0000000000\",\"0.0000000000\",\"0.0000000000\",\"0.0000000000\",\"0.0000000000\",\"0.0000000000\",\"0.0000000000\",\"0.0000000000\",\"0.0000000000\",\"0.0000000000\",\"0.0000000000\",\"0.0000000000\",\"0.0000000000\",\"0.0000000000\",\"0.7559289460\",\"0.0000000000\",\"0.0000000000\",\"0.3779644730\",\"0.0000000000\",\"0.0000000000\",\"0.0000000000\",\"0.0000000000\",\"0.0000000000\",\"0.0000000000\",\"0.0000000000\",\"-0.3779644730\",\"0.0000000000\",\"0.0000000000\",\"0.0000000000\",\"0.0000000000\",\"0.0000000000\",\"0.0000000000\",\"0.0000000000\",\"0.0000000000\",\"0.0000000000\",\"0.0000000000\",\"0.0000000000\",\"0.0000000000\",\"0.0000000000\",\"0.0000000000\",\"0.0000000000\",\"0.0000000000\",\"0.0000000000\",\"0.0000000000\"]}",
@@ -791,7 +1052,7 @@
     "confidence": "0.7890625000",
     "content": "Queue depth alerts at ten thousand.",
     "content_sha256": "70e2f930211ece6ef78d2bf16eb5ec3fd1f1f6a59bfb978321f53ffe5357d5d5",
-    "created_at": "2026-01-01T00:00:00.000009+00:00",
+    "created_at": "2026-01-01T00:00:00.000010+00:00",
     "created_by": "seasons-agent",
     "custody_status": "CLEAN",
     "embedding_json": "{\"v\":[\"0.4082482905\",\"0.0000000000\",\"0.0000000000\",\"0.0000000000\",\"0.0000000000\",\"-0.4082482905\",\"0.0000000000\",\"0.0000000000\",\"0.0000000000\",\"0.0000000000\",\"0.0000000000\",\"0.0000000000\",\"0.0000000000\",\"0.0000000000\",\"0.0000000000\",\"0.4082482905\",\"0.4082482905\",\"0.0000000000\",\"0.0000000000\",\"0.0000000000\",\"0.0000000000\",\"0.0000000000\",\"0.0000000000\",\"0.0000000000\",\"0.0000000000\",\"0.0000000000\",\"0.0000000000\",\"0.0000000000\",\"0.0000000000\",\"0.0000000000\",\"0.0000000000\",\"0.0000000000\",\"0.0000000000\",\"0.0000000000\",\"-0.4082482905\",\"0.0000000000\",\"0.0000000000\",\"0.0000000000\",\"0.0000000000\",\"0.0000000000\",\"0.0000000000\",\"-0.4082482905\",\"0.0000000000\",\"0.0000000000\",\"0.0000000000\",\"0.0000000000\",\"0.0000000000\",\"0.0000000000\",\"0.0000000000\",\"0.0000000000\",\"0.0000000000\",\"0.0000000000\",\"0.0000000000\",\"0.0000000000\",\"0.0000000000\",\"0.0000000000\",\"0.0000000000\",\"0.0000000000\",\"0.0000000000\",\"0.0000000000\",\"0.0000000000\",\"0.0000000000\",\"0.0000000000\",\"0.0000000000\"]}",
@@ -857,7 +1118,7 @@
    "ab1e0792a2300ec893540a09a1e34fe2ac02c15fad404e0dc736dccbb7cbd1b6"
   ],
   "excised": {
-   "created_at": "2026-01-01T00:00:00.000011+00:00",
+   "created_at": "2026-01-01T00:00:00.000012+00:00",
    "event_type": "REHABILITATED",
    "memory_id": "mem-0000",
    "seq": 2
@@ -1198,7 +1459,7 @@
     ]
    }
   ],
-  "report_sha256": "ef2fc48ff6979d86ced2cfef3315c013009187f6492c3a890248632c1aaa0c7f",
+  "report_sha256": "0166217de0410ff5ee903c0d8ffc0e80c6d7a76f7d36e4ec998f620445a35865",
   "scope_note": "consequential subset = decision-cited receipts; reads nobody acted on have no downstream effect",
   "ungrounded_decisions": [
    {
