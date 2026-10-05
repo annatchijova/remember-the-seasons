@@ -509,6 +509,11 @@ def main(path, keys_path=None, fmt="text"):
         for end in ("from_id", "to_id"):
             if link.get(end) not in mids:
                 dangling.append(f"cell_links.{end}={link.get(end)}")
+    for s in ev.get("event_sigs") or []:
+        if s["seq"] not in seqs.get(s["memory_id"], set()):
+            dangling.append(
+                f"event_sig ({s['memory_id']},{s['seq']}) signs "
+                f"nothing — an attestation with no event")
     check("CF1.7 every sealed reference resolves", not dangling,
           f"{len(dangling)} dangling: {dangling[:4]}")
 

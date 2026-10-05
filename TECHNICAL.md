@@ -107,7 +107,7 @@ only for versions it implemented and tested.
   deterministically (fixed test-only signing seed);
   `--check` proves byte-for-byte regeneration.
 - `differential.sh` builds the clean-room Go verifier in-tree and
-  compares exit code + normalized verdict per artifact: **18/18 AGREE**
+  compares exit code + normalized verdict per artifact: **21/21 AGREE**
   covering signature variants, mutants (tampered events, dropped
   edges, phantom ungrounding, wrong seq, unknown protocol, missing
   payloadType, causes-stripped, transitivity-break, dup-keys), an
@@ -118,7 +118,7 @@ only for versions it implemented and tested.
 
 ## 6. Stigmergy series — adversarial findings, in order
 
-`product/tests/test_stigmergy_pure.py` — 16 checks. The point of the
+`product/tests/test_stigmergy_pure.py` — 18 checks. The point of the
 series was falsification; three of its findings falsified something:
 
 | step | attack | result |

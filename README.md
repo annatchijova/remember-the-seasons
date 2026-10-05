@@ -115,7 +115,7 @@ subordinate of the protocol — by design.
   (see `docs/HYPOTHESES.md`, `docs/EXPERIMENTS.md`).
 - **Protocol conformance**: `mneme-cf-bundle/v1` + `cf-cascade/v2` +
   `causal_ontology 2.0.0` — a clean-room Go verifier reproduces every
-  verdict: **18/18 artifacts agree**, corpus regenerates byte-for-byte,
+  verdict: **21/21 artifacts agree**, corpus regenerates byte-for-byte,
   CI enforces it on every push.
 - **Causal ontology**: spec `product/spec/causal-ontology-v2.md` —
   explicit `causes[]`, transitive-closure invalidation; adjacency
@@ -152,12 +152,13 @@ cd product
 python3 demo.py                     # offline, deterministic
 python3 tests/test_stigmergy_pure.py
 python3 conformance/cf/v1/generate.py --check   # corpus drift check
-bash conformance/cf/v1/differential.sh          # Python ↔ Go, 18/18
+bash conformance/cf/v1/differential.sh          # Python ↔ Go, 21/21
 ```
 
 Deep architecture, protocol versions, threat model, determinism
 scope, and the honest list of what this does not guarantee:
-**[TECHNICAL.md](TECHNICAL.md)**.
+**[TECHNICAL.md](TECHNICAL.md)**. A section-by-section reading of the
+demo: **[docs/DEMO.md](docs/DEMO.md)**.
 
 ## Rules in force here
 

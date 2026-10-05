@@ -911,6 +911,14 @@ func main() {
 			dangling++
 		}
 	}
+	// an event_sig attesting to a nonexistent (memory_id, seq) is
+	// dangling evidence — an attestation with no event
+	for _, sv := range ev["event_sigs"].([]interface{}) {
+		s := sv.(map[string]interface{})
+		if !seqSet[s["memory_id"].(string)][s["seq"].(float64)] {
+			dangling++
+		}
+	}
 	check("CF1.7", dangling == 0)
 
 	// CF1.8 — per-actor attribution: when actor_keys declares a key

@@ -32,6 +32,8 @@
   "mutants/orphan-invalidation.json": "11838ab63f662d4886e6fc6d3a224837517a0de441c89ebd6a81d6f3e9831d96",
   "mutants/phantom-cause.expected.json": "f144862ef7adf7b10bf3ebe0f7728b5a369657e6f4ebcbae097f8dce2276154d",
   "mutants/phantom-cause.json": "06889f857cf4b386fb345cd8fc318849840c014886c83a1a48676d8ff17f5e5e",
+  "mutants/phantom-sig.expected.json": "f144862ef7adf7b10bf3ebe0f7728b5a369657e6f4ebcbae097f8dce2276154d",
+  "mutants/phantom-sig.json": "7d364244c35774c74ff1c349842a8a6000b9f4d0b8d0da66d8c4b1f095444563",
   "mutants/phantom-ungrounding.expected.json": "5c48ac87ac3cf9793df6a0b97ce5ed0e64c3e454b3d086e86c3cd6f502662614",
   "mutants/phantom-ungrounding.json": "75ab7a799e57f458400aa283cca61b51759208ba41a05f261db36201e579b446",
   "mutants/tampered-event.expected.json": "d43bc0abc90e6049e6bedc55d06b4c4cda61257b41e701e675dbd0f5e0f1467a",

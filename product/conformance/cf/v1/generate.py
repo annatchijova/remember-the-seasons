@@ -372,6 +372,16 @@ def build(out_dir):
             e["entry_hash"].encode("ascii")).signature.hex()
     mutant("wrong-actor-sig", _wrong_actor_sig, "CF1.8")
 
+    def _phantom_sig(bb):
+        # an attestation with no event: a correctly-formed event_sig
+        # referencing a (memory_id, seq) that does not exist
+        bb["evidence"]["event_sigs"].append({
+            "keyid": bb["evidence"]["actor_keys"][0]["keyid"],
+            "memory_id": "mem-0000",
+            "seq": 9999,
+            "sig": "00" * 64})
+    mutant("phantom-sig", _phantom_sig, "CF1.7")
+
     mutant("coherent-false",
            lambda bb: (bb["report"].__setitem__(
                            "divergent_receipts", []),

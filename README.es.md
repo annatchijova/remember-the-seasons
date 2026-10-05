@@ -118,13 +118,13 @@ protocolo — por diseño.
   falsificación (`docs/HYPOTHESES.md`, `docs/EXPERIMENTS.md`).
 - **Conformidad de protocolo**: `mneme-cf-bundle/v1` + `cf-cascade/v2`
   + `causal_ontology 2.0.0` — un verificador Go escrito de cero
-  reproduce cada veredicto: **18/18 artifacts coinciden**, el corpus
+  reproduce cada veredicto: **21/21 artifacts coinciden**, el corpus
   se regenera byte-por-byte, y CI lo impone en cada push.
 - **Ontología causal**: spec `product/spec/causal-ontology-v2.md` —
   `causes[]` explícitas, invalidación por clausura transitiva; la
   adyacencia sola ya no mata nada.
 - **Serie stigmergy adversarial**: `product/tests/test_stigmergy_pure.py`
-  — 16 invariantes sobre escritura concurrente multi-autoridad.
+  — 18 invariantes sobre escritura concurrente multi-autoridad.
   Encontró races reales (ya corregidas), demostró que serialización
   no es causalidad, que legalidad no es confluencia, y terminó en una
   frontera documentada: el registro sellado todavía no distingue
@@ -155,12 +155,13 @@ cd product
 python3 demo.py                     # offline, determinístico
 python3 tests/test_stigmergy_pure.py
 python3 conformance/cf/v1/generate.py --check   # drift del corpus
-bash conformance/cf/v1/differential.sh          # Python ↔ Go, 18/18
+bash conformance/cf/v1/differential.sh          # Python ↔ Go, 21/21
 ```
 
 Arquitectura profunda, versiones de protocolo, modelo de amenazas,
 alcance del determinismo y la lista honesta de lo que esto NO
-garantiza: **[TECHNICAL.md](TECHNICAL.md)**.
+garantiza: **[TECHNICAL.md](TECHNICAL.md)**. Lectura del demo sección
+por sección: **[docs/DEMO.md](docs/DEMO.md)**.
 
 ## Reglas vigentes
 

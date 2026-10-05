@@ -50,6 +50,9 @@ class SeasonsAgent:
                 (actor_id, self.keyid, vk, custody.now_ts()))
             self.conn.commit()
 
+            # NOTE: the signer closes over THIS cursor — rebinding
+            # self.cur after init leaves signatures writing to the
+            # stale cursor. Agents keep one conn for their lifetime.
             def _sign(entry, _cur=self.cur, _seed=key_seed):
                 _cur.execute(
                     "INSERT INTO event_sigs (memory_id, seq, keyid,"
