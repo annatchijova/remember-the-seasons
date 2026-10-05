@@ -31,7 +31,7 @@ input[type=file]{margin:10px 0;padding:8px;background:#0a0e08;border:1px dashed 
 <div class="sub">Drop a <code>.dsse.json</code> bundle. This page recomputes every seal in your
 browser — nothing is trusted from the file, nothing leaves this page.</div>
 <input type="file" id="f" accept=".json">
-<div id="out"></div>
+<div id="out"><div class="note">loading demo-bundle.dsse.json …</div></div>
 <script>
 const $=id=>document.getElementById(id);
 const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
@@ -66,8 +66,7 @@ async function edVerify(vkHex,sigB,msgB){
   }catch(_){return null} // browser lacks Ed25519 — degrade honestly
 }
 
-$('f').onchange=async ev=>{
-  const raw=JSON.parse(await ev.target.files[0].text());
+async function verify(raw){
   const out=[];const log=(ok,label,detail='')=>out.push(
     `<div class="chk ${ok===null?'':ok?'pass':'fail'}">${ok===null?'◦':ok?'✓':'✗'} ${esc(label)}
      ${detail?`<span class="hash">${esc(detail)}</span>`:''}</div>`);
@@ -188,5 +187,12 @@ $('f').onchange=async ev=>{
     <div class="hash">report_sha256 ${rep.report_sha256}</div></div>`);
 
   $('out').innerHTML=out.join('');
+}
+$('f').onchange=async ev=>{
+  verify(JSON.parse(await ev.target.files[0].text()));
 };
+// same-origin auto-load: on Pages the demo bundle sits beside this page
+fetch('demo-bundle.dsse.json').then(r=>r.ok?r.json():Promise.reject())
+  .then(verify).catch(()=>{ $('out').innerHTML=
+    '<div class="note">no sibling bundle — drop a .dsse.json above.</div>';});
 </script></body></html>

@@ -163,7 +163,7 @@ alcance del determinismo y la lista honesta de lo que esto NO
 garantiza: **[TECHNICAL.md](TECHNICAL.md)**. Lectura del demo sección
 por sección: **[docs/DEMO.md](docs/DEMO.md)**. Un artefacto de
 evidencia sellado que se verifica sin correr nada: abrí
-**`product/bundle_viewer.html`**, arrastrá
+**`docs/viewer.html`**, arrastrá
 **`docs/demo-bundle.dsse.json`** — la página recomputa cada sello en
 el navegador (digest, chains, referencias, atribución Ed25519).
 
