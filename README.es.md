@@ -4,6 +4,11 @@
 
 **[English](README.md)** · **Español** · **[Technical README](TECHNICAL.md)**
 
+**Verificación de evidencia en vivo — sin instalar nada, sin confiar:**
+**[annatchijova.github.io/remember-the-seasons/viewer.html](https://annatchijova.github.io/remember-the-seasons/viewer.html)**
+abre ya verificado (el bundle de demo auto-carga y cada sello se
+recomputa en tu navegador).
+
 > Nos pidieron construir la próxima frontera de la IA. No podemos
 > afirmar que la revolucionamos. Este es nuestro mejor intento en un mes.
 
@@ -172,6 +177,10 @@ el navegador (digest, chains, referencias, atribución Ed25519).
 Ver `AGENTS.md`. En particular: nada de commit/push sin autorización
 explícita; `sources/` es read-only; cada afirmación va etiquetada
 OBSERVED / INFERRED / PROPOSED / UNKNOWN.
+
+## El producto, como lo ve el jurado
+
+![el UI del demo — banner, respuestas selladas, provenance, contrafáctico](visual/page.png)
 
 ## Licencia y atribución
 

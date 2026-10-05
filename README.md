@@ -4,6 +4,11 @@
 
 **English** · **[Español](README.es.md)** · **[Technical README](TECHNICAL.md)**
 
+**Live evidence check — no install, no trust required:**
+**[annatchijova.github.io/remember-the-seasons/viewer.html](https://annatchijova.github.io/remember-the-seasons/viewer.html)**
+opens already verified (the demo bundle auto-loads and every seal is
+recomputed in your browser).
+
 > We were asked to build the next frontier of AI. We cannot claim to
 > have revolutionized it. This is our best attempt in one month.
 
@@ -169,6 +174,10 @@ the browser (digest, chains, references, Ed25519 attribution).
 See `AGENTS.md`. In particular: no commit/push without explicit
 authorization; `sources/` is read-only; every claim is labelled
 OBSERVED / INFERRED / PROPOSED / UNKNOWN.
+
+## The product, as a judge sees it
+
+![the demo UI — banner, sealed answers, provenance, counterfactual](visual/page.png)
 
 ## License & attribution
 
