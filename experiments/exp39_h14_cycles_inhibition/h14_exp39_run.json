@@ -1,0 +1,130 @@
+{
+  "absolute_incoming_weight_bound": "5/6",
+  "epistemic_labels": {
+    "INFERRED": "In this model, the infinite signed walk sum equals the exact fixed point, while every reported finite prefix leaves a residual.",
+    "OBSERVED": "Exact rational outputs and recurrence checks from this run.",
+    "PROPOSED": "A contractive linear fixed-point model with signed edges represents the tested cyclic propagation semantics.",
+    "UNKNOWN": "Whether Raven, MNEME, or another agent follows these cyclic update semantics."
+  },
+  "exp37_one_step_A_effect_by_node": {
+    "A": "1/1",
+    "B": "1/2",
+    "C": "0/1",
+    "D": "0/1"
+  },
+  "finite_walk_prefixes_A_through_target": {
+    "0": {
+      "C_by_path_length": {},
+      "by_node": {
+        "A": "1/1",
+        "B": "0/1",
+        "C": "0/1",
+        "D": "0/1"
+      }
+    },
+    "1": {
+      "C_by_path_length": {},
+      "by_node": {
+        "A": "1/1",
+        "B": "1/2",
+        "C": "0/1",
+        "D": "0/1"
+      }
+    },
+    "16": {
+      "C_by_path_length": {
+        "10": "1/16384",
+        "12": "-1/131072",
+        "14": "1/1048576",
+        "16": "-1/8388608",
+        "2": "1/4",
+        "4": "-1/32",
+        "6": "1/256",
+        "8": "-1/2048"
+      },
+      "by_node": {
+        "A": "14913081/16777216",
+        "B": "1864135/4194304",
+        "C": "1864135/8388608",
+        "D": "0/1"
+      }
+    },
+    "2": {
+      "C_by_path_length": {
+        "2": "1/4"
+      },
+      "by_node": {
+        "A": "7/8",
+        "B": "1/2",
+        "C": "1/4",
+        "D": "0/1"
+      }
+    },
+    "4": {
+      "C_by_path_length": {
+        "2": "1/4",
+        "4": "-1/32"
+      },
+      "by_node": {
+        "A": "57/64",
+        "B": "7/16",
+        "C": "7/32",
+        "D": "0/1"
+      }
+    },
+    "8": {
+      "C_by_path_length": {
+        "2": "1/4",
+        "4": "-1/32",
+        "6": "1/256",
+        "8": "-1/2048"
+      },
+      "by_node": {
+        "A": "3641/4096",
+        "B": "455/1024",
+        "C": "455/2048",
+        "D": "0/1"
+      }
+    }
+  },
+  "fixed_point_A_effect_by_action": {
+    "X": "10/9",
+    "Y": "4/9"
+  },
+  "fixed_point_A_effect_by_node": {
+    "A": "8/9",
+    "B": "4/9",
+    "C": "2/9",
+    "D": "0/1"
+  },
+  "fixed_point_A_effect_on_X_minus_Y_margin": "2/3",
+  "fixed_point_B_neutralization_effect_by_node": {
+    "A": "-1/9",
+    "B": "4/9",
+    "C": "2/9",
+    "D": "0/1"
+  },
+  "fixed_point_equation_verified": true,
+  "graph": {
+    "A->B": "1/2",
+    "B->A": "-1/4",
+    "B->C": "1/2",
+    "D->C": "1/3"
+  },
+  "limits": "Exact linear rational system under strict contraction only; no nonlinear thresholds, saturation, time-varying updates, or Raven/MNEME claim.",
+  "predeclared_prediction": {
+    "A_activation": "8/9",
+    "A_effect_on_C": "2/9",
+    "B_activation": "4/9",
+    "D_effect_on_C_survives_A_neutralization": true,
+    "finite_walk_prefix_equals_fixed_point": false
+  },
+  "query_seed": {
+    "A": "1/1",
+    "B": "0/1",
+    "C": "0/1",
+    "D": "1/1"
+  },
+  "sha256": "615fe4aa2a400295fe0e63bbace03f36168accff889334af3e349c70711db078",
+  "status": "EXECUTED_BOUNDED_SYNTHETIC_CYCLE_ASSAY"
+}
