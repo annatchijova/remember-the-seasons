@@ -1,0 +1,428 @@
+{
+  "cartesian_domain": {
+    "counterexamples": [
+      {
+        "action": "C",
+        "immediate_output_a": {
+          "causal_C_to_D": "0/1",
+          "choice": "C",
+          "propagation": false
+        },
+        "immediate_output_b": {
+          "causal_C_to_D": "0/1",
+          "choice": "C",
+          "propagation": false
+        },
+        "immediate_outputs_equal": true,
+        "state_a": {
+          "association": "0/1",
+          "link": false,
+          "recency_age": 0,
+          "reinforced": false,
+          "reinforcement_count": 0
+        },
+        "state_b": {
+          "association": "1/4",
+          "link": true,
+          "recency_age": 0,
+          "reinforced": false,
+          "reinforcement_count": 0
+        },
+        "states_equivalent_under_exp48_protocol": true,
+        "successor_a": {
+          "association": "1/8",
+          "link": false,
+          "recency_age": 0,
+          "reinforced": true,
+          "reinforcement_count": 1
+        },
+        "successor_b": {
+          "association": "3/8",
+          "link": true,
+          "recency_age": 0,
+          "reinforced": true,
+          "reinforcement_count": 1
+        },
+        "successors_equivalent_under_exp48_protocol": false
+      },
+      {
+        "action": "C",
+        "immediate_output_a": {
+          "causal_C_to_D": "0/1",
+          "choice": "C",
+          "propagation": false
+        },
+        "immediate_output_b": {
+          "causal_C_to_D": "0/1",
+          "choice": "C",
+          "propagation": false
+        },
+        "immediate_outputs_equal": true,
+        "state_a": {
+          "association": "0/1",
+          "link": false,
+          "recency_age": 0,
+          "reinforced": false,
+          "reinforcement_count": 0
+        },
+        "state_b": {
+          "association": "1/4",
+          "link": true,
+          "recency_age": 1,
+          "reinforced": false,
+          "reinforcement_count": 0
+        },
+        "states_equivalent_under_exp48_protocol": true,
+        "successor_a": {
+          "association": "1/8",
+          "link": false,
+          "recency_age": 0,
+          "reinforced": true,
+          "reinforcement_count": 1
+        },
+        "successor_b": {
+          "association": "3/8",
+          "link": true,
+          "recency_age": 0,
+          "reinforced": true,
+          "reinforcement_count": 1
+        },
+        "successors_equivalent_under_exp48_protocol": false
+      },
+      {
+        "action": "C",
+        "immediate_output_a": {
+          "causal_C_to_D": "0/1",
+          "choice": "C",
+          "propagation": false
+        },
+        "immediate_output_b": {
+          "causal_C_to_D": "0/1",
+          "choice": "C",
+          "propagation": false
+        },
+        "immediate_outputs_equal": true,
+        "state_a": {
+          "association": "0/1",
+          "link": false,
+          "recency_age": 0,
+          "reinforced": false,
+          "reinforcement_count": 0
+        },
+        "state_b": {
+          "association": "1/4",
+          "link": true,
+          "recency_age": 2,
+          "reinforced": false,
+          "reinforcement_count": 0
+        },
+        "states_equivalent_under_exp48_protocol": true,
+        "successor_a": {
+          "association": "1/8",
+          "link": false,
+          "recency_age": 0,
+          "reinforced": true,
+          "reinforcement_count": 1
+        },
+        "successor_b": {
+          "association": "3/8",
+          "link": true,
+          "recency_age": 0,
+          "reinforced": true,
+          "reinforcement_count": 1
+        },
+        "successors_equivalent_under_exp48_protocol": false
+      },
+      {
+        "action": "C",
+        "immediate_output_a": {
+          "causal_C_to_D": "0/1",
+          "choice": "C",
+          "propagation": false
+        },
+        "immediate_output_b": {
+          "causal_C_to_D": "0/1",
+          "choice": "C",
+          "propagation": false
+        },
+        "immediate_outputs_equal": true,
+        "state_a": {
+          "association": "0/1",
+          "link": false,
+          "recency_age": 0,
+          "reinforced": false,
+          "reinforcement_count": 0
+        },
+        "state_b": {
+          "association": "3/8",
+          "link": true,
+          "recency_age": 3,
+          "reinforced": false,
+          "reinforcement_count": 0
+        },
+        "states_equivalent_under_exp48_protocol": true,
+        "successor_a": {
+          "association": "1/8",
+          "link": false,
+          "recency_age": 0,
+          "reinforced": true,
+          "reinforcement_count": 1
+        },
+        "successor_b": {
+          "association": "7/16",
+          "link": true,
+          "recency_age": 0,
+          "reinforced": true,
+          "reinforcement_count": 1
+        },
+        "successors_equivalent_under_exp48_protocol": false
+      },
+      {
+        "action": "C",
+        "immediate_output_a": {
+          "causal_C_to_D": "0/1",
+          "choice": "C",
+          "propagation": false
+        },
+        "immediate_output_b": {
+          "causal_C_to_D": "0/1",
+          "choice": "C",
+          "propagation": false
+        },
+        "immediate_outputs_equal": true,
+        "state_a": {
+          "association": "0/1",
+          "link": false,
+          "recency_age": 1,
+          "reinforced": false,
+          "reinforcement_count": 0
+        },
+        "state_b": {
+          "association": "1/4",
+          "link": true,
+          "recency_age": 0,
+          "reinforced": false,
+          "reinforcement_count": 0
+        },
+        "states_equivalent_under_exp48_protocol": true,
+        "successor_a": {
+          "association": "1/8",
+          "link": false,
+          "recency_age": 0,
+          "reinforced": true,
+          "reinforcement_count": 1
+        },
+        "successor_b": {
+          "association": "3/8",
+          "link": true,
+          "recency_age": 0,
+          "reinforced": true,
+          "reinforcement_count": 1
+        },
+        "successors_equivalent_under_exp48_protocol": false
+      },
+      {
+        "action": "C",
+        "immediate_output_a": {
+          "causal_C_to_D": "0/1",
+          "choice": "C",
+          "propagation": false
+        },
+        "immediate_output_b": {
+          "causal_C_to_D": "0/1",
+          "choice": "C",
+          "propagation": false
+        },
+        "immediate_outputs_equal": true,
+        "state_a": {
+          "association": "0/1",
+          "link": false,
+          "recency_age": 1,
+          "reinforced": false,
+          "reinforcement_count": 0
+        },
+        "state_b": {
+          "association": "1/4",
+          "link": true,
+          "recency_age": 1,
+          "reinforced": false,
+          "reinforcement_count": 0
+        },
+        "states_equivalent_under_exp48_protocol": true,
+        "successor_a": {
+          "association": "1/8",
+          "link": false,
+          "recency_age": 0,
+          "reinforced": true,
+          "reinforcement_count": 1
+        },
+        "successor_b": {
+          "association": "3/8",
+          "link": true,
+          "recency_age": 0,
+          "reinforced": true,
+          "reinforcement_count": 1
+        },
+        "successors_equivalent_under_exp48_protocol": false
+      },
+      {
+        "action": "C",
+        "immediate_output_a": {
+          "causal_C_to_D": "0/1",
+          "choice": "C",
+          "propagation": false
+        },
+        "immediate_output_b": {
+          "causal_C_to_D": "0/1",
+          "choice": "C",
+          "propagation": false
+        },
+        "immediate_outputs_equal": true,
+        "state_a": {
+          "association": "0/1",
+          "link": false,
+          "recency_age": 1,
+          "reinforced": false,
+          "reinforcement_count": 0
+        },
+        "state_b": {
+          "association": "1/4",
+          "link": true,
+          "recency_age": 2,
+          "reinforced": false,
+          "reinforcement_count": 0
+        },
+        "states_equivalent_under_exp48_protocol": true,
+        "successor_a": {
+          "association": "1/8",
+          "link": false,
+          "recency_age": 0,
+          "reinforced": true,
+          "reinforcement_count": 1
+        },
+        "successor_b": {
+          "association": "3/8",
+          "link": true,
+          "recency_age": 0,
+          "reinforced": true,
+          "reinforcement_count": 1
+        },
+        "successors_equivalent_under_exp48_protocol": false
+      },
+      {
+        "action": "C",
+        "immediate_output_a": {
+          "causal_C_to_D": "0/1",
+          "choice": "C",
+          "propagation": false
+        },
+        "immediate_output_b": {
+          "causal_C_to_D": "0/1",
+          "choice": "C",
+          "propagation": false
+        },
+        "immediate_outputs_equal": true,
+        "state_a": {
+          "association": "0/1",
+          "link": false,
+          "recency_age": 1,
+          "reinforced": false,
+          "reinforcement_count": 0
+        },
+        "state_b": {
+          "association": "3/8",
+          "link": true,
+          "recency_age": 3,
+          "reinforced": false,
+          "reinforcement_count": 0
+        },
+        "states_equivalent_under_exp48_protocol": true,
+        "successor_a": {
+          "association": "1/8",
+          "link": false,
+          "recency_age": 0,
+          "reinforced": true,
+          "reinforcement_count": 1
+        },
+        "successor_b": {
+          "association": "7/16",
+          "link": true,
+          "recency_age": 0,
+          "reinforced": true,
+          "reinforcement_count": 1
+        },
+        "successors_equivalent_under_exp48_protocol": false
+      }
+    ],
+    "equivalence_class_count": 441,
+    "equivalent_unordered_state_pairs": 24822,
+    "immediate_output_mismatch_count": 0,
+    "pair_action_checks": 49644,
+    "state_count": 1512,
+    "successor_class_mismatch_count": 3843,
+    "transition_congruence_holds_for_checked_domain": false
+  },
+  "epistemic_status": {
+    "INFERRED": "A counterexample with equal current protocol signatures but distinct successor signatures shows the Exp48 quotient is not a congruence for that tested domain and action set. If no counterexample exists, the result would support congruence only over that finite domain and action set.",
+    "OBSERVED": "The pinned Exp48 result verified with canonical SHA256 f143334a0bb89cac6c806e94c0af7ffc767459ce06dac2025c6f92a4997c8914. Exp48 defines equivalence by exact output traces for 24 fixed schedules.",
+    "PROPOSED": "This assay tests all unordered equivalent-state pairs and both forced actions C and K, comparing immediate observable outputs and whether successor states remain equivalent under the same Exp48 protocol.",
+    "UNKNOWN": "Whether a transition-stable quotient exists with the same classes over arbitrary future query inputs, or in Raven/MNEME."
+  },
+  "experiment": "Exp49",
+  "limits": "The Cartesian domain is not transition-closed: its one-eighth association grid omits reachable sixteenth-step values. The seed closure tests all C/K action sequences from one seed but not every possible initial history. The Cartesian-domain counterexample concerns states that are not in the documented seed closure. The stable quotient result applies only to that 172-state closure, the two C/K actions, and this synthetic transition system; it does not cover other initial histories or Raven/MNEME.",
+  "protocol": {
+    "action_semantics": "Query scores force the named choice: 0 selects C; 3/2 selects K.",
+    "actions": {
+      "C": "0/1",
+      "K": "3/2"
+    },
+    "check_rule": "For every equivalent pair and each action, immediate outputs must agree and successors must remain equivalent.",
+    "immediate_observables": [
+      "choice",
+      "propagation",
+      "causal_C_to_D"
+    ],
+    "successor_equivalence": "Exact agreement on all 24 Exp48 probe schedules."
+  },
+  "reachable_seed_closure": {
+    "counterexamples": [],
+    "equivalence_class_count": 118,
+    "equivalent_unordered_state_pairs": 108,
+    "immediate_output_mismatch_count": 0,
+    "pair_action_checks": 216,
+    "seed": {
+      "association": "3/8",
+      "link": true,
+      "recency_age": 0,
+      "reinforced": true,
+      "reinforcement_count": 3
+    },
+    "seed_history": {
+      "initial_association": "0/1",
+      "paired_updates": 3,
+      "reinforcement_only_events": 0
+    },
+    "state_count": 172,
+    "successor_class_mismatch_count": 0,
+    "transition_congruence_holds_for_checked_domain": true
+  },
+  "sha256": "bc321768caab06edaf09eefbc8a02e61c141cb4a6fc6a550ad2b65c1dbbda4ed",
+  "source_provenance": {
+    "exp48": {
+      "artifact": "experiments/exp48_h14_observational_quotient/h14_exp48_run.json",
+      "canonical_sha256": "f143334a0bb89cac6c806e94c0af7ffc767459ce06dac2025c6f92a4997c8914",
+      "path": "experiments/exp48_h14_observational_quotient/exp48_h14_observational_quotient.py",
+      "use": "Defines the 24-schedule observational equivalence and reachable seed closure."
+    }
+  },
+  "status": "EXECUTED_SYNTHETIC_QUOTIENT_CONGRUENCE_ASSAY",
+  "title": "Transition congruence of the finite Exp48 observational quotient",
+  "verdict": {
+    "claim_scope": "The 172 states reachable from the one documented seed under the two declared actions. In this model, every query induces C or K, so a closed, output-preserving congruence predicts every finite C/K sequence by induction.",
+    "exp48_quotient_is_congruent_on_cartesian_domain": false,
+    "exp48_quotient_is_congruent_on_reachable_seed_closure": true,
+    "reachable_seed_closure_is_closed_under_actions": true,
+    "reachable_seed_closure_minimum_classes_for_behavioral_prediction": 118,
+    "reachable_seed_closure_quotient_supports_all_finite_action_sequences": true
+  }
+}

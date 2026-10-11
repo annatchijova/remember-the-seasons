@@ -13,11 +13,13 @@ recomputed in your browser).
 > have revolutionized it. This is our best attempt in one month.
 
 > STATUS: the main research phase is closed; H14 follow-up research through
-> Exp48 is active in `experiments/`. These are synthetic assays, not
+> Exp49 is active in `experiments/`. These are synthetic assays, not
 > Raven/MNEME evaluations. Exp48 found that the 1,512-state Cartesian domain
 > used by Exp47 differs from the 172-state closure reachable from its
 > documented seed, and computed observational quotients for both under 24
-> fixed query schedules. A working prototype lives in `product/`; sources
+> fixed query schedules. Exp49 found the 118-class quotient is stable under
+> both declared actions on that seed closure; the Cartesian quotient is not.
+> A working prototype lives in `product/`; sources
 > remain read-only, claims stay labelled, and limitations are documented.
 
 ## The problem
@@ -121,13 +123,17 @@ subordinate of the protocol — by design.
 ## The evidence
 
 - **Research**: `experiments/` — Exp19–35, the main falsification chain,
-  plus H14 follow-up assays Exp36–48. **OBSERVED, synthetic:** Exp48 groups
+  plus H14 follow-up assays Exp36–49. **OBSERVED, synthetic:** Exp48 groups
   states by exact choice, propagation, and causal-contribution traces under
   its 24 fixed schedules. It finds 441 observational classes in Exp47's
   1,512-state Cartesian domain and 118 classes in a 172-state closure from
   one documented seed; 60 states in that closure fall outside the Cartesian
-  domain. This quotient is specific to those schedules and does not validate
-  Raven/MNEME. See [Exp48's run artifact](experiments/exp48_h14_observational_quotient/h14_exp48_run.json),
+  domain. **OBSERVED, synthetic:** Exp49 checked all 108 equivalent state
+  pairs and both actions in the seed closure: immediate outputs agreed and
+  successor classes remained equivalent. The Cartesian quotient had 3,843
+  successor-class mismatches. The stable result applies to the declared
+  transition system and seed closure, not Raven/MNEME. See the [Exp48 run](experiments/exp48_h14_observational_quotient/h14_exp48_run.json)
+  and [Exp49 run](experiments/exp49_h14_quotient_congruence/h14_exp49_run.json),
   `docs/HYPOTHESES.md`, and `docs/EXPERIMENTS.md`.
 - **Protocol conformance**: `mneme-cf-bundle/v1` + `cf-cascade/v2` +
   `causal_ontology 2.0.0` — a clean-room Go verifier reproduces every
@@ -150,7 +156,7 @@ remember-the-seasons/
   sources/       read-only research snapshots (raven-memory, mneme,
                  stigmergy — each with PROVENANCE.md)
   research/      archaeology inventories, mechanism maps
-  experiments/   Exp19–Exp35 falsification chain + H14 Exp36–48
+  experiments/   Exp19–Exp35 falsification chain + H14 Exp36–49
   docs/          research package, hypotheses, stop conditions
   product/       the working skeleton — see product/README.md
     mneme/       custody, authority, receipts, claims, canonical JSON
