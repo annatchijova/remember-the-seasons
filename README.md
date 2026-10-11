@@ -12,10 +12,12 @@ recomputed in your browser).
 > We were asked to build the next frontier of AI. We cannot claim to
 > have revolutionized it. This is our best attempt in one month.
 
-> STATUS: the main research phase is closed; H14 follow-up research is
-> active in `experiments/exp36_h14/` and
-> `experiments/exp37_h14_measurement/`. These are synthetic assays, not
-> Raven/MNEME evaluations. A working prototype lives in `product/`; sources
+> STATUS: the main research phase is closed; H14 follow-up research through
+> Exp48 is active in `experiments/`. These are synthetic assays, not
+> Raven/MNEME evaluations. Exp48 found that the 1,512-state Cartesian domain
+> used by Exp47 differs from the 172-state closure reachable from its
+> documented seed, and computed observational quotients for both under 24
+> fixed query schedules. A working prototype lives in `product/`; sources
 > remain read-only, claims stay labelled, and limitations are documented.
 
 ## The problem
@@ -119,11 +121,14 @@ subordinate of the protocol — by design.
 ## The evidence
 
 - **Research**: `experiments/` — Exp19–35, the main falsification chain,
-  plus H14 follow-up assays Exp36 and Exp37. Exp37 preserves signed
-  action-score contributions that choice-flip metrics can hide in its toy
-  setup; H14 remains open, and neither assay evaluates Raven/MNEME. See
-  `docs/HYPOTHESES.md`, `docs/EXPERIMENTS.md`, and
-  `research/PHASE11_H14_EXP37_MEASUREMENT.md`.
+  plus H14 follow-up assays Exp36–48. **OBSERVED, synthetic:** Exp48 groups
+  states by exact choice, propagation, and causal-contribution traces under
+  its 24 fixed schedules. It finds 441 observational classes in Exp47's
+  1,512-state Cartesian domain and 118 classes in a 172-state closure from
+  one documented seed; 60 states in that closure fall outside the Cartesian
+  domain. This quotient is specific to those schedules and does not validate
+  Raven/MNEME. See [Exp48's run artifact](experiments/exp48_h14_observational_quotient/h14_exp48_run.json),
+  `docs/HYPOTHESES.md`, and `docs/EXPERIMENTS.md`.
 - **Protocol conformance**: `mneme-cf-bundle/v1` + `cf-cascade/v2` +
   `causal_ontology 2.0.0` — a clean-room Go verifier reproduces every
   verdict: **21/21 artifacts agree**, corpus regenerates byte-for-byte,
@@ -145,7 +150,7 @@ remember-the-seasons/
   sources/       read-only research snapshots (raven-memory, mneme,
                  stigmergy — each with PROVENANCE.md)
   research/      archaeology inventories, mechanism maps
-  experiments/   Exp19–Exp35 falsification chain + H14 Exp36–37
+  experiments/   Exp19–Exp35 falsification chain + H14 Exp36–48
   docs/          research package, hypotheses, stop conditions
   product/       the working skeleton — see product/README.md
     mneme/       custody, authority, receipts, claims, canonical JSON
