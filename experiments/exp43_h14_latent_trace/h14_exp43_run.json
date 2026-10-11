@@ -1,0 +1,1112 @@
+{
+  "design": {
+    "association_increment_per_paired_experience": "1/8",
+    "controls": {
+      "equalized_history": "Set both branches' C->D association to zero before the same paired reactivation schedule; their recovery timing should match.",
+      "sham": "Present C without D; the declared pair-dependent rule predicts no association recovery in either branch."
+    },
+    "familiarity_increment_per_presented_memory": "1/4",
+    "primary_falsifier": "The latent-trace recovery claim is falsified in this protocol if the high-residual branch does not regain C->D propagation before the zero-residual branch under the same paired experiences.",
+    "propagation_threshold": "1/2",
+    "reactivation_event": "A common external cue pair presents C and D together; a separate C-seeded probe measures C->D transmission after the experience context is cleared.",
+    "state_rule": "REINFORCED iff familiarity >= 1/2; otherwise NEUTRAL.",
+    "steps": 4
+  },
+  "epistemic_labels": {
+    "INFERRED": "Any earlier threshold crossing in the high-residual branch is caused by its different initial association under the declared equal updates; equal-history and sham controls test this explanation.",
+    "OBSERVED": "The exact Exp42 post-washout values loaded from the hash-verified result, and the deterministic trajectories generated here.",
+    "PROPOSED": "An external paired C/D reactivation increments their association by 1/8; propagation is enabled at association >= 1/2; the causal score oracle is synthetic.",
+    "UNKNOWN": "Whether an analogous latent trace or accelerated functional recovery occurs in Raven, MNEME, or deployed agents."
+  },
+  "equalized_history_control": {
+    "during_bfs": [
+      {
+        "association_C_to_D": "0/1",
+        "causal_C_effect": {
+          "delta_by_action": {
+            "X": "1/1",
+            "Y": "0/1"
+          },
+          "delta_margin_X_minus_Y": "1/1",
+          "score_C_suppressed": {
+            "X": "0/1",
+            "Y": "1/4"
+          },
+          "score_with_C": {
+            "X": "1/1",
+            "Y": "1/4"
+          }
+        },
+        "familiarity": {
+          "C": "3/8",
+          "D": "3/8"
+        },
+        "label": "post_washout_baseline",
+        "learning_enabled": true,
+        "propagation_probe": {
+          "C_propagates_to_D": false,
+          "C_seeded": true,
+          "C_to_D_association": "0/1",
+          "D_candidate": false,
+          "threshold": "1/2"
+        },
+        "states": {
+          "C": "NEUTRAL",
+          "D": "NEUTRAL"
+        }
+      },
+      {
+        "association_C_to_D": "1/8",
+        "causal_C_effect": {
+          "delta_by_action": {
+            "X": "1/1",
+            "Y": "0/1"
+          },
+          "delta_margin_X_minus_Y": "1/1",
+          "score_C_suppressed": {
+            "X": "0/1",
+            "Y": "1/4"
+          },
+          "score_with_C": {
+            "X": "1/1",
+            "Y": "1/4"
+          }
+        },
+        "familiarity": {
+          "C": "5/8",
+          "D": "5/8"
+        },
+        "label": "reactivation_1",
+        "learning_enabled": true,
+        "propagation_probe": {
+          "C_propagates_to_D": false,
+          "C_seeded": true,
+          "C_to_D_association": "1/8",
+          "D_candidate": false,
+          "threshold": "1/2"
+        },
+        "states": {
+          "C": "REINFORCED",
+          "D": "REINFORCED"
+        }
+      },
+      {
+        "association_C_to_D": "1/4",
+        "causal_C_effect": {
+          "delta_by_action": {
+            "X": "1/1",
+            "Y": "0/1"
+          },
+          "delta_margin_X_minus_Y": "1/1",
+          "score_C_suppressed": {
+            "X": "0/1",
+            "Y": "1/4"
+          },
+          "score_with_C": {
+            "X": "1/1",
+            "Y": "1/4"
+          }
+        },
+        "familiarity": {
+          "C": "7/8",
+          "D": "7/8"
+        },
+        "label": "reactivation_2",
+        "learning_enabled": true,
+        "propagation_probe": {
+          "C_propagates_to_D": false,
+          "C_seeded": true,
+          "C_to_D_association": "1/4",
+          "D_candidate": false,
+          "threshold": "1/2"
+        },
+        "states": {
+          "C": "REINFORCED",
+          "D": "REINFORCED"
+        }
+      },
+      {
+        "association_C_to_D": "3/8",
+        "causal_C_effect": {
+          "delta_by_action": {
+            "X": "1/1",
+            "Y": "0/1"
+          },
+          "delta_margin_X_minus_Y": "1/1",
+          "score_C_suppressed": {
+            "X": "0/1",
+            "Y": "1/4"
+          },
+          "score_with_C": {
+            "X": "1/1",
+            "Y": "1/4"
+          }
+        },
+        "familiarity": {
+          "C": "1/1",
+          "D": "1/1"
+        },
+        "label": "reactivation_3",
+        "learning_enabled": true,
+        "propagation_probe": {
+          "C_propagates_to_D": false,
+          "C_seeded": true,
+          "C_to_D_association": "3/8",
+          "D_candidate": false,
+          "threshold": "1/2"
+        },
+        "states": {
+          "C": "REINFORCED",
+          "D": "REINFORCED"
+        }
+      },
+      {
+        "association_C_to_D": "1/2",
+        "causal_C_effect": {
+          "delta_by_action": {
+            "X": "1/1",
+            "Y": "1/2"
+          },
+          "delta_margin_X_minus_Y": "1/2",
+          "score_C_suppressed": {
+            "X": "0/1",
+            "Y": "1/4"
+          },
+          "score_with_C": {
+            "X": "1/1",
+            "Y": "3/4"
+          }
+        },
+        "familiarity": {
+          "C": "1/1",
+          "D": "1/1"
+        },
+        "label": "reactivation_4",
+        "learning_enabled": true,
+        "propagation_probe": {
+          "C_propagates_to_D": true,
+          "C_seeded": true,
+          "C_to_D_association": "1/2",
+          "D_candidate": true,
+          "threshold": "1/2"
+        },
+        "states": {
+          "C": "REINFORCED",
+          "D": "REINFORCED"
+        }
+      }
+    ],
+    "post_bfs": [
+      {
+        "association_C_to_D": "0/1",
+        "causal_C_effect": {
+          "delta_by_action": {
+            "X": "1/1",
+            "Y": "0/1"
+          },
+          "delta_margin_X_minus_Y": "1/1",
+          "score_C_suppressed": {
+            "X": "0/1",
+            "Y": "1/4"
+          },
+          "score_with_C": {
+            "X": "1/1",
+            "Y": "1/4"
+          }
+        },
+        "familiarity": {
+          "C": "3/8",
+          "D": "0/1"
+        },
+        "label": "post_washout_baseline",
+        "learning_enabled": true,
+        "propagation_probe": {
+          "C_propagates_to_D": false,
+          "C_seeded": true,
+          "C_to_D_association": "0/1",
+          "D_candidate": false,
+          "threshold": "1/2"
+        },
+        "states": {
+          "C": "NEUTRAL",
+          "D": "NEUTRAL"
+        }
+      },
+      {
+        "association_C_to_D": "1/8",
+        "causal_C_effect": {
+          "delta_by_action": {
+            "X": "1/1",
+            "Y": "0/1"
+          },
+          "delta_margin_X_minus_Y": "1/1",
+          "score_C_suppressed": {
+            "X": "0/1",
+            "Y": "1/4"
+          },
+          "score_with_C": {
+            "X": "1/1",
+            "Y": "1/4"
+          }
+        },
+        "familiarity": {
+          "C": "5/8",
+          "D": "1/4"
+        },
+        "label": "reactivation_1",
+        "learning_enabled": true,
+        "propagation_probe": {
+          "C_propagates_to_D": false,
+          "C_seeded": true,
+          "C_to_D_association": "1/8",
+          "D_candidate": false,
+          "threshold": "1/2"
+        },
+        "states": {
+          "C": "REINFORCED",
+          "D": "NEUTRAL"
+        }
+      },
+      {
+        "association_C_to_D": "1/4",
+        "causal_C_effect": {
+          "delta_by_action": {
+            "X": "1/1",
+            "Y": "0/1"
+          },
+          "delta_margin_X_minus_Y": "1/1",
+          "score_C_suppressed": {
+            "X": "0/1",
+            "Y": "1/4"
+          },
+          "score_with_C": {
+            "X": "1/1",
+            "Y": "1/4"
+          }
+        },
+        "familiarity": {
+          "C": "7/8",
+          "D": "1/2"
+        },
+        "label": "reactivation_2",
+        "learning_enabled": true,
+        "propagation_probe": {
+          "C_propagates_to_D": false,
+          "C_seeded": true,
+          "C_to_D_association": "1/4",
+          "D_candidate": false,
+          "threshold": "1/2"
+        },
+        "states": {
+          "C": "REINFORCED",
+          "D": "REINFORCED"
+        }
+      },
+      {
+        "association_C_to_D": "3/8",
+        "causal_C_effect": {
+          "delta_by_action": {
+            "X": "1/1",
+            "Y": "0/1"
+          },
+          "delta_margin_X_minus_Y": "1/1",
+          "score_C_suppressed": {
+            "X": "0/1",
+            "Y": "1/4"
+          },
+          "score_with_C": {
+            "X": "1/1",
+            "Y": "1/4"
+          }
+        },
+        "familiarity": {
+          "C": "1/1",
+          "D": "3/4"
+        },
+        "label": "reactivation_3",
+        "learning_enabled": true,
+        "propagation_probe": {
+          "C_propagates_to_D": false,
+          "C_seeded": true,
+          "C_to_D_association": "3/8",
+          "D_candidate": false,
+          "threshold": "1/2"
+        },
+        "states": {
+          "C": "REINFORCED",
+          "D": "REINFORCED"
+        }
+      },
+      {
+        "association_C_to_D": "1/2",
+        "causal_C_effect": {
+          "delta_by_action": {
+            "X": "1/1",
+            "Y": "1/2"
+          },
+          "delta_margin_X_minus_Y": "1/2",
+          "score_C_suppressed": {
+            "X": "0/1",
+            "Y": "1/4"
+          },
+          "score_with_C": {
+            "X": "1/1",
+            "Y": "3/4"
+          }
+        },
+        "familiarity": {
+          "C": "1/1",
+          "D": "1/1"
+        },
+        "label": "reactivation_4",
+        "learning_enabled": true,
+        "propagation_probe": {
+          "C_propagates_to_D": true,
+          "C_seeded": true,
+          "C_to_D_association": "1/2",
+          "D_candidate": true,
+          "threshold": "1/2"
+        },
+        "states": {
+          "C": "REINFORCED",
+          "D": "REINFORCED"
+        }
+      }
+    ]
+  },
+  "exp42_input": {
+    "artifact": "experiments/exp42_h14_longitudinal/h14_exp42_run.json",
+    "sha256": "ffd85a7ad396e029ceff5e0438b60dfb085c7b2b099760873ca52ce995a98cbd",
+    "source_branches": {
+      "during_bfs": {
+        "association_C_to_D": "3/8",
+        "familiarity_C": "3/8",
+        "familiarity_D": "3/8",
+        "state_C": "NEUTRAL",
+        "state_D": "NEUTRAL"
+      },
+      "post_bfs": {
+        "association_C_to_D": "0/1",
+        "familiarity_C": "3/8",
+        "familiarity_D": "0/1",
+        "state_C": "NEUTRAL",
+        "state_D": "NEUTRAL"
+      }
+    }
+  },
+  "limits": "A deterministic threshold model and hand-authored reactivation rule; no noisy retrieval, alternative learning rules, persistent memory engine, Raven runtime, MNEME, or human data.",
+  "paired_reactivation": {
+    "during_bfs": [
+      {
+        "association_C_to_D": "3/8",
+        "causal_C_effect": {
+          "delta_by_action": {
+            "X": "1/1",
+            "Y": "0/1"
+          },
+          "delta_margin_X_minus_Y": "1/1",
+          "score_C_suppressed": {
+            "X": "0/1",
+            "Y": "1/4"
+          },
+          "score_with_C": {
+            "X": "1/1",
+            "Y": "1/4"
+          }
+        },
+        "familiarity": {
+          "C": "3/8",
+          "D": "3/8"
+        },
+        "label": "post_washout_baseline",
+        "learning_enabled": true,
+        "propagation_probe": {
+          "C_propagates_to_D": false,
+          "C_seeded": true,
+          "C_to_D_association": "3/8",
+          "D_candidate": false,
+          "threshold": "1/2"
+        },
+        "states": {
+          "C": "NEUTRAL",
+          "D": "NEUTRAL"
+        }
+      },
+      {
+        "association_C_to_D": "1/2",
+        "causal_C_effect": {
+          "delta_by_action": {
+            "X": "1/1",
+            "Y": "1/2"
+          },
+          "delta_margin_X_minus_Y": "1/2",
+          "score_C_suppressed": {
+            "X": "0/1",
+            "Y": "1/4"
+          },
+          "score_with_C": {
+            "X": "1/1",
+            "Y": "3/4"
+          }
+        },
+        "familiarity": {
+          "C": "5/8",
+          "D": "5/8"
+        },
+        "label": "reactivation_1",
+        "learning_enabled": true,
+        "propagation_probe": {
+          "C_propagates_to_D": true,
+          "C_seeded": true,
+          "C_to_D_association": "1/2",
+          "D_candidate": true,
+          "threshold": "1/2"
+        },
+        "states": {
+          "C": "REINFORCED",
+          "D": "REINFORCED"
+        }
+      },
+      {
+        "association_C_to_D": "5/8",
+        "causal_C_effect": {
+          "delta_by_action": {
+            "X": "1/1",
+            "Y": "5/8"
+          },
+          "delta_margin_X_minus_Y": "3/8",
+          "score_C_suppressed": {
+            "X": "0/1",
+            "Y": "1/4"
+          },
+          "score_with_C": {
+            "X": "1/1",
+            "Y": "7/8"
+          }
+        },
+        "familiarity": {
+          "C": "7/8",
+          "D": "7/8"
+        },
+        "label": "reactivation_2",
+        "learning_enabled": true,
+        "propagation_probe": {
+          "C_propagates_to_D": true,
+          "C_seeded": true,
+          "C_to_D_association": "5/8",
+          "D_candidate": true,
+          "threshold": "1/2"
+        },
+        "states": {
+          "C": "REINFORCED",
+          "D": "REINFORCED"
+        }
+      },
+      {
+        "association_C_to_D": "3/4",
+        "causal_C_effect": {
+          "delta_by_action": {
+            "X": "1/1",
+            "Y": "3/4"
+          },
+          "delta_margin_X_minus_Y": "1/4",
+          "score_C_suppressed": {
+            "X": "0/1",
+            "Y": "1/4"
+          },
+          "score_with_C": {
+            "X": "1/1",
+            "Y": "1/1"
+          }
+        },
+        "familiarity": {
+          "C": "1/1",
+          "D": "1/1"
+        },
+        "label": "reactivation_3",
+        "learning_enabled": true,
+        "propagation_probe": {
+          "C_propagates_to_D": true,
+          "C_seeded": true,
+          "C_to_D_association": "3/4",
+          "D_candidate": true,
+          "threshold": "1/2"
+        },
+        "states": {
+          "C": "REINFORCED",
+          "D": "REINFORCED"
+        }
+      },
+      {
+        "association_C_to_D": "7/8",
+        "causal_C_effect": {
+          "delta_by_action": {
+            "X": "1/1",
+            "Y": "7/8"
+          },
+          "delta_margin_X_minus_Y": "1/8",
+          "score_C_suppressed": {
+            "X": "0/1",
+            "Y": "1/4"
+          },
+          "score_with_C": {
+            "X": "1/1",
+            "Y": "9/8"
+          }
+        },
+        "familiarity": {
+          "C": "1/1",
+          "D": "1/1"
+        },
+        "label": "reactivation_4",
+        "learning_enabled": true,
+        "propagation_probe": {
+          "C_propagates_to_D": true,
+          "C_seeded": true,
+          "C_to_D_association": "7/8",
+          "D_candidate": true,
+          "threshold": "1/2"
+        },
+        "states": {
+          "C": "REINFORCED",
+          "D": "REINFORCED"
+        }
+      }
+    ],
+    "post_bfs": [
+      {
+        "association_C_to_D": "0/1",
+        "causal_C_effect": {
+          "delta_by_action": {
+            "X": "1/1",
+            "Y": "0/1"
+          },
+          "delta_margin_X_minus_Y": "1/1",
+          "score_C_suppressed": {
+            "X": "0/1",
+            "Y": "1/4"
+          },
+          "score_with_C": {
+            "X": "1/1",
+            "Y": "1/4"
+          }
+        },
+        "familiarity": {
+          "C": "3/8",
+          "D": "0/1"
+        },
+        "label": "post_washout_baseline",
+        "learning_enabled": true,
+        "propagation_probe": {
+          "C_propagates_to_D": false,
+          "C_seeded": true,
+          "C_to_D_association": "0/1",
+          "D_candidate": false,
+          "threshold": "1/2"
+        },
+        "states": {
+          "C": "NEUTRAL",
+          "D": "NEUTRAL"
+        }
+      },
+      {
+        "association_C_to_D": "1/8",
+        "causal_C_effect": {
+          "delta_by_action": {
+            "X": "1/1",
+            "Y": "0/1"
+          },
+          "delta_margin_X_minus_Y": "1/1",
+          "score_C_suppressed": {
+            "X": "0/1",
+            "Y": "1/4"
+          },
+          "score_with_C": {
+            "X": "1/1",
+            "Y": "1/4"
+          }
+        },
+        "familiarity": {
+          "C": "5/8",
+          "D": "1/4"
+        },
+        "label": "reactivation_1",
+        "learning_enabled": true,
+        "propagation_probe": {
+          "C_propagates_to_D": false,
+          "C_seeded": true,
+          "C_to_D_association": "1/8",
+          "D_candidate": false,
+          "threshold": "1/2"
+        },
+        "states": {
+          "C": "REINFORCED",
+          "D": "NEUTRAL"
+        }
+      },
+      {
+        "association_C_to_D": "1/4",
+        "causal_C_effect": {
+          "delta_by_action": {
+            "X": "1/1",
+            "Y": "0/1"
+          },
+          "delta_margin_X_minus_Y": "1/1",
+          "score_C_suppressed": {
+            "X": "0/1",
+            "Y": "1/4"
+          },
+          "score_with_C": {
+            "X": "1/1",
+            "Y": "1/4"
+          }
+        },
+        "familiarity": {
+          "C": "7/8",
+          "D": "1/2"
+        },
+        "label": "reactivation_2",
+        "learning_enabled": true,
+        "propagation_probe": {
+          "C_propagates_to_D": false,
+          "C_seeded": true,
+          "C_to_D_association": "1/4",
+          "D_candidate": false,
+          "threshold": "1/2"
+        },
+        "states": {
+          "C": "REINFORCED",
+          "D": "REINFORCED"
+        }
+      },
+      {
+        "association_C_to_D": "3/8",
+        "causal_C_effect": {
+          "delta_by_action": {
+            "X": "1/1",
+            "Y": "0/1"
+          },
+          "delta_margin_X_minus_Y": "1/1",
+          "score_C_suppressed": {
+            "X": "0/1",
+            "Y": "1/4"
+          },
+          "score_with_C": {
+            "X": "1/1",
+            "Y": "1/4"
+          }
+        },
+        "familiarity": {
+          "C": "1/1",
+          "D": "3/4"
+        },
+        "label": "reactivation_3",
+        "learning_enabled": true,
+        "propagation_probe": {
+          "C_propagates_to_D": false,
+          "C_seeded": true,
+          "C_to_D_association": "3/8",
+          "D_candidate": false,
+          "threshold": "1/2"
+        },
+        "states": {
+          "C": "REINFORCED",
+          "D": "REINFORCED"
+        }
+      },
+      {
+        "association_C_to_D": "1/2",
+        "causal_C_effect": {
+          "delta_by_action": {
+            "X": "1/1",
+            "Y": "1/2"
+          },
+          "delta_margin_X_minus_Y": "1/2",
+          "score_C_suppressed": {
+            "X": "0/1",
+            "Y": "1/4"
+          },
+          "score_with_C": {
+            "X": "1/1",
+            "Y": "3/4"
+          }
+        },
+        "familiarity": {
+          "C": "1/1",
+          "D": "1/1"
+        },
+        "label": "reactivation_4",
+        "learning_enabled": true,
+        "propagation_probe": {
+          "C_propagates_to_D": true,
+          "C_seeded": true,
+          "C_to_D_association": "1/2",
+          "D_candidate": true,
+          "threshold": "1/2"
+        },
+        "states": {
+          "C": "REINFORCED",
+          "D": "REINFORCED"
+        }
+      }
+    ]
+  },
+  "sha256": "40070dc233cb54abd31a630637b4fa13fa7ad1e1a35e00ce2df705b54ac6cadb",
+  "sham_reactivation": {
+    "during_bfs": [
+      {
+        "association_C_to_D": "3/8",
+        "causal_C_effect": {
+          "delta_by_action": {
+            "X": "1/1",
+            "Y": "0/1"
+          },
+          "delta_margin_X_minus_Y": "1/1",
+          "score_C_suppressed": {
+            "X": "0/1",
+            "Y": "1/4"
+          },
+          "score_with_C": {
+            "X": "1/1",
+            "Y": "1/4"
+          }
+        },
+        "familiarity": {
+          "C": "3/8",
+          "D": "3/8"
+        },
+        "label": "post_washout_baseline",
+        "learning_enabled": true,
+        "propagation_probe": {
+          "C_propagates_to_D": false,
+          "C_seeded": true,
+          "C_to_D_association": "3/8",
+          "D_candidate": false,
+          "threshold": "1/2"
+        },
+        "states": {
+          "C": "NEUTRAL",
+          "D": "NEUTRAL"
+        }
+      },
+      {
+        "association_C_to_D": "3/8",
+        "causal_C_effect": {
+          "delta_by_action": {
+            "X": "1/1",
+            "Y": "0/1"
+          },
+          "delta_margin_X_minus_Y": "1/1",
+          "score_C_suppressed": {
+            "X": "0/1",
+            "Y": "1/4"
+          },
+          "score_with_C": {
+            "X": "1/1",
+            "Y": "1/4"
+          }
+        },
+        "familiarity": {
+          "C": "5/8",
+          "D": "3/8"
+        },
+        "label": "reactivation_1",
+        "learning_enabled": true,
+        "propagation_probe": {
+          "C_propagates_to_D": false,
+          "C_seeded": true,
+          "C_to_D_association": "3/8",
+          "D_candidate": false,
+          "threshold": "1/2"
+        },
+        "states": {
+          "C": "REINFORCED",
+          "D": "NEUTRAL"
+        }
+      },
+      {
+        "association_C_to_D": "3/8",
+        "causal_C_effect": {
+          "delta_by_action": {
+            "X": "1/1",
+            "Y": "0/1"
+          },
+          "delta_margin_X_minus_Y": "1/1",
+          "score_C_suppressed": {
+            "X": "0/1",
+            "Y": "1/4"
+          },
+          "score_with_C": {
+            "X": "1/1",
+            "Y": "1/4"
+          }
+        },
+        "familiarity": {
+          "C": "7/8",
+          "D": "3/8"
+        },
+        "label": "reactivation_2",
+        "learning_enabled": true,
+        "propagation_probe": {
+          "C_propagates_to_D": false,
+          "C_seeded": true,
+          "C_to_D_association": "3/8",
+          "D_candidate": false,
+          "threshold": "1/2"
+        },
+        "states": {
+          "C": "REINFORCED",
+          "D": "NEUTRAL"
+        }
+      },
+      {
+        "association_C_to_D": "3/8",
+        "causal_C_effect": {
+          "delta_by_action": {
+            "X": "1/1",
+            "Y": "0/1"
+          },
+          "delta_margin_X_minus_Y": "1/1",
+          "score_C_suppressed": {
+            "X": "0/1",
+            "Y": "1/4"
+          },
+          "score_with_C": {
+            "X": "1/1",
+            "Y": "1/4"
+          }
+        },
+        "familiarity": {
+          "C": "1/1",
+          "D": "3/8"
+        },
+        "label": "reactivation_3",
+        "learning_enabled": true,
+        "propagation_probe": {
+          "C_propagates_to_D": false,
+          "C_seeded": true,
+          "C_to_D_association": "3/8",
+          "D_candidate": false,
+          "threshold": "1/2"
+        },
+        "states": {
+          "C": "REINFORCED",
+          "D": "NEUTRAL"
+        }
+      },
+      {
+        "association_C_to_D": "3/8",
+        "causal_C_effect": {
+          "delta_by_action": {
+            "X": "1/1",
+            "Y": "0/1"
+          },
+          "delta_margin_X_minus_Y": "1/1",
+          "score_C_suppressed": {
+            "X": "0/1",
+            "Y": "1/4"
+          },
+          "score_with_C": {
+            "X": "1/1",
+            "Y": "1/4"
+          }
+        },
+        "familiarity": {
+          "C": "1/1",
+          "D": "3/8"
+        },
+        "label": "reactivation_4",
+        "learning_enabled": true,
+        "propagation_probe": {
+          "C_propagates_to_D": false,
+          "C_seeded": true,
+          "C_to_D_association": "3/8",
+          "D_candidate": false,
+          "threshold": "1/2"
+        },
+        "states": {
+          "C": "REINFORCED",
+          "D": "NEUTRAL"
+        }
+      }
+    ],
+    "post_bfs": [
+      {
+        "association_C_to_D": "0/1",
+        "causal_C_effect": {
+          "delta_by_action": {
+            "X": "1/1",
+            "Y": "0/1"
+          },
+          "delta_margin_X_minus_Y": "1/1",
+          "score_C_suppressed": {
+            "X": "0/1",
+            "Y": "1/4"
+          },
+          "score_with_C": {
+            "X": "1/1",
+            "Y": "1/4"
+          }
+        },
+        "familiarity": {
+          "C": "3/8",
+          "D": "0/1"
+        },
+        "label": "post_washout_baseline",
+        "learning_enabled": true,
+        "propagation_probe": {
+          "C_propagates_to_D": false,
+          "C_seeded": true,
+          "C_to_D_association": "0/1",
+          "D_candidate": false,
+          "threshold": "1/2"
+        },
+        "states": {
+          "C": "NEUTRAL",
+          "D": "NEUTRAL"
+        }
+      },
+      {
+        "association_C_to_D": "0/1",
+        "causal_C_effect": {
+          "delta_by_action": {
+            "X": "1/1",
+            "Y": "0/1"
+          },
+          "delta_margin_X_minus_Y": "1/1",
+          "score_C_suppressed": {
+            "X": "0/1",
+            "Y": "1/4"
+          },
+          "score_with_C": {
+            "X": "1/1",
+            "Y": "1/4"
+          }
+        },
+        "familiarity": {
+          "C": "5/8",
+          "D": "0/1"
+        },
+        "label": "reactivation_1",
+        "learning_enabled": true,
+        "propagation_probe": {
+          "C_propagates_to_D": false,
+          "C_seeded": true,
+          "C_to_D_association": "0/1",
+          "D_candidate": false,
+          "threshold": "1/2"
+        },
+        "states": {
+          "C": "REINFORCED",
+          "D": "NEUTRAL"
+        }
+      },
+      {
+        "association_C_to_D": "0/1",
+        "causal_C_effect": {
+          "delta_by_action": {
+            "X": "1/1",
+            "Y": "0/1"
+          },
+          "delta_margin_X_minus_Y": "1/1",
+          "score_C_suppressed": {
+            "X": "0/1",
+            "Y": "1/4"
+          },
+          "score_with_C": {
+            "X": "1/1",
+            "Y": "1/4"
+          }
+        },
+        "familiarity": {
+          "C": "7/8",
+          "D": "0/1"
+        },
+        "label": "reactivation_2",
+        "learning_enabled": true,
+        "propagation_probe": {
+          "C_propagates_to_D": false,
+          "C_seeded": true,
+          "C_to_D_association": "0/1",
+          "D_candidate": false,
+          "threshold": "1/2"
+        },
+        "states": {
+          "C": "REINFORCED",
+          "D": "NEUTRAL"
+        }
+      },
+      {
+        "association_C_to_D": "0/1",
+        "causal_C_effect": {
+          "delta_by_action": {
+            "X": "1/1",
+            "Y": "0/1"
+          },
+          "delta_margin_X_minus_Y": "1/1",
+          "score_C_suppressed": {
+            "X": "0/1",
+            "Y": "1/4"
+          },
+          "score_with_C": {
+            "X": "1/1",
+            "Y": "1/4"
+          }
+        },
+        "familiarity": {
+          "C": "1/1",
+          "D": "0/1"
+        },
+        "label": "reactivation_3",
+        "learning_enabled": true,
+        "propagation_probe": {
+          "C_propagates_to_D": false,
+          "C_seeded": true,
+          "C_to_D_association": "0/1",
+          "D_candidate": false,
+          "threshold": "1/2"
+        },
+        "states": {
+          "C": "REINFORCED",
+          "D": "NEUTRAL"
+        }
+      },
+      {
+        "association_C_to_D": "0/1",
+        "causal_C_effect": {
+          "delta_by_action": {
+            "X": "1/1",
+            "Y": "0/1"
+          },
+          "delta_margin_X_minus_Y": "1/1",
+          "score_C_suppressed": {
+            "X": "0/1",
+            "Y": "1/4"
+          },
+          "score_with_C": {
+            "X": "1/1",
+            "Y": "1/4"
+          }
+        },
+        "familiarity": {
+          "C": "1/1",
+          "D": "0/1"
+        },
+        "label": "reactivation_4",
+        "learning_enabled": true,
+        "propagation_probe": {
+          "C_propagates_to_D": false,
+          "C_seeded": true,
+          "C_to_D_association": "0/1",
+          "D_candidate": false,
+          "threshold": "1/2"
+        },
+        "states": {
+          "C": "REINFORCED",
+          "D": "NEUTRAL"
+        }
+      }
+    ]
+  },
+  "status": "EXECUTED_SYNTHETIC_LATENT_TRACE_RECOVERY_ASSAY"
+}
