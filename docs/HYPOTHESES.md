@@ -511,4 +511,19 @@ directions. H11 remains inconclusive for equivalence.
   no research contribution.
 - The three systems should remain separate.
 - A very small new core is sufficient.
-- The entire project premise (H0) is unsupported.
+- The overall premise (H0) remains unsupported.
+
+## Proposed follow-up hypothesis (not registered)
+
+**H14 — Reintroduction does not necessarily restore causal function.**
+Re-exposure, intrinsic-state restoration, incident-link restoration, and
+relearning may produce different causal-influence vectors after functional
+absence; restoring the target and its links may still fail to match the
+no-absence trajectory. H14 remains PROPOSED and unregistered. Exp36 is retained as a historical
+toy assay with known measurement limitations; Exp37 adds a separate
+signed-score instrument check with frozen A-incident links. Neither evaluates
+Raven/MNEME. The operational definitions and open decisions are in
+[`REINTRODUCTION_RESTORATION.md`](REINTRODUCTION_RESTORATION.md); see
+[`PHASE11_H14_TOY_ASSAY.md`](../research/PHASE11_H14_TOY_ASSAY.md) and
+[`PHASE11_H14_EXP37_MEASUREMENT.md`](../research/PHASE11_H14_EXP37_MEASUREMENT.md)
+for the two toy assay records.

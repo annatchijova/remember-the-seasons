@@ -1,0 +1,863 @@
+{
+  "absence_link_policy": "freeze_all_A_incident_links_at_pre_absence_values",
+  "absence_steps": 8,
+  "arms": [
+    "no_absence",
+    "reexposure",
+    "strict",
+    "links_only",
+    "state_and_links",
+    "relearning"
+  ],
+  "final": {
+    "links_only": [
+      {
+        "choice_neutralized_A": "Y",
+        "choice_with_A": "X",
+        "delta_by_action": {
+          "X": "3557/1920",
+          "Y": "121/240"
+        },
+        "delta_margin_X_minus_Y": "863/640",
+        "neutralized_A": {
+          "X": "23/40",
+          "Y": "2497/1600"
+        },
+        "with_A": {
+          "X": "4661/1920",
+          "Y": "9911/4800"
+        }
+      },
+      {
+        "choice_neutralized_A": "Y",
+        "choice_with_A": "Y",
+        "delta_by_action": {
+          "X": "1953/1280",
+          "Y": "121/384"
+        },
+        "delta_margin_X_minus_Y": "4649/3840",
+        "neutralized_A": {
+          "X": "69/80",
+          "Y": "6723/3200"
+        },
+        "with_A": {
+          "X": "3057/1280",
+          "Y": "11597/4800"
+        }
+      },
+      {
+        "choice_neutralized_A": "Y",
+        "choice_with_A": "X",
+        "delta_by_action": {
+          "X": "2343/1280",
+          "Y": "847/1920"
+        },
+        "delta_margin_X_minus_Y": "1067/768",
+        "neutralized_A": {
+          "X": "19/16",
+          "Y": "5317/3200"
+        },
+        "with_A": {
+          "X": "3863/1280",
+          "Y": "10093/4800"
+        }
+      },
+      {
+        "choice_neutralized_A": "X",
+        "choice_with_A": "X",
+        "delta_by_action": {
+          "X": "41/32",
+          "Y": "121/480"
+        },
+        "delta_margin_X_minus_Y": "247/240",
+        "neutralized_A": {
+          "X": "119/80",
+          "Y": "593/400"
+        },
+        "with_A": {
+          "X": "443/160",
+          "Y": "4163/2400"
+        }
+      }
+    ],
+    "no_absence": [
+      {
+        "choice_neutralized_A": "Y",
+        "choice_with_A": "X",
+        "delta_by_action": {
+          "X": "139/60",
+          "Y": "8/15"
+        },
+        "delta_margin_X_minus_Y": "107/60",
+        "neutralized_A": {
+          "X": "1/5",
+          "Y": "61/50"
+        },
+        "with_A": {
+          "X": "151/60",
+          "Y": "263/150"
+        }
+      },
+      {
+        "choice_neutralized_A": "Y",
+        "choice_with_A": "X",
+        "delta_by_action": {
+          "X": "67/40",
+          "Y": "1/3"
+        },
+        "delta_margin_X_minus_Y": "161/120",
+        "neutralized_A": {
+          "X": "3/10",
+          "Y": "159/100"
+        },
+        "with_A": {
+          "X": "79/40",
+          "Y": "577/300"
+        }
+      },
+      {
+        "choice_neutralized_A": "Y",
+        "choice_with_A": "X",
+        "delta_by_action": {
+          "X": "83/40",
+          "Y": "7/15"
+        },
+        "delta_margin_X_minus_Y": "193/120",
+        "neutralized_A": {
+          "X": "1/2",
+          "Y": "111/100"
+        },
+        "with_A": {
+          "X": "103/40",
+          "Y": "473/300"
+        }
+      },
+      {
+        "choice_neutralized_A": "Y",
+        "choice_with_A": "X",
+        "delta_by_action": {
+          "X": "51/40",
+          "Y": "4/15"
+        },
+        "delta_margin_X_minus_Y": "121/120",
+        "neutralized_A": {
+          "X": "4/5",
+          "Y": "219/200"
+        },
+        "with_A": {
+          "X": "83/40",
+          "Y": "817/600"
+        }
+      }
+    ],
+    "reexposure": [
+      {
+        "choice_neutralized_A": "Y",
+        "choice_with_A": "Y",
+        "delta_by_action": {
+          "X": "4/5",
+          "Y": "0/1"
+        },
+        "delta_margin_X_minus_Y": "4/5",
+        "neutralized_A": {
+          "X": "23/40",
+          "Y": "5189/3200"
+        },
+        "with_A": {
+          "X": "11/8",
+          "Y": "5189/3200"
+        }
+      },
+      {
+        "choice_neutralized_A": "Y",
+        "choice_with_A": "Y",
+        "delta_by_action": {
+          "X": "1/2",
+          "Y": "0/1"
+        },
+        "delta_margin_X_minus_Y": "1/2",
+        "neutralized_A": {
+          "X": "69/80",
+          "Y": "14031/6400"
+        },
+        "with_A": {
+          "X": "109/80",
+          "Y": "14031/6400"
+        }
+      },
+      {
+        "choice_neutralized_A": "Y",
+        "choice_with_A": "X",
+        "delta_by_action": {
+          "X": "7/10",
+          "Y": "0/1"
+        },
+        "delta_margin_X_minus_Y": "7/10",
+        "neutralized_A": {
+          "X": "19/16",
+          "Y": "11609/6400"
+        },
+        "with_A": {
+          "X": "151/80",
+          "Y": "11609/6400"
+        }
+      },
+      {
+        "choice_neutralized_A": "Y",
+        "choice_with_A": "X",
+        "delta_by_action": {
+          "X": "2/5",
+          "Y": "0/1"
+        },
+        "delta_margin_X_minus_Y": "2/5",
+        "neutralized_A": {
+          "X": "119/80",
+          "Y": "1381/800"
+        },
+        "with_A": {
+          "X": "151/80",
+          "Y": "1381/800"
+        }
+      }
+    ],
+    "relearning": [
+      {
+        "choice_neutralized_A": "Y",
+        "choice_with_A": "X",
+        "delta_by_action": {
+          "X": "51/40",
+          "Y": "9/40"
+        },
+        "delta_margin_X_minus_Y": "21/20",
+        "neutralized_A": {
+          "X": "23/40",
+          "Y": "5189/3200"
+        },
+        "with_A": {
+          "X": "37/20",
+          "Y": "5909/3200"
+        }
+      },
+      {
+        "choice_neutralized_A": "Y",
+        "choice_with_A": "Y",
+        "delta_by_action": {
+          "X": "51/64",
+          "Y": "9/64"
+        },
+        "delta_margin_X_minus_Y": "21/32",
+        "neutralized_A": {
+          "X": "69/80",
+          "Y": "14031/6400"
+        },
+        "with_A": {
+          "X": "531/320",
+          "Y": "14931/6400"
+        }
+      },
+      {
+        "choice_neutralized_A": "Y",
+        "choice_with_A": "X",
+        "delta_by_action": {
+          "X": "357/320",
+          "Y": "63/320"
+        },
+        "delta_margin_X_minus_Y": "147/160",
+        "neutralized_A": {
+          "X": "19/16",
+          "Y": "11609/6400"
+        },
+        "with_A": {
+          "X": "737/320",
+          "Y": "12869/6400"
+        }
+      },
+      {
+        "choice_neutralized_A": "Y",
+        "choice_with_A": "X",
+        "delta_by_action": {
+          "X": "51/80",
+          "Y": "9/80"
+        },
+        "delta_margin_X_minus_Y": "21/40",
+        "neutralized_A": {
+          "X": "119/80",
+          "Y": "1381/800"
+        },
+        "with_A": {
+          "X": "17/8",
+          "Y": "1471/800"
+        }
+      }
+    ],
+    "state_and_links": [
+      {
+        "choice_neutralized_A": "Y",
+        "choice_with_A": "X",
+        "delta_by_action": {
+          "X": "5429/1920",
+          "Y": "8/15"
+        },
+        "delta_margin_X_minus_Y": "881/384",
+        "neutralized_A": {
+          "X": "17/40",
+          "Y": "2497/1600"
+        },
+        "with_A": {
+          "X": "1249/384",
+          "Y": "10051/4800"
+        }
+      },
+      {
+        "choice_neutralized_A": "Y",
+        "choice_with_A": "X",
+        "delta_by_action": {
+          "X": "2789/1280",
+          "Y": "1/3"
+        },
+        "delta_margin_X_minus_Y": "7087/3840",
+        "neutralized_A": {
+          "X": "51/80",
+          "Y": "6723/3200"
+        },
+        "with_A": {
+          "X": "721/256",
+          "Y": "23369/9600"
+        }
+      },
+      {
+        "choice_neutralized_A": "Y",
+        "choice_with_A": "X",
+        "delta_by_action": {
+          "X": "695/256",
+          "Y": "7/15"
+        },
+        "delta_margin_X_minus_Y": "8633/3840",
+        "neutralized_A": {
+          "X": "77/80",
+          "Y": "5317/3200"
+        },
+        "with_A": {
+          "X": "4707/1280",
+          "Y": "20431/9600"
+        }
+      },
+      {
+        "choice_neutralized_A": "Y",
+        "choice_with_A": "X",
+        "delta_by_action": {
+          "X": "57/32",
+          "Y": "4/15"
+        },
+        "delta_margin_X_minus_Y": "727/480",
+        "neutralized_A": {
+          "X": "11/8",
+          "Y": "593/400"
+        },
+        "with_A": {
+          "X": "101/32",
+          "Y": "2099/1200"
+        }
+      }
+    ],
+    "strict": [
+      {
+        "choice_neutralized_A": "Y",
+        "choice_with_A": "X",
+        "delta_by_action": {
+          "X": "5429/1920",
+          "Y": "8/15"
+        },
+        "delta_margin_X_minus_Y": "881/384",
+        "neutralized_A": {
+          "X": "17/40",
+          "Y": "2497/1600"
+        },
+        "with_A": {
+          "X": "1249/384",
+          "Y": "10051/4800"
+        }
+      },
+      {
+        "choice_neutralized_A": "Y",
+        "choice_with_A": "X",
+        "delta_by_action": {
+          "X": "2789/1280",
+          "Y": "1/3"
+        },
+        "delta_margin_X_minus_Y": "7087/3840",
+        "neutralized_A": {
+          "X": "51/80",
+          "Y": "6723/3200"
+        },
+        "with_A": {
+          "X": "721/256",
+          "Y": "23369/9600"
+        }
+      },
+      {
+        "choice_neutralized_A": "Y",
+        "choice_with_A": "X",
+        "delta_by_action": {
+          "X": "695/256",
+          "Y": "7/15"
+        },
+        "delta_margin_X_minus_Y": "8633/3840",
+        "neutralized_A": {
+          "X": "77/80",
+          "Y": "5317/3200"
+        },
+        "with_A": {
+          "X": "4707/1280",
+          "Y": "20431/9600"
+        }
+      },
+      {
+        "choice_neutralized_A": "Y",
+        "choice_with_A": "X",
+        "delta_by_action": {
+          "X": "57/32",
+          "Y": "4/15"
+        },
+        "delta_margin_X_minus_Y": "727/480",
+        "neutralized_A": {
+          "X": "11/8",
+          "Y": "593/400"
+        },
+        "with_A": {
+          "X": "101/32",
+          "Y": "2099/1200"
+        }
+      }
+    ]
+  },
+  "followup_steps": 12,
+  "incident_links_unchanged_during_absence": true,
+  "initial": {
+    "links_only": [
+      {
+        "choice_neutralized_A": "Y",
+        "choice_with_A": "Y",
+        "delta_by_action": {
+          "X": "17/12",
+          "Y": "4/15"
+        },
+        "delta_margin_X_minus_Y": "23/20",
+        "neutralized_A": {
+          "X": "7/20",
+          "Y": "1241/800"
+        },
+        "with_A": {
+          "X": "53/30",
+          "Y": "4363/2400"
+        }
+      },
+      {
+        "choice_neutralized_A": "Y",
+        "choice_with_A": "Y",
+        "delta_by_action": {
+          "X": "6/5",
+          "Y": "1/6"
+        },
+        "delta_margin_X_minus_Y": "31/30",
+        "neutralized_A": {
+          "X": "21/40",
+          "Y": "3339/1600"
+        },
+        "with_A": {
+          "X": "69/40",
+          "Y": "10817/4800"
+        }
+      },
+      {
+        "choice_neutralized_A": "Y",
+        "choice_with_A": "X",
+        "delta_by_action": {
+          "X": "27/20",
+          "Y": "7/30"
+        },
+        "delta_margin_X_minus_Y": "67/60",
+        "neutralized_A": {
+          "X": "31/40",
+          "Y": "2621/1600"
+        },
+        "with_A": {
+          "X": "17/8",
+          "Y": "8983/4800"
+        }
+      },
+      {
+        "choice_neutralized_A": "Y",
+        "choice_with_A": "X",
+        "delta_by_action": {
+          "X": "17/20",
+          "Y": "2/15"
+        },
+        "delta_margin_X_minus_Y": "43/60",
+        "neutralized_A": {
+          "X": "43/40",
+          "Y": "289/200"
+        },
+        "with_A": {
+          "X": "77/40",
+          "Y": "947/600"
+        }
+      }
+    ],
+    "no_absence": [
+      {
+        "choice_neutralized_A": "Y",
+        "choice_with_A": "X",
+        "delta_by_action": {
+          "X": "139/60",
+          "Y": "8/15"
+        },
+        "delta_margin_X_minus_Y": "107/60",
+        "neutralized_A": {
+          "X": "1/5",
+          "Y": "61/50"
+        },
+        "with_A": {
+          "X": "151/60",
+          "Y": "263/150"
+        }
+      },
+      {
+        "choice_neutralized_A": "Y",
+        "choice_with_A": "X",
+        "delta_by_action": {
+          "X": "67/40",
+          "Y": "1/3"
+        },
+        "delta_margin_X_minus_Y": "161/120",
+        "neutralized_A": {
+          "X": "3/10",
+          "Y": "159/100"
+        },
+        "with_A": {
+          "X": "79/40",
+          "Y": "577/300"
+        }
+      },
+      {
+        "choice_neutralized_A": "Y",
+        "choice_with_A": "X",
+        "delta_by_action": {
+          "X": "83/40",
+          "Y": "7/15"
+        },
+        "delta_margin_X_minus_Y": "193/120",
+        "neutralized_A": {
+          "X": "1/2",
+          "Y": "111/100"
+        },
+        "with_A": {
+          "X": "103/40",
+          "Y": "473/300"
+        }
+      },
+      {
+        "choice_neutralized_A": "Y",
+        "choice_with_A": "X",
+        "delta_by_action": {
+          "X": "51/40",
+          "Y": "4/15"
+        },
+        "delta_margin_X_minus_Y": "121/120",
+        "neutralized_A": {
+          "X": "4/5",
+          "Y": "219/200"
+        },
+        "with_A": {
+          "X": "83/40",
+          "Y": "817/600"
+        }
+      }
+    ],
+    "reexposure": [
+      {
+        "choice_neutralized_A": "Y",
+        "choice_with_A": "Y",
+        "delta_by_action": {
+          "X": "4/5",
+          "Y": "0/1"
+        },
+        "delta_margin_X_minus_Y": "4/5",
+        "neutralized_A": {
+          "X": "7/20",
+          "Y": "1241/800"
+        },
+        "with_A": {
+          "X": "23/20",
+          "Y": "1241/800"
+        }
+      },
+      {
+        "choice_neutralized_A": "Y",
+        "choice_with_A": "Y",
+        "delta_by_action": {
+          "X": "1/2",
+          "Y": "0/1"
+        },
+        "delta_margin_X_minus_Y": "1/2",
+        "neutralized_A": {
+          "X": "21/40",
+          "Y": "3339/1600"
+        },
+        "with_A": {
+          "X": "41/40",
+          "Y": "3339/1600"
+        }
+      },
+      {
+        "choice_neutralized_A": "Y",
+        "choice_with_A": "Y",
+        "delta_by_action": {
+          "X": "7/10",
+          "Y": "0/1"
+        },
+        "delta_margin_X_minus_Y": "7/10",
+        "neutralized_A": {
+          "X": "31/40",
+          "Y": "2621/1600"
+        },
+        "with_A": {
+          "X": "59/40",
+          "Y": "2621/1600"
+        }
+      },
+      {
+        "choice_neutralized_A": "Y",
+        "choice_with_A": "X",
+        "delta_by_action": {
+          "X": "2/5",
+          "Y": "0/1"
+        },
+        "delta_margin_X_minus_Y": "2/5",
+        "neutralized_A": {
+          "X": "43/40",
+          "Y": "289/200"
+        },
+        "with_A": {
+          "X": "59/40",
+          "Y": "289/200"
+        }
+      }
+    ],
+    "relearning": [
+      {
+        "choice_neutralized_A": "Y",
+        "choice_with_A": "Y",
+        "delta_by_action": {
+          "X": "4/5",
+          "Y": "0/1"
+        },
+        "delta_margin_X_minus_Y": "4/5",
+        "neutralized_A": {
+          "X": "7/20",
+          "Y": "1241/800"
+        },
+        "with_A": {
+          "X": "23/20",
+          "Y": "1241/800"
+        }
+      },
+      {
+        "choice_neutralized_A": "Y",
+        "choice_with_A": "Y",
+        "delta_by_action": {
+          "X": "1/2",
+          "Y": "0/1"
+        },
+        "delta_margin_X_minus_Y": "1/2",
+        "neutralized_A": {
+          "X": "21/40",
+          "Y": "3339/1600"
+        },
+        "with_A": {
+          "X": "41/40",
+          "Y": "3339/1600"
+        }
+      },
+      {
+        "choice_neutralized_A": "Y",
+        "choice_with_A": "Y",
+        "delta_by_action": {
+          "X": "7/10",
+          "Y": "0/1"
+        },
+        "delta_margin_X_minus_Y": "7/10",
+        "neutralized_A": {
+          "X": "31/40",
+          "Y": "2621/1600"
+        },
+        "with_A": {
+          "X": "59/40",
+          "Y": "2621/1600"
+        }
+      },
+      {
+        "choice_neutralized_A": "Y",
+        "choice_with_A": "X",
+        "delta_by_action": {
+          "X": "2/5",
+          "Y": "0/1"
+        },
+        "delta_margin_X_minus_Y": "2/5",
+        "neutralized_A": {
+          "X": "43/40",
+          "Y": "289/200"
+        },
+        "with_A": {
+          "X": "59/40",
+          "Y": "289/200"
+        }
+      }
+    ],
+    "state_and_links": [
+      {
+        "choice_neutralized_A": "Y",
+        "choice_with_A": "X",
+        "delta_by_action": {
+          "X": "29/12",
+          "Y": "8/15"
+        },
+        "delta_margin_X_minus_Y": "113/60",
+        "neutralized_A": {
+          "X": "7/20",
+          "Y": "1241/800"
+        },
+        "with_A": {
+          "X": "83/30",
+          "Y": "5003/2400"
+        }
+      },
+      {
+        "choice_neutralized_A": "Y",
+        "choice_with_A": "Y",
+        "delta_by_action": {
+          "X": "73/40",
+          "Y": "1/3"
+        },
+        "delta_margin_X_minus_Y": "179/120",
+        "neutralized_A": {
+          "X": "21/40",
+          "Y": "3339/1600"
+        },
+        "with_A": {
+          "X": "47/20",
+          "Y": "11617/4800"
+        }
+      },
+      {
+        "choice_neutralized_A": "Y",
+        "choice_with_A": "X",
+        "delta_by_action": {
+          "X": "89/40",
+          "Y": "7/15"
+        },
+        "delta_margin_X_minus_Y": "211/120",
+        "neutralized_A": {
+          "X": "31/40",
+          "Y": "2621/1600"
+        },
+        "with_A": {
+          "X": "3/1",
+          "Y": "10103/4800"
+        }
+      },
+      {
+        "choice_neutralized_A": "Y",
+        "choice_with_A": "X",
+        "delta_by_action": {
+          "X": "27/20",
+          "Y": "4/15"
+        },
+        "delta_margin_X_minus_Y": "13/12",
+        "neutralized_A": {
+          "X": "43/40",
+          "Y": "289/200"
+        },
+        "with_A": {
+          "X": "97/40",
+          "Y": "1027/600"
+        }
+      }
+    ],
+    "strict": [
+      {
+        "choice_neutralized_A": "Y",
+        "choice_with_A": "X",
+        "delta_by_action": {
+          "X": "29/12",
+          "Y": "8/15"
+        },
+        "delta_margin_X_minus_Y": "113/60",
+        "neutralized_A": {
+          "X": "7/20",
+          "Y": "1241/800"
+        },
+        "with_A": {
+          "X": "83/30",
+          "Y": "5003/2400"
+        }
+      },
+      {
+        "choice_neutralized_A": "Y",
+        "choice_with_A": "Y",
+        "delta_by_action": {
+          "X": "73/40",
+          "Y": "1/3"
+        },
+        "delta_margin_X_minus_Y": "179/120",
+        "neutralized_A": {
+          "X": "21/40",
+          "Y": "3339/1600"
+        },
+        "with_A": {
+          "X": "47/20",
+          "Y": "11617/4800"
+        }
+      },
+      {
+        "choice_neutralized_A": "Y",
+        "choice_with_A": "X",
+        "delta_by_action": {
+          "X": "89/40",
+          "Y": "7/15"
+        },
+        "delta_margin_X_minus_Y": "211/120",
+        "neutralized_A": {
+          "X": "31/40",
+          "Y": "2621/1600"
+        },
+        "with_A": {
+          "X": "3/1",
+          "Y": "10103/4800"
+        }
+      },
+      {
+        "choice_neutralized_A": "Y",
+        "choice_with_A": "X",
+        "delta_by_action": {
+          "X": "27/20",
+          "Y": "4/15"
+        },
+        "delta_margin_X_minus_Y": "13/12",
+        "neutralized_A": {
+          "X": "43/40",
+          "Y": "289/200"
+        },
+        "with_A": {
+          "X": "97/40",
+          "Y": "1027/600"
+        }
+      }
+    ]
+  },
+  "limits": "One deterministic synthetic configuration; no Raven/MNEME equivalence or statistical generalization claimed.",
+  "measurement": "exact_fraction_action_score_deltas_plus_signed_X_minus_Y_margin_and_choices",
+  "query_count": 4,
+  "sha256": "4558b20721a3d14418ca2938815e84ae64050e9beaa587a224ffac0e01641559",
+  "status": "EXECUTED_TOY_ASSAY_NOT_RAVEN"
+}

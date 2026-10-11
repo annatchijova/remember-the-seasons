@@ -1,6 +1,6 @@
 # Experiments index
 
-All 23 experiments in `experiments/`, grouped by phase. Verdicts are
+All 36 numbered experiment scripts in `experiments/`, grouped by phase. Verdicts are
 observed results, not aspirations. `PASS` means the property survived
 falsification; `FALSIFIED` means the experiment killed the hypothesis.
 
@@ -64,7 +64,21 @@ measurable properties that retrieval alone does not represent?
 | `exp34_event_indexed_leverage.py` | Event-indexed leverage, one realized block | NEITHER dominates — j≤3 premium ~0.15 vs ~0.10; shadow hypothesis dead; accumulation > position |
 | `exp35_dose_position_factorial.py` | Dose x position factorial | Placement matters at equal realized count: k=1 gives early 0.152 vs late 0.004 (n=24); realized_k is post-treatment — coefficients descriptive only |
 
-## Supporting infrastructure
+## Runner infrastructure
+
+| Script | Role |
+|---|---|
+| `sweep_infra.py` | Shared sweep infrastructure |
+
+## Phase 11: H14 restoration (independent toy assay)
+
+| Script | Question | Verdict |
+|---|---|---|
+| `exp36_h14/exp36_h14_restoration.py` | Do re-exposure, state restoration, link restoration, and relearning recover A's measured influence? | RUNTIME-CONFIRMED toy execution; H14 verdict OPEN (one synthetic configuration) |
+| `exp37_h14_measurement/exp37_h14_causal_measurement.py` | Does a signed action-score instrument preserve effects hidden by choice flips, with frozen A-incident links? | RUNTIME-CONFIRMED instrument checks; H14 verdict OPEN (one synthetic configuration) |
+
+See [`research/PHASE11_H14_TOY_ASSAY.md`](../research/PHASE11_H14_TOY_ASSAY.md) for Exp36's provenance and limits, and [`research/PHASE11_H14_EXP37_MEASUREMENT.md`](../research/PHASE11_H14_EXP37_MEASUREMENT.md) for Exp37's measurement definition, test evidence, and limits.
+
 
 | Script | Role |
 |---|---|
@@ -96,5 +110,17 @@ Boundary discovered: **stateless retrieval vs stateful adaptive
 retrieval** — not retrieval vs memory. The minimum state is a
 persistent accumulating flag; exact bit budget is noisy.
 
-See `docs/HYPOTHESES.md` for the hypothesis ledger and
-`research/PHASE*.md` for full experimental writeups.
+The hypothesis ledger is in `docs/HYPOTHESES.md`; full phase writeups are
+in `research/PHASE*.md`.
+
+## H14 status
+
+Exp36 remains the historical six-arm toy assay with binary flip outcomes
+and incident-link aging. Exp37 is a separate six-arm toy assay with signed
+action-score effects and frozen A-incident links. Both are synthetic and
+neither evaluates Raven or MNEME. H14 remains OPEN. See
+[`REINTRODUCTION_RESTORATION.md`](REINTRODUCTION_RESTORATION.md) for the
+protocol, [`research/PHASE11_H14_TOY_ASSAY.md`](../research/PHASE11_H14_TOY_ASSAY.md)
+for the Exp36 verification, and
+[`research/PHASE11_H14_EXP37_MEASUREMENT.md`](../research/PHASE11_H14_EXP37_MEASUREMENT.md)
+for Exp37.

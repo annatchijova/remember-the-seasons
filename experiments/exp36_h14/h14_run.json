@@ -1,0 +1,100 @@
+{
+  "absence_steps": 8,
+  "final": {
+    "links_only": [
+      1,
+      0,
+      1,
+      0
+    ],
+    "no_absence": [
+      1,
+      1,
+      1,
+      1
+    ],
+    "reexposure": [
+      0,
+      0,
+      1,
+      1
+    ],
+    "relearning": [
+      1,
+      0,
+      1,
+      1
+    ],
+    "state_and_links": [
+      1,
+      1,
+      1,
+      1
+    ],
+    "strict": [
+      1,
+      1,
+      1,
+      1
+    ]
+  },
+  "followup_steps": 12,
+  "hamming_to_no_absence": {
+    "links_only": 2,
+    "no_absence": 0,
+    "reexposure": 2,
+    "relearning": 1,
+    "state_and_links": 0,
+    "strict": 0
+  },
+  "initial": {
+    "links_only": [
+      0,
+      0,
+      1,
+      1
+    ],
+    "no_absence": [
+      1,
+      1,
+      1,
+      1
+    ],
+    "reexposure": [
+      0,
+      0,
+      0,
+      1
+    ],
+    "relearning": [
+      0,
+      0,
+      0,
+      1
+    ],
+    "state_and_links": [
+      1,
+      0,
+      1,
+      1
+    ],
+    "strict": [
+      1,
+      0,
+      1,
+      1
+    ]
+  },
+  "limits": "Small synthetic scenario; no efficacy, clinical analogy, statistical generalization or Raven/MNEME equivalence claimed.",
+  "mechanism": "1-step directed propagation + per-memory reinforcement + co-recall edges + shared edge aging",
+  "pre_absence_influence": [
+    1,
+    1,
+    1,
+    1
+  ],
+  "queries": 4,
+  "relearning_dose": 4,
+  "sha256": "169d9ff3170cfd4b2d0594d73c4dcc1cb5a3a2f6def7d07d1d704c66dd9b5253",
+  "status": "EXECUTED_TOY_ASSAY_NOT_RAVEN"
+}
