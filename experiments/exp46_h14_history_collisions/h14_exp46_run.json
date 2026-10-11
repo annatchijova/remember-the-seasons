@@ -1,0 +1,349 @@
+{
+  "controls": {
+    "binary_trajectories_equal": true,
+    "different_history_counts": true,
+    "equal_count_control_trajectories_equal": true,
+    "first_scalar_divergence_has_causal_propagation_split": true,
+    "first_scalar_divergence_step": 1,
+    "same_projected_state": true,
+    "scalar_trajectories_diverge": true
+  },
+  "design": {
+    "exp25_semantics": {
+      "binary_multiplier": "3/2 iff count > 0",
+      "scalar_multiplier": "1 + (1/20) * min(count, 20)"
+    },
+    "future_schedule": {
+      "base_score_C": "7/10",
+      "base_score_K": "4/5",
+      "paired_experience_when_C_selected": "1/8",
+      "propagation_threshold": "1/2",
+      "queries": 4
+    },
+    "history_generators": {
+      "long_history": {
+        "initial_association": "0/1",
+        "paired_reactivations": 3,
+        "reinforcement_count": 3
+      },
+      "short_history": {
+        "initial_association": "1/4",
+        "paired_reactivations": 1,
+        "reinforcement_count": 1
+      }
+    },
+    "projected_fields": [
+      "reinforcement",
+      "association",
+      "link",
+      "recency"
+    ],
+    "shared_projected_state": {
+      "association": "3/8",
+      "link": true,
+      "recency": 0,
+      "reinforcement": true
+    }
+  },
+  "epistemic_status": {
+    "INFERRED": "If the identical projected states diverge only when the Exp25 scalar count semantics are retained, the four fields are insufficient across these two declared ranking semantics; an omitted count predicts the split.",
+    "OBSERVED": "Exp25 stores a scalar reinforcement count and defines binary and scalar score boosts in experiments/exp25_state_amputation.py:57-63,96-104; its trajectory reinforces the top recalled memory at lines 215-217. Exp45's pinned artifact has canonical SHA256 427e502fbb0ec443685302cd161691bd3c9dc70b861cd5badf1fd03d6e5a1acd.",
+    "PROPOSED": "The two history generators, paired-association update, two-item ranking harness, downstream propagation threshold, and causal readout are this assay's synthetic bridge between Exp45 and Exp25.",
+    "UNKNOWN": "Whether Raven, MNEME, or deployed agent memory retains this count or follows any of these cross-assay dynamics."
+  },
+  "experiment": "Exp46",
+  "limits": "This is a deterministic synthetic cross-assay harness, not an Exp25 rerun and not Raven/MNEME validation. Its histories and association updates are proposed. The finding is conditional on the Exp25 scalar ranking formula and the declared toy downstream threshold. Equal histories under a different update rule may erase the divergence.",
+  "results": {
+    "binary": {
+      "long_history": {
+        "timeline": [
+          {
+            "association_C_to_D": "1/2",
+            "causal_C_to_D": "1/2",
+            "choice": "C",
+            "propagation_C_to_D": true,
+            "reinforcement_count": 4,
+            "score_C": "21/20",
+            "score_K": "4/5",
+            "step": 1
+          },
+          {
+            "association_C_to_D": "5/8",
+            "causal_C_to_D": "5/8",
+            "choice": "C",
+            "propagation_C_to_D": true,
+            "reinforcement_count": 5,
+            "score_C": "21/20",
+            "score_K": "4/5",
+            "step": 2
+          },
+          {
+            "association_C_to_D": "3/4",
+            "causal_C_to_D": "3/4",
+            "choice": "C",
+            "propagation_C_to_D": true,
+            "reinforcement_count": 6,
+            "score_C": "21/20",
+            "score_K": "4/5",
+            "step": 3
+          },
+          {
+            "association_C_to_D": "7/8",
+            "causal_C_to_D": "7/8",
+            "choice": "C",
+            "propagation_C_to_D": true,
+            "reinforcement_count": 7,
+            "score_C": "21/20",
+            "score_K": "4/5",
+            "step": 4
+          }
+        ],
+        "variant": "binary"
+      },
+      "short_history": {
+        "timeline": [
+          {
+            "association_C_to_D": "1/2",
+            "causal_C_to_D": "1/2",
+            "choice": "C",
+            "propagation_C_to_D": true,
+            "reinforcement_count": 2,
+            "score_C": "21/20",
+            "score_K": "4/5",
+            "step": 1
+          },
+          {
+            "association_C_to_D": "5/8",
+            "causal_C_to_D": "5/8",
+            "choice": "C",
+            "propagation_C_to_D": true,
+            "reinforcement_count": 3,
+            "score_C": "21/20",
+            "score_K": "4/5",
+            "step": 2
+          },
+          {
+            "association_C_to_D": "3/4",
+            "causal_C_to_D": "3/4",
+            "choice": "C",
+            "propagation_C_to_D": true,
+            "reinforcement_count": 4,
+            "score_C": "21/20",
+            "score_K": "4/5",
+            "step": 3
+          },
+          {
+            "association_C_to_D": "7/8",
+            "causal_C_to_D": "7/8",
+            "choice": "C",
+            "propagation_C_to_D": true,
+            "reinforcement_count": 5,
+            "score_C": "21/20",
+            "score_K": "4/5",
+            "step": 4
+          }
+        ],
+        "variant": "binary"
+      }
+    },
+    "scalar": {
+      "long_history": {
+        "timeline": [
+          {
+            "association_C_to_D": "1/2",
+            "causal_C_to_D": "1/2",
+            "choice": "C",
+            "propagation_C_to_D": true,
+            "reinforcement_count": 4,
+            "score_C": "161/200",
+            "score_K": "4/5",
+            "step": 1
+          },
+          {
+            "association_C_to_D": "5/8",
+            "causal_C_to_D": "5/8",
+            "choice": "C",
+            "propagation_C_to_D": true,
+            "reinforcement_count": 5,
+            "score_C": "21/25",
+            "score_K": "4/5",
+            "step": 2
+          },
+          {
+            "association_C_to_D": "3/4",
+            "causal_C_to_D": "3/4",
+            "choice": "C",
+            "propagation_C_to_D": true,
+            "reinforcement_count": 6,
+            "score_C": "7/8",
+            "score_K": "4/5",
+            "step": 3
+          },
+          {
+            "association_C_to_D": "7/8",
+            "causal_C_to_D": "7/8",
+            "choice": "C",
+            "propagation_C_to_D": true,
+            "reinforcement_count": 7,
+            "score_C": "91/100",
+            "score_K": "4/5",
+            "step": 4
+          }
+        ],
+        "variant": "scalar"
+      },
+      "short_history": {
+        "timeline": [
+          {
+            "association_C_to_D": "3/8",
+            "causal_C_to_D": "0/1",
+            "choice": "K",
+            "propagation_C_to_D": false,
+            "reinforcement_count": 1,
+            "score_C": "147/200",
+            "score_K": "4/5",
+            "step": 1
+          },
+          {
+            "association_C_to_D": "3/8",
+            "causal_C_to_D": "0/1",
+            "choice": "K",
+            "propagation_C_to_D": false,
+            "reinforcement_count": 1,
+            "score_C": "147/200",
+            "score_K": "4/5",
+            "step": 2
+          },
+          {
+            "association_C_to_D": "3/8",
+            "causal_C_to_D": "0/1",
+            "choice": "K",
+            "propagation_C_to_D": false,
+            "reinforcement_count": 1,
+            "score_C": "147/200",
+            "score_K": "4/5",
+            "step": 3
+          },
+          {
+            "association_C_to_D": "3/8",
+            "causal_C_to_D": "0/1",
+            "choice": "K",
+            "propagation_C_to_D": false,
+            "reinforcement_count": 1,
+            "score_C": "147/200",
+            "score_K": "4/5",
+            "step": 4
+          }
+        ],
+        "variant": "scalar"
+      }
+    },
+    "scalar_equal_count_control": {
+      "history_a": {
+        "timeline": [
+          {
+            "association_C_to_D": "3/8",
+            "causal_C_to_D": "0/1",
+            "choice": "K",
+            "propagation_C_to_D": false,
+            "reinforcement_count": 1,
+            "score_C": "147/200",
+            "score_K": "4/5",
+            "step": 1
+          },
+          {
+            "association_C_to_D": "3/8",
+            "causal_C_to_D": "0/1",
+            "choice": "K",
+            "propagation_C_to_D": false,
+            "reinforcement_count": 1,
+            "score_C": "147/200",
+            "score_K": "4/5",
+            "step": 2
+          },
+          {
+            "association_C_to_D": "3/8",
+            "causal_C_to_D": "0/1",
+            "choice": "K",
+            "propagation_C_to_D": false,
+            "reinforcement_count": 1,
+            "score_C": "147/200",
+            "score_K": "4/5",
+            "step": 3
+          },
+          {
+            "association_C_to_D": "3/8",
+            "causal_C_to_D": "0/1",
+            "choice": "K",
+            "propagation_C_to_D": false,
+            "reinforcement_count": 1,
+            "score_C": "147/200",
+            "score_K": "4/5",
+            "step": 4
+          }
+        ],
+        "variant": "scalar"
+      },
+      "history_b": {
+        "timeline": [
+          {
+            "association_C_to_D": "3/8",
+            "causal_C_to_D": "0/1",
+            "choice": "K",
+            "propagation_C_to_D": false,
+            "reinforcement_count": 1,
+            "score_C": "147/200",
+            "score_K": "4/5",
+            "step": 1
+          },
+          {
+            "association_C_to_D": "3/8",
+            "causal_C_to_D": "0/1",
+            "choice": "K",
+            "propagation_C_to_D": false,
+            "reinforcement_count": 1,
+            "score_C": "147/200",
+            "score_K": "4/5",
+            "step": 2
+          },
+          {
+            "association_C_to_D": "3/8",
+            "causal_C_to_D": "0/1",
+            "choice": "K",
+            "propagation_C_to_D": false,
+            "reinforcement_count": 1,
+            "score_C": "147/200",
+            "score_K": "4/5",
+            "step": 3
+          },
+          {
+            "association_C_to_D": "3/8",
+            "causal_C_to_D": "0/1",
+            "choice": "K",
+            "propagation_C_to_D": false,
+            "reinforcement_count": 1,
+            "score_C": "147/200",
+            "score_K": "4/5",
+            "step": 4
+          }
+        ],
+        "variant": "scalar"
+      }
+    }
+  },
+  "sha256": "10e84c100d8ca3c9c74b723b051baf0b9ff39833c96ad8b7c37d953fdae70c36",
+  "source_provenance": {
+    "exp25": {
+      "lines": "57-63, 96-104, 215-217",
+      "path": "experiments/exp25_state_amputation.py",
+      "use": "Scalar count field, binary/scalar boost definitions, top-result reinforcement."
+    },
+    "exp45": {
+      "canonical_sha256": "427e502fbb0ec443685302cd161691bd3c9dc70b861cd5badf1fd03d6e5a1acd",
+      "path": "experiments/exp45_h14_sufficient_state/h14_exp45_run.json",
+      "use": "Pinned four-field state schema and scoped sufficiency result."
+    }
+  },
+  "status": "EXECUTED_SYNTHETIC_CROSS_ASSAY_FALSIFIER",
+  "title": "History collisions under a four-field state projection"
+}
