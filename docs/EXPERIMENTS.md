@@ -124,6 +124,75 @@ differences remain explainable by the stored Raven state/link trajectory.
 See the [preregistration, amendments, report, tests, provenance, and run
 artifact](../experiments/exp51_raven_h14_longitudinal/).
 
+## H14 follow-up: suppression semantics and operational erasure
+
+**OBSERVED, copied Raven source plus synthetic fixture:** Exp52 separates
+result exclusion from influence exclusion. With A suppressed as a field cell,
+the raw core omitted A but still returned C from A's `current_turn_memories`
+synaptic link; C scored `0.18`, and A's `A→B` link added `0.24` to B's score.
+The no-source control omitted C. Filtering A from that source list made the
+non-A score vector match the no-source control exactly. The finding is bounded
+to the copied source snapshot and tested input.
+
+Exp52 also compared two histories from one seed, then deleted A and all
+incident synaptic and cell links in both. One remaining value differed after
+the matched post-deletion schedule: C's `recall_count` was 5 after A
+participated and 4 in the suppressed control. All four post-deletion query
+score vectors and rankings nevertheless matched exactly. This falsifies exact
+persistent-state equivalence for the operational deletion protocol while
+supporting observed retrieval equivalence for only the four fixed queries.
+It does not demonstrate functionally consequential historical persistence or
+universal erasure. See the [Exp52 preregistration, report, tests, provenance,
+and run artifact](../experiments/exp52_raven_suppression_semantics/).
+
+## H14 follow-up: `recall_count` consumers
+
+**OBSERVED, copied Raven source plus synthetic fixture:** Exp53 compared two
+states whose only difference was C's persisted `recall_count` (5 versus 4),
+with B held at 4 in both. Four fixed `_recall_core()` queries had identical
+score components and rankings. This supports retrieval invariance only for
+those inputs.
+
+The count was observable through stats and memory serialization. With
+`export_graph(max_nodes=1)`, S5 selected C and S4 selected B: S4 tied B and C
+at count 4, and this SQLite fixture returned B first. The source query has no
+secondary tie-break, so that exact tied selection is database-plan dependent.
+Exp53's sleep-consolidator dry runs matched because that code derives
+consolidation counts from `audit_log.memories_retrieved`, held identical in
+both branches, rather than reading this row field. Equalizing the counter
+made all measured output groups match.
+
+The assay therefore falsifies broad observational redundancy for the
+declared stats/inspection/export interfaces, while finding no retrieval score
+or rank effect in the four tested queries. It does not establish downstream
+agent impact. See the [Exp53 preregistration, operation inventory, report,
+tests, provenance, and run artifact](../experiments/exp53_raven_latent_trace/).
+
+## H14 follow-up: observable contract and transition congruence
+
+**OBSERVED, copied Raven source plus synthetic fixture:** Exp54 inventoried
+the FastAPI routes and MCP tools, distinguishing declared external operations
+from engine/storage helpers. It compared S5/S4 after five same-input mutating
+engine actions: `recall`, `store`, `reinforce`, `forget`, and
+`create_cell_link`. Immediate action outputs matched, and the states remained
+equivalent for the four fixed retrieval score/rank probes. Stats and serialized
+memory inspection still distinguished the counter values. This supports
+transition congruence of retrieval equivalence only for that finite action and
+query set; it is not whole-system operational equivalence.
+
+Exp54 also reversed physical SQLite row order in a clone with identical
+logical memory rows. The four retrieval probes and full graph output remained
+equal, while the original truncated graph export selected B versus C when
+their recall counts tied. An experiment-only selector ordered by
+`recall_count DESC, memory_id ASC` selected B in both copies. This demonstrates
+row-order sensitivity for this fixture and SQLite query plan, not across all
+SQLite versions or database layouts. No upstream Raven file was changed.
+
+The route inventory is source inspection, not exhaustive runtime tracing.
+Exp54 does not test arbitrary inputs, live API/MCP behavior, concurrency,
+non-dry-run consolidation, provider behavior, or agent decisions. See the
+[Exp54 preregistration, report, tests, provenance, and run artifact](../experiments/exp54_raven_observational_contract/).
+
 
 | Script | Role |
 |---|---|

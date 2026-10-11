@@ -1,0 +1,349 @@
+{
+  "equalized_counter_control": {
+    "inspection": true,
+    "retrieval": true,
+    "sleep_consolidator_dry_run": true,
+    "stats": true,
+    "truncated_graph": true
+  },
+  "exp51_seed_sha256": "395c120e61d4538afddb623f18cdd6981af01625900ba18843a86896a31ed53c",
+  "experiment": "Exp53",
+  "interpretation_limits": [
+    "one pinned Raven source snapshot and synthetic four-memory fixture",
+    "four read-only retrieval queries and one deterministic dry-run maintenance path",
+    "API behavior is source-inspected; serialization behavior is tested through MemoryEntry.to_dict",
+    "no downstream agent action, concurrency, live API server, or production data"
+  ],
+  "paired_state_differences": {
+    "S4_non_counter_sha256": "574e6d392e00a72d2b5fa6ceb2351b0835f084d076f9a07303add88b47c53d08",
+    "S4_recall_counts": {
+      "B": 4,
+      "C": 4
+    },
+    "S5_non_counter_sha256": "574e6d392e00a72d2b5fa6ceb2351b0835f084d076f9a07303add88b47c53d08",
+    "S5_recall_counts": {
+      "B": 4,
+      "C": 5
+    },
+    "all_non_counter_fields_and_audit_rows_equal": true
+  },
+  "retrieval_outputs": {
+    "S4": {
+      "A": {
+        "ranked_ids": [
+          "A",
+          "C",
+          "D"
+        ],
+        "scores": [
+          {
+            "base_score": 1.0,
+            "hop_decay": 1.0,
+            "hop_distance": 0,
+            "memory_id": "A",
+            "recency_bonus": 0.0,
+            "score": 1.5,
+            "source": "similarity",
+            "state_boost": 1.5,
+            "synaptic_boost": 0.0
+          },
+          {
+            "base_score": 0.4000000059604645,
+            "hop_decay": 0.8607079764250578,
+            "hop_distance": 1,
+            "memory_id": "C",
+            "recency_bonus": 0.0,
+            "score": 0.5442831986804747,
+            "source": "similarity",
+            "state_boost": 1.0,
+            "synaptic_boost": 0.0
+          },
+          {
+            "base_score": 0.0,
+            "hop_decay": 0.7408182206817179,
+            "hop_distance": 2,
+            "memory_id": "D",
+            "recency_bonus": 0.0,
+            "score": 0.0,
+            "source": "similarity",
+            "state_boost": 1.0,
+            "synaptic_boost": 0.0
+          }
+        ]
+      },
+      "B": {
+        "ranked_ids": [
+          "B"
+        ],
+        "scores": [
+          {
+            "base_score": 0.9999999899804883,
+            "hop_decay": 1.0,
+            "hop_distance": 0,
+            "memory_id": "B",
+            "recency_bonus": 0.0,
+            "score": 0.9999999899804883,
+            "source": "similarity",
+            "state_boost": 1.0,
+            "synaptic_boost": 0.0
+          }
+        ]
+      },
+      "C": {
+        "ranked_ids": [
+          "D",
+          "C"
+        ],
+        "scores": [
+          {
+            "base_score": 0.916515138991168,
+            "hop_decay": 0.8607079764250578,
+            "hop_distance": 1,
+            "memory_id": "D",
+            "recency_bonus": 0.0,
+            "score": 1.2471094601396029,
+            "source": "similarity",
+            "state_boost": 1.0,
+            "synaptic_boost": 0.0
+          },
+          {
+            "base_score": 0.9999999775759996,
+            "hop_decay": 1.0,
+            "hop_distance": 0,
+            "memory_id": "C",
+            "recency_bonus": 0.0,
+            "score": 0.9999999775759996,
+            "source": "similarity",
+            "state_boost": 1.0,
+            "synaptic_boost": 0.0
+          }
+        ]
+      },
+      "D": {
+        "ranked_ids": [
+          "D"
+        ],
+        "scores": [
+          {
+            "base_score": 1.0,
+            "hop_decay": 1.0,
+            "hop_distance": 0,
+            "memory_id": "D",
+            "recency_bonus": 0.0,
+            "score": 1.0,
+            "source": "similarity",
+            "state_boost": 1.0,
+            "synaptic_boost": 0.0
+          }
+        ]
+      }
+    },
+    "S5": {
+      "A": {
+        "ranked_ids": [
+          "A",
+          "C",
+          "D"
+        ],
+        "scores": [
+          {
+            "base_score": 1.0,
+            "hop_decay": 1.0,
+            "hop_distance": 0,
+            "memory_id": "A",
+            "recency_bonus": 0.0,
+            "score": 1.5,
+            "source": "similarity",
+            "state_boost": 1.5,
+            "synaptic_boost": 0.0
+          },
+          {
+            "base_score": 0.4000000059604645,
+            "hop_decay": 0.8607079764250578,
+            "hop_distance": 1,
+            "memory_id": "C",
+            "recency_bonus": 0.0,
+            "score": 0.5442831986804747,
+            "source": "similarity",
+            "state_boost": 1.0,
+            "synaptic_boost": 0.0
+          },
+          {
+            "base_score": 0.0,
+            "hop_decay": 0.7408182206817179,
+            "hop_distance": 2,
+            "memory_id": "D",
+            "recency_bonus": 0.0,
+            "score": 0.0,
+            "source": "similarity",
+            "state_boost": 1.0,
+            "synaptic_boost": 0.0
+          }
+        ]
+      },
+      "B": {
+        "ranked_ids": [
+          "B"
+        ],
+        "scores": [
+          {
+            "base_score": 0.9999999899804883,
+            "hop_decay": 1.0,
+            "hop_distance": 0,
+            "memory_id": "B",
+            "recency_bonus": 0.0,
+            "score": 0.9999999899804883,
+            "source": "similarity",
+            "state_boost": 1.0,
+            "synaptic_boost": 0.0
+          }
+        ]
+      },
+      "C": {
+        "ranked_ids": [
+          "D",
+          "C"
+        ],
+        "scores": [
+          {
+            "base_score": 0.916515138991168,
+            "hop_decay": 0.8607079764250578,
+            "hop_distance": 1,
+            "memory_id": "D",
+            "recency_bonus": 0.0,
+            "score": 1.2471094601396029,
+            "source": "similarity",
+            "state_boost": 1.0,
+            "synaptic_boost": 0.0
+          },
+          {
+            "base_score": 0.9999999775759996,
+            "hop_decay": 1.0,
+            "hop_distance": 0,
+            "memory_id": "C",
+            "recency_bonus": 0.0,
+            "score": 0.9999999775759996,
+            "source": "similarity",
+            "state_boost": 1.0,
+            "synaptic_boost": 0.0
+          }
+        ]
+      },
+      "D": {
+        "ranked_ids": [
+          "D"
+        ],
+        "scores": [
+          {
+            "base_score": 1.0,
+            "hop_decay": 1.0,
+            "hop_distance": 0,
+            "memory_id": "D",
+            "recency_bonus": 0.0,
+            "score": 1.0,
+            "source": "similarity",
+            "state_boost": 1.0,
+            "synaptic_boost": 0.0
+          }
+        ]
+      }
+    }
+  },
+  "retrieval_score_and_rank_equivalence_by_query": {
+    "A": true,
+    "B": true,
+    "C": true,
+    "D": true
+  },
+  "same_activation_update": {
+    "C4_state": {
+      "C_last_activation": 2001.0,
+      "C_recall_count": 5
+    },
+    "C5_state": {
+      "C_last_activation": 2001.0,
+      "C_recall_count": 6
+    }
+  },
+  "sleep_consolidator": {
+    "S4_dry_run": {
+      "created": 0,
+      "dry_run": true,
+      "groups": [
+        {
+          "previews": [
+            "Synthetic fixture memory A",
+            "Synthetic fixture memory B",
+            "Synthetic fixture memory C",
+            "Synthetic fixture memory D"
+          ],
+          "size": 4,
+          "total_recalls": 0
+        }
+      ],
+      "merged": 0,
+      "processed": 4,
+      "singletons": 0,
+      "threshold": 0.0
+    },
+    "S5_dry_run": {
+      "created": 0,
+      "dry_run": true,
+      "groups": [
+        {
+          "previews": [
+            "Synthetic fixture memory A",
+            "Synthetic fixture memory B",
+            "Synthetic fixture memory C",
+            "Synthetic fixture memory D"
+          ],
+          "size": 4,
+          "total_recalls": 0
+        }
+      ],
+      "merged": 0,
+      "processed": 4,
+      "singletons": 0,
+      "threshold": 0.0
+    },
+    "dry_run_outputs_equal_with_identical_audit_logs": true
+  },
+  "source_commit": "56df6cfdd7f3dd3000bfd7ce8cc42606d66a191f",
+  "telemetry_and_export": {
+    "S4_C_inspection_recall_count": 4,
+    "S4_total_recalls": 8,
+    "S4_truncated_graph": {
+      "edges": [],
+      "nodes": [
+        {
+          "id": 1,
+          "label": "Synthetic fixture memory B\u2026",
+          "layer": "semantic",
+          "memory_id": "B",
+          "recall_count": 4,
+          "state": "NEUTRAL"
+        }
+      ],
+      "total_nodes": 4,
+      "truncated": true
+    },
+    "S5_C_inspection_recall_count": 5,
+    "S5_total_recalls": 9,
+    "S5_truncated_graph": {
+      "edges": [],
+      "nodes": [
+        {
+          "id": 2,
+          "label": "Synthetic fixture memory C\u2026",
+          "layer": "semantic",
+          "memory_id": "C",
+          "recall_count": 5,
+          "state": "NEUTRAL"
+        }
+      ],
+      "total_nodes": 4,
+      "truncated": true
+    }
+  },
+  "title": "Raven Latent Trace Activation Assay"
+}

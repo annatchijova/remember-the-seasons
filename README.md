@@ -13,7 +13,8 @@ recomputed in your browser).
 > have revolutionized it. This is our best attempt in one month.
 
 > STATUS: the main research phase is closed; Exp48–50 are synthetic H14
-> follow-up assays. Exp51 is an isolated transfer pilot against a copied
+> follow-up assays. Exp51–54 are isolated transfer, state-consumer, and
+> observability probes against a copied
 > Raven implementation with synthetic data. **OBSERVED, copied source with
 > synthetic fixture:** it found a current-turn
 > synaptic-source path that bypasses the copied core's documented suppression
@@ -31,6 +32,30 @@ recomputed in your browser).
 > 6,169 differ on the initial observation, and the other 734 have shortest
 > distinguishing query sequences of at most three steps. This is a finite
 > synthetic result, not a Raven/MNEME evaluation.
+> Exp52 found raw suppression excluded A from results but still allowed A's
+> `current_turn_memories` synaptic source path to change non-A scores. An
+> experiment-only source filter matched the no-source control. After deleting
+> A and its incident links, one non-target recall counter still differed, but
+> all four preregistered score vectors and rankings matched. This is a finite
+> synthetic result, not evidence beyond the declared schedule. See the
+> [Exp52 report and artifacts](experiments/exp52_raven_suppression_semantics/).
+> Exp53 isolated `C.recall_count` (5 versus 4). **OBSERVED:** four fixed Raven
+> retrieval queries produced identical scores and rankings, while stats and
+> inspection exposed the count; truncating `export_graph(max_nodes=1)` selected
+> C versus B in this fixture. The sleep consolidator dry run was identical
+> because its weights came from the unchanged audit log. This separates
+> retrieval effects from telemetry/export effects; it does not show a
+> downstream agent decision. See the
+> [Exp53 assay](experiments/exp53_raven_latent_trace/).
+> Exp54 inventories Raven's declared FastAPI/MCP surface and tests five
+> same-input mutating engine actions. **OBSERVED:** the S5/S4 pair stayed
+> equivalent on the four retrieval probes after each action, while stats and
+> memory inspection continued to expose the counter difference. Reversing
+> physical SQLite row order with identical logical rows changed the original
+> truncated graph's tied winner (B to C); an Exp54-only selector with
+> `memory_id` as a secondary key was stable. This is bounded to the copied
+> Raven snapshot and fixture, not the full service contract. See the
+> [Exp54 assay](experiments/exp54_raven_observational_contract/).
 > A working prototype lives in `product/`; sources
 > remain read-only, claims stay labelled, and limitations are documented.
 
@@ -135,7 +160,7 @@ subordinate of the protocol — by design.
 ## The evidence
 
 - **Research**: `experiments/` — Exp19–35, the main falsification chain,
-  plus H14 follow-up assays Exp36–51. **OBSERVED, synthetic:** Exp48 groups
+  plus H14 follow-up assays Exp36–54. **OBSERVED, synthetic:** Exp48 groups
   states by exact choice, propagation, and causal-contribution traces under
   its 24 fixed schedules. It finds 441 observational classes in Exp47's
   1,512-state Cartesian domain and 118 classes in a 172-state closure from
@@ -158,7 +183,10 @@ subordinate of the protocol — by design.
   [Exp50 code, tests, and run](experiments/exp50_h14_partition_refinement/),
   the [Exp48–50 minimality report](docs/H14_EXP48_50_MINIMIZATION.md),
   the [real-system transfer audit](docs/H14_REAL_SYSTEM_TRANSFER_AUDIT.md),
-  and the [Exp51 Raven longitudinal pilot](experiments/exp51_raven_h14_longitudinal/),
+  the [Exp51 Raven longitudinal pilot](experiments/exp51_raven_h14_longitudinal/),
+  the [Exp52 suppression semantics assay](experiments/exp52_raven_suppression_semantics/),
+  the [Exp53 latent trace assay](experiments/exp53_raven_latent_trace/),
+  the [Exp54 observational contract assay](experiments/exp54_raven_observational_contract/),
   `docs/HYPOTHESES.md`, and `docs/EXPERIMENTS.md`.
 - **Protocol conformance**: `mneme-cf-bundle/v1` + `cf-cascade/v2` +
   `causal_ontology 2.0.0` — a clean-room Go verifier reproduces every
@@ -181,7 +209,7 @@ remember-the-seasons/
   sources/       read-only research snapshots (raven-memory, mneme,
                  stigmergy — each with PROVENANCE.md)
   research/      archaeology inventories, mechanism maps
-  experiments/   Exp19–Exp35 falsification chain + H14 Exp36–51
+  experiments/   Exp19–Exp35 falsification chain + H14 Exp36–54
   docs/          research package, hypotheses, stop conditions
   product/       the working skeleton — see product/README.md
     mneme/       custody, authority, receipts, claims, canonical JSON

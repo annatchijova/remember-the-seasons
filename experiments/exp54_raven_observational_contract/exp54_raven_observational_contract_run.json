@@ -1,0 +1,1311 @@
+{
+  "epistemic_scope": "copied Raven snapshot and synthetic Exp51 fixture",
+  "equivalence_definition": {
+    "operational_observations": [
+      "stats",
+      "serialized memory inspection",
+      "truncated graph",
+      "selected action outputs"
+    ],
+    "retrieval": "exact equality of all score rows and ranked IDs for A/B/C/D fixed probes",
+    "transition_congruence_domain": [
+      "recall",
+      "store",
+      "reinforce",
+      "forget",
+      "create_cell_link"
+    ]
+  },
+  "experiment": "Exp54",
+  "initial_counter_pair": {
+    "S4_memory_recall_counts": {
+      "A": 0,
+      "B": 4,
+      "C": 4,
+      "D": 0
+    },
+    "S4_total_recalls": 8,
+    "S5_memory_recall_counts": {
+      "A": 0,
+      "B": 4,
+      "C": 5,
+      "D": 0
+    },
+    "S5_total_recalls": 9,
+    "retrieval_equivalent": true
+  },
+  "interpretation_limits": [
+    "static route/tool inventory plus five direct engine action schedules",
+    "synthetic four-memory fixture; no FastAPI/MCP server or real agent execution",
+    "no arbitrary request inputs, concurrency, live cache, embedding provider, or non-dry-run consolidation",
+    "retrieval congruence is bounded to four fixed queries and the selected action inputs",
+    "the secondary-key selector is an experimental comparator, not an upstream Raven fix"
+  ],
+  "selected_action_congruence": {
+    "create_cell_link": {
+      "S4_immediate_output": {
+        "from": 1,
+        "to": 3,
+        "type": "INHIBITORY"
+      },
+      "S4_successor_retrieval": {
+        "A": {
+          "ranked_ids": [
+            "A",
+            "C",
+            "D"
+          ],
+          "scores": [
+            {
+              "base_score": 1.0,
+              "hop_decay": 1.0,
+              "hop_distance": 0,
+              "memory_id": "A",
+              "recency_bonus": 0.0,
+              "score": 1.5,
+              "source": "similarity",
+              "state_boost": 1.5,
+              "synaptic_boost": 0.0
+            },
+            {
+              "base_score": 0.4000000059604645,
+              "hop_decay": 0.8607079764250578,
+              "hop_distance": 1,
+              "memory_id": "C",
+              "recency_bonus": 0.0,
+              "score": 0.5442831986804747,
+              "source": "similarity",
+              "state_boost": 1.0,
+              "synaptic_boost": 0.0
+            },
+            {
+              "base_score": 0.0,
+              "hop_decay": 0.7408182206817179,
+              "hop_distance": 2,
+              "memory_id": "D",
+              "recency_bonus": 0.0,
+              "score": 0.0,
+              "source": "similarity",
+              "state_boost": 1.0,
+              "synaptic_boost": 0.0
+            }
+          ]
+        },
+        "B": {
+          "ranked_ids": [
+            "B"
+          ],
+          "scores": [
+            {
+              "base_score": 0.9999999899804883,
+              "hop_decay": 1.0,
+              "hop_distance": 0,
+              "memory_id": "B",
+              "recency_bonus": 0.0,
+              "score": 0.9999999899804883,
+              "source": "similarity",
+              "state_boost": 1.0,
+              "synaptic_boost": 0.0
+            }
+          ]
+        },
+        "C": {
+          "ranked_ids": [
+            "D",
+            "C"
+          ],
+          "scores": [
+            {
+              "base_score": 0.916515138991168,
+              "hop_decay": 0.8607079764250578,
+              "hop_distance": 1,
+              "memory_id": "D",
+              "recency_bonus": 0.0,
+              "score": 1.2471094601396029,
+              "source": "similarity",
+              "state_boost": 1.0,
+              "synaptic_boost": 0.0
+            },
+            {
+              "base_score": 0.9999999775759996,
+              "hop_decay": 1.0,
+              "hop_distance": 0,
+              "memory_id": "C",
+              "recency_bonus": 0.0,
+              "score": 0.9999999775759996,
+              "source": "similarity",
+              "state_boost": 1.0,
+              "synaptic_boost": 0.0
+            }
+          ]
+        },
+        "D": {
+          "ranked_ids": [
+            "D"
+          ],
+          "scores": [
+            {
+              "base_score": 1.0,
+              "hop_decay": 1.0,
+              "hop_distance": 0,
+              "memory_id": "D",
+              "recency_bonus": 0.0,
+              "score": 1.0,
+              "source": "similarity",
+              "state_boost": 1.0,
+              "synaptic_boost": 0.0
+            }
+          ]
+        }
+      },
+      "S5_immediate_output": {
+        "from": 1,
+        "to": 3,
+        "type": "INHIBITORY"
+      },
+      "S5_successor_retrieval": {
+        "A": {
+          "ranked_ids": [
+            "A",
+            "C",
+            "D"
+          ],
+          "scores": [
+            {
+              "base_score": 1.0,
+              "hop_decay": 1.0,
+              "hop_distance": 0,
+              "memory_id": "A",
+              "recency_bonus": 0.0,
+              "score": 1.5,
+              "source": "similarity",
+              "state_boost": 1.5,
+              "synaptic_boost": 0.0
+            },
+            {
+              "base_score": 0.4000000059604645,
+              "hop_decay": 0.8607079764250578,
+              "hop_distance": 1,
+              "memory_id": "C",
+              "recency_bonus": 0.0,
+              "score": 0.5442831986804747,
+              "source": "similarity",
+              "state_boost": 1.0,
+              "synaptic_boost": 0.0
+            },
+            {
+              "base_score": 0.0,
+              "hop_decay": 0.7408182206817179,
+              "hop_distance": 2,
+              "memory_id": "D",
+              "recency_bonus": 0.0,
+              "score": 0.0,
+              "source": "similarity",
+              "state_boost": 1.0,
+              "synaptic_boost": 0.0
+            }
+          ]
+        },
+        "B": {
+          "ranked_ids": [
+            "B"
+          ],
+          "scores": [
+            {
+              "base_score": 0.9999999899804883,
+              "hop_decay": 1.0,
+              "hop_distance": 0,
+              "memory_id": "B",
+              "recency_bonus": 0.0,
+              "score": 0.9999999899804883,
+              "source": "similarity",
+              "state_boost": 1.0,
+              "synaptic_boost": 0.0
+            }
+          ]
+        },
+        "C": {
+          "ranked_ids": [
+            "D",
+            "C"
+          ],
+          "scores": [
+            {
+              "base_score": 0.916515138991168,
+              "hop_decay": 0.8607079764250578,
+              "hop_distance": 1,
+              "memory_id": "D",
+              "recency_bonus": 0.0,
+              "score": 1.2471094601396029,
+              "source": "similarity",
+              "state_boost": 1.0,
+              "synaptic_boost": 0.0
+            },
+            {
+              "base_score": 0.9999999775759996,
+              "hop_decay": 1.0,
+              "hop_distance": 0,
+              "memory_id": "C",
+              "recency_bonus": 0.0,
+              "score": 0.9999999775759996,
+              "source": "similarity",
+              "state_boost": 1.0,
+              "synaptic_boost": 0.0
+            }
+          ]
+        },
+        "D": {
+          "ranked_ids": [
+            "D"
+          ],
+          "scores": [
+            {
+              "base_score": 1.0,
+              "hop_decay": 1.0,
+              "hop_distance": 0,
+              "memory_id": "D",
+              "recency_bonus": 0.0,
+              "score": 1.0,
+              "source": "similarity",
+              "state_boost": 1.0,
+              "synaptic_boost": 0.0
+            }
+          ]
+        }
+      },
+      "immediate_outputs_equal": true,
+      "successor_retrieval_equivalent": true,
+      "successor_total_recalls": [
+        9,
+        8
+      ]
+    },
+    "forget": {
+      "S4_immediate_output": {
+        "memory_id": "C",
+        "state": "FORGOTTEN"
+      },
+      "S4_successor_retrieval": {
+        "A": {
+          "ranked_ids": [
+            "A",
+            "D"
+          ],
+          "scores": [
+            {
+              "base_score": 1.0,
+              "hop_decay": 1.0,
+              "hop_distance": 0,
+              "memory_id": "A",
+              "recency_bonus": 0.0,
+              "score": 1.5,
+              "source": "similarity",
+              "state_boost": 1.5,
+              "synaptic_boost": 0.0
+            },
+            {
+              "base_score": 0.0,
+              "hop_decay": 0.7408182206817179,
+              "hop_distance": 2,
+              "memory_id": "D",
+              "recency_bonus": 0.0,
+              "score": 0.0,
+              "source": "similarity",
+              "state_boost": 1.0,
+              "synaptic_boost": 0.0
+            }
+          ]
+        },
+        "B": {
+          "ranked_ids": [
+            "B"
+          ],
+          "scores": [
+            {
+              "base_score": 0.9999999899804883,
+              "hop_decay": 1.0,
+              "hop_distance": 0,
+              "memory_id": "B",
+              "recency_bonus": 0.0,
+              "score": 0.9999999899804883,
+              "source": "similarity",
+              "state_boost": 1.0,
+              "synaptic_boost": 0.0
+            }
+          ]
+        },
+        "C": {
+          "ranked_ids": [
+            "D"
+          ],
+          "scores": [
+            {
+              "base_score": 0.916515138991168,
+              "hop_decay": 1.0,
+              "hop_distance": 0,
+              "memory_id": "D",
+              "recency_bonus": 0.0,
+              "score": 0.916515138991168,
+              "source": "similarity",
+              "state_boost": 1.0,
+              "synaptic_boost": 0.0
+            }
+          ]
+        },
+        "D": {
+          "ranked_ids": [
+            "D"
+          ],
+          "scores": [
+            {
+              "base_score": 1.0,
+              "hop_decay": 1.0,
+              "hop_distance": 0,
+              "memory_id": "D",
+              "recency_bonus": 0.0,
+              "score": 1.0,
+              "source": "similarity",
+              "state_boost": 1.0,
+              "synaptic_boost": 0.0
+            }
+          ]
+        }
+      },
+      "S5_immediate_output": {
+        "memory_id": "C",
+        "state": "FORGOTTEN"
+      },
+      "S5_successor_retrieval": {
+        "A": {
+          "ranked_ids": [
+            "A",
+            "D"
+          ],
+          "scores": [
+            {
+              "base_score": 1.0,
+              "hop_decay": 1.0,
+              "hop_distance": 0,
+              "memory_id": "A",
+              "recency_bonus": 0.0,
+              "score": 1.5,
+              "source": "similarity",
+              "state_boost": 1.5,
+              "synaptic_boost": 0.0
+            },
+            {
+              "base_score": 0.0,
+              "hop_decay": 0.7408182206817179,
+              "hop_distance": 2,
+              "memory_id": "D",
+              "recency_bonus": 0.0,
+              "score": 0.0,
+              "source": "similarity",
+              "state_boost": 1.0,
+              "synaptic_boost": 0.0
+            }
+          ]
+        },
+        "B": {
+          "ranked_ids": [
+            "B"
+          ],
+          "scores": [
+            {
+              "base_score": 0.9999999899804883,
+              "hop_decay": 1.0,
+              "hop_distance": 0,
+              "memory_id": "B",
+              "recency_bonus": 0.0,
+              "score": 0.9999999899804883,
+              "source": "similarity",
+              "state_boost": 1.0,
+              "synaptic_boost": 0.0
+            }
+          ]
+        },
+        "C": {
+          "ranked_ids": [
+            "D"
+          ],
+          "scores": [
+            {
+              "base_score": 0.916515138991168,
+              "hop_decay": 1.0,
+              "hop_distance": 0,
+              "memory_id": "D",
+              "recency_bonus": 0.0,
+              "score": 0.916515138991168,
+              "source": "similarity",
+              "state_boost": 1.0,
+              "synaptic_boost": 0.0
+            }
+          ]
+        },
+        "D": {
+          "ranked_ids": [
+            "D"
+          ],
+          "scores": [
+            {
+              "base_score": 1.0,
+              "hop_decay": 1.0,
+              "hop_distance": 0,
+              "memory_id": "D",
+              "recency_bonus": 0.0,
+              "score": 1.0,
+              "source": "similarity",
+              "state_boost": 1.0,
+              "synaptic_boost": 0.0
+            }
+          ]
+        }
+      },
+      "immediate_outputs_equal": true,
+      "successor_retrieval_equivalent": true,
+      "successor_total_recalls": [
+        9,
+        8
+      ]
+    },
+    "recall": {
+      "S4_immediate_output": {
+        "audit_operation": "recall",
+        "ranked_ids": [
+          "B"
+        ],
+        "scores": [
+          {
+            "hop_distance": 0,
+            "memory_id": "B",
+            "score": 0.9999999899804883,
+            "synaptic_boost": 0.0
+          }
+        ]
+      },
+      "S4_successor_retrieval": {
+        "A": {
+          "ranked_ids": [
+            "A",
+            "C",
+            "D"
+          ],
+          "scores": [
+            {
+              "base_score": 1.0,
+              "hop_decay": 1.0,
+              "hop_distance": 0,
+              "memory_id": "A",
+              "recency_bonus": 0.0,
+              "score": 1.5,
+              "source": "similarity",
+              "state_boost": 1.5,
+              "synaptic_boost": 0.0
+            },
+            {
+              "base_score": 0.4000000059604645,
+              "hop_decay": 0.8607079764250578,
+              "hop_distance": 1,
+              "memory_id": "C",
+              "recency_bonus": 0.0,
+              "score": 0.5442831986804747,
+              "source": "similarity",
+              "state_boost": 1.0,
+              "synaptic_boost": 0.0
+            },
+            {
+              "base_score": 0.0,
+              "hop_decay": 0.7408182206817179,
+              "hop_distance": 2,
+              "memory_id": "D",
+              "recency_bonus": 0.0,
+              "score": 0.0,
+              "source": "similarity",
+              "state_boost": 1.0,
+              "synaptic_boost": 0.0
+            }
+          ]
+        },
+        "B": {
+          "ranked_ids": [
+            "B"
+          ],
+          "scores": [
+            {
+              "base_score": 0.9999999899804883,
+              "hop_decay": 1.0,
+              "hop_distance": 0,
+              "memory_id": "B",
+              "recency_bonus": 0.05,
+              "score": 1.0499999899804884,
+              "source": "similarity",
+              "state_boost": 1.0,
+              "synaptic_boost": 0.0
+            }
+          ]
+        },
+        "C": {
+          "ranked_ids": [
+            "D",
+            "C"
+          ],
+          "scores": [
+            {
+              "base_score": 0.916515138991168,
+              "hop_decay": 0.8607079764250578,
+              "hop_distance": 1,
+              "memory_id": "D",
+              "recency_bonus": 0.0,
+              "score": 1.2471094601396029,
+              "source": "similarity",
+              "state_boost": 1.0,
+              "synaptic_boost": 0.0
+            },
+            {
+              "base_score": 0.9999999775759996,
+              "hop_decay": 1.0,
+              "hop_distance": 0,
+              "memory_id": "C",
+              "recency_bonus": 0.0,
+              "score": 0.9999999775759996,
+              "source": "similarity",
+              "state_boost": 1.0,
+              "synaptic_boost": 0.0
+            }
+          ]
+        },
+        "D": {
+          "ranked_ids": [
+            "D"
+          ],
+          "scores": [
+            {
+              "base_score": 1.0,
+              "hop_decay": 1.0,
+              "hop_distance": 0,
+              "memory_id": "D",
+              "recency_bonus": 0.0,
+              "score": 1.0,
+              "source": "similarity",
+              "state_boost": 1.0,
+              "synaptic_boost": 0.0
+            }
+          ]
+        }
+      },
+      "S5_immediate_output": {
+        "audit_operation": "recall",
+        "ranked_ids": [
+          "B"
+        ],
+        "scores": [
+          {
+            "hop_distance": 0,
+            "memory_id": "B",
+            "score": 0.9999999899804883,
+            "synaptic_boost": 0.0
+          }
+        ]
+      },
+      "S5_successor_retrieval": {
+        "A": {
+          "ranked_ids": [
+            "A",
+            "C",
+            "D"
+          ],
+          "scores": [
+            {
+              "base_score": 1.0,
+              "hop_decay": 1.0,
+              "hop_distance": 0,
+              "memory_id": "A",
+              "recency_bonus": 0.0,
+              "score": 1.5,
+              "source": "similarity",
+              "state_boost": 1.5,
+              "synaptic_boost": 0.0
+            },
+            {
+              "base_score": 0.4000000059604645,
+              "hop_decay": 0.8607079764250578,
+              "hop_distance": 1,
+              "memory_id": "C",
+              "recency_bonus": 0.0,
+              "score": 0.5442831986804747,
+              "source": "similarity",
+              "state_boost": 1.0,
+              "synaptic_boost": 0.0
+            },
+            {
+              "base_score": 0.0,
+              "hop_decay": 0.7408182206817179,
+              "hop_distance": 2,
+              "memory_id": "D",
+              "recency_bonus": 0.0,
+              "score": 0.0,
+              "source": "similarity",
+              "state_boost": 1.0,
+              "synaptic_boost": 0.0
+            }
+          ]
+        },
+        "B": {
+          "ranked_ids": [
+            "B"
+          ],
+          "scores": [
+            {
+              "base_score": 0.9999999899804883,
+              "hop_decay": 1.0,
+              "hop_distance": 0,
+              "memory_id": "B",
+              "recency_bonus": 0.05,
+              "score": 1.0499999899804884,
+              "source": "similarity",
+              "state_boost": 1.0,
+              "synaptic_boost": 0.0
+            }
+          ]
+        },
+        "C": {
+          "ranked_ids": [
+            "D",
+            "C"
+          ],
+          "scores": [
+            {
+              "base_score": 0.916515138991168,
+              "hop_decay": 0.8607079764250578,
+              "hop_distance": 1,
+              "memory_id": "D",
+              "recency_bonus": 0.0,
+              "score": 1.2471094601396029,
+              "source": "similarity",
+              "state_boost": 1.0,
+              "synaptic_boost": 0.0
+            },
+            {
+              "base_score": 0.9999999775759996,
+              "hop_decay": 1.0,
+              "hop_distance": 0,
+              "memory_id": "C",
+              "recency_bonus": 0.0,
+              "score": 0.9999999775759996,
+              "source": "similarity",
+              "state_boost": 1.0,
+              "synaptic_boost": 0.0
+            }
+          ]
+        },
+        "D": {
+          "ranked_ids": [
+            "D"
+          ],
+          "scores": [
+            {
+              "base_score": 1.0,
+              "hop_decay": 1.0,
+              "hop_distance": 0,
+              "memory_id": "D",
+              "recency_bonus": 0.0,
+              "score": 1.0,
+              "source": "similarity",
+              "state_boost": 1.0,
+              "synaptic_boost": 0.0
+            }
+          ]
+        }
+      },
+      "immediate_outputs_equal": true,
+      "successor_retrieval_equivalent": true,
+      "successor_total_recalls": [
+        10,
+        9
+      ]
+    },
+    "reinforce": {
+      "S4_immediate_output": {
+        "memory_id": "C",
+        "state": "REINFORCED"
+      },
+      "S4_successor_retrieval": {
+        "A": {
+          "ranked_ids": [
+            "A",
+            "C",
+            "D"
+          ],
+          "scores": [
+            {
+              "base_score": 1.0,
+              "hop_decay": 1.0,
+              "hop_distance": 0,
+              "memory_id": "A",
+              "recency_bonus": 0.0,
+              "score": 1.5,
+              "source": "similarity",
+              "state_boost": 1.5,
+              "synaptic_boost": 0.0
+            },
+            {
+              "base_score": 0.4000000059604645,
+              "hop_decay": 0.8607079764250578,
+              "hop_distance": 1,
+              "memory_id": "C",
+              "recency_bonus": 0.0,
+              "score": 0.7164247965305959,
+              "source": "similarity",
+              "state_boost": 1.5,
+              "synaptic_boost": 0.0
+            },
+            {
+              "base_score": 0.0,
+              "hop_decay": 0.7408182206817179,
+              "hop_distance": 2,
+              "memory_id": "D",
+              "recency_bonus": 0.0,
+              "score": 0.0,
+              "source": "similarity",
+              "state_boost": 1.0,
+              "synaptic_boost": 0.0
+            }
+          ]
+        },
+        "B": {
+          "ranked_ids": [
+            "B"
+          ],
+          "scores": [
+            {
+              "base_score": 0.9999999899804883,
+              "hop_decay": 1.0,
+              "hop_distance": 0,
+              "memory_id": "B",
+              "recency_bonus": 0.0,
+              "score": 0.9999999899804883,
+              "source": "similarity",
+              "state_boost": 1.0,
+              "synaptic_boost": 0.0
+            }
+          ]
+        },
+        "C": {
+          "ranked_ids": [
+            "C",
+            "D"
+          ],
+          "scores": [
+            {
+              "base_score": 0.9999999775759996,
+              "hop_decay": 1.0,
+              "hop_distance": 0,
+              "memory_id": "C",
+              "recency_bonus": 0.0,
+              "score": 1.4999999663639993,
+              "source": "similarity",
+              "state_boost": 1.5,
+              "synaptic_boost": 0.0
+            },
+            {
+              "base_score": 0.916515138991168,
+              "hop_decay": 0.8607079764250578,
+              "hop_distance": 1,
+              "memory_id": "D",
+              "recency_bonus": 0.0,
+              "score": 1.2471094601396029,
+              "source": "similarity",
+              "state_boost": 1.0,
+              "synaptic_boost": 0.0
+            }
+          ]
+        },
+        "D": {
+          "ranked_ids": [
+            "D"
+          ],
+          "scores": [
+            {
+              "base_score": 1.0,
+              "hop_decay": 1.0,
+              "hop_distance": 0,
+              "memory_id": "D",
+              "recency_bonus": 0.0,
+              "score": 1.0,
+              "source": "similarity",
+              "state_boost": 1.0,
+              "synaptic_boost": 0.0
+            }
+          ]
+        }
+      },
+      "S5_immediate_output": {
+        "memory_id": "C",
+        "state": "REINFORCED"
+      },
+      "S5_successor_retrieval": {
+        "A": {
+          "ranked_ids": [
+            "A",
+            "C",
+            "D"
+          ],
+          "scores": [
+            {
+              "base_score": 1.0,
+              "hop_decay": 1.0,
+              "hop_distance": 0,
+              "memory_id": "A",
+              "recency_bonus": 0.0,
+              "score": 1.5,
+              "source": "similarity",
+              "state_boost": 1.5,
+              "synaptic_boost": 0.0
+            },
+            {
+              "base_score": 0.4000000059604645,
+              "hop_decay": 0.8607079764250578,
+              "hop_distance": 1,
+              "memory_id": "C",
+              "recency_bonus": 0.0,
+              "score": 0.7164247965305959,
+              "source": "similarity",
+              "state_boost": 1.5,
+              "synaptic_boost": 0.0
+            },
+            {
+              "base_score": 0.0,
+              "hop_decay": 0.7408182206817179,
+              "hop_distance": 2,
+              "memory_id": "D",
+              "recency_bonus": 0.0,
+              "score": 0.0,
+              "source": "similarity",
+              "state_boost": 1.0,
+              "synaptic_boost": 0.0
+            }
+          ]
+        },
+        "B": {
+          "ranked_ids": [
+            "B"
+          ],
+          "scores": [
+            {
+              "base_score": 0.9999999899804883,
+              "hop_decay": 1.0,
+              "hop_distance": 0,
+              "memory_id": "B",
+              "recency_bonus": 0.0,
+              "score": 0.9999999899804883,
+              "source": "similarity",
+              "state_boost": 1.0,
+              "synaptic_boost": 0.0
+            }
+          ]
+        },
+        "C": {
+          "ranked_ids": [
+            "C",
+            "D"
+          ],
+          "scores": [
+            {
+              "base_score": 0.9999999775759996,
+              "hop_decay": 1.0,
+              "hop_distance": 0,
+              "memory_id": "C",
+              "recency_bonus": 0.0,
+              "score": 1.4999999663639993,
+              "source": "similarity",
+              "state_boost": 1.5,
+              "synaptic_boost": 0.0
+            },
+            {
+              "base_score": 0.916515138991168,
+              "hop_decay": 0.8607079764250578,
+              "hop_distance": 1,
+              "memory_id": "D",
+              "recency_bonus": 0.0,
+              "score": 1.2471094601396029,
+              "source": "similarity",
+              "state_boost": 1.0,
+              "synaptic_boost": 0.0
+            }
+          ]
+        },
+        "D": {
+          "ranked_ids": [
+            "D"
+          ],
+          "scores": [
+            {
+              "base_score": 1.0,
+              "hop_decay": 1.0,
+              "hop_distance": 0,
+              "memory_id": "D",
+              "recency_bonus": 0.0,
+              "score": 1.0,
+              "source": "similarity",
+              "state_boost": 1.0,
+              "synaptic_boost": 0.0
+            }
+          ]
+        }
+      },
+      "immediate_outputs_equal": true,
+      "successor_retrieval_equivalent": true,
+      "successor_total_recalls": [
+        9,
+        8
+      ]
+    },
+    "store": {
+      "S4_immediate_output": {
+        "cell_id": 4,
+        "memory_id": "mem_22478634e0d10745_2000000_4",
+        "recall_count": 0,
+        "state": "NEUTRAL"
+      },
+      "S4_successor_retrieval": {
+        "A": {
+          "ranked_ids": [
+            "A",
+            "C",
+            "D"
+          ],
+          "scores": [
+            {
+              "base_score": 1.0,
+              "hop_decay": 1.0,
+              "hop_distance": 0,
+              "memory_id": "A",
+              "recency_bonus": 0.0,
+              "score": 1.5,
+              "source": "similarity",
+              "state_boost": 1.5,
+              "synaptic_boost": 0.0
+            },
+            {
+              "base_score": 0.4000000059604645,
+              "hop_decay": 0.8607079764250578,
+              "hop_distance": 1,
+              "memory_id": "C",
+              "recency_bonus": 0.0,
+              "score": 0.5442831986804747,
+              "source": "similarity",
+              "state_boost": 1.0,
+              "synaptic_boost": 0.0
+            },
+            {
+              "base_score": 0.0,
+              "hop_decay": 0.7408182206817179,
+              "hop_distance": 2,
+              "memory_id": "D",
+              "recency_bonus": 0.0,
+              "score": 0.0,
+              "source": "similarity",
+              "state_boost": 1.0,
+              "synaptic_boost": 0.0
+            }
+          ]
+        },
+        "B": {
+          "ranked_ids": [
+            "B"
+          ],
+          "scores": [
+            {
+              "base_score": 0.9999999899804883,
+              "hop_decay": 1.0,
+              "hop_distance": 0,
+              "memory_id": "B",
+              "recency_bonus": 0.0,
+              "score": 0.9999999899804883,
+              "source": "similarity",
+              "state_boost": 1.0,
+              "synaptic_boost": 0.0
+            }
+          ]
+        },
+        "C": {
+          "ranked_ids": [
+            "D",
+            "C"
+          ],
+          "scores": [
+            {
+              "base_score": 0.916515138991168,
+              "hop_decay": 0.8607079764250578,
+              "hop_distance": 1,
+              "memory_id": "D",
+              "recency_bonus": 0.0,
+              "score": 1.2471094601396029,
+              "source": "similarity",
+              "state_boost": 1.0,
+              "synaptic_boost": 0.0
+            },
+            {
+              "base_score": 0.9999999775759996,
+              "hop_decay": 1.0,
+              "hop_distance": 0,
+              "memory_id": "C",
+              "recency_bonus": 0.0,
+              "score": 0.9999999775759996,
+              "source": "similarity",
+              "state_boost": 1.0,
+              "synaptic_boost": 0.0
+            }
+          ]
+        },
+        "D": {
+          "ranked_ids": [
+            "D"
+          ],
+          "scores": [
+            {
+              "base_score": 1.0,
+              "hop_decay": 1.0,
+              "hop_distance": 0,
+              "memory_id": "D",
+              "recency_bonus": 0.0,
+              "score": 1.0,
+              "source": "similarity",
+              "state_boost": 1.0,
+              "synaptic_boost": 0.0
+            }
+          ]
+        }
+      },
+      "S5_immediate_output": {
+        "cell_id": 4,
+        "memory_id": "mem_22478634e0d10745_2000000_4",
+        "recall_count": 0,
+        "state": "NEUTRAL"
+      },
+      "S5_successor_retrieval": {
+        "A": {
+          "ranked_ids": [
+            "A",
+            "C",
+            "D"
+          ],
+          "scores": [
+            {
+              "base_score": 1.0,
+              "hop_decay": 1.0,
+              "hop_distance": 0,
+              "memory_id": "A",
+              "recency_bonus": 0.0,
+              "score": 1.5,
+              "source": "similarity",
+              "state_boost": 1.5,
+              "synaptic_boost": 0.0
+            },
+            {
+              "base_score": 0.4000000059604645,
+              "hop_decay": 0.8607079764250578,
+              "hop_distance": 1,
+              "memory_id": "C",
+              "recency_bonus": 0.0,
+              "score": 0.5442831986804747,
+              "source": "similarity",
+              "state_boost": 1.0,
+              "synaptic_boost": 0.0
+            },
+            {
+              "base_score": 0.0,
+              "hop_decay": 0.7408182206817179,
+              "hop_distance": 2,
+              "memory_id": "D",
+              "recency_bonus": 0.0,
+              "score": 0.0,
+              "source": "similarity",
+              "state_boost": 1.0,
+              "synaptic_boost": 0.0
+            }
+          ]
+        },
+        "B": {
+          "ranked_ids": [
+            "B"
+          ],
+          "scores": [
+            {
+              "base_score": 0.9999999899804883,
+              "hop_decay": 1.0,
+              "hop_distance": 0,
+              "memory_id": "B",
+              "recency_bonus": 0.0,
+              "score": 0.9999999899804883,
+              "source": "similarity",
+              "state_boost": 1.0,
+              "synaptic_boost": 0.0
+            }
+          ]
+        },
+        "C": {
+          "ranked_ids": [
+            "D",
+            "C"
+          ],
+          "scores": [
+            {
+              "base_score": 0.916515138991168,
+              "hop_decay": 0.8607079764250578,
+              "hop_distance": 1,
+              "memory_id": "D",
+              "recency_bonus": 0.0,
+              "score": 1.2471094601396029,
+              "source": "similarity",
+              "state_boost": 1.0,
+              "synaptic_boost": 0.0
+            },
+            {
+              "base_score": 0.9999999775759996,
+              "hop_decay": 1.0,
+              "hop_distance": 0,
+              "memory_id": "C",
+              "recency_bonus": 0.0,
+              "score": 0.9999999775759996,
+              "source": "similarity",
+              "state_boost": 1.0,
+              "synaptic_boost": 0.0
+            }
+          ]
+        },
+        "D": {
+          "ranked_ids": [
+            "D"
+          ],
+          "scores": [
+            {
+              "base_score": 1.0,
+              "hop_decay": 1.0,
+              "hop_distance": 0,
+              "memory_id": "D",
+              "recency_bonus": 0.0,
+              "score": 1.0,
+              "source": "similarity",
+              "state_boost": 1.0,
+              "synaptic_boost": 0.0
+            }
+          ]
+        }
+      },
+      "immediate_outputs_equal": true,
+      "successor_retrieval_equivalent": true,
+      "successor_total_recalls": [
+        9,
+        8
+      ]
+    }
+  },
+  "source_commit": "56df6cfdd7f3dd3000bfd7ce8cc42606d66a191f",
+  "source_inventory": {
+    "classification_limit": "route and tool declarations inventoried; all dynamic consumers and external clients not enumerated",
+    "fastapi_public_routes": {
+      "mutating_or_observation_with_possible_write": [
+        "POST /memories",
+        "POST /memories/{memory_id}/reinforce",
+        "POST /memories/{memory_id}/forget",
+        "POST /recall",
+        "POST /cell-links",
+        "POST /consolidate"
+      ],
+      "read_or_observe": [
+        "GET /",
+        "GET /demo",
+        "GET /api",
+        "GET /health",
+        "GET /memories",
+        "GET /memories/{memory_id}",
+        "GET /graph",
+        "GET /stats",
+        "GET /audit",
+        "GET /metrics",
+        "GET /alerts",
+        "WS /ws"
+      ]
+    },
+    "mcp_tools": [
+      "raven_store",
+      "raven_recall",
+      "raven_reinforce",
+      "raven_forget",
+      "raven_create_link",
+      "raven_stats",
+      "raven_get_memory",
+      "raven_audit_trail",
+      "raven_export_graph",
+      "raven_verify_chain",
+      "raven_consolidate",
+      "raven_info"
+    ]
+  },
+  "sqlite_row_order_probe": {
+    "experimental_order_clause": "recall_count DESC, memory_id ASC",
+    "experimental_secondary_key_ids": {
+      "equal": true,
+      "normal": [
+        "B"
+      ],
+      "reversed": [
+        "B"
+      ]
+    },
+    "full_graph_node_order_equal": true,
+    "logical_memory_rows_equal": true,
+    "logical_state_sha256_normal": "b5b8c7cb0869bc470c37c0c878f28e94792578b2395dcd09baceddca601ce00d",
+    "logical_state_sha256_reversed": "b5b8c7cb0869bc470c37c0c878f28e94792578b2395dcd09baceddca601ce00d",
+    "original_truncated_graph_ids": {
+      "equal": false,
+      "normal": [
+        "B"
+      ],
+      "reversed": [
+        "C"
+      ]
+    },
+    "physical_row_order": {
+      "normal": [
+        [
+          "A",
+          1
+        ],
+        [
+          "B",
+          2
+        ],
+        [
+          "C",
+          3
+        ],
+        [
+          "D",
+          4
+        ]
+      ],
+      "reversed": [
+        [
+          "D",
+          1
+        ],
+        [
+          "C",
+          2
+        ],
+        [
+          "B",
+          3
+        ],
+        [
+          "A",
+          4
+        ]
+      ]
+    },
+    "retrieval_equivalent_after_permutation": true
+  },
+  "title": "Raven Observational Contract and Transition Congruence"
+}
