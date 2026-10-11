@@ -1,0 +1,206 @@
+{
+  "collision_audit": {
+    "association": {
+      "groups_with_observably_different_futures": 84,
+      "necessary_for_exact_prediction_in_enumerated_domain": true,
+      "projection_groups": 168
+    },
+    "link": {
+      "groups_with_observably_different_futures": 483,
+      "necessary_for_exact_prediction_in_enumerated_domain": true,
+      "projection_groups": 756
+    },
+    "recency_age": {
+      "groups_with_observably_different_futures": 105,
+      "necessary_for_exact_prediction_in_enumerated_domain": true,
+      "projection_groups": 378
+    },
+    "reinforcement_count": {
+      "groups_with_observably_different_futures": 72,
+      "necessary_for_exact_prediction_in_enumerated_domain": true,
+      "projection_groups": 72
+    }
+  },
+  "epistemic_status": {
+    "INFERRED": "If all full-state collisions agree and omitting each candidate component creates at least one discrepant future in the exhaustive domain, the four component representation is sufficient and component-wise irreducible for exact prediction under this model and observation set.",
+    "OBSERVED": "The pinned Exp46 artifact verified with canonical SHA256 10e84c100d8ca3c9c74b723b051baf0b9ff39833c96ad8b7c37d953fdae70c36; Exp46 used a scalar reinforcement count in a synthetic cross-assay.",
+    "PROPOSED": "This assay defines a finite transition model with capped scalar count, association, link, and recency age. Scores, updates, thresholds, and probe schedules are declared toy semantics.",
+    "UNKNOWN": "Whether this representation is sufficient or minimal in Raven, MNEME, or any deployed agent memory system."
+  },
+  "experiment": "Exp47",
+  "history_collision_control": {
+    "converged_state": {
+      "association": "3/8",
+      "link": true,
+      "recency_age": 0,
+      "reinforced": true,
+      "reinforcement_count": 3
+    },
+    "history_a": {
+      "initial_association": "0/1",
+      "paired_updates": 3,
+      "reinforcement_only_events": 0
+    },
+    "history_b": {
+      "initial_association": "1/8",
+      "paired_updates": 2,
+      "reinforcement_only_events": 1
+    },
+    "same_full_state": true,
+    "same_future_outputs_for_all_probe_schedules": true
+  },
+  "limits": "Exhaustive only over the declared 1,512 states and 24 probe schedules. Minimality is component-wise within this representation and observation set, not information-theoretic or universal. The full-state collision control covers two constructed histories; the transition implementation still defines the synthetic system. No Raven/MNEME code was executed.",
+  "model": {
+    "domain": {
+      "association": {
+        "values": [
+          "0/1",
+          "1/8",
+          "1/4",
+          "3/8",
+          "1/2",
+          "5/8",
+          "3/4",
+          "7/8",
+          "1/1"
+        ]
+      },
+      "link": {
+        "values": [
+          false,
+          true
+        ]
+      },
+      "recency_age": {
+        "levels": 4,
+        "max": 3,
+        "min": 0
+      },
+      "reinforcement_count_capped": {
+        "levels": 21,
+        "max": 20,
+        "min": 0
+      },
+      "state_count": 1512
+    },
+    "probe_schedules": [
+      [
+        "0/1"
+      ],
+      [
+        "3/2",
+        "0/1"
+      ],
+      [
+        "3/2",
+        "3/2",
+        "0/1"
+      ],
+      [
+        "3/2",
+        "3/2",
+        "3/2",
+        "0/1"
+      ],
+      [
+        "287/400"
+      ],
+      [
+        "301/400"
+      ],
+      [
+        "63/80"
+      ],
+      [
+        "329/400"
+      ],
+      [
+        "343/400"
+      ],
+      [
+        "357/400"
+      ],
+      [
+        "371/400"
+      ],
+      [
+        "77/80"
+      ],
+      [
+        "399/400"
+      ],
+      [
+        "413/400"
+      ],
+      [
+        "427/400"
+      ],
+      [
+        "441/400"
+      ],
+      [
+        "91/80"
+      ],
+      [
+        "469/400"
+      ],
+      [
+        "483/400"
+      ],
+      [
+        "497/400"
+      ],
+      [
+        "511/400"
+      ],
+      [
+        "21/16"
+      ],
+      [
+        "539/400"
+      ],
+      [
+        "553/400"
+      ]
+    ],
+    "reinforced_flag": "derived as reinforcement_count_capped > 0; not an independent component",
+    "state_components": [
+      "reinforcement_count_capped",
+      "association",
+      "link",
+      "recency_age"
+    ],
+    "transition_rules": {
+      "C_selected": "association += 1/8 if recency_age <= 2 else 1/16; count += 1 capped at 20; age = 0",
+      "K_selected": "association and count unchanged; age += 1 capped at 3",
+      "behavioral_observables": [
+        "choice",
+        "propagation",
+        "causal_C_to_D"
+      ],
+      "propagation": "link and association >= 1/2",
+      "score_C": "7/10 * (1 + reinforcement_count_capped/20)",
+      "select_C": "score_C > challenger_score; ties select K"
+    }
+  },
+  "sha256": "a340d939e0ef41ab2090d5efb94492161108894c2275118168720d187b17dfd7",
+  "source_provenance": {
+    "exp25": {
+      "lines": "57-63, 96-104",
+      "path": "experiments/exp25_state_amputation.py",
+      "use": "Source for the capped scalar count and score multiplier form."
+    },
+    "exp46": {
+      "canonical_sha256": "10e84c100d8ca3c9c74b723b051baf0b9ff39833c96ad8b7c37d953fdae70c36",
+      "path": "experiments/exp46_h14_history_collisions/h14_exp46_run.json",
+      "use": "Anchors the four-field projection and candidate omitted count."
+    }
+  },
+  "status": "EXECUTED_SYNTHETIC_FINITE_DOMAIN_CHARACTERIZATION",
+  "title": "Finite-domain characterization of a sufficient state",
+  "verdict": {
+    "all_four_components_necessary_in_enumerated_model": true,
+    "reinforcement_flag_is_redundant_given_count": true,
+    "sufficient_in_enumerated_model": true
+  }
+}
