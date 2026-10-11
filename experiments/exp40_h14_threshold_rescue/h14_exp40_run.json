@@ -1,0 +1,231 @@
+{
+  "epistemic_labels": {
+    "INFERRED": "In this harness, crossing the seed threshold changes C's inhibition/candidate status; suppressing A lets the independent R-X-Y-C route recover C.",
+    "OBSERVED": "Raven snapshot code uses BFS propagation, inhibitory links, suppression, and post-BFS rescue as cited below.",
+    "PROPOSED": "Thresholded multiple seed scores and this seven-node graph are experimental choices, not Raven's seed-selection implementation.",
+    "UNKNOWN": "Whether these exact threshold and rescue interactions occur in Raven, MNEME, or a deployed agent under equivalent inputs."
+  },
+  "experiment_parameters": {
+    "A_edge_recorded_during_suppression": true,
+    "A_to_B": "undirected neighborhood edge",
+    "B_to_C": "INHIBITORY",
+    "C_to_D": "undirected neighborhood edge",
+    "alternate_route": [
+      "R",
+      "X",
+      "Y",
+      "C"
+    ],
+    "max_hops": 4,
+    "threshold": "1/1"
+  },
+  "high_query_with_A_suppressed": {
+    "activated": [
+      "C",
+      "D",
+      "R",
+      "X",
+      "Y"
+    ],
+    "candidates": [
+      "C",
+      "D",
+      "R",
+      "X",
+      "Y"
+    ],
+    "exclusions": {
+      "A": "DIRECT_SUPPRESSION"
+    },
+    "first_hop": {
+      "C": 3,
+      "D": 4,
+      "R": 0,
+      "X": 1,
+      "Y": 2
+    },
+    "inhibited": [],
+    "rescued": [],
+    "seeds": [
+      "R"
+    ]
+  },
+  "high_query_with_REINFORCED_C_rescue": {
+    "activated": [
+      "A",
+      "B",
+      "C",
+      "R",
+      "X",
+      "Y"
+    ],
+    "candidates": [
+      "A",
+      "B",
+      "C",
+      "R",
+      "X",
+      "Y"
+    ],
+    "exclusions": {},
+    "first_hop": {
+      "A": 0,
+      "B": 1,
+      "C": 3,
+      "R": 0,
+      "X": 1,
+      "Y": 2
+    },
+    "inhibited": [],
+    "rescued": [
+      "C"
+    ],
+    "seeds": [
+      "A",
+      "R"
+    ]
+  },
+  "limits": "Finite-hop discrete harness; thresholded multi-seed logic is proposed, not Raven's nearest-cell seeding. No persistent state update, ranking score, stochastic model, or MNEME/Raven runtime integration is measured.",
+  "predictions": {
+    "A_suppression_recovers_C_via_alternate_route": true,
+    "C_candidate_below_threshold": true,
+    "C_excluded_at_threshold_when_NEUTRAL": true,
+    "REINFORCED_C_is_rescued_after_BFS": true,
+    "post_BFS_rescue_does_not_activate_D_from_C": true
+  },
+  "raven_snapshot": {
+    "commit": "56df6cfdd7f3dd3000bfd7ce8cc42606d66a191f",
+    "observed_code": [
+      {
+        "claim": "Ternary memory and link enum values include FORGOTTEN=0.0 and INHIBITORY=-1.0.",
+        "file": "sources/raven-memory/raven/memory_engine.py",
+        "lines": "125-134"
+      },
+      {
+        "claim": "The field suppression contract blocks a cell from seeding, relaying, firing links, and ranking.",
+        "file": "sources/raven-memory/raven/memory_engine.py",
+        "lines": "1635-1639"
+      },
+      {
+        "claim": "Recall uses bounded BFS frontiers; inhibitory links mark targets inhibited, while resonant and neutral links add traversal targets.",
+        "file": "sources/raven-memory/raven/memory_engine.py",
+        "lines": "1682-1714"
+      },
+      {
+        "claim": "After BFS, inhibited REINFORCED cells are removed from inhibition and added to activated cells.",
+        "file": "sources/raven-memory/raven/memory_engine.py",
+        "lines": "1718-1730"
+      },
+      {
+        "claim": "The production recall seed is selected as the nearest eligible cell; it is not chosen by the threshold used in this experiment.",
+        "file": "sources/raven-memory/raven/memory_engine.py",
+        "lines": "1649-1671"
+      }
+    ],
+    "provenance_file": "sources/raven-memory/PROVENANCE.md",
+    "repo": "sources/raven-memory"
+  },
+  "sha256": "cba32844a4ee7983e446b46c60a68698c111860797a162e85bcd9320fcc75ae5",
+  "status": "EXECUTED_SYNTHETIC_DISCRETE_MECHANISM_ASSAY",
+  "threshold_sweep": {
+    "above": {
+      "activated": [
+        "A",
+        "B",
+        "R",
+        "X",
+        "Y"
+      ],
+      "candidates": [
+        "A",
+        "B",
+        "R",
+        "X",
+        "Y"
+      ],
+      "exclusions": {
+        "C": "INHIBITED"
+      },
+      "first_hop": {
+        "A": 0,
+        "B": 1,
+        "C": 3,
+        "R": 0,
+        "X": 1,
+        "Y": 2
+      },
+      "inhibited": [
+        "C"
+      ],
+      "rescued": [],
+      "seeds": [
+        "A",
+        "R"
+      ]
+    },
+    "at": {
+      "activated": [
+        "A",
+        "B",
+        "R",
+        "X",
+        "Y"
+      ],
+      "candidates": [
+        "A",
+        "B",
+        "R",
+        "X",
+        "Y"
+      ],
+      "exclusions": {
+        "C": "INHIBITED"
+      },
+      "first_hop": {
+        "A": 0,
+        "B": 1,
+        "C": 3,
+        "R": 0,
+        "X": 1,
+        "Y": 2
+      },
+      "inhibited": [
+        "C"
+      ],
+      "rescued": [],
+      "seeds": [
+        "A",
+        "R"
+      ]
+    },
+    "below": {
+      "activated": [
+        "C",
+        "D",
+        "R",
+        "X",
+        "Y"
+      ],
+      "candidates": [
+        "C",
+        "D",
+        "R",
+        "X",
+        "Y"
+      ],
+      "exclusions": {},
+      "first_hop": {
+        "C": 3,
+        "D": 4,
+        "R": 0,
+        "X": 1,
+        "Y": 2
+      },
+      "inhibited": [],
+      "rescued": [],
+      "seeds": [
+        "R"
+      ]
+    }
+  }
+}

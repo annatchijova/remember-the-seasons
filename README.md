@@ -12,13 +12,25 @@ recomputed in your browser).
 > We were asked to build the next frontier of AI. We cannot claim to
 > have revolutionized it. This is our best attempt in one month.
 
-> STATUS: the main research phase is closed; H14 follow-up research through
-> Exp49 is active in `experiments/`. These are synthetic assays, not
-> Raven/MNEME evaluations. Exp48 found that the 1,512-state Cartesian domain
+> STATUS: the main research phase is closed; Exp48–50 are synthetic H14
+> follow-up assays. Exp51 is an isolated transfer pilot against a copied
+> Raven implementation with synthetic data. **OBSERVED, copied source with
+> synthetic fixture:** it found a current-turn
+> synaptic-source path that bypasses the copied core's documented suppression
+> semantics, then measured six longitudinal arms using an experiment-only
+> filter. The run is retrieval evidence for one snapshot and schedule, not
+> validation of a deployed agent. Exp48 found that the 1,512-state Cartesian domain
 > used by Exp47 differs from the 172-state closure reachable from its
 > documented seed, and computed observational quotients for both under 24
 > fixed query schedules. Exp49 found the 118-class quotient is stable under
 > both declared actions on that seed closure; the Cartesian quotient is not.
+> Exp50 rechecked the quotient using shared challenger-score inputs, matching
+> Exp47's state-dependent transition semantics. On the same closure, its fixed
+> point also has 118 classes, matching Exp48; 2,376 checks found no immediate
+> output or successor-class mismatch. Certificates cover all 6,903 class pairs:
+> 6,169 differ on the initial observation, and the other 734 have shortest
+> distinguishing query sequences of at most three steps. This is a finite
+> synthetic result, not a Raven/MNEME evaluation.
 > A working prototype lives in `product/`; sources
 > remain read-only, claims stay labelled, and limitations are documented.
 
@@ -123,7 +135,7 @@ subordinate of the protocol — by design.
 ## The evidence
 
 - **Research**: `experiments/` — Exp19–35, the main falsification chain,
-  plus H14 follow-up assays Exp36–49. **OBSERVED, synthetic:** Exp48 groups
+  plus H14 follow-up assays Exp36–51. **OBSERVED, synthetic:** Exp48 groups
   states by exact choice, propagation, and causal-contribution traces under
   its 24 fixed schedules. It finds 441 observational classes in Exp47's
   1,512-state Cartesian domain and 118 classes in a 172-state closure from
@@ -132,8 +144,21 @@ subordinate of the protocol — by design.
   pairs and both actions in the seed closure: immediate outputs agreed and
   successor classes remained equivalent. The Cartesian quotient had 3,843
   successor-class mismatches. The stable result applies to the declared
-  transition system and seed closure, not Raven/MNEME. See the [Exp48 run](experiments/exp48_h14_observational_quotient/h14_exp48_run.json)
-  and [Exp49 run](experiments/exp49_h14_quotient_congruence/h14_exp49_run.json),
+  transition system and seed closure, not Raven/MNEME. **OBSERVED, synthetic:**
+  Exp50 refined under 22 shared challenger-score inputs (which induce the
+  state-dependent C/K choices) and found the same 118 classes as Exp48. Its
+  2,376 checks found no congruence counterexample. Certificates cover all
+  6,903 class pairs: 6,169 differ on the initial observation, and the other
+  734 have shortest distinguishing query sequences. A deliberate
+  constant-observation mutation collapsed the partition to one class and was
+  detected by a test. These results support minimal behavioral class count for
+  this one seeded finite machine and declared inputs only. See the
+  [Exp48 run](experiments/exp48_h14_observational_quotient/h14_exp48_run.json),
+  [Exp49 run](experiments/exp49_h14_quotient_congruence/h14_exp49_run.json),
+  [Exp50 code, tests, and run](experiments/exp50_h14_partition_refinement/),
+  the [Exp48–50 minimality report](docs/H14_EXP48_50_MINIMIZATION.md),
+  the [real-system transfer audit](docs/H14_REAL_SYSTEM_TRANSFER_AUDIT.md),
+  and the [Exp51 Raven longitudinal pilot](experiments/exp51_raven_h14_longitudinal/),
   `docs/HYPOTHESES.md`, and `docs/EXPERIMENTS.md`.
 - **Protocol conformance**: `mneme-cf-bundle/v1` + `cf-cascade/v2` +
   `causal_ontology 2.0.0` — a clean-room Go verifier reproduces every
@@ -156,7 +181,7 @@ remember-the-seasons/
   sources/       read-only research snapshots (raven-memory, mneme,
                  stigmergy — each with PROVENANCE.md)
   research/      archaeology inventories, mechanism maps
-  experiments/   Exp19–Exp35 falsification chain + H14 Exp36–49
+  experiments/   Exp19–Exp35 falsification chain + H14 Exp36–51
   docs/          research package, hypotheses, stop conditions
   product/       the working skeleton — see product/README.md
     mneme/       custody, authority, receipts, claims, canonical JSON

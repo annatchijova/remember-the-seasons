@@ -79,6 +79,51 @@ measurable properties that retrieval alone does not represent?
 
 See [`research/PHASE11_H14_TOY_ASSAY.md`](../research/PHASE11_H14_TOY_ASSAY.md) for Exp36's provenance and limits, and [`research/PHASE11_H14_EXP37_MEASUREMENT.md`](../research/PHASE11_H14_EXP37_MEASUREMENT.md) for Exp37's measurement definition, test evidence, and limits.
 
+## H14 follow-up: observational quotient and transition stability
+
+**OBSERVED, synthetic:** Exp48 groups states by exact traces from 24 fixed
+challenger-score schedules. Exp49 tests transition congruence for two forced
+choices, C and K. Exp50 repeats the stability and minimization check with
+shared challenger-score inputs, leaving the state-dependent choice inside the
+Exp47 transition function.
+
+From one documented Exp47 seed, Exp50 enumerates a closed 172-state reachable
+set. Its 22-score input alphabet covers the distinct C/K choice regions at the
+declared reinforcement-count levels. Partition refinement yields 68, 93, then
+118 classes, and reaches a fixed point on the next round. This partition
+matches Exp48's 118 observational classes on that closure. Across 2,376
+equivalent-state-pair/input checks, there were no immediate-output mismatches
+or successor-class mismatches.
+
+The run includes certificates for all 6,903 pairs of distinct classes: 6,169
+pairs differ on the initial observation, and the remaining 734 have shortest
+distinguishing input sequences of one to three steps. All certificates replay
+against the transition function. A deliberate constant-observation mutation
+collapses the machine to one class and is detected by the test suite (12 tests
+pass, including that mutation control). The result supports 118 as the minimum behavioral
+class count for this finite machine, seed, input alphabet, and declared
+observables. It does not establish minimality for other seeds, arbitrary
+transition rules, Raven, or MNEME. Exp50 code, tests, and the reproducible JSON
+are in [`experiments/exp50_h14_partition_refinement/`](../experiments/exp50_h14_partition_refinement/).
+See the [Exp48–50 minimality report](H14_EXP48_50_MINIMIZATION.md) for the
+machine definition, refinement, certificates, and bounded claim.
+
+## H14 follow-up: Raven longitudinal transfer pilot
+
+**OBSERVED, copied Raven source plus synthetic fixture:** Exp51 ran six
+longitudinal arms against a copy of source commit
+`56df6cfdd7f3dd3000bfd7ce8cc42606d66a191f`. Its raw-core negative control
+found that a suppressed memory can still emit a synaptic pull when included in
+`current_turn_memories`; the experiment-only adapter filters this source and
+does not change the read-only snapshot. The amended run records retrieval,
+signed non-target score effects, standardized propagation, and state at each
+checkpoint. Several branches differ after five washout experiences, while
+re-exposure and relearning converge on the measured values in this fixture.
+This is not downstream agent behavior or a deployed Raven evaluation, and the
+differences remain explainable by the stored Raven state/link trajectory.
+See the [preregistration, amendments, report, tests, provenance, and run
+artifact](../experiments/exp51_raven_h14_longitudinal/).
+
 
 | Script | Role |
 |---|---|

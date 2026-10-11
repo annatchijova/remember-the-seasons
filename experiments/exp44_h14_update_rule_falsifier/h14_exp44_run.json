@@ -1,0 +1,2319 @@
+{
+  "design": {
+    "common_paired_experience_evidence": "1/8",
+    "max_reactivation_steps": 12,
+    "primary_falsifier": "The claimed robustness is falsified if the high-residual branch does not cross before the zero-residual branch under update rules that use the starting association. The independent-history interpretation is unsupported if equalized starts produce equal trajectories, as predicted by all state-only rules.",
+    "proportional_learning_rate": "1/4",
+    "rules": {
+      "additive_fixed": "w' = min(1, w + 1/8)",
+      "evidence_average": "w' = (w + 1/8) / 2",
+      "history_reset_additive": "Discard incoming w, then set w' = min(1, exposure_count * 1/8)",
+      "proportional_saturating": "w' = w + (1 - w) * 1/4"
+    },
+    "sham": "Without paired C/D coactivation, no rule receives an update; this checks that exposure alone does not trigger recovery.",
+    "threshold": "1/2"
+  },
+  "epistemic_labels": {
+    "INFERRED": "If a recovery lead appears only under rules that preserve initial association, Exp43's result is explained by scalar distance to threshold within those rules; equalized-history controls test for any separate history signal.",
+    "OBSERVED": "The deterministic threshold crossings and association trajectories emitted by this harness.",
+    "PROPOSED": "The four update rules are alternative synthetic learning hypotheses; none is asserted to model a real agent or biology.",
+    "UNKNOWN": "Which, if any, update rule resembles Raven, MNEME, or deployed agent memory dynamics."
+  },
+  "exp43_input": {
+    "artifact": "experiments/exp43_h14_latent_trace/h14_exp43_run.json",
+    "initial_association": {
+      "during_bfs": "3/8",
+      "post_bfs": "0/1"
+    },
+    "sha256": "40070dc233cb54abd31a630637b4fa13fa7ad1e1a35e00ce2df705b54ac6cadb"
+  },
+  "interpretation_limit": "All differences are produced by declared scalar update equations and one threshold. These results can distinguish rule sensitivity inside the toy model, but cannot establish an additional biological or deployed-agent mechanism.",
+  "results_by_rule": {
+    "additive_fixed": {
+      "equalized_history_control": {
+        "during_bfs": [
+          {
+            "association_C_to_D": "0/1",
+            "causal_C_effect_on_Y": "0/1",
+            "distance_to_threshold": "1/2",
+            "propagation_enabled": false,
+            "step": 0
+          },
+          {
+            "association_C_to_D": "1/8",
+            "causal_C_effect_on_Y": "0/1",
+            "distance_to_threshold": "3/8",
+            "propagation_enabled": false,
+            "step": 1
+          },
+          {
+            "association_C_to_D": "1/4",
+            "causal_C_effect_on_Y": "0/1",
+            "distance_to_threshold": "1/4",
+            "propagation_enabled": false,
+            "step": 2
+          },
+          {
+            "association_C_to_D": "3/8",
+            "causal_C_effect_on_Y": "0/1",
+            "distance_to_threshold": "1/8",
+            "propagation_enabled": false,
+            "step": 3
+          },
+          {
+            "association_C_to_D": "1/2",
+            "causal_C_effect_on_Y": "1/2",
+            "distance_to_threshold": "0/1",
+            "propagation_enabled": true,
+            "step": 4
+          },
+          {
+            "association_C_to_D": "5/8",
+            "causal_C_effect_on_Y": "5/8",
+            "distance_to_threshold": "0/1",
+            "propagation_enabled": true,
+            "step": 5
+          },
+          {
+            "association_C_to_D": "3/4",
+            "causal_C_effect_on_Y": "3/4",
+            "distance_to_threshold": "0/1",
+            "propagation_enabled": true,
+            "step": 6
+          },
+          {
+            "association_C_to_D": "7/8",
+            "causal_C_effect_on_Y": "7/8",
+            "distance_to_threshold": "0/1",
+            "propagation_enabled": true,
+            "step": 7
+          },
+          {
+            "association_C_to_D": "1/1",
+            "causal_C_effect_on_Y": "1/1",
+            "distance_to_threshold": "0/1",
+            "propagation_enabled": true,
+            "step": 8
+          },
+          {
+            "association_C_to_D": "1/1",
+            "causal_C_effect_on_Y": "1/1",
+            "distance_to_threshold": "0/1",
+            "propagation_enabled": true,
+            "step": 9
+          },
+          {
+            "association_C_to_D": "1/1",
+            "causal_C_effect_on_Y": "1/1",
+            "distance_to_threshold": "0/1",
+            "propagation_enabled": true,
+            "step": 10
+          },
+          {
+            "association_C_to_D": "1/1",
+            "causal_C_effect_on_Y": "1/1",
+            "distance_to_threshold": "0/1",
+            "propagation_enabled": true,
+            "step": 11
+          },
+          {
+            "association_C_to_D": "1/1",
+            "causal_C_effect_on_Y": "1/1",
+            "distance_to_threshold": "0/1",
+            "propagation_enabled": true,
+            "step": 12
+          }
+        ],
+        "post_bfs": [
+          {
+            "association_C_to_D": "0/1",
+            "causal_C_effect_on_Y": "0/1",
+            "distance_to_threshold": "1/2",
+            "propagation_enabled": false,
+            "step": 0
+          },
+          {
+            "association_C_to_D": "1/8",
+            "causal_C_effect_on_Y": "0/1",
+            "distance_to_threshold": "3/8",
+            "propagation_enabled": false,
+            "step": 1
+          },
+          {
+            "association_C_to_D": "1/4",
+            "causal_C_effect_on_Y": "0/1",
+            "distance_to_threshold": "1/4",
+            "propagation_enabled": false,
+            "step": 2
+          },
+          {
+            "association_C_to_D": "3/8",
+            "causal_C_effect_on_Y": "0/1",
+            "distance_to_threshold": "1/8",
+            "propagation_enabled": false,
+            "step": 3
+          },
+          {
+            "association_C_to_D": "1/2",
+            "causal_C_effect_on_Y": "1/2",
+            "distance_to_threshold": "0/1",
+            "propagation_enabled": true,
+            "step": 4
+          },
+          {
+            "association_C_to_D": "5/8",
+            "causal_C_effect_on_Y": "5/8",
+            "distance_to_threshold": "0/1",
+            "propagation_enabled": true,
+            "step": 5
+          },
+          {
+            "association_C_to_D": "3/4",
+            "causal_C_effect_on_Y": "3/4",
+            "distance_to_threshold": "0/1",
+            "propagation_enabled": true,
+            "step": 6
+          },
+          {
+            "association_C_to_D": "7/8",
+            "causal_C_effect_on_Y": "7/8",
+            "distance_to_threshold": "0/1",
+            "propagation_enabled": true,
+            "step": 7
+          },
+          {
+            "association_C_to_D": "1/1",
+            "causal_C_effect_on_Y": "1/1",
+            "distance_to_threshold": "0/1",
+            "propagation_enabled": true,
+            "step": 8
+          },
+          {
+            "association_C_to_D": "1/1",
+            "causal_C_effect_on_Y": "1/1",
+            "distance_to_threshold": "0/1",
+            "propagation_enabled": true,
+            "step": 9
+          },
+          {
+            "association_C_to_D": "1/1",
+            "causal_C_effect_on_Y": "1/1",
+            "distance_to_threshold": "0/1",
+            "propagation_enabled": true,
+            "step": 10
+          },
+          {
+            "association_C_to_D": "1/1",
+            "causal_C_effect_on_Y": "1/1",
+            "distance_to_threshold": "0/1",
+            "propagation_enabled": true,
+            "step": 11
+          },
+          {
+            "association_C_to_D": "1/1",
+            "causal_C_effect_on_Y": "1/1",
+            "distance_to_threshold": "0/1",
+            "propagation_enabled": true,
+            "step": 12
+          }
+        ]
+      },
+      "first_propagation_step": {
+        "during_bfs": 1,
+        "post_bfs": 4
+      },
+      "paired_reactivation": {
+        "during_bfs": [
+          {
+            "association_C_to_D": "3/8",
+            "causal_C_effect_on_Y": "0/1",
+            "distance_to_threshold": "1/8",
+            "propagation_enabled": false,
+            "step": 0
+          },
+          {
+            "association_C_to_D": "1/2",
+            "causal_C_effect_on_Y": "1/2",
+            "distance_to_threshold": "0/1",
+            "propagation_enabled": true,
+            "step": 1
+          },
+          {
+            "association_C_to_D": "5/8",
+            "causal_C_effect_on_Y": "5/8",
+            "distance_to_threshold": "0/1",
+            "propagation_enabled": true,
+            "step": 2
+          },
+          {
+            "association_C_to_D": "3/4",
+            "causal_C_effect_on_Y": "3/4",
+            "distance_to_threshold": "0/1",
+            "propagation_enabled": true,
+            "step": 3
+          },
+          {
+            "association_C_to_D": "7/8",
+            "causal_C_effect_on_Y": "7/8",
+            "distance_to_threshold": "0/1",
+            "propagation_enabled": true,
+            "step": 4
+          },
+          {
+            "association_C_to_D": "1/1",
+            "causal_C_effect_on_Y": "1/1",
+            "distance_to_threshold": "0/1",
+            "propagation_enabled": true,
+            "step": 5
+          },
+          {
+            "association_C_to_D": "1/1",
+            "causal_C_effect_on_Y": "1/1",
+            "distance_to_threshold": "0/1",
+            "propagation_enabled": true,
+            "step": 6
+          },
+          {
+            "association_C_to_D": "1/1",
+            "causal_C_effect_on_Y": "1/1",
+            "distance_to_threshold": "0/1",
+            "propagation_enabled": true,
+            "step": 7
+          },
+          {
+            "association_C_to_D": "1/1",
+            "causal_C_effect_on_Y": "1/1",
+            "distance_to_threshold": "0/1",
+            "propagation_enabled": true,
+            "step": 8
+          },
+          {
+            "association_C_to_D": "1/1",
+            "causal_C_effect_on_Y": "1/1",
+            "distance_to_threshold": "0/1",
+            "propagation_enabled": true,
+            "step": 9
+          },
+          {
+            "association_C_to_D": "1/1",
+            "causal_C_effect_on_Y": "1/1",
+            "distance_to_threshold": "0/1",
+            "propagation_enabled": true,
+            "step": 10
+          },
+          {
+            "association_C_to_D": "1/1",
+            "causal_C_effect_on_Y": "1/1",
+            "distance_to_threshold": "0/1",
+            "propagation_enabled": true,
+            "step": 11
+          },
+          {
+            "association_C_to_D": "1/1",
+            "causal_C_effect_on_Y": "1/1",
+            "distance_to_threshold": "0/1",
+            "propagation_enabled": true,
+            "step": 12
+          }
+        ],
+        "post_bfs": [
+          {
+            "association_C_to_D": "0/1",
+            "causal_C_effect_on_Y": "0/1",
+            "distance_to_threshold": "1/2",
+            "propagation_enabled": false,
+            "step": 0
+          },
+          {
+            "association_C_to_D": "1/8",
+            "causal_C_effect_on_Y": "0/1",
+            "distance_to_threshold": "3/8",
+            "propagation_enabled": false,
+            "step": 1
+          },
+          {
+            "association_C_to_D": "1/4",
+            "causal_C_effect_on_Y": "0/1",
+            "distance_to_threshold": "1/4",
+            "propagation_enabled": false,
+            "step": 2
+          },
+          {
+            "association_C_to_D": "3/8",
+            "causal_C_effect_on_Y": "0/1",
+            "distance_to_threshold": "1/8",
+            "propagation_enabled": false,
+            "step": 3
+          },
+          {
+            "association_C_to_D": "1/2",
+            "causal_C_effect_on_Y": "1/2",
+            "distance_to_threshold": "0/1",
+            "propagation_enabled": true,
+            "step": 4
+          },
+          {
+            "association_C_to_D": "5/8",
+            "causal_C_effect_on_Y": "5/8",
+            "distance_to_threshold": "0/1",
+            "propagation_enabled": true,
+            "step": 5
+          },
+          {
+            "association_C_to_D": "3/4",
+            "causal_C_effect_on_Y": "3/4",
+            "distance_to_threshold": "0/1",
+            "propagation_enabled": true,
+            "step": 6
+          },
+          {
+            "association_C_to_D": "7/8",
+            "causal_C_effect_on_Y": "7/8",
+            "distance_to_threshold": "0/1",
+            "propagation_enabled": true,
+            "step": 7
+          },
+          {
+            "association_C_to_D": "1/1",
+            "causal_C_effect_on_Y": "1/1",
+            "distance_to_threshold": "0/1",
+            "propagation_enabled": true,
+            "step": 8
+          },
+          {
+            "association_C_to_D": "1/1",
+            "causal_C_effect_on_Y": "1/1",
+            "distance_to_threshold": "0/1",
+            "propagation_enabled": true,
+            "step": 9
+          },
+          {
+            "association_C_to_D": "1/1",
+            "causal_C_effect_on_Y": "1/1",
+            "distance_to_threshold": "0/1",
+            "propagation_enabled": true,
+            "step": 10
+          },
+          {
+            "association_C_to_D": "1/1",
+            "causal_C_effect_on_Y": "1/1",
+            "distance_to_threshold": "0/1",
+            "propagation_enabled": true,
+            "step": 11
+          },
+          {
+            "association_C_to_D": "1/1",
+            "causal_C_effect_on_Y": "1/1",
+            "distance_to_threshold": "0/1",
+            "propagation_enabled": true,
+            "step": 12
+          }
+        ]
+      },
+      "recovery_lead_steps": 3,
+      "sham_no_coactivation": {
+        "during_bfs": [
+          {
+            "association_C_to_D": "3/8",
+            "causal_C_effect_on_Y": "0/1",
+            "distance_to_threshold": "1/8",
+            "propagation_enabled": false,
+            "step": 0
+          },
+          {
+            "association_C_to_D": "3/8",
+            "causal_C_effect_on_Y": "0/1",
+            "distance_to_threshold": "1/8",
+            "propagation_enabled": false,
+            "step": 1
+          },
+          {
+            "association_C_to_D": "3/8",
+            "causal_C_effect_on_Y": "0/1",
+            "distance_to_threshold": "1/8",
+            "propagation_enabled": false,
+            "step": 2
+          },
+          {
+            "association_C_to_D": "3/8",
+            "causal_C_effect_on_Y": "0/1",
+            "distance_to_threshold": "1/8",
+            "propagation_enabled": false,
+            "step": 3
+          },
+          {
+            "association_C_to_D": "3/8",
+            "causal_C_effect_on_Y": "0/1",
+            "distance_to_threshold": "1/8",
+            "propagation_enabled": false,
+            "step": 4
+          },
+          {
+            "association_C_to_D": "3/8",
+            "causal_C_effect_on_Y": "0/1",
+            "distance_to_threshold": "1/8",
+            "propagation_enabled": false,
+            "step": 5
+          },
+          {
+            "association_C_to_D": "3/8",
+            "causal_C_effect_on_Y": "0/1",
+            "distance_to_threshold": "1/8",
+            "propagation_enabled": false,
+            "step": 6
+          },
+          {
+            "association_C_to_D": "3/8",
+            "causal_C_effect_on_Y": "0/1",
+            "distance_to_threshold": "1/8",
+            "propagation_enabled": false,
+            "step": 7
+          },
+          {
+            "association_C_to_D": "3/8",
+            "causal_C_effect_on_Y": "0/1",
+            "distance_to_threshold": "1/8",
+            "propagation_enabled": false,
+            "step": 8
+          },
+          {
+            "association_C_to_D": "3/8",
+            "causal_C_effect_on_Y": "0/1",
+            "distance_to_threshold": "1/8",
+            "propagation_enabled": false,
+            "step": 9
+          },
+          {
+            "association_C_to_D": "3/8",
+            "causal_C_effect_on_Y": "0/1",
+            "distance_to_threshold": "1/8",
+            "propagation_enabled": false,
+            "step": 10
+          },
+          {
+            "association_C_to_D": "3/8",
+            "causal_C_effect_on_Y": "0/1",
+            "distance_to_threshold": "1/8",
+            "propagation_enabled": false,
+            "step": 11
+          },
+          {
+            "association_C_to_D": "3/8",
+            "causal_C_effect_on_Y": "0/1",
+            "distance_to_threshold": "1/8",
+            "propagation_enabled": false,
+            "step": 12
+          }
+        ],
+        "post_bfs": [
+          {
+            "association_C_to_D": "0/1",
+            "causal_C_effect_on_Y": "0/1",
+            "distance_to_threshold": "1/2",
+            "propagation_enabled": false,
+            "step": 0
+          },
+          {
+            "association_C_to_D": "0/1",
+            "causal_C_effect_on_Y": "0/1",
+            "distance_to_threshold": "1/2",
+            "propagation_enabled": false,
+            "step": 1
+          },
+          {
+            "association_C_to_D": "0/1",
+            "causal_C_effect_on_Y": "0/1",
+            "distance_to_threshold": "1/2",
+            "propagation_enabled": false,
+            "step": 2
+          },
+          {
+            "association_C_to_D": "0/1",
+            "causal_C_effect_on_Y": "0/1",
+            "distance_to_threshold": "1/2",
+            "propagation_enabled": false,
+            "step": 3
+          },
+          {
+            "association_C_to_D": "0/1",
+            "causal_C_effect_on_Y": "0/1",
+            "distance_to_threshold": "1/2",
+            "propagation_enabled": false,
+            "step": 4
+          },
+          {
+            "association_C_to_D": "0/1",
+            "causal_C_effect_on_Y": "0/1",
+            "distance_to_threshold": "1/2",
+            "propagation_enabled": false,
+            "step": 5
+          },
+          {
+            "association_C_to_D": "0/1",
+            "causal_C_effect_on_Y": "0/1",
+            "distance_to_threshold": "1/2",
+            "propagation_enabled": false,
+            "step": 6
+          },
+          {
+            "association_C_to_D": "0/1",
+            "causal_C_effect_on_Y": "0/1",
+            "distance_to_threshold": "1/2",
+            "propagation_enabled": false,
+            "step": 7
+          },
+          {
+            "association_C_to_D": "0/1",
+            "causal_C_effect_on_Y": "0/1",
+            "distance_to_threshold": "1/2",
+            "propagation_enabled": false,
+            "step": 8
+          },
+          {
+            "association_C_to_D": "0/1",
+            "causal_C_effect_on_Y": "0/1",
+            "distance_to_threshold": "1/2",
+            "propagation_enabled": false,
+            "step": 9
+          },
+          {
+            "association_C_to_D": "0/1",
+            "causal_C_effect_on_Y": "0/1",
+            "distance_to_threshold": "1/2",
+            "propagation_enabled": false,
+            "step": 10
+          },
+          {
+            "association_C_to_D": "0/1",
+            "causal_C_effect_on_Y": "0/1",
+            "distance_to_threshold": "1/2",
+            "propagation_enabled": false,
+            "step": 11
+          },
+          {
+            "association_C_to_D": "0/1",
+            "causal_C_effect_on_Y": "0/1",
+            "distance_to_threshold": "1/2",
+            "propagation_enabled": false,
+            "step": 12
+          }
+        ]
+      }
+    },
+    "evidence_average": {
+      "equalized_history_control": {
+        "during_bfs": [
+          {
+            "association_C_to_D": "0/1",
+            "causal_C_effect_on_Y": "0/1",
+            "distance_to_threshold": "1/2",
+            "propagation_enabled": false,
+            "step": 0
+          },
+          {
+            "association_C_to_D": "1/16",
+            "causal_C_effect_on_Y": "0/1",
+            "distance_to_threshold": "7/16",
+            "propagation_enabled": false,
+            "step": 1
+          },
+          {
+            "association_C_to_D": "3/32",
+            "causal_C_effect_on_Y": "0/1",
+            "distance_to_threshold": "13/32",
+            "propagation_enabled": false,
+            "step": 2
+          },
+          {
+            "association_C_to_D": "7/64",
+            "causal_C_effect_on_Y": "0/1",
+            "distance_to_threshold": "25/64",
+            "propagation_enabled": false,
+            "step": 3
+          },
+          {
+            "association_C_to_D": "15/128",
+            "causal_C_effect_on_Y": "0/1",
+            "distance_to_threshold": "49/128",
+            "propagation_enabled": false,
+            "step": 4
+          },
+          {
+            "association_C_to_D": "31/256",
+            "causal_C_effect_on_Y": "0/1",
+            "distance_to_threshold": "97/256",
+            "propagation_enabled": false,
+            "step": 5
+          },
+          {
+            "association_C_to_D": "63/512",
+            "causal_C_effect_on_Y": "0/1",
+            "distance_to_threshold": "193/512",
+            "propagation_enabled": false,
+            "step": 6
+          },
+          {
+            "association_C_to_D": "127/1024",
+            "causal_C_effect_on_Y": "0/1",
+            "distance_to_threshold": "385/1024",
+            "propagation_enabled": false,
+            "step": 7
+          },
+          {
+            "association_C_to_D": "255/2048",
+            "causal_C_effect_on_Y": "0/1",
+            "distance_to_threshold": "769/2048",
+            "propagation_enabled": false,
+            "step": 8
+          },
+          {
+            "association_C_to_D": "511/4096",
+            "causal_C_effect_on_Y": "0/1",
+            "distance_to_threshold": "1537/4096",
+            "propagation_enabled": false,
+            "step": 9
+          },
+          {
+            "association_C_to_D": "1023/8192",
+            "causal_C_effect_on_Y": "0/1",
+            "distance_to_threshold": "3073/8192",
+            "propagation_enabled": false,
+            "step": 10
+          },
+          {
+            "association_C_to_D": "2047/16384",
+            "causal_C_effect_on_Y": "0/1",
+            "distance_to_threshold": "6145/16384",
+            "propagation_enabled": false,
+            "step": 11
+          },
+          {
+            "association_C_to_D": "4095/32768",
+            "causal_C_effect_on_Y": "0/1",
+            "distance_to_threshold": "12289/32768",
+            "propagation_enabled": false,
+            "step": 12
+          }
+        ],
+        "post_bfs": [
+          {
+            "association_C_to_D": "0/1",
+            "causal_C_effect_on_Y": "0/1",
+            "distance_to_threshold": "1/2",
+            "propagation_enabled": false,
+            "step": 0
+          },
+          {
+            "association_C_to_D": "1/16",
+            "causal_C_effect_on_Y": "0/1",
+            "distance_to_threshold": "7/16",
+            "propagation_enabled": false,
+            "step": 1
+          },
+          {
+            "association_C_to_D": "3/32",
+            "causal_C_effect_on_Y": "0/1",
+            "distance_to_threshold": "13/32",
+            "propagation_enabled": false,
+            "step": 2
+          },
+          {
+            "association_C_to_D": "7/64",
+            "causal_C_effect_on_Y": "0/1",
+            "distance_to_threshold": "25/64",
+            "propagation_enabled": false,
+            "step": 3
+          },
+          {
+            "association_C_to_D": "15/128",
+            "causal_C_effect_on_Y": "0/1",
+            "distance_to_threshold": "49/128",
+            "propagation_enabled": false,
+            "step": 4
+          },
+          {
+            "association_C_to_D": "31/256",
+            "causal_C_effect_on_Y": "0/1",
+            "distance_to_threshold": "97/256",
+            "propagation_enabled": false,
+            "step": 5
+          },
+          {
+            "association_C_to_D": "63/512",
+            "causal_C_effect_on_Y": "0/1",
+            "distance_to_threshold": "193/512",
+            "propagation_enabled": false,
+            "step": 6
+          },
+          {
+            "association_C_to_D": "127/1024",
+            "causal_C_effect_on_Y": "0/1",
+            "distance_to_threshold": "385/1024",
+            "propagation_enabled": false,
+            "step": 7
+          },
+          {
+            "association_C_to_D": "255/2048",
+            "causal_C_effect_on_Y": "0/1",
+            "distance_to_threshold": "769/2048",
+            "propagation_enabled": false,
+            "step": 8
+          },
+          {
+            "association_C_to_D": "511/4096",
+            "causal_C_effect_on_Y": "0/1",
+            "distance_to_threshold": "1537/4096",
+            "propagation_enabled": false,
+            "step": 9
+          },
+          {
+            "association_C_to_D": "1023/8192",
+            "causal_C_effect_on_Y": "0/1",
+            "distance_to_threshold": "3073/8192",
+            "propagation_enabled": false,
+            "step": 10
+          },
+          {
+            "association_C_to_D": "2047/16384",
+            "causal_C_effect_on_Y": "0/1",
+            "distance_to_threshold": "6145/16384",
+            "propagation_enabled": false,
+            "step": 11
+          },
+          {
+            "association_C_to_D": "4095/32768",
+            "causal_C_effect_on_Y": "0/1",
+            "distance_to_threshold": "12289/32768",
+            "propagation_enabled": false,
+            "step": 12
+          }
+        ]
+      },
+      "first_propagation_step": {
+        "during_bfs": null,
+        "post_bfs": null
+      },
+      "paired_reactivation": {
+        "during_bfs": [
+          {
+            "association_C_to_D": "3/8",
+            "causal_C_effect_on_Y": "0/1",
+            "distance_to_threshold": "1/8",
+            "propagation_enabled": false,
+            "step": 0
+          },
+          {
+            "association_C_to_D": "1/4",
+            "causal_C_effect_on_Y": "0/1",
+            "distance_to_threshold": "1/4",
+            "propagation_enabled": false,
+            "step": 1
+          },
+          {
+            "association_C_to_D": "3/16",
+            "causal_C_effect_on_Y": "0/1",
+            "distance_to_threshold": "5/16",
+            "propagation_enabled": false,
+            "step": 2
+          },
+          {
+            "association_C_to_D": "5/32",
+            "causal_C_effect_on_Y": "0/1",
+            "distance_to_threshold": "11/32",
+            "propagation_enabled": false,
+            "step": 3
+          },
+          {
+            "association_C_to_D": "9/64",
+            "causal_C_effect_on_Y": "0/1",
+            "distance_to_threshold": "23/64",
+            "propagation_enabled": false,
+            "step": 4
+          },
+          {
+            "association_C_to_D": "17/128",
+            "causal_C_effect_on_Y": "0/1",
+            "distance_to_threshold": "47/128",
+            "propagation_enabled": false,
+            "step": 5
+          },
+          {
+            "association_C_to_D": "33/256",
+            "causal_C_effect_on_Y": "0/1",
+            "distance_to_threshold": "95/256",
+            "propagation_enabled": false,
+            "step": 6
+          },
+          {
+            "association_C_to_D": "65/512",
+            "causal_C_effect_on_Y": "0/1",
+            "distance_to_threshold": "191/512",
+            "propagation_enabled": false,
+            "step": 7
+          },
+          {
+            "association_C_to_D": "129/1024",
+            "causal_C_effect_on_Y": "0/1",
+            "distance_to_threshold": "383/1024",
+            "propagation_enabled": false,
+            "step": 8
+          },
+          {
+            "association_C_to_D": "257/2048",
+            "causal_C_effect_on_Y": "0/1",
+            "distance_to_threshold": "767/2048",
+            "propagation_enabled": false,
+            "step": 9
+          },
+          {
+            "association_C_to_D": "513/4096",
+            "causal_C_effect_on_Y": "0/1",
+            "distance_to_threshold": "1535/4096",
+            "propagation_enabled": false,
+            "step": 10
+          },
+          {
+            "association_C_to_D": "1025/8192",
+            "causal_C_effect_on_Y": "0/1",
+            "distance_to_threshold": "3071/8192",
+            "propagation_enabled": false,
+            "step": 11
+          },
+          {
+            "association_C_to_D": "2049/16384",
+            "causal_C_effect_on_Y": "0/1",
+            "distance_to_threshold": "6143/16384",
+            "propagation_enabled": false,
+            "step": 12
+          }
+        ],
+        "post_bfs": [
+          {
+            "association_C_to_D": "0/1",
+            "causal_C_effect_on_Y": "0/1",
+            "distance_to_threshold": "1/2",
+            "propagation_enabled": false,
+            "step": 0
+          },
+          {
+            "association_C_to_D": "1/16",
+            "causal_C_effect_on_Y": "0/1",
+            "distance_to_threshold": "7/16",
+            "propagation_enabled": false,
+            "step": 1
+          },
+          {
+            "association_C_to_D": "3/32",
+            "causal_C_effect_on_Y": "0/1",
+            "distance_to_threshold": "13/32",
+            "propagation_enabled": false,
+            "step": 2
+          },
+          {
+            "association_C_to_D": "7/64",
+            "causal_C_effect_on_Y": "0/1",
+            "distance_to_threshold": "25/64",
+            "propagation_enabled": false,
+            "step": 3
+          },
+          {
+            "association_C_to_D": "15/128",
+            "causal_C_effect_on_Y": "0/1",
+            "distance_to_threshold": "49/128",
+            "propagation_enabled": false,
+            "step": 4
+          },
+          {
+            "association_C_to_D": "31/256",
+            "causal_C_effect_on_Y": "0/1",
+            "distance_to_threshold": "97/256",
+            "propagation_enabled": false,
+            "step": 5
+          },
+          {
+            "association_C_to_D": "63/512",
+            "causal_C_effect_on_Y": "0/1",
+            "distance_to_threshold": "193/512",
+            "propagation_enabled": false,
+            "step": 6
+          },
+          {
+            "association_C_to_D": "127/1024",
+            "causal_C_effect_on_Y": "0/1",
+            "distance_to_threshold": "385/1024",
+            "propagation_enabled": false,
+            "step": 7
+          },
+          {
+            "association_C_to_D": "255/2048",
+            "causal_C_effect_on_Y": "0/1",
+            "distance_to_threshold": "769/2048",
+            "propagation_enabled": false,
+            "step": 8
+          },
+          {
+            "association_C_to_D": "511/4096",
+            "causal_C_effect_on_Y": "0/1",
+            "distance_to_threshold": "1537/4096",
+            "propagation_enabled": false,
+            "step": 9
+          },
+          {
+            "association_C_to_D": "1023/8192",
+            "causal_C_effect_on_Y": "0/1",
+            "distance_to_threshold": "3073/8192",
+            "propagation_enabled": false,
+            "step": 10
+          },
+          {
+            "association_C_to_D": "2047/16384",
+            "causal_C_effect_on_Y": "0/1",
+            "distance_to_threshold": "6145/16384",
+            "propagation_enabled": false,
+            "step": 11
+          },
+          {
+            "association_C_to_D": "4095/32768",
+            "causal_C_effect_on_Y": "0/1",
+            "distance_to_threshold": "12289/32768",
+            "propagation_enabled": false,
+            "step": 12
+          }
+        ]
+      },
+      "recovery_lead_steps": null,
+      "sham_no_coactivation": {
+        "during_bfs": [
+          {
+            "association_C_to_D": "3/8",
+            "causal_C_effect_on_Y": "0/1",
+            "distance_to_threshold": "1/8",
+            "propagation_enabled": false,
+            "step": 0
+          },
+          {
+            "association_C_to_D": "3/8",
+            "causal_C_effect_on_Y": "0/1",
+            "distance_to_threshold": "1/8",
+            "propagation_enabled": false,
+            "step": 1
+          },
+          {
+            "association_C_to_D": "3/8",
+            "causal_C_effect_on_Y": "0/1",
+            "distance_to_threshold": "1/8",
+            "propagation_enabled": false,
+            "step": 2
+          },
+          {
+            "association_C_to_D": "3/8",
+            "causal_C_effect_on_Y": "0/1",
+            "distance_to_threshold": "1/8",
+            "propagation_enabled": false,
+            "step": 3
+          },
+          {
+            "association_C_to_D": "3/8",
+            "causal_C_effect_on_Y": "0/1",
+            "distance_to_threshold": "1/8",
+            "propagation_enabled": false,
+            "step": 4
+          },
+          {
+            "association_C_to_D": "3/8",
+            "causal_C_effect_on_Y": "0/1",
+            "distance_to_threshold": "1/8",
+            "propagation_enabled": false,
+            "step": 5
+          },
+          {
+            "association_C_to_D": "3/8",
+            "causal_C_effect_on_Y": "0/1",
+            "distance_to_threshold": "1/8",
+            "propagation_enabled": false,
+            "step": 6
+          },
+          {
+            "association_C_to_D": "3/8",
+            "causal_C_effect_on_Y": "0/1",
+            "distance_to_threshold": "1/8",
+            "propagation_enabled": false,
+            "step": 7
+          },
+          {
+            "association_C_to_D": "3/8",
+            "causal_C_effect_on_Y": "0/1",
+            "distance_to_threshold": "1/8",
+            "propagation_enabled": false,
+            "step": 8
+          },
+          {
+            "association_C_to_D": "3/8",
+            "causal_C_effect_on_Y": "0/1",
+            "distance_to_threshold": "1/8",
+            "propagation_enabled": false,
+            "step": 9
+          },
+          {
+            "association_C_to_D": "3/8",
+            "causal_C_effect_on_Y": "0/1",
+            "distance_to_threshold": "1/8",
+            "propagation_enabled": false,
+            "step": 10
+          },
+          {
+            "association_C_to_D": "3/8",
+            "causal_C_effect_on_Y": "0/1",
+            "distance_to_threshold": "1/8",
+            "propagation_enabled": false,
+            "step": 11
+          },
+          {
+            "association_C_to_D": "3/8",
+            "causal_C_effect_on_Y": "0/1",
+            "distance_to_threshold": "1/8",
+            "propagation_enabled": false,
+            "step": 12
+          }
+        ],
+        "post_bfs": [
+          {
+            "association_C_to_D": "0/1",
+            "causal_C_effect_on_Y": "0/1",
+            "distance_to_threshold": "1/2",
+            "propagation_enabled": false,
+            "step": 0
+          },
+          {
+            "association_C_to_D": "0/1",
+            "causal_C_effect_on_Y": "0/1",
+            "distance_to_threshold": "1/2",
+            "propagation_enabled": false,
+            "step": 1
+          },
+          {
+            "association_C_to_D": "0/1",
+            "causal_C_effect_on_Y": "0/1",
+            "distance_to_threshold": "1/2",
+            "propagation_enabled": false,
+            "step": 2
+          },
+          {
+            "association_C_to_D": "0/1",
+            "causal_C_effect_on_Y": "0/1",
+            "distance_to_threshold": "1/2",
+            "propagation_enabled": false,
+            "step": 3
+          },
+          {
+            "association_C_to_D": "0/1",
+            "causal_C_effect_on_Y": "0/1",
+            "distance_to_threshold": "1/2",
+            "propagation_enabled": false,
+            "step": 4
+          },
+          {
+            "association_C_to_D": "0/1",
+            "causal_C_effect_on_Y": "0/1",
+            "distance_to_threshold": "1/2",
+            "propagation_enabled": false,
+            "step": 5
+          },
+          {
+            "association_C_to_D": "0/1",
+            "causal_C_effect_on_Y": "0/1",
+            "distance_to_threshold": "1/2",
+            "propagation_enabled": false,
+            "step": 6
+          },
+          {
+            "association_C_to_D": "0/1",
+            "causal_C_effect_on_Y": "0/1",
+            "distance_to_threshold": "1/2",
+            "propagation_enabled": false,
+            "step": 7
+          },
+          {
+            "association_C_to_D": "0/1",
+            "causal_C_effect_on_Y": "0/1",
+            "distance_to_threshold": "1/2",
+            "propagation_enabled": false,
+            "step": 8
+          },
+          {
+            "association_C_to_D": "0/1",
+            "causal_C_effect_on_Y": "0/1",
+            "distance_to_threshold": "1/2",
+            "propagation_enabled": false,
+            "step": 9
+          },
+          {
+            "association_C_to_D": "0/1",
+            "causal_C_effect_on_Y": "0/1",
+            "distance_to_threshold": "1/2",
+            "propagation_enabled": false,
+            "step": 10
+          },
+          {
+            "association_C_to_D": "0/1",
+            "causal_C_effect_on_Y": "0/1",
+            "distance_to_threshold": "1/2",
+            "propagation_enabled": false,
+            "step": 11
+          },
+          {
+            "association_C_to_D": "0/1",
+            "causal_C_effect_on_Y": "0/1",
+            "distance_to_threshold": "1/2",
+            "propagation_enabled": false,
+            "step": 12
+          }
+        ]
+      }
+    },
+    "history_reset_additive": {
+      "equalized_history_control": {
+        "during_bfs": [
+          {
+            "association_C_to_D": "0/1",
+            "causal_C_effect_on_Y": "0/1",
+            "distance_to_threshold": "1/2",
+            "propagation_enabled": false,
+            "step": 0
+          },
+          {
+            "association_C_to_D": "1/8",
+            "causal_C_effect_on_Y": "0/1",
+            "distance_to_threshold": "3/8",
+            "propagation_enabled": false,
+            "step": 1
+          },
+          {
+            "association_C_to_D": "1/4",
+            "causal_C_effect_on_Y": "0/1",
+            "distance_to_threshold": "1/4",
+            "propagation_enabled": false,
+            "step": 2
+          },
+          {
+            "association_C_to_D": "3/8",
+            "causal_C_effect_on_Y": "0/1",
+            "distance_to_threshold": "1/8",
+            "propagation_enabled": false,
+            "step": 3
+          },
+          {
+            "association_C_to_D": "1/2",
+            "causal_C_effect_on_Y": "1/2",
+            "distance_to_threshold": "0/1",
+            "propagation_enabled": true,
+            "step": 4
+          },
+          {
+            "association_C_to_D": "5/8",
+            "causal_C_effect_on_Y": "5/8",
+            "distance_to_threshold": "0/1",
+            "propagation_enabled": true,
+            "step": 5
+          },
+          {
+            "association_C_to_D": "3/4",
+            "causal_C_effect_on_Y": "3/4",
+            "distance_to_threshold": "0/1",
+            "propagation_enabled": true,
+            "step": 6
+          },
+          {
+            "association_C_to_D": "7/8",
+            "causal_C_effect_on_Y": "7/8",
+            "distance_to_threshold": "0/1",
+            "propagation_enabled": true,
+            "step": 7
+          },
+          {
+            "association_C_to_D": "1/1",
+            "causal_C_effect_on_Y": "1/1",
+            "distance_to_threshold": "0/1",
+            "propagation_enabled": true,
+            "step": 8
+          },
+          {
+            "association_C_to_D": "1/1",
+            "causal_C_effect_on_Y": "1/1",
+            "distance_to_threshold": "0/1",
+            "propagation_enabled": true,
+            "step": 9
+          },
+          {
+            "association_C_to_D": "1/1",
+            "causal_C_effect_on_Y": "1/1",
+            "distance_to_threshold": "0/1",
+            "propagation_enabled": true,
+            "step": 10
+          },
+          {
+            "association_C_to_D": "1/1",
+            "causal_C_effect_on_Y": "1/1",
+            "distance_to_threshold": "0/1",
+            "propagation_enabled": true,
+            "step": 11
+          },
+          {
+            "association_C_to_D": "1/1",
+            "causal_C_effect_on_Y": "1/1",
+            "distance_to_threshold": "0/1",
+            "propagation_enabled": true,
+            "step": 12
+          }
+        ],
+        "post_bfs": [
+          {
+            "association_C_to_D": "0/1",
+            "causal_C_effect_on_Y": "0/1",
+            "distance_to_threshold": "1/2",
+            "propagation_enabled": false,
+            "step": 0
+          },
+          {
+            "association_C_to_D": "1/8",
+            "causal_C_effect_on_Y": "0/1",
+            "distance_to_threshold": "3/8",
+            "propagation_enabled": false,
+            "step": 1
+          },
+          {
+            "association_C_to_D": "1/4",
+            "causal_C_effect_on_Y": "0/1",
+            "distance_to_threshold": "1/4",
+            "propagation_enabled": false,
+            "step": 2
+          },
+          {
+            "association_C_to_D": "3/8",
+            "causal_C_effect_on_Y": "0/1",
+            "distance_to_threshold": "1/8",
+            "propagation_enabled": false,
+            "step": 3
+          },
+          {
+            "association_C_to_D": "1/2",
+            "causal_C_effect_on_Y": "1/2",
+            "distance_to_threshold": "0/1",
+            "propagation_enabled": true,
+            "step": 4
+          },
+          {
+            "association_C_to_D": "5/8",
+            "causal_C_effect_on_Y": "5/8",
+            "distance_to_threshold": "0/1",
+            "propagation_enabled": true,
+            "step": 5
+          },
+          {
+            "association_C_to_D": "3/4",
+            "causal_C_effect_on_Y": "3/4",
+            "distance_to_threshold": "0/1",
+            "propagation_enabled": true,
+            "step": 6
+          },
+          {
+            "association_C_to_D": "7/8",
+            "causal_C_effect_on_Y": "7/8",
+            "distance_to_threshold": "0/1",
+            "propagation_enabled": true,
+            "step": 7
+          },
+          {
+            "association_C_to_D": "1/1",
+            "causal_C_effect_on_Y": "1/1",
+            "distance_to_threshold": "0/1",
+            "propagation_enabled": true,
+            "step": 8
+          },
+          {
+            "association_C_to_D": "1/1",
+            "causal_C_effect_on_Y": "1/1",
+            "distance_to_threshold": "0/1",
+            "propagation_enabled": true,
+            "step": 9
+          },
+          {
+            "association_C_to_D": "1/1",
+            "causal_C_effect_on_Y": "1/1",
+            "distance_to_threshold": "0/1",
+            "propagation_enabled": true,
+            "step": 10
+          },
+          {
+            "association_C_to_D": "1/1",
+            "causal_C_effect_on_Y": "1/1",
+            "distance_to_threshold": "0/1",
+            "propagation_enabled": true,
+            "step": 11
+          },
+          {
+            "association_C_to_D": "1/1",
+            "causal_C_effect_on_Y": "1/1",
+            "distance_to_threshold": "0/1",
+            "propagation_enabled": true,
+            "step": 12
+          }
+        ]
+      },
+      "first_propagation_step": {
+        "during_bfs": 4,
+        "post_bfs": 4
+      },
+      "paired_reactivation": {
+        "during_bfs": [
+          {
+            "association_C_to_D": "3/8",
+            "causal_C_effect_on_Y": "0/1",
+            "distance_to_threshold": "1/8",
+            "propagation_enabled": false,
+            "step": 0
+          },
+          {
+            "association_C_to_D": "1/8",
+            "causal_C_effect_on_Y": "0/1",
+            "distance_to_threshold": "3/8",
+            "propagation_enabled": false,
+            "step": 1
+          },
+          {
+            "association_C_to_D": "1/4",
+            "causal_C_effect_on_Y": "0/1",
+            "distance_to_threshold": "1/4",
+            "propagation_enabled": false,
+            "step": 2
+          },
+          {
+            "association_C_to_D": "3/8",
+            "causal_C_effect_on_Y": "0/1",
+            "distance_to_threshold": "1/8",
+            "propagation_enabled": false,
+            "step": 3
+          },
+          {
+            "association_C_to_D": "1/2",
+            "causal_C_effect_on_Y": "1/2",
+            "distance_to_threshold": "0/1",
+            "propagation_enabled": true,
+            "step": 4
+          },
+          {
+            "association_C_to_D": "5/8",
+            "causal_C_effect_on_Y": "5/8",
+            "distance_to_threshold": "0/1",
+            "propagation_enabled": true,
+            "step": 5
+          },
+          {
+            "association_C_to_D": "3/4",
+            "causal_C_effect_on_Y": "3/4",
+            "distance_to_threshold": "0/1",
+            "propagation_enabled": true,
+            "step": 6
+          },
+          {
+            "association_C_to_D": "7/8",
+            "causal_C_effect_on_Y": "7/8",
+            "distance_to_threshold": "0/1",
+            "propagation_enabled": true,
+            "step": 7
+          },
+          {
+            "association_C_to_D": "1/1",
+            "causal_C_effect_on_Y": "1/1",
+            "distance_to_threshold": "0/1",
+            "propagation_enabled": true,
+            "step": 8
+          },
+          {
+            "association_C_to_D": "1/1",
+            "causal_C_effect_on_Y": "1/1",
+            "distance_to_threshold": "0/1",
+            "propagation_enabled": true,
+            "step": 9
+          },
+          {
+            "association_C_to_D": "1/1",
+            "causal_C_effect_on_Y": "1/1",
+            "distance_to_threshold": "0/1",
+            "propagation_enabled": true,
+            "step": 10
+          },
+          {
+            "association_C_to_D": "1/1",
+            "causal_C_effect_on_Y": "1/1",
+            "distance_to_threshold": "0/1",
+            "propagation_enabled": true,
+            "step": 11
+          },
+          {
+            "association_C_to_D": "1/1",
+            "causal_C_effect_on_Y": "1/1",
+            "distance_to_threshold": "0/1",
+            "propagation_enabled": true,
+            "step": 12
+          }
+        ],
+        "post_bfs": [
+          {
+            "association_C_to_D": "0/1",
+            "causal_C_effect_on_Y": "0/1",
+            "distance_to_threshold": "1/2",
+            "propagation_enabled": false,
+            "step": 0
+          },
+          {
+            "association_C_to_D": "1/8",
+            "causal_C_effect_on_Y": "0/1",
+            "distance_to_threshold": "3/8",
+            "propagation_enabled": false,
+            "step": 1
+          },
+          {
+            "association_C_to_D": "1/4",
+            "causal_C_effect_on_Y": "0/1",
+            "distance_to_threshold": "1/4",
+            "propagation_enabled": false,
+            "step": 2
+          },
+          {
+            "association_C_to_D": "3/8",
+            "causal_C_effect_on_Y": "0/1",
+            "distance_to_threshold": "1/8",
+            "propagation_enabled": false,
+            "step": 3
+          },
+          {
+            "association_C_to_D": "1/2",
+            "causal_C_effect_on_Y": "1/2",
+            "distance_to_threshold": "0/1",
+            "propagation_enabled": true,
+            "step": 4
+          },
+          {
+            "association_C_to_D": "5/8",
+            "causal_C_effect_on_Y": "5/8",
+            "distance_to_threshold": "0/1",
+            "propagation_enabled": true,
+            "step": 5
+          },
+          {
+            "association_C_to_D": "3/4",
+            "causal_C_effect_on_Y": "3/4",
+            "distance_to_threshold": "0/1",
+            "propagation_enabled": true,
+            "step": 6
+          },
+          {
+            "association_C_to_D": "7/8",
+            "causal_C_effect_on_Y": "7/8",
+            "distance_to_threshold": "0/1",
+            "propagation_enabled": true,
+            "step": 7
+          },
+          {
+            "association_C_to_D": "1/1",
+            "causal_C_effect_on_Y": "1/1",
+            "distance_to_threshold": "0/1",
+            "propagation_enabled": true,
+            "step": 8
+          },
+          {
+            "association_C_to_D": "1/1",
+            "causal_C_effect_on_Y": "1/1",
+            "distance_to_threshold": "0/1",
+            "propagation_enabled": true,
+            "step": 9
+          },
+          {
+            "association_C_to_D": "1/1",
+            "causal_C_effect_on_Y": "1/1",
+            "distance_to_threshold": "0/1",
+            "propagation_enabled": true,
+            "step": 10
+          },
+          {
+            "association_C_to_D": "1/1",
+            "causal_C_effect_on_Y": "1/1",
+            "distance_to_threshold": "0/1",
+            "propagation_enabled": true,
+            "step": 11
+          },
+          {
+            "association_C_to_D": "1/1",
+            "causal_C_effect_on_Y": "1/1",
+            "distance_to_threshold": "0/1",
+            "propagation_enabled": true,
+            "step": 12
+          }
+        ]
+      },
+      "recovery_lead_steps": 0,
+      "sham_no_coactivation": {
+        "during_bfs": [
+          {
+            "association_C_to_D": "3/8",
+            "causal_C_effect_on_Y": "0/1",
+            "distance_to_threshold": "1/8",
+            "propagation_enabled": false,
+            "step": 0
+          },
+          {
+            "association_C_to_D": "3/8",
+            "causal_C_effect_on_Y": "0/1",
+            "distance_to_threshold": "1/8",
+            "propagation_enabled": false,
+            "step": 1
+          },
+          {
+            "association_C_to_D": "3/8",
+            "causal_C_effect_on_Y": "0/1",
+            "distance_to_threshold": "1/8",
+            "propagation_enabled": false,
+            "step": 2
+          },
+          {
+            "association_C_to_D": "3/8",
+            "causal_C_effect_on_Y": "0/1",
+            "distance_to_threshold": "1/8",
+            "propagation_enabled": false,
+            "step": 3
+          },
+          {
+            "association_C_to_D": "3/8",
+            "causal_C_effect_on_Y": "0/1",
+            "distance_to_threshold": "1/8",
+            "propagation_enabled": false,
+            "step": 4
+          },
+          {
+            "association_C_to_D": "3/8",
+            "causal_C_effect_on_Y": "0/1",
+            "distance_to_threshold": "1/8",
+            "propagation_enabled": false,
+            "step": 5
+          },
+          {
+            "association_C_to_D": "3/8",
+            "causal_C_effect_on_Y": "0/1",
+            "distance_to_threshold": "1/8",
+            "propagation_enabled": false,
+            "step": 6
+          },
+          {
+            "association_C_to_D": "3/8",
+            "causal_C_effect_on_Y": "0/1",
+            "distance_to_threshold": "1/8",
+            "propagation_enabled": false,
+            "step": 7
+          },
+          {
+            "association_C_to_D": "3/8",
+            "causal_C_effect_on_Y": "0/1",
+            "distance_to_threshold": "1/8",
+            "propagation_enabled": false,
+            "step": 8
+          },
+          {
+            "association_C_to_D": "3/8",
+            "causal_C_effect_on_Y": "0/1",
+            "distance_to_threshold": "1/8",
+            "propagation_enabled": false,
+            "step": 9
+          },
+          {
+            "association_C_to_D": "3/8",
+            "causal_C_effect_on_Y": "0/1",
+            "distance_to_threshold": "1/8",
+            "propagation_enabled": false,
+            "step": 10
+          },
+          {
+            "association_C_to_D": "3/8",
+            "causal_C_effect_on_Y": "0/1",
+            "distance_to_threshold": "1/8",
+            "propagation_enabled": false,
+            "step": 11
+          },
+          {
+            "association_C_to_D": "3/8",
+            "causal_C_effect_on_Y": "0/1",
+            "distance_to_threshold": "1/8",
+            "propagation_enabled": false,
+            "step": 12
+          }
+        ],
+        "post_bfs": [
+          {
+            "association_C_to_D": "0/1",
+            "causal_C_effect_on_Y": "0/1",
+            "distance_to_threshold": "1/2",
+            "propagation_enabled": false,
+            "step": 0
+          },
+          {
+            "association_C_to_D": "0/1",
+            "causal_C_effect_on_Y": "0/1",
+            "distance_to_threshold": "1/2",
+            "propagation_enabled": false,
+            "step": 1
+          },
+          {
+            "association_C_to_D": "0/1",
+            "causal_C_effect_on_Y": "0/1",
+            "distance_to_threshold": "1/2",
+            "propagation_enabled": false,
+            "step": 2
+          },
+          {
+            "association_C_to_D": "0/1",
+            "causal_C_effect_on_Y": "0/1",
+            "distance_to_threshold": "1/2",
+            "propagation_enabled": false,
+            "step": 3
+          },
+          {
+            "association_C_to_D": "0/1",
+            "causal_C_effect_on_Y": "0/1",
+            "distance_to_threshold": "1/2",
+            "propagation_enabled": false,
+            "step": 4
+          },
+          {
+            "association_C_to_D": "0/1",
+            "causal_C_effect_on_Y": "0/1",
+            "distance_to_threshold": "1/2",
+            "propagation_enabled": false,
+            "step": 5
+          },
+          {
+            "association_C_to_D": "0/1",
+            "causal_C_effect_on_Y": "0/1",
+            "distance_to_threshold": "1/2",
+            "propagation_enabled": false,
+            "step": 6
+          },
+          {
+            "association_C_to_D": "0/1",
+            "causal_C_effect_on_Y": "0/1",
+            "distance_to_threshold": "1/2",
+            "propagation_enabled": false,
+            "step": 7
+          },
+          {
+            "association_C_to_D": "0/1",
+            "causal_C_effect_on_Y": "0/1",
+            "distance_to_threshold": "1/2",
+            "propagation_enabled": false,
+            "step": 8
+          },
+          {
+            "association_C_to_D": "0/1",
+            "causal_C_effect_on_Y": "0/1",
+            "distance_to_threshold": "1/2",
+            "propagation_enabled": false,
+            "step": 9
+          },
+          {
+            "association_C_to_D": "0/1",
+            "causal_C_effect_on_Y": "0/1",
+            "distance_to_threshold": "1/2",
+            "propagation_enabled": false,
+            "step": 10
+          },
+          {
+            "association_C_to_D": "0/1",
+            "causal_C_effect_on_Y": "0/1",
+            "distance_to_threshold": "1/2",
+            "propagation_enabled": false,
+            "step": 11
+          },
+          {
+            "association_C_to_D": "0/1",
+            "causal_C_effect_on_Y": "0/1",
+            "distance_to_threshold": "1/2",
+            "propagation_enabled": false,
+            "step": 12
+          }
+        ]
+      }
+    },
+    "proportional_saturating": {
+      "equalized_history_control": {
+        "during_bfs": [
+          {
+            "association_C_to_D": "0/1",
+            "causal_C_effect_on_Y": "0/1",
+            "distance_to_threshold": "1/2",
+            "propagation_enabled": false,
+            "step": 0
+          },
+          {
+            "association_C_to_D": "1/4",
+            "causal_C_effect_on_Y": "0/1",
+            "distance_to_threshold": "1/4",
+            "propagation_enabled": false,
+            "step": 1
+          },
+          {
+            "association_C_to_D": "7/16",
+            "causal_C_effect_on_Y": "0/1",
+            "distance_to_threshold": "1/16",
+            "propagation_enabled": false,
+            "step": 2
+          },
+          {
+            "association_C_to_D": "37/64",
+            "causal_C_effect_on_Y": "37/64",
+            "distance_to_threshold": "0/1",
+            "propagation_enabled": true,
+            "step": 3
+          },
+          {
+            "association_C_to_D": "175/256",
+            "causal_C_effect_on_Y": "175/256",
+            "distance_to_threshold": "0/1",
+            "propagation_enabled": true,
+            "step": 4
+          },
+          {
+            "association_C_to_D": "781/1024",
+            "causal_C_effect_on_Y": "781/1024",
+            "distance_to_threshold": "0/1",
+            "propagation_enabled": true,
+            "step": 5
+          },
+          {
+            "association_C_to_D": "3367/4096",
+            "causal_C_effect_on_Y": "3367/4096",
+            "distance_to_threshold": "0/1",
+            "propagation_enabled": true,
+            "step": 6
+          },
+          {
+            "association_C_to_D": "14197/16384",
+            "causal_C_effect_on_Y": "14197/16384",
+            "distance_to_threshold": "0/1",
+            "propagation_enabled": true,
+            "step": 7
+          },
+          {
+            "association_C_to_D": "58975/65536",
+            "causal_C_effect_on_Y": "58975/65536",
+            "distance_to_threshold": "0/1",
+            "propagation_enabled": true,
+            "step": 8
+          },
+          {
+            "association_C_to_D": "242461/262144",
+            "causal_C_effect_on_Y": "242461/262144",
+            "distance_to_threshold": "0/1",
+            "propagation_enabled": true,
+            "step": 9
+          },
+          {
+            "association_C_to_D": "989527/1048576",
+            "causal_C_effect_on_Y": "989527/1048576",
+            "distance_to_threshold": "0/1",
+            "propagation_enabled": true,
+            "step": 10
+          },
+          {
+            "association_C_to_D": "4017157/4194304",
+            "causal_C_effect_on_Y": "4017157/4194304",
+            "distance_to_threshold": "0/1",
+            "propagation_enabled": true,
+            "step": 11
+          },
+          {
+            "association_C_to_D": "16245775/16777216",
+            "causal_C_effect_on_Y": "16245775/16777216",
+            "distance_to_threshold": "0/1",
+            "propagation_enabled": true,
+            "step": 12
+          }
+        ],
+        "post_bfs": [
+          {
+            "association_C_to_D": "0/1",
+            "causal_C_effect_on_Y": "0/1",
+            "distance_to_threshold": "1/2",
+            "propagation_enabled": false,
+            "step": 0
+          },
+          {
+            "association_C_to_D": "1/4",
+            "causal_C_effect_on_Y": "0/1",
+            "distance_to_threshold": "1/4",
+            "propagation_enabled": false,
+            "step": 1
+          },
+          {
+            "association_C_to_D": "7/16",
+            "causal_C_effect_on_Y": "0/1",
+            "distance_to_threshold": "1/16",
+            "propagation_enabled": false,
+            "step": 2
+          },
+          {
+            "association_C_to_D": "37/64",
+            "causal_C_effect_on_Y": "37/64",
+            "distance_to_threshold": "0/1",
+            "propagation_enabled": true,
+            "step": 3
+          },
+          {
+            "association_C_to_D": "175/256",
+            "causal_C_effect_on_Y": "175/256",
+            "distance_to_threshold": "0/1",
+            "propagation_enabled": true,
+            "step": 4
+          },
+          {
+            "association_C_to_D": "781/1024",
+            "causal_C_effect_on_Y": "781/1024",
+            "distance_to_threshold": "0/1",
+            "propagation_enabled": true,
+            "step": 5
+          },
+          {
+            "association_C_to_D": "3367/4096",
+            "causal_C_effect_on_Y": "3367/4096",
+            "distance_to_threshold": "0/1",
+            "propagation_enabled": true,
+            "step": 6
+          },
+          {
+            "association_C_to_D": "14197/16384",
+            "causal_C_effect_on_Y": "14197/16384",
+            "distance_to_threshold": "0/1",
+            "propagation_enabled": true,
+            "step": 7
+          },
+          {
+            "association_C_to_D": "58975/65536",
+            "causal_C_effect_on_Y": "58975/65536",
+            "distance_to_threshold": "0/1",
+            "propagation_enabled": true,
+            "step": 8
+          },
+          {
+            "association_C_to_D": "242461/262144",
+            "causal_C_effect_on_Y": "242461/262144",
+            "distance_to_threshold": "0/1",
+            "propagation_enabled": true,
+            "step": 9
+          },
+          {
+            "association_C_to_D": "989527/1048576",
+            "causal_C_effect_on_Y": "989527/1048576",
+            "distance_to_threshold": "0/1",
+            "propagation_enabled": true,
+            "step": 10
+          },
+          {
+            "association_C_to_D": "4017157/4194304",
+            "causal_C_effect_on_Y": "4017157/4194304",
+            "distance_to_threshold": "0/1",
+            "propagation_enabled": true,
+            "step": 11
+          },
+          {
+            "association_C_to_D": "16245775/16777216",
+            "causal_C_effect_on_Y": "16245775/16777216",
+            "distance_to_threshold": "0/1",
+            "propagation_enabled": true,
+            "step": 12
+          }
+        ]
+      },
+      "first_propagation_step": {
+        "during_bfs": 1,
+        "post_bfs": 3
+      },
+      "paired_reactivation": {
+        "during_bfs": [
+          {
+            "association_C_to_D": "3/8",
+            "causal_C_effect_on_Y": "0/1",
+            "distance_to_threshold": "1/8",
+            "propagation_enabled": false,
+            "step": 0
+          },
+          {
+            "association_C_to_D": "17/32",
+            "causal_C_effect_on_Y": "17/32",
+            "distance_to_threshold": "0/1",
+            "propagation_enabled": true,
+            "step": 1
+          },
+          {
+            "association_C_to_D": "83/128",
+            "causal_C_effect_on_Y": "83/128",
+            "distance_to_threshold": "0/1",
+            "propagation_enabled": true,
+            "step": 2
+          },
+          {
+            "association_C_to_D": "377/512",
+            "causal_C_effect_on_Y": "377/512",
+            "distance_to_threshold": "0/1",
+            "propagation_enabled": true,
+            "step": 3
+          },
+          {
+            "association_C_to_D": "1643/2048",
+            "causal_C_effect_on_Y": "1643/2048",
+            "distance_to_threshold": "0/1",
+            "propagation_enabled": true,
+            "step": 4
+          },
+          {
+            "association_C_to_D": "6977/8192",
+            "causal_C_effect_on_Y": "6977/8192",
+            "distance_to_threshold": "0/1",
+            "propagation_enabled": true,
+            "step": 5
+          },
+          {
+            "association_C_to_D": "29123/32768",
+            "causal_C_effect_on_Y": "29123/32768",
+            "distance_to_threshold": "0/1",
+            "propagation_enabled": true,
+            "step": 6
+          },
+          {
+            "association_C_to_D": "120137/131072",
+            "causal_C_effect_on_Y": "120137/131072",
+            "distance_to_threshold": "0/1",
+            "propagation_enabled": true,
+            "step": 7
+          },
+          {
+            "association_C_to_D": "491483/524288",
+            "causal_C_effect_on_Y": "491483/524288",
+            "distance_to_threshold": "0/1",
+            "propagation_enabled": true,
+            "step": 8
+          },
+          {
+            "association_C_to_D": "1998737/2097152",
+            "causal_C_effect_on_Y": "1998737/2097152",
+            "distance_to_threshold": "0/1",
+            "propagation_enabled": true,
+            "step": 9
+          },
+          {
+            "association_C_to_D": "8093363/8388608",
+            "causal_C_effect_on_Y": "8093363/8388608",
+            "distance_to_threshold": "0/1",
+            "propagation_enabled": true,
+            "step": 10
+          },
+          {
+            "association_C_to_D": "32668697/33554432",
+            "causal_C_effect_on_Y": "32668697/33554432",
+            "distance_to_threshold": "0/1",
+            "propagation_enabled": true,
+            "step": 11
+          },
+          {
+            "association_C_to_D": "131560523/134217728",
+            "causal_C_effect_on_Y": "131560523/134217728",
+            "distance_to_threshold": "0/1",
+            "propagation_enabled": true,
+            "step": 12
+          }
+        ],
+        "post_bfs": [
+          {
+            "association_C_to_D": "0/1",
+            "causal_C_effect_on_Y": "0/1",
+            "distance_to_threshold": "1/2",
+            "propagation_enabled": false,
+            "step": 0
+          },
+          {
+            "association_C_to_D": "1/4",
+            "causal_C_effect_on_Y": "0/1",
+            "distance_to_threshold": "1/4",
+            "propagation_enabled": false,
+            "step": 1
+          },
+          {
+            "association_C_to_D": "7/16",
+            "causal_C_effect_on_Y": "0/1",
+            "distance_to_threshold": "1/16",
+            "propagation_enabled": false,
+            "step": 2
+          },
+          {
+            "association_C_to_D": "37/64",
+            "causal_C_effect_on_Y": "37/64",
+            "distance_to_threshold": "0/1",
+            "propagation_enabled": true,
+            "step": 3
+          },
+          {
+            "association_C_to_D": "175/256",
+            "causal_C_effect_on_Y": "175/256",
+            "distance_to_threshold": "0/1",
+            "propagation_enabled": true,
+            "step": 4
+          },
+          {
+            "association_C_to_D": "781/1024",
+            "causal_C_effect_on_Y": "781/1024",
+            "distance_to_threshold": "0/1",
+            "propagation_enabled": true,
+            "step": 5
+          },
+          {
+            "association_C_to_D": "3367/4096",
+            "causal_C_effect_on_Y": "3367/4096",
+            "distance_to_threshold": "0/1",
+            "propagation_enabled": true,
+            "step": 6
+          },
+          {
+            "association_C_to_D": "14197/16384",
+            "causal_C_effect_on_Y": "14197/16384",
+            "distance_to_threshold": "0/1",
+            "propagation_enabled": true,
+            "step": 7
+          },
+          {
+            "association_C_to_D": "58975/65536",
+            "causal_C_effect_on_Y": "58975/65536",
+            "distance_to_threshold": "0/1",
+            "propagation_enabled": true,
+            "step": 8
+          },
+          {
+            "association_C_to_D": "242461/262144",
+            "causal_C_effect_on_Y": "242461/262144",
+            "distance_to_threshold": "0/1",
+            "propagation_enabled": true,
+            "step": 9
+          },
+          {
+            "association_C_to_D": "989527/1048576",
+            "causal_C_effect_on_Y": "989527/1048576",
+            "distance_to_threshold": "0/1",
+            "propagation_enabled": true,
+            "step": 10
+          },
+          {
+            "association_C_to_D": "4017157/4194304",
+            "causal_C_effect_on_Y": "4017157/4194304",
+            "distance_to_threshold": "0/1",
+            "propagation_enabled": true,
+            "step": 11
+          },
+          {
+            "association_C_to_D": "16245775/16777216",
+            "causal_C_effect_on_Y": "16245775/16777216",
+            "distance_to_threshold": "0/1",
+            "propagation_enabled": true,
+            "step": 12
+          }
+        ]
+      },
+      "recovery_lead_steps": 2,
+      "sham_no_coactivation": {
+        "during_bfs": [
+          {
+            "association_C_to_D": "3/8",
+            "causal_C_effect_on_Y": "0/1",
+            "distance_to_threshold": "1/8",
+            "propagation_enabled": false,
+            "step": 0
+          },
+          {
+            "association_C_to_D": "3/8",
+            "causal_C_effect_on_Y": "0/1",
+            "distance_to_threshold": "1/8",
+            "propagation_enabled": false,
+            "step": 1
+          },
+          {
+            "association_C_to_D": "3/8",
+            "causal_C_effect_on_Y": "0/1",
+            "distance_to_threshold": "1/8",
+            "propagation_enabled": false,
+            "step": 2
+          },
+          {
+            "association_C_to_D": "3/8",
+            "causal_C_effect_on_Y": "0/1",
+            "distance_to_threshold": "1/8",
+            "propagation_enabled": false,
+            "step": 3
+          },
+          {
+            "association_C_to_D": "3/8",
+            "causal_C_effect_on_Y": "0/1",
+            "distance_to_threshold": "1/8",
+            "propagation_enabled": false,
+            "step": 4
+          },
+          {
+            "association_C_to_D": "3/8",
+            "causal_C_effect_on_Y": "0/1",
+            "distance_to_threshold": "1/8",
+            "propagation_enabled": false,
+            "step": 5
+          },
+          {
+            "association_C_to_D": "3/8",
+            "causal_C_effect_on_Y": "0/1",
+            "distance_to_threshold": "1/8",
+            "propagation_enabled": false,
+            "step": 6
+          },
+          {
+            "association_C_to_D": "3/8",
+            "causal_C_effect_on_Y": "0/1",
+            "distance_to_threshold": "1/8",
+            "propagation_enabled": false,
+            "step": 7
+          },
+          {
+            "association_C_to_D": "3/8",
+            "causal_C_effect_on_Y": "0/1",
+            "distance_to_threshold": "1/8",
+            "propagation_enabled": false,
+            "step": 8
+          },
+          {
+            "association_C_to_D": "3/8",
+            "causal_C_effect_on_Y": "0/1",
+            "distance_to_threshold": "1/8",
+            "propagation_enabled": false,
+            "step": 9
+          },
+          {
+            "association_C_to_D": "3/8",
+            "causal_C_effect_on_Y": "0/1",
+            "distance_to_threshold": "1/8",
+            "propagation_enabled": false,
+            "step": 10
+          },
+          {
+            "association_C_to_D": "3/8",
+            "causal_C_effect_on_Y": "0/1",
+            "distance_to_threshold": "1/8",
+            "propagation_enabled": false,
+            "step": 11
+          },
+          {
+            "association_C_to_D": "3/8",
+            "causal_C_effect_on_Y": "0/1",
+            "distance_to_threshold": "1/8",
+            "propagation_enabled": false,
+            "step": 12
+          }
+        ],
+        "post_bfs": [
+          {
+            "association_C_to_D": "0/1",
+            "causal_C_effect_on_Y": "0/1",
+            "distance_to_threshold": "1/2",
+            "propagation_enabled": false,
+            "step": 0
+          },
+          {
+            "association_C_to_D": "0/1",
+            "causal_C_effect_on_Y": "0/1",
+            "distance_to_threshold": "1/2",
+            "propagation_enabled": false,
+            "step": 1
+          },
+          {
+            "association_C_to_D": "0/1",
+            "causal_C_effect_on_Y": "0/1",
+            "distance_to_threshold": "1/2",
+            "propagation_enabled": false,
+            "step": 2
+          },
+          {
+            "association_C_to_D": "0/1",
+            "causal_C_effect_on_Y": "0/1",
+            "distance_to_threshold": "1/2",
+            "propagation_enabled": false,
+            "step": 3
+          },
+          {
+            "association_C_to_D": "0/1",
+            "causal_C_effect_on_Y": "0/1",
+            "distance_to_threshold": "1/2",
+            "propagation_enabled": false,
+            "step": 4
+          },
+          {
+            "association_C_to_D": "0/1",
+            "causal_C_effect_on_Y": "0/1",
+            "distance_to_threshold": "1/2",
+            "propagation_enabled": false,
+            "step": 5
+          },
+          {
+            "association_C_to_D": "0/1",
+            "causal_C_effect_on_Y": "0/1",
+            "distance_to_threshold": "1/2",
+            "propagation_enabled": false,
+            "step": 6
+          },
+          {
+            "association_C_to_D": "0/1",
+            "causal_C_effect_on_Y": "0/1",
+            "distance_to_threshold": "1/2",
+            "propagation_enabled": false,
+            "step": 7
+          },
+          {
+            "association_C_to_D": "0/1",
+            "causal_C_effect_on_Y": "0/1",
+            "distance_to_threshold": "1/2",
+            "propagation_enabled": false,
+            "step": 8
+          },
+          {
+            "association_C_to_D": "0/1",
+            "causal_C_effect_on_Y": "0/1",
+            "distance_to_threshold": "1/2",
+            "propagation_enabled": false,
+            "step": 9
+          },
+          {
+            "association_C_to_D": "0/1",
+            "causal_C_effect_on_Y": "0/1",
+            "distance_to_threshold": "1/2",
+            "propagation_enabled": false,
+            "step": 10
+          },
+          {
+            "association_C_to_D": "0/1",
+            "causal_C_effect_on_Y": "0/1",
+            "distance_to_threshold": "1/2",
+            "propagation_enabled": false,
+            "step": 11
+          },
+          {
+            "association_C_to_D": "0/1",
+            "causal_C_effect_on_Y": "0/1",
+            "distance_to_threshold": "1/2",
+            "propagation_enabled": false,
+            "step": 12
+          }
+        ]
+      }
+    }
+  },
+  "sha256": "1ef42c09e92a25e29d6891e29838cb5a9c106aaa654c8b8d42e4d44294da8764",
+  "status": "EXECUTED_SYNTHETIC_UPDATE_RULE_FALSIFIER"
+}

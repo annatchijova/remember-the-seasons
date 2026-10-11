@@ -1,0 +1,5953 @@
+{
+  "absence_steps": [
+    1,
+    2,
+    3,
+    4
+  ],
+  "arms": {
+    "complete_local_restore": {
+      "checkpoints": [
+        {
+          "non_target_state_digest": "2b07f9cc0993bae90ddffc263ace75c070d3e7b40f591ee81e7d75c827b4e07e",
+          "phase": "post_window",
+          "query": "B",
+          "retrieval": {
+            "activated_ids": [
+              "B"
+            ],
+            "ranked_ids": [
+              "B",
+              "C",
+              "A"
+            ],
+            "scores": [
+              {
+                "base_score": 0.9999999899804883,
+                "hop_decay": 1.0,
+                "hop_distance": 0,
+                "memory_id": "B",
+                "recency_bonus": 0.05,
+                "score": 1.1099999899804884,
+                "source": "similarity",
+                "state_boost": 1.0,
+                "synaptic_boost": 0.2
+              },
+              {
+                "base_score": 0.0,
+                "hop_decay": 1.0,
+                "hop_distance": -1,
+                "memory_id": "C",
+                "recency_bonus": 0.0,
+                "score": 0.29999999999999993,
+                "source": "synaptic",
+                "state_boost": 1.0,
+                "synaptic_boost": 0.9999999999999999
+              },
+              {
+                "base_score": 0.0,
+                "hop_decay": 1.0,
+                "hop_distance": -1,
+                "memory_id": "A",
+                "recency_bonus": 0.0,
+                "score": 0.24,
+                "source": "synaptic",
+                "state_boost": 1.5,
+                "synaptic_boost": 0.8
+              }
+            ],
+            "target_active_in_experience": false,
+            "target_direct_score": 0.24,
+            "target_indirect_score_effect_by_memory": {
+              "B": 0.0,
+              "C": 0.0
+            },
+            "target_indirect_score_effect_sum": 0.0
+          },
+          "standardized_propagation": {
+            "activated_ids": [
+              "A",
+              "C",
+              "D"
+            ],
+            "query": "A",
+            "reaches_C": true,
+            "reaches_D": true,
+            "target_suppressed": false
+          },
+          "state": {
+            "incident_cell_links": [
+              [
+                0,
+                2,
+                "RESONANT"
+              ]
+            ],
+            "incident_synaptic_links": {
+              "A": {
+                "B": 0.8,
+                "C": 0.6
+              },
+              "B": {
+                "A": 0.8,
+                "C": 0.9999999999999999,
+                "D": 0.2
+              },
+              "C": {
+                "A": 0.27999999999999997,
+                "B": 0.18,
+                "D": 1.1
+              }
+            },
+            "last_activation": 0.0,
+            "recall_count": 0,
+            "state": "REINFORCED",
+            "target_synaptic_links": {
+              "B": 0.8,
+              "C": 0.6
+            }
+          },
+          "step": 5
+        },
+        {
+          "non_target_state_digest": "6bfd42c8fe2e7b2ca30b114646c892d3849d26a11f4bf38ee15b1bd76807a5f0",
+          "phase": "post_window",
+          "query": "A",
+          "retrieval": {
+            "activated_ids": [
+              "A",
+              "C",
+              "D"
+            ],
+            "ranked_ids": [
+              "A",
+              "C",
+              "B",
+              "D"
+            ],
+            "scores": [
+              {
+                "base_score": 1.0,
+                "hop_decay": 1.0,
+                "hop_distance": 0,
+                "memory_id": "A",
+                "recency_bonus": 0.05,
+                "score": 1.73,
+                "source": "similarity",
+                "state_boost": 1.5,
+                "synaptic_boost": 0.6
+              },
+              {
+                "base_score": 0.4000000059604645,
+                "hop_decay": 0.8607079764250578,
+                "hop_distance": 1,
+                "memory_id": "C",
+                "recency_bonus": 0.05,
+                "score": 1.0082831986804748,
+                "source": "similarity",
+                "state_boost": 1.0,
+                "synaptic_boost": 1.3800000000000001
+              },
+              {
+                "base_score": 0.0,
+                "hop_decay": 1.0,
+                "hop_distance": -1,
+                "memory_id": "B",
+                "recency_bonus": 0.0,
+                "score": 0.24,
+                "source": "synaptic",
+                "state_boost": 1.0,
+                "synaptic_boost": 0.8
+              },
+              {
+                "base_score": 0.0,
+                "hop_decay": 0.7408182206817179,
+                "hop_distance": 2,
+                "memory_id": "D",
+                "recency_bonus": 0.05,
+                "score": 0.134,
+                "source": "similarity",
+                "state_boost": 1.0,
+                "synaptic_boost": 0.28
+              }
+            ],
+            "target_active_in_experience": true,
+            "target_direct_score": 1.73,
+            "target_indirect_score_effect_by_memory": {
+              "B": -1.2238833230884631,
+              "C": 1.0082831986804748,
+              "D": -0.196
+            },
+            "target_indirect_score_effect_sum": -0.4116001244079884
+          },
+          "standardized_propagation": {
+            "activated_ids": [
+              "A",
+              "C",
+              "D"
+            ],
+            "query": "A",
+            "reaches_C": true,
+            "reaches_D": true,
+            "target_suppressed": false
+          },
+          "state": {
+            "incident_cell_links": [
+              [
+                0,
+                2,
+                "RESONANT"
+              ]
+            ],
+            "incident_synaptic_links": {
+              "A": {
+                "B": 0.8,
+                "C": 0.6
+              },
+              "B": {
+                "A": 0.9,
+                "C": 1.0999999999999999,
+                "D": 0.30000000000000004
+              },
+              "C": {
+                "A": 0.27999999999999997,
+                "B": 0.18,
+                "D": 1.1
+              },
+              "D": {
+                "A": 0.1,
+                "B": 0.08,
+                "C": 0.18
+              }
+            },
+            "last_activation": 1006.0,
+            "recall_count": 1,
+            "state": "REINFORCED",
+            "target_synaptic_links": {
+              "B": 0.8,
+              "C": 0.6
+            }
+          },
+          "step": 6
+        },
+        {
+          "non_target_state_digest": "49f8e54df6cf46327aa12e12d646540cae2ed906ce8c34db266b7454b75b907a",
+          "phase": "post_window",
+          "query": "D",
+          "retrieval": {
+            "activated_ids": [
+              "D"
+            ],
+            "ranked_ids": [
+              "D",
+              "C",
+              "A"
+            ],
+            "scores": [
+              {
+                "base_score": 1.0,
+                "hop_decay": 1.0,
+                "hop_distance": 0,
+                "memory_id": "D",
+                "recency_bonus": 0.05,
+                "score": 1.188,
+                "source": "similarity",
+                "state_boost": 1.0,
+                "synaptic_boost": 0.46
+              },
+              {
+                "base_score": 0.0,
+                "hop_decay": 1.0,
+                "hop_distance": -1,
+                "memory_id": "C",
+                "recency_bonus": 0.0,
+                "score": 0.32999999999999996,
+                "source": "synaptic",
+                "state_boost": 1.0,
+                "synaptic_boost": 1.0999999999999999
+              },
+              {
+                "base_score": 0.0,
+                "hop_decay": 1.0,
+                "hop_distance": -1,
+                "memory_id": "A",
+                "recency_bonus": 0.0,
+                "score": 0.27,
+                "source": "synaptic",
+                "state_boost": 1.5,
+                "synaptic_boost": 0.9
+              }
+            ],
+            "target_active_in_experience": false,
+            "target_direct_score": 0.27,
+            "target_indirect_score_effect_by_memory": {
+              "C": 0.0,
+              "D": 0.0
+            },
+            "target_indirect_score_effect_sum": 0.0
+          },
+          "standardized_propagation": {
+            "activated_ids": [
+              "A",
+              "C",
+              "D"
+            ],
+            "query": "A",
+            "reaches_C": true,
+            "reaches_D": true,
+            "target_suppressed": false
+          },
+          "state": {
+            "incident_cell_links": [
+              [
+                0,
+                2,
+                "RESONANT"
+              ]
+            ],
+            "incident_synaptic_links": {
+              "A": {
+                "B": 0.9,
+                "C": 0.7,
+                "D": 0.1
+              },
+              "B": {
+                "A": 0.9,
+                "C": 1.0999999999999999,
+                "D": 0.30000000000000004
+              },
+              "C": {
+                "A": 0.25999999999999995,
+                "B": 0.28,
+                "D": 1.2000000000000002
+              },
+              "D": {
+                "A": 0.08,
+                "B": 0.18,
+                "C": 0.28
+              }
+            },
+            "last_activation": 1006.0,
+            "recall_count": 1,
+            "state": "REINFORCED",
+            "target_synaptic_links": {
+              "B": 0.9,
+              "C": 0.7,
+              "D": 0.1
+            }
+          },
+          "step": 7
+        },
+        {
+          "non_target_state_digest": "52adc531dccc7bd84836ec9449f1ef5acf2631bfa7f0a1e83a14bebea2924534",
+          "phase": "post_window",
+          "query": "B",
+          "retrieval": {
+            "activated_ids": [
+              "B"
+            ],
+            "ranked_ids": [
+              "B",
+              "D",
+              "C",
+              "A"
+            ],
+            "scores": [
+              {
+                "base_score": 0.9999999899804883,
+                "hop_decay": 1.0,
+                "hop_distance": 0,
+                "memory_id": "B",
+                "recency_bonus": 0.05,
+                "score": 1.8299999899804884,
+                "source": "similarity",
+                "state_boost": 1.0,
+                "synaptic_boost": 2.6
+              },
+              {
+                "base_score": 0.0,
+                "hop_decay": 1.0,
+                "hop_distance": -1,
+                "memory_id": "D",
+                "recency_bonus": 0.0,
+                "score": 0.39000000000000007,
+                "source": "synaptic",
+                "state_boost": 1.0,
+                "synaptic_boost": 1.3000000000000003
+              },
+              {
+                "base_score": 0.0,
+                "hop_decay": 1.0,
+                "hop_distance": -1,
+                "memory_id": "C",
+                "recency_bonus": 0.0,
+                "score": 0.36,
+                "source": "synaptic",
+                "state_boost": 1.0,
+                "synaptic_boost": 1.2
+              },
+              {
+                "base_score": 0.0,
+                "hop_decay": 1.0,
+                "hop_distance": -1,
+                "memory_id": "A",
+                "recency_bonus": 0.0,
+                "score": 0.3,
+                "source": "synaptic",
+                "state_boost": 1.5,
+                "synaptic_boost": 1.0
+              }
+            ],
+            "target_active_in_experience": false,
+            "target_direct_score": 0.3,
+            "target_indirect_score_effect_by_memory": {
+              "B": 0.30000000000000004,
+              "C": 0.0,
+              "D": 0.0
+            },
+            "target_indirect_score_effect_sum": 0.30000000000000004
+          },
+          "standardized_propagation": {
+            "activated_ids": [
+              "A",
+              "C",
+              "D"
+            ],
+            "query": "A",
+            "reaches_C": true,
+            "reaches_D": true,
+            "target_suppressed": false
+          },
+          "state": {
+            "incident_cell_links": [
+              [
+                0,
+                2,
+                "RESONANT"
+              ]
+            ],
+            "incident_synaptic_links": {
+              "A": {
+                "B": 0.9,
+                "C": 0.7,
+                "D": 0.1
+              },
+              "B": {
+                "A": 1.0,
+                "C": 1.2,
+                "D": 0.4
+              },
+              "C": {
+                "A": 0.36,
+                "B": 0.38,
+                "D": 1.3000000000000003
+              },
+              "D": {
+                "A": 0.18,
+                "B": 0.28,
+                "C": 0.38
+              }
+            },
+            "last_activation": 1008.0,
+            "recall_count": 2,
+            "state": "REINFORCED",
+            "target_synaptic_links": {
+              "B": 0.9,
+              "C": 0.7,
+              "D": 0.1
+            }
+          },
+          "step": 8
+        },
+        {
+          "non_target_state_digest": "e8b6b623cf26c59803ddff4b47be5df57e6ea6374d6a4b53fcf92ecd98218056",
+          "phase": "washout",
+          "query": "C",
+          "retrieval": {
+            "activated_ids": [
+              "C",
+              "D"
+            ],
+            "ranked_ids": [
+              "C",
+              "D",
+              "A",
+              "B"
+            ],
+            "scores": [
+              {
+                "base_score": 0.9999999775759996,
+                "hop_decay": 1.0,
+                "hop_distance": 0,
+                "memory_id": "C",
+                "recency_bonus": 0.05,
+                "score": 1.7519999775759996,
+                "source": "similarity",
+                "state_boost": 1.0,
+                "synaptic_boost": 2.3400000000000003
+              },
+              {
+                "base_score": 0.916515138991168,
+                "hop_decay": 0.8607079764250578,
+                "hop_distance": 1,
+                "memory_id": "D",
+                "recency_bonus": 0.05,
+                "score": 1.639109460139603,
+                "source": "similarity",
+                "state_boost": 1.0,
+                "synaptic_boost": 1.1400000000000001
+              },
+              {
+                "base_score": 0.0,
+                "hop_decay": 1.0,
+                "hop_distance": -1,
+                "memory_id": "A",
+                "recency_bonus": 0.0,
+                "score": 0.33,
+                "source": "synaptic",
+                "state_boost": 1.5,
+                "synaptic_boost": 1.1
+              },
+              {
+                "base_score": 0.0,
+                "hop_decay": 1.0,
+                "hop_distance": -1,
+                "memory_id": "B",
+                "recency_bonus": 0.0,
+                "score": 0.3,
+                "source": "synaptic",
+                "state_boost": 1.0,
+                "synaptic_boost": 1.0
+              }
+            ],
+            "target_active_in_experience": false,
+            "target_direct_score": 0.33,
+            "target_indirect_score_effect_by_memory": {
+              "B": 0.3,
+              "C": 0.1379999999999999,
+              "D": 0.08400000000000007
+            },
+            "target_indirect_score_effect_sum": 0.522
+          },
+          "standardized_propagation": {
+            "activated_ids": [
+              "A",
+              "C",
+              "D"
+            ],
+            "query": "A",
+            "reaches_C": true,
+            "reaches_D": true,
+            "target_suppressed": false
+          },
+          "state": {
+            "incident_cell_links": [
+              [
+                0,
+                2,
+                "RESONANT"
+              ]
+            ],
+            "incident_synaptic_links": {
+              "A": {
+                "B": 1.0,
+                "C": 0.7999999999999999,
+                "D": 0.2
+              },
+              "B": {
+                "A": 1.1,
+                "C": 1.3,
+                "D": 0.5
+              },
+              "C": {
+                "A": 0.45999999999999996,
+                "B": 0.48,
+                "D": 1.4000000000000004
+              },
+              "D": {
+                "A": 0.28,
+                "B": 0.38,
+                "C": 0.48
+              }
+            },
+            "last_activation": 1009.0,
+            "recall_count": 3,
+            "state": "REINFORCED",
+            "target_synaptic_links": {
+              "B": 1.0,
+              "C": 0.7999999999999999,
+              "D": 0.2
+            }
+          },
+          "step": 9
+        },
+        {
+          "non_target_state_digest": "dee832aceb592754a6f30bb780aaf86a3306ca06b0a333b79a8de810b9188f95",
+          "phase": "washout",
+          "query": "D",
+          "retrieval": {
+            "activated_ids": [
+              "D"
+            ],
+            "ranked_ids": [
+              "D",
+              "C",
+              "A",
+              "B"
+            ],
+            "scores": [
+              {
+                "base_score": 1.0,
+                "hop_decay": 1.0,
+                "hop_distance": 0,
+                "memory_id": "D",
+                "recency_bonus": 0.05,
+                "score": 1.482,
+                "source": "similarity",
+                "state_boost": 1.0,
+                "synaptic_boost": 1.44
+              },
+              {
+                "base_score": 0.0,
+                "hop_decay": 1.0,
+                "hop_distance": -1,
+                "memory_id": "C",
+                "recency_bonus": 0.0,
+                "score": 0.42000000000000004,
+                "source": "synaptic",
+                "state_boost": 1.0,
+                "synaptic_boost": 1.4000000000000001
+              },
+              {
+                "base_score": 0.0,
+                "hop_decay": 1.0,
+                "hop_distance": -1,
+                "memory_id": "A",
+                "recency_bonus": 0.0,
+                "score": 0.36000000000000004,
+                "source": "synaptic",
+                "state_boost": 1.5,
+                "synaptic_boost": 1.2000000000000002
+              },
+              {
+                "base_score": 0.0,
+                "hop_decay": 1.0,
+                "hop_distance": -1,
+                "memory_id": "B",
+                "recency_bonus": 0.0,
+                "score": 0.33,
+                "source": "synaptic",
+                "state_boost": 1.0,
+                "synaptic_boost": 1.1
+              }
+            ],
+            "target_active_in_experience": false,
+            "target_direct_score": 0.36000000000000004,
+            "target_indirect_score_effect_by_memory": {
+              "B": 0.15600000000000003,
+              "C": 0.0,
+              "D": 0.11399999999999988
+            },
+            "target_indirect_score_effect_sum": 0.2699999999999999
+          },
+          "standardized_propagation": {
+            "activated_ids": [
+              "A",
+              "C",
+              "D"
+            ],
+            "query": "A",
+            "reaches_C": true,
+            "reaches_D": true,
+            "target_suppressed": false
+          },
+          "state": {
+            "incident_cell_links": [
+              [
+                0,
+                2,
+                "RESONANT"
+              ]
+            ],
+            "incident_synaptic_links": {
+              "A": {
+                "B": 1.1,
+                "C": 0.8999999999999999,
+                "D": 0.30000000000000004
+              },
+              "B": {
+                "A": 1.2000000000000002,
+                "C": 1.4000000000000001,
+                "D": 0.6
+              },
+              "C": {
+                "A": 0.5599999999999999,
+                "B": 0.58,
+                "D": 1.5000000000000004
+              },
+              "D": {
+                "A": 0.38,
+                "B": 0.48,
+                "C": 0.58
+              }
+            },
+            "last_activation": 1010.0,
+            "recall_count": 4,
+            "state": "REINFORCED",
+            "target_synaptic_links": {
+              "B": 1.1,
+              "C": 0.8999999999999999,
+              "D": 0.30000000000000004
+            }
+          },
+          "step": 10
+        },
+        {
+          "non_target_state_digest": "fb08caab7c088b5bdc2d74afcd90c736aaf030eca3ccedea79bb811fe1de54d2",
+          "phase": "washout",
+          "query": "A",
+          "retrieval": {
+            "activated_ids": [
+              "A",
+              "C",
+              "D"
+            ],
+            "ranked_ids": [
+              "A",
+              "C",
+              "D",
+              "B"
+            ],
+            "scores": [
+              {
+                "base_score": 1.0,
+                "hop_decay": 1.0,
+                "hop_distance": 0,
+                "memory_id": "A",
+                "recency_bonus": 0.05,
+                "score": 2.33,
+                "source": "similarity",
+                "state_boost": 1.5,
+                "synaptic_boost": 2.6
+              },
+              {
+                "base_score": 0.4000000059604645,
+                "hop_decay": 0.8607079764250578,
+                "hop_distance": 1,
+                "memory_id": "C",
+                "recency_bonus": 0.05,
+                "score": 1.476283198680475,
+                "source": "similarity",
+                "state_boost": 1.0,
+                "synaptic_boost": 2.9400000000000004
+              },
+              {
+                "base_score": 0.0,
+                "hop_decay": 0.7408182206817179,
+                "hop_distance": 2,
+                "memory_id": "D",
+                "recency_bonus": 0.05,
+                "score": 0.572,
+                "source": "similarity",
+                "state_boost": 1.0,
+                "synaptic_boost": 1.7399999999999998
+              },
+              {
+                "base_score": 0.0,
+                "hop_decay": 1.0,
+                "hop_distance": -1,
+                "memory_id": "B",
+                "recency_bonus": 0.0,
+                "score": 0.36000000000000004,
+                "source": "synaptic",
+                "state_boost": 1.0,
+                "synaptic_boost": 1.2000000000000002
+              }
+            ],
+            "target_active_in_experience": true,
+            "target_direct_score": 2.33,
+            "target_indirect_score_effect_by_memory": {
+              "B": -1.3438837242136947,
+              "C": 1.026283198680475,
+              "D": 0.0919999999999998
+            },
+            "target_indirect_score_effect_sum": -0.2256005255332199
+          },
+          "standardized_propagation": {
+            "activated_ids": [
+              "A",
+              "C",
+              "D"
+            ],
+            "query": "A",
+            "reaches_C": true,
+            "reaches_D": true,
+            "target_suppressed": false
+          },
+          "state": {
+            "incident_cell_links": [
+              [
+                0,
+                2,
+                "RESONANT"
+              ]
+            ],
+            "incident_synaptic_links": {
+              "A": {
+                "B": 1.2000000000000002,
+                "C": 0.9999999999999999,
+                "D": 0.4
+              },
+              "B": {
+                "A": 1.3000000000000003,
+                "C": 1.5000000000000002,
+                "D": 0.7
+              },
+              "C": {
+                "A": 0.6599999999999999,
+                "B": 0.6799999999999999,
+                "D": 1.6000000000000005
+              },
+              "D": {
+                "A": 0.48,
+                "B": 0.58,
+                "C": 0.6799999999999999
+              }
+            },
+            "last_activation": 1011.0,
+            "recall_count": 5,
+            "state": "REINFORCED",
+            "target_synaptic_links": {
+              "B": 1.2000000000000002,
+              "C": 0.9999999999999999,
+              "D": 0.4
+            }
+          },
+          "step": 11
+        },
+        {
+          "non_target_state_digest": "aa28477d7090cfae3daf9c7d182292e09a21aaaf1ce701533cfb26d6e4ac0d64",
+          "phase": "washout",
+          "query": "C",
+          "retrieval": {
+            "activated_ids": [
+              "C",
+              "D"
+            ],
+            "ranked_ids": [
+              "C",
+              "D",
+              "A",
+              "B"
+            ],
+            "scores": [
+              {
+                "base_score": 0.9999999775759996,
+                "hop_decay": 1.0,
+                "hop_distance": 0,
+                "memory_id": "C",
+                "recency_bonus": 0.05,
+                "score": 2.0219999775759994,
+                "source": "similarity",
+                "state_boost": 1.0,
+                "synaptic_boost": 3.24
+              },
+              {
+                "base_score": 0.916515138991168,
+                "hop_decay": 0.8607079764250578,
+                "hop_distance": 1,
+                "memory_id": "D",
+                "recency_bonus": 0.05,
+                "score": 1.909109460139603,
+                "source": "similarity",
+                "state_boost": 1.0,
+                "synaptic_boost": 2.04
+              },
+              {
+                "base_score": 0.0,
+                "hop_decay": 1.0,
+                "hop_distance": -1,
+                "memory_id": "A",
+                "recency_bonus": 0.0,
+                "score": 0.4200000000000001,
+                "source": "synaptic",
+                "state_boost": 1.5,
+                "synaptic_boost": 1.4000000000000004
+              },
+              {
+                "base_score": 0.0,
+                "hop_decay": 1.0,
+                "hop_distance": -1,
+                "memory_id": "B",
+                "recency_bonus": 0.0,
+                "score": 0.39000000000000007,
+                "source": "synaptic",
+                "state_boost": 1.0,
+                "synaptic_boost": 1.3000000000000003
+              }
+            ],
+            "target_active_in_experience": false,
+            "target_direct_score": 0.4200000000000001,
+            "target_indirect_score_effect_by_memory": {
+              "B": 0.1560000000000001,
+              "C": 0.22799999999999954,
+              "D": 0.17400000000000015
+            },
+            "target_indirect_score_effect_sum": 0.5579999999999998
+          },
+          "standardized_propagation": {
+            "activated_ids": [
+              "A",
+              "C",
+              "D"
+            ],
+            "query": "A",
+            "reaches_C": true,
+            "reaches_D": true,
+            "target_suppressed": false
+          },
+          "state": {
+            "incident_cell_links": [
+              [
+                0,
+                2,
+                "RESONANT"
+              ]
+            ],
+            "incident_synaptic_links": {
+              "A": {
+                "B": 1.3000000000000003,
+                "C": 1.0999999999999999,
+                "D": 0.5
+              },
+              "B": {
+                "A": 1.4000000000000004,
+                "C": 1.6000000000000003,
+                "D": 0.7999999999999999
+              },
+              "C": {
+                "A": 0.7599999999999999,
+                "B": 0.7799999999999999,
+                "D": 1.7000000000000006
+              },
+              "D": {
+                "A": 0.58,
+                "B": 0.6799999999999999,
+                "C": 0.7799999999999999
+              }
+            },
+            "last_activation": 1012.0,
+            "recall_count": 6,
+            "state": "REINFORCED",
+            "target_synaptic_links": {
+              "B": 1.3000000000000003,
+              "C": 1.0999999999999999,
+              "D": 0.5
+            }
+          },
+          "step": 12
+        },
+        {
+          "non_target_state_digest": "9224702b19d27aa4411e167b7a2fdae3d254444217459ea2b689d5c4e706dbd4",
+          "phase": "washout",
+          "query": "B",
+          "retrieval": {
+            "activated_ids": [
+              "B"
+            ],
+            "ranked_ids": [
+              "B",
+              "D",
+              "C",
+              "A"
+            ],
+            "scores": [
+              {
+                "base_score": 0.9999999899804883,
+                "hop_decay": 1.0,
+                "hop_distance": 0,
+                "memory_id": "B",
+                "recency_bonus": 0.05,
+                "score": 2.279999989980489,
+                "source": "similarity",
+                "state_boost": 1.0,
+                "synaptic_boost": 4.100000000000001
+              },
+              {
+                "base_score": 0.0,
+                "hop_decay": 1.0,
+                "hop_distance": -1,
+                "memory_id": "D",
+                "recency_bonus": 0.0,
+                "score": 0.5400000000000001,
+                "source": "synaptic",
+                "state_boost": 1.0,
+                "synaptic_boost": 1.8000000000000007
+              },
+              {
+                "base_score": 0.0,
+                "hop_decay": 1.0,
+                "hop_distance": -1,
+                "memory_id": "C",
+                "recency_bonus": 0.0,
+                "score": 0.5100000000000001,
+                "source": "synaptic",
+                "state_boost": 1.0,
+                "synaptic_boost": 1.7000000000000004
+              },
+              {
+                "base_score": 0.0,
+                "hop_decay": 1.0,
+                "hop_distance": -1,
+                "memory_id": "A",
+                "recency_bonus": 0.0,
+                "score": 0.4500000000000001,
+                "source": "synaptic",
+                "state_boost": 1.5,
+                "synaptic_boost": 1.5000000000000004
+              }
+            ],
+            "target_active_in_experience": false,
+            "target_direct_score": 0.4500000000000001,
+            "target_indirect_score_effect_by_memory": {
+              "B": 0.4500000000000004,
+              "C": 0.0,
+              "D": 0.0
+            },
+            "target_indirect_score_effect_sum": 0.4500000000000004
+          },
+          "standardized_propagation": {
+            "activated_ids": [
+              "A",
+              "C",
+              "D"
+            ],
+            "query": "A",
+            "reaches_C": true,
+            "reaches_D": true,
+            "target_suppressed": false
+          },
+          "state": {
+            "incident_cell_links": [
+              [
+                0,
+                2,
+                "RESONANT"
+              ]
+            ],
+            "incident_synaptic_links": {
+              "A": {
+                "B": 1.4000000000000004,
+                "C": 1.2,
+                "D": 0.6
+              },
+              "B": {
+                "A": 1.5000000000000004,
+                "C": 1.7000000000000004,
+                "D": 0.8999999999999999
+              },
+              "C": {
+                "A": 0.8599999999999999,
+                "B": 0.8799999999999999,
+                "D": 1.8000000000000007
+              },
+              "D": {
+                "A": 0.6799999999999999,
+                "B": 0.7799999999999999,
+                "C": 0.8799999999999999
+              }
+            },
+            "last_activation": 1013.0,
+            "recall_count": 7,
+            "state": "REINFORCED",
+            "target_synaptic_links": {
+              "B": 1.4000000000000004,
+              "C": 1.2,
+              "D": 0.6
+            }
+          },
+          "step": 13
+        }
+      ],
+      "final_non_target_state": {
+        "B": [
+          "NEUTRAL",
+          1013.0,
+          11,
+          {
+            "A": 1.5000000000000004,
+            "C": 1.7000000000000004,
+            "D": 0.8999999999999999
+          }
+        ],
+        "C": [
+          "NEUTRAL",
+          1013.0,
+          11,
+          {
+            "A": 0.8599999999999999,
+            "B": 0.8799999999999999,
+            "D": 1.8000000000000007
+          }
+        ],
+        "D": [
+          "NEUTRAL",
+          1013.0,
+          11,
+          {
+            "A": 0.6799999999999999,
+            "B": 0.7799999999999999,
+            "C": 0.8799999999999999
+          }
+        ]
+      },
+      "non_target_state_changed_from_seed": true
+    },
+    "links_only_restore": {
+      "checkpoints": [
+        {
+          "non_target_state_digest": "2b07f9cc0993bae90ddffc263ace75c070d3e7b40f591ee81e7d75c827b4e07e",
+          "phase": "post_window",
+          "query": "B",
+          "retrieval": {
+            "activated_ids": [
+              "B"
+            ],
+            "ranked_ids": [
+              "B",
+              "C",
+              "A"
+            ],
+            "scores": [
+              {
+                "base_score": 0.9999999899804883,
+                "hop_decay": 1.0,
+                "hop_distance": 0,
+                "memory_id": "B",
+                "recency_bonus": 0.05,
+                "score": 1.1099999899804884,
+                "source": "similarity",
+                "state_boost": 1.0,
+                "synaptic_boost": 0.2
+              },
+              {
+                "base_score": 0.0,
+                "hop_decay": 1.0,
+                "hop_distance": -1,
+                "memory_id": "C",
+                "recency_bonus": 0.0,
+                "score": 0.29999999999999993,
+                "source": "synaptic",
+                "state_boost": 1.0,
+                "synaptic_boost": 0.9999999999999999
+              },
+              {
+                "base_score": 0.0,
+                "hop_decay": 1.0,
+                "hop_distance": -1,
+                "memory_id": "A",
+                "recency_bonus": 0.0,
+                "score": 0.24,
+                "source": "synaptic",
+                "state_boost": 1.5,
+                "synaptic_boost": 0.8
+              }
+            ],
+            "target_active_in_experience": false,
+            "target_direct_score": 0.24,
+            "target_indirect_score_effect_by_memory": {
+              "B": 0.0,
+              "C": 0.0
+            },
+            "target_indirect_score_effect_sum": 0.0
+          },
+          "standardized_propagation": {
+            "activated_ids": [
+              "A",
+              "C",
+              "D"
+            ],
+            "query": "A",
+            "reaches_C": true,
+            "reaches_D": true,
+            "target_suppressed": false
+          },
+          "state": {
+            "incident_cell_links": [
+              [
+                0,
+                2,
+                "RESONANT"
+              ]
+            ],
+            "incident_synaptic_links": {
+              "A": {
+                "B": 0.8,
+                "C": 0.6
+              },
+              "B": {
+                "A": 0.8,
+                "C": 0.9999999999999999,
+                "D": 0.2
+              },
+              "C": {
+                "A": 0.27999999999999997,
+                "B": 0.18,
+                "D": 1.1
+              }
+            },
+            "last_activation": 0.0,
+            "recall_count": 0,
+            "state": "REINFORCED",
+            "target_synaptic_links": {
+              "B": 0.8,
+              "C": 0.6
+            }
+          },
+          "step": 5
+        },
+        {
+          "non_target_state_digest": "6bfd42c8fe2e7b2ca30b114646c892d3849d26a11f4bf38ee15b1bd76807a5f0",
+          "phase": "post_window",
+          "query": "A",
+          "retrieval": {
+            "activated_ids": [
+              "A",
+              "C",
+              "D"
+            ],
+            "ranked_ids": [
+              "A",
+              "C",
+              "B",
+              "D"
+            ],
+            "scores": [
+              {
+                "base_score": 1.0,
+                "hop_decay": 1.0,
+                "hop_distance": 0,
+                "memory_id": "A",
+                "recency_bonus": 0.05,
+                "score": 1.73,
+                "source": "similarity",
+                "state_boost": 1.5,
+                "synaptic_boost": 0.6
+              },
+              {
+                "base_score": 0.4000000059604645,
+                "hop_decay": 0.8607079764250578,
+                "hop_distance": 1,
+                "memory_id": "C",
+                "recency_bonus": 0.05,
+                "score": 1.0082831986804748,
+                "source": "similarity",
+                "state_boost": 1.0,
+                "synaptic_boost": 1.3800000000000001
+              },
+              {
+                "base_score": 0.0,
+                "hop_decay": 1.0,
+                "hop_distance": -1,
+                "memory_id": "B",
+                "recency_bonus": 0.0,
+                "score": 0.24,
+                "source": "synaptic",
+                "state_boost": 1.0,
+                "synaptic_boost": 0.8
+              },
+              {
+                "base_score": 0.0,
+                "hop_decay": 0.7408182206817179,
+                "hop_distance": 2,
+                "memory_id": "D",
+                "recency_bonus": 0.05,
+                "score": 0.134,
+                "source": "similarity",
+                "state_boost": 1.0,
+                "synaptic_boost": 0.28
+              }
+            ],
+            "target_active_in_experience": true,
+            "target_direct_score": 1.73,
+            "target_indirect_score_effect_by_memory": {
+              "B": -1.2238833230884631,
+              "C": 1.0082831986804748,
+              "D": -0.196
+            },
+            "target_indirect_score_effect_sum": -0.4116001244079884
+          },
+          "standardized_propagation": {
+            "activated_ids": [
+              "A",
+              "C",
+              "D"
+            ],
+            "query": "A",
+            "reaches_C": true,
+            "reaches_D": true,
+            "target_suppressed": false
+          },
+          "state": {
+            "incident_cell_links": [
+              [
+                0,
+                2,
+                "RESONANT"
+              ]
+            ],
+            "incident_synaptic_links": {
+              "A": {
+                "B": 0.8,
+                "C": 0.6
+              },
+              "B": {
+                "A": 0.9,
+                "C": 1.0999999999999999,
+                "D": 0.30000000000000004
+              },
+              "C": {
+                "A": 0.27999999999999997,
+                "B": 0.18,
+                "D": 1.1
+              },
+              "D": {
+                "A": 0.1,
+                "B": 0.08,
+                "C": 0.18
+              }
+            },
+            "last_activation": 1006.0,
+            "recall_count": 1,
+            "state": "REINFORCED",
+            "target_synaptic_links": {
+              "B": 0.8,
+              "C": 0.6
+            }
+          },
+          "step": 6
+        },
+        {
+          "non_target_state_digest": "49f8e54df6cf46327aa12e12d646540cae2ed906ce8c34db266b7454b75b907a",
+          "phase": "post_window",
+          "query": "D",
+          "retrieval": {
+            "activated_ids": [
+              "D"
+            ],
+            "ranked_ids": [
+              "D",
+              "C",
+              "A"
+            ],
+            "scores": [
+              {
+                "base_score": 1.0,
+                "hop_decay": 1.0,
+                "hop_distance": 0,
+                "memory_id": "D",
+                "recency_bonus": 0.05,
+                "score": 1.188,
+                "source": "similarity",
+                "state_boost": 1.0,
+                "synaptic_boost": 0.46
+              },
+              {
+                "base_score": 0.0,
+                "hop_decay": 1.0,
+                "hop_distance": -1,
+                "memory_id": "C",
+                "recency_bonus": 0.0,
+                "score": 0.32999999999999996,
+                "source": "synaptic",
+                "state_boost": 1.0,
+                "synaptic_boost": 1.0999999999999999
+              },
+              {
+                "base_score": 0.0,
+                "hop_decay": 1.0,
+                "hop_distance": -1,
+                "memory_id": "A",
+                "recency_bonus": 0.0,
+                "score": 0.27,
+                "source": "synaptic",
+                "state_boost": 1.5,
+                "synaptic_boost": 0.9
+              }
+            ],
+            "target_active_in_experience": false,
+            "target_direct_score": 0.27,
+            "target_indirect_score_effect_by_memory": {
+              "C": 0.0,
+              "D": 0.0
+            },
+            "target_indirect_score_effect_sum": 0.0
+          },
+          "standardized_propagation": {
+            "activated_ids": [
+              "A",
+              "C",
+              "D"
+            ],
+            "query": "A",
+            "reaches_C": true,
+            "reaches_D": true,
+            "target_suppressed": false
+          },
+          "state": {
+            "incident_cell_links": [
+              [
+                0,
+                2,
+                "RESONANT"
+              ]
+            ],
+            "incident_synaptic_links": {
+              "A": {
+                "B": 0.9,
+                "C": 0.7,
+                "D": 0.1
+              },
+              "B": {
+                "A": 0.9,
+                "C": 1.0999999999999999,
+                "D": 0.30000000000000004
+              },
+              "C": {
+                "A": 0.25999999999999995,
+                "B": 0.28,
+                "D": 1.2000000000000002
+              },
+              "D": {
+                "A": 0.08,
+                "B": 0.18,
+                "C": 0.28
+              }
+            },
+            "last_activation": 1006.0,
+            "recall_count": 1,
+            "state": "REINFORCED",
+            "target_synaptic_links": {
+              "B": 0.9,
+              "C": 0.7,
+              "D": 0.1
+            }
+          },
+          "step": 7
+        },
+        {
+          "non_target_state_digest": "52adc531dccc7bd84836ec9449f1ef5acf2631bfa7f0a1e83a14bebea2924534",
+          "phase": "post_window",
+          "query": "B",
+          "retrieval": {
+            "activated_ids": [
+              "B"
+            ],
+            "ranked_ids": [
+              "B",
+              "D",
+              "C",
+              "A"
+            ],
+            "scores": [
+              {
+                "base_score": 0.9999999899804883,
+                "hop_decay": 1.0,
+                "hop_distance": 0,
+                "memory_id": "B",
+                "recency_bonus": 0.05,
+                "score": 1.8299999899804884,
+                "source": "similarity",
+                "state_boost": 1.0,
+                "synaptic_boost": 2.6
+              },
+              {
+                "base_score": 0.0,
+                "hop_decay": 1.0,
+                "hop_distance": -1,
+                "memory_id": "D",
+                "recency_bonus": 0.0,
+                "score": 0.39000000000000007,
+                "source": "synaptic",
+                "state_boost": 1.0,
+                "synaptic_boost": 1.3000000000000003
+              },
+              {
+                "base_score": 0.0,
+                "hop_decay": 1.0,
+                "hop_distance": -1,
+                "memory_id": "C",
+                "recency_bonus": 0.0,
+                "score": 0.36,
+                "source": "synaptic",
+                "state_boost": 1.0,
+                "synaptic_boost": 1.2
+              },
+              {
+                "base_score": 0.0,
+                "hop_decay": 1.0,
+                "hop_distance": -1,
+                "memory_id": "A",
+                "recency_bonus": 0.0,
+                "score": 0.3,
+                "source": "synaptic",
+                "state_boost": 1.5,
+                "synaptic_boost": 1.0
+              }
+            ],
+            "target_active_in_experience": false,
+            "target_direct_score": 0.3,
+            "target_indirect_score_effect_by_memory": {
+              "B": 0.30000000000000004,
+              "C": 0.0,
+              "D": 0.0
+            },
+            "target_indirect_score_effect_sum": 0.30000000000000004
+          },
+          "standardized_propagation": {
+            "activated_ids": [
+              "A",
+              "C",
+              "D"
+            ],
+            "query": "A",
+            "reaches_C": true,
+            "reaches_D": true,
+            "target_suppressed": false
+          },
+          "state": {
+            "incident_cell_links": [
+              [
+                0,
+                2,
+                "RESONANT"
+              ]
+            ],
+            "incident_synaptic_links": {
+              "A": {
+                "B": 0.9,
+                "C": 0.7,
+                "D": 0.1
+              },
+              "B": {
+                "A": 1.0,
+                "C": 1.2,
+                "D": 0.4
+              },
+              "C": {
+                "A": 0.36,
+                "B": 0.38,
+                "D": 1.3000000000000003
+              },
+              "D": {
+                "A": 0.18,
+                "B": 0.28,
+                "C": 0.38
+              }
+            },
+            "last_activation": 1008.0,
+            "recall_count": 2,
+            "state": "REINFORCED",
+            "target_synaptic_links": {
+              "B": 0.9,
+              "C": 0.7,
+              "D": 0.1
+            }
+          },
+          "step": 8
+        },
+        {
+          "non_target_state_digest": "e8b6b623cf26c59803ddff4b47be5df57e6ea6374d6a4b53fcf92ecd98218056",
+          "phase": "washout",
+          "query": "C",
+          "retrieval": {
+            "activated_ids": [
+              "C",
+              "D"
+            ],
+            "ranked_ids": [
+              "C",
+              "D",
+              "A",
+              "B"
+            ],
+            "scores": [
+              {
+                "base_score": 0.9999999775759996,
+                "hop_decay": 1.0,
+                "hop_distance": 0,
+                "memory_id": "C",
+                "recency_bonus": 0.05,
+                "score": 1.7519999775759996,
+                "source": "similarity",
+                "state_boost": 1.0,
+                "synaptic_boost": 2.3400000000000003
+              },
+              {
+                "base_score": 0.916515138991168,
+                "hop_decay": 0.8607079764250578,
+                "hop_distance": 1,
+                "memory_id": "D",
+                "recency_bonus": 0.05,
+                "score": 1.639109460139603,
+                "source": "similarity",
+                "state_boost": 1.0,
+                "synaptic_boost": 1.1400000000000001
+              },
+              {
+                "base_score": 0.0,
+                "hop_decay": 1.0,
+                "hop_distance": -1,
+                "memory_id": "A",
+                "recency_bonus": 0.0,
+                "score": 0.33,
+                "source": "synaptic",
+                "state_boost": 1.5,
+                "synaptic_boost": 1.1
+              },
+              {
+                "base_score": 0.0,
+                "hop_decay": 1.0,
+                "hop_distance": -1,
+                "memory_id": "B",
+                "recency_bonus": 0.0,
+                "score": 0.3,
+                "source": "synaptic",
+                "state_boost": 1.0,
+                "synaptic_boost": 1.0
+              }
+            ],
+            "target_active_in_experience": false,
+            "target_direct_score": 0.33,
+            "target_indirect_score_effect_by_memory": {
+              "B": 0.3,
+              "C": 0.1379999999999999,
+              "D": 0.08400000000000007
+            },
+            "target_indirect_score_effect_sum": 0.522
+          },
+          "standardized_propagation": {
+            "activated_ids": [
+              "A",
+              "C",
+              "D"
+            ],
+            "query": "A",
+            "reaches_C": true,
+            "reaches_D": true,
+            "target_suppressed": false
+          },
+          "state": {
+            "incident_cell_links": [
+              [
+                0,
+                2,
+                "RESONANT"
+              ]
+            ],
+            "incident_synaptic_links": {
+              "A": {
+                "B": 1.0,
+                "C": 0.7999999999999999,
+                "D": 0.2
+              },
+              "B": {
+                "A": 1.1,
+                "C": 1.3,
+                "D": 0.5
+              },
+              "C": {
+                "A": 0.45999999999999996,
+                "B": 0.48,
+                "D": 1.4000000000000004
+              },
+              "D": {
+                "A": 0.28,
+                "B": 0.38,
+                "C": 0.48
+              }
+            },
+            "last_activation": 1009.0,
+            "recall_count": 3,
+            "state": "REINFORCED",
+            "target_synaptic_links": {
+              "B": 1.0,
+              "C": 0.7999999999999999,
+              "D": 0.2
+            }
+          },
+          "step": 9
+        },
+        {
+          "non_target_state_digest": "dee832aceb592754a6f30bb780aaf86a3306ca06b0a333b79a8de810b9188f95",
+          "phase": "washout",
+          "query": "D",
+          "retrieval": {
+            "activated_ids": [
+              "D"
+            ],
+            "ranked_ids": [
+              "D",
+              "C",
+              "A",
+              "B"
+            ],
+            "scores": [
+              {
+                "base_score": 1.0,
+                "hop_decay": 1.0,
+                "hop_distance": 0,
+                "memory_id": "D",
+                "recency_bonus": 0.05,
+                "score": 1.482,
+                "source": "similarity",
+                "state_boost": 1.0,
+                "synaptic_boost": 1.44
+              },
+              {
+                "base_score": 0.0,
+                "hop_decay": 1.0,
+                "hop_distance": -1,
+                "memory_id": "C",
+                "recency_bonus": 0.0,
+                "score": 0.42000000000000004,
+                "source": "synaptic",
+                "state_boost": 1.0,
+                "synaptic_boost": 1.4000000000000001
+              },
+              {
+                "base_score": 0.0,
+                "hop_decay": 1.0,
+                "hop_distance": -1,
+                "memory_id": "A",
+                "recency_bonus": 0.0,
+                "score": 0.36000000000000004,
+                "source": "synaptic",
+                "state_boost": 1.5,
+                "synaptic_boost": 1.2000000000000002
+              },
+              {
+                "base_score": 0.0,
+                "hop_decay": 1.0,
+                "hop_distance": -1,
+                "memory_id": "B",
+                "recency_bonus": 0.0,
+                "score": 0.33,
+                "source": "synaptic",
+                "state_boost": 1.0,
+                "synaptic_boost": 1.1
+              }
+            ],
+            "target_active_in_experience": false,
+            "target_direct_score": 0.36000000000000004,
+            "target_indirect_score_effect_by_memory": {
+              "B": 0.15600000000000003,
+              "C": 0.0,
+              "D": 0.11399999999999988
+            },
+            "target_indirect_score_effect_sum": 0.2699999999999999
+          },
+          "standardized_propagation": {
+            "activated_ids": [
+              "A",
+              "C",
+              "D"
+            ],
+            "query": "A",
+            "reaches_C": true,
+            "reaches_D": true,
+            "target_suppressed": false
+          },
+          "state": {
+            "incident_cell_links": [
+              [
+                0,
+                2,
+                "RESONANT"
+              ]
+            ],
+            "incident_synaptic_links": {
+              "A": {
+                "B": 1.1,
+                "C": 0.8999999999999999,
+                "D": 0.30000000000000004
+              },
+              "B": {
+                "A": 1.2000000000000002,
+                "C": 1.4000000000000001,
+                "D": 0.6
+              },
+              "C": {
+                "A": 0.5599999999999999,
+                "B": 0.58,
+                "D": 1.5000000000000004
+              },
+              "D": {
+                "A": 0.38,
+                "B": 0.48,
+                "C": 0.58
+              }
+            },
+            "last_activation": 1010.0,
+            "recall_count": 4,
+            "state": "REINFORCED",
+            "target_synaptic_links": {
+              "B": 1.1,
+              "C": 0.8999999999999999,
+              "D": 0.30000000000000004
+            }
+          },
+          "step": 10
+        },
+        {
+          "non_target_state_digest": "fb08caab7c088b5bdc2d74afcd90c736aaf030eca3ccedea79bb811fe1de54d2",
+          "phase": "washout",
+          "query": "A",
+          "retrieval": {
+            "activated_ids": [
+              "A",
+              "C",
+              "D"
+            ],
+            "ranked_ids": [
+              "A",
+              "C",
+              "D",
+              "B"
+            ],
+            "scores": [
+              {
+                "base_score": 1.0,
+                "hop_decay": 1.0,
+                "hop_distance": 0,
+                "memory_id": "A",
+                "recency_bonus": 0.05,
+                "score": 2.33,
+                "source": "similarity",
+                "state_boost": 1.5,
+                "synaptic_boost": 2.6
+              },
+              {
+                "base_score": 0.4000000059604645,
+                "hop_decay": 0.8607079764250578,
+                "hop_distance": 1,
+                "memory_id": "C",
+                "recency_bonus": 0.05,
+                "score": 1.476283198680475,
+                "source": "similarity",
+                "state_boost": 1.0,
+                "synaptic_boost": 2.9400000000000004
+              },
+              {
+                "base_score": 0.0,
+                "hop_decay": 0.7408182206817179,
+                "hop_distance": 2,
+                "memory_id": "D",
+                "recency_bonus": 0.05,
+                "score": 0.572,
+                "source": "similarity",
+                "state_boost": 1.0,
+                "synaptic_boost": 1.7399999999999998
+              },
+              {
+                "base_score": 0.0,
+                "hop_decay": 1.0,
+                "hop_distance": -1,
+                "memory_id": "B",
+                "recency_bonus": 0.0,
+                "score": 0.36000000000000004,
+                "source": "synaptic",
+                "state_boost": 1.0,
+                "synaptic_boost": 1.2000000000000002
+              }
+            ],
+            "target_active_in_experience": true,
+            "target_direct_score": 2.33,
+            "target_indirect_score_effect_by_memory": {
+              "B": -1.3438837242136947,
+              "C": 1.026283198680475,
+              "D": 0.0919999999999998
+            },
+            "target_indirect_score_effect_sum": -0.2256005255332199
+          },
+          "standardized_propagation": {
+            "activated_ids": [
+              "A",
+              "C",
+              "D"
+            ],
+            "query": "A",
+            "reaches_C": true,
+            "reaches_D": true,
+            "target_suppressed": false
+          },
+          "state": {
+            "incident_cell_links": [
+              [
+                0,
+                2,
+                "RESONANT"
+              ]
+            ],
+            "incident_synaptic_links": {
+              "A": {
+                "B": 1.2000000000000002,
+                "C": 0.9999999999999999,
+                "D": 0.4
+              },
+              "B": {
+                "A": 1.3000000000000003,
+                "C": 1.5000000000000002,
+                "D": 0.7
+              },
+              "C": {
+                "A": 0.6599999999999999,
+                "B": 0.6799999999999999,
+                "D": 1.6000000000000005
+              },
+              "D": {
+                "A": 0.48,
+                "B": 0.58,
+                "C": 0.6799999999999999
+              }
+            },
+            "last_activation": 1011.0,
+            "recall_count": 5,
+            "state": "REINFORCED",
+            "target_synaptic_links": {
+              "B": 1.2000000000000002,
+              "C": 0.9999999999999999,
+              "D": 0.4
+            }
+          },
+          "step": 11
+        },
+        {
+          "non_target_state_digest": "aa28477d7090cfae3daf9c7d182292e09a21aaaf1ce701533cfb26d6e4ac0d64",
+          "phase": "washout",
+          "query": "C",
+          "retrieval": {
+            "activated_ids": [
+              "C",
+              "D"
+            ],
+            "ranked_ids": [
+              "C",
+              "D",
+              "A",
+              "B"
+            ],
+            "scores": [
+              {
+                "base_score": 0.9999999775759996,
+                "hop_decay": 1.0,
+                "hop_distance": 0,
+                "memory_id": "C",
+                "recency_bonus": 0.05,
+                "score": 2.0219999775759994,
+                "source": "similarity",
+                "state_boost": 1.0,
+                "synaptic_boost": 3.24
+              },
+              {
+                "base_score": 0.916515138991168,
+                "hop_decay": 0.8607079764250578,
+                "hop_distance": 1,
+                "memory_id": "D",
+                "recency_bonus": 0.05,
+                "score": 1.909109460139603,
+                "source": "similarity",
+                "state_boost": 1.0,
+                "synaptic_boost": 2.04
+              },
+              {
+                "base_score": 0.0,
+                "hop_decay": 1.0,
+                "hop_distance": -1,
+                "memory_id": "A",
+                "recency_bonus": 0.0,
+                "score": 0.4200000000000001,
+                "source": "synaptic",
+                "state_boost": 1.5,
+                "synaptic_boost": 1.4000000000000004
+              },
+              {
+                "base_score": 0.0,
+                "hop_decay": 1.0,
+                "hop_distance": -1,
+                "memory_id": "B",
+                "recency_bonus": 0.0,
+                "score": 0.39000000000000007,
+                "source": "synaptic",
+                "state_boost": 1.0,
+                "synaptic_boost": 1.3000000000000003
+              }
+            ],
+            "target_active_in_experience": false,
+            "target_direct_score": 0.4200000000000001,
+            "target_indirect_score_effect_by_memory": {
+              "B": 0.1560000000000001,
+              "C": 0.22799999999999954,
+              "D": 0.17400000000000015
+            },
+            "target_indirect_score_effect_sum": 0.5579999999999998
+          },
+          "standardized_propagation": {
+            "activated_ids": [
+              "A",
+              "C",
+              "D"
+            ],
+            "query": "A",
+            "reaches_C": true,
+            "reaches_D": true,
+            "target_suppressed": false
+          },
+          "state": {
+            "incident_cell_links": [
+              [
+                0,
+                2,
+                "RESONANT"
+              ]
+            ],
+            "incident_synaptic_links": {
+              "A": {
+                "B": 1.3000000000000003,
+                "C": 1.0999999999999999,
+                "D": 0.5
+              },
+              "B": {
+                "A": 1.4000000000000004,
+                "C": 1.6000000000000003,
+                "D": 0.7999999999999999
+              },
+              "C": {
+                "A": 0.7599999999999999,
+                "B": 0.7799999999999999,
+                "D": 1.7000000000000006
+              },
+              "D": {
+                "A": 0.58,
+                "B": 0.6799999999999999,
+                "C": 0.7799999999999999
+              }
+            },
+            "last_activation": 1012.0,
+            "recall_count": 6,
+            "state": "REINFORCED",
+            "target_synaptic_links": {
+              "B": 1.3000000000000003,
+              "C": 1.0999999999999999,
+              "D": 0.5
+            }
+          },
+          "step": 12
+        },
+        {
+          "non_target_state_digest": "9224702b19d27aa4411e167b7a2fdae3d254444217459ea2b689d5c4e706dbd4",
+          "phase": "washout",
+          "query": "B",
+          "retrieval": {
+            "activated_ids": [
+              "B"
+            ],
+            "ranked_ids": [
+              "B",
+              "D",
+              "C",
+              "A"
+            ],
+            "scores": [
+              {
+                "base_score": 0.9999999899804883,
+                "hop_decay": 1.0,
+                "hop_distance": 0,
+                "memory_id": "B",
+                "recency_bonus": 0.05,
+                "score": 2.279999989980489,
+                "source": "similarity",
+                "state_boost": 1.0,
+                "synaptic_boost": 4.100000000000001
+              },
+              {
+                "base_score": 0.0,
+                "hop_decay": 1.0,
+                "hop_distance": -1,
+                "memory_id": "D",
+                "recency_bonus": 0.0,
+                "score": 0.5400000000000001,
+                "source": "synaptic",
+                "state_boost": 1.0,
+                "synaptic_boost": 1.8000000000000007
+              },
+              {
+                "base_score": 0.0,
+                "hop_decay": 1.0,
+                "hop_distance": -1,
+                "memory_id": "C",
+                "recency_bonus": 0.0,
+                "score": 0.5100000000000001,
+                "source": "synaptic",
+                "state_boost": 1.0,
+                "synaptic_boost": 1.7000000000000004
+              },
+              {
+                "base_score": 0.0,
+                "hop_decay": 1.0,
+                "hop_distance": -1,
+                "memory_id": "A",
+                "recency_bonus": 0.0,
+                "score": 0.4500000000000001,
+                "source": "synaptic",
+                "state_boost": 1.5,
+                "synaptic_boost": 1.5000000000000004
+              }
+            ],
+            "target_active_in_experience": false,
+            "target_direct_score": 0.4500000000000001,
+            "target_indirect_score_effect_by_memory": {
+              "B": 0.4500000000000004,
+              "C": 0.0,
+              "D": 0.0
+            },
+            "target_indirect_score_effect_sum": 0.4500000000000004
+          },
+          "standardized_propagation": {
+            "activated_ids": [
+              "A",
+              "C",
+              "D"
+            ],
+            "query": "A",
+            "reaches_C": true,
+            "reaches_D": true,
+            "target_suppressed": false
+          },
+          "state": {
+            "incident_cell_links": [
+              [
+                0,
+                2,
+                "RESONANT"
+              ]
+            ],
+            "incident_synaptic_links": {
+              "A": {
+                "B": 1.4000000000000004,
+                "C": 1.2,
+                "D": 0.6
+              },
+              "B": {
+                "A": 1.5000000000000004,
+                "C": 1.7000000000000004,
+                "D": 0.8999999999999999
+              },
+              "C": {
+                "A": 0.8599999999999999,
+                "B": 0.8799999999999999,
+                "D": 1.8000000000000007
+              },
+              "D": {
+                "A": 0.6799999999999999,
+                "B": 0.7799999999999999,
+                "C": 0.8799999999999999
+              }
+            },
+            "last_activation": 1013.0,
+            "recall_count": 7,
+            "state": "REINFORCED",
+            "target_synaptic_links": {
+              "B": 1.4000000000000004,
+              "C": 1.2,
+              "D": 0.6
+            }
+          },
+          "step": 13
+        }
+      ],
+      "final_non_target_state": {
+        "B": [
+          "NEUTRAL",
+          1013.0,
+          11,
+          {
+            "A": 1.5000000000000004,
+            "C": 1.7000000000000004,
+            "D": 0.8999999999999999
+          }
+        ],
+        "C": [
+          "NEUTRAL",
+          1013.0,
+          11,
+          {
+            "A": 0.8599999999999999,
+            "B": 0.8799999999999999,
+            "D": 1.8000000000000007
+          }
+        ],
+        "D": [
+          "NEUTRAL",
+          1013.0,
+          11,
+          {
+            "A": 0.6799999999999999,
+            "B": 0.7799999999999999,
+            "C": 0.8799999999999999
+          }
+        ]
+      },
+      "non_target_state_changed_from_seed": true
+    },
+    "no_absence": {
+      "checkpoints": [
+        {
+          "non_target_state_digest": "4be81d4a2a82a3169b9b919d0d0409905c21098362b2ae81755adb68aedfc105",
+          "phase": "post_window",
+          "query": "B",
+          "retrieval": {
+            "activated_ids": [
+              "B"
+            ],
+            "ranked_ids": [
+              "B",
+              "D",
+              "A",
+              "C"
+            ],
+            "scores": [
+              {
+                "base_score": 0.9999999899804883,
+                "hop_decay": 1.0,
+                "hop_distance": 0,
+                "memory_id": "B",
+                "recency_bonus": 0.05,
+                "score": 1.6799999899804883,
+                "source": "similarity",
+                "state_boost": 1.0,
+                "synaptic_boost": 2.0999999999999996
+              },
+              {
+                "base_score": 0.0,
+                "hop_decay": 1.0,
+                "hop_distance": -1,
+                "memory_id": "D",
+                "recency_bonus": 0.0,
+                "score": 0.36000000000000004,
+                "source": "synaptic",
+                "state_boost": 1.0,
+                "synaptic_boost": 1.2000000000000002
+              },
+              {
+                "base_score": 0.0,
+                "hop_decay": 1.0,
+                "hop_distance": -1,
+                "memory_id": "A",
+                "recency_bonus": 0.0,
+                "score": 0.3,
+                "source": "synaptic",
+                "state_boost": 1.5,
+                "synaptic_boost": 1.0
+              },
+              {
+                "base_score": 0.0,
+                "hop_decay": 1.0,
+                "hop_distance": -1,
+                "memory_id": "C",
+                "recency_bonus": 0.0,
+                "score": 0.26999999999999996,
+                "source": "synaptic",
+                "state_boost": 1.0,
+                "synaptic_boost": 0.8999999999999999
+              }
+            ],
+            "target_active_in_experience": false,
+            "target_direct_score": 0.3,
+            "target_indirect_score_effect_by_memory": {
+              "B": 0.30000000000000004,
+              "C": 0.0,
+              "D": 0.0
+            },
+            "target_indirect_score_effect_sum": 0.30000000000000004
+          },
+          "standardized_propagation": {
+            "activated_ids": [
+              "A",
+              "C",
+              "D"
+            ],
+            "query": "A",
+            "reaches_C": true,
+            "reaches_D": true,
+            "target_suppressed": false
+          },
+          "state": {
+            "incident_cell_links": [
+              [
+                0,
+                2,
+                "RESONANT"
+              ]
+            ],
+            "incident_synaptic_links": {
+              "A": {
+                "B": 1.0,
+                "C": 0.7999999999999999,
+                "D": 0.2
+              },
+              "B": {
+                "A": 1.0,
+                "C": 0.8999999999999999,
+                "D": 0.2
+              },
+              "C": {
+                "A": 0.45999999999999996,
+                "B": 0.28,
+                "D": 1.2000000000000002
+              },
+              "D": {
+                "A": 0.18,
+                "B": 0.28,
+                "C": 0.4
+              }
+            },
+            "last_activation": 1005.0,
+            "recall_count": 3,
+            "state": "REINFORCED",
+            "target_synaptic_links": {
+              "B": 1.0,
+              "C": 0.7999999999999999,
+              "D": 0.2
+            }
+          },
+          "step": 5
+        },
+        {
+          "non_target_state_digest": "b74bab93f6c9463f473d660577ce562d5fd0e8bf43d893b073c01252d602a376",
+          "phase": "post_window",
+          "query": "A",
+          "retrieval": {
+            "activated_ids": [
+              "A",
+              "C",
+              "D"
+            ],
+            "ranked_ids": [
+              "A",
+              "C",
+              "D",
+              "B"
+            ],
+            "scores": [
+              {
+                "base_score": 1.0,
+                "hop_decay": 1.0,
+                "hop_distance": 0,
+                "memory_id": "A",
+                "recency_bonus": 0.05,
+                "score": 2.2399999999999998,
+                "source": "similarity",
+                "state_boost": 1.5,
+                "synaptic_boost": 2.3
+              },
+              {
+                "base_score": 0.4000000059604645,
+                "hop_decay": 0.8607079764250578,
+                "hop_distance": 1,
+                "memory_id": "C",
+                "recency_bonus": 0.05,
+                "score": 1.2662831986804748,
+                "source": "similarity",
+                "state_boost": 1.0,
+                "synaptic_boost": 2.24
+              },
+              {
+                "base_score": 0.0,
+                "hop_decay": 0.7408182206817179,
+                "hop_distance": 2,
+                "memory_id": "D",
+                "recency_bonus": 0.05,
+                "score": 0.398,
+                "source": "similarity",
+                "state_boost": 1.0,
+                "synaptic_boost": 1.1600000000000001
+              },
+              {
+                "base_score": 0.0,
+                "hop_decay": 1.0,
+                "hop_distance": -1,
+                "memory_id": "B",
+                "recency_bonus": 0.0,
+                "score": 0.33,
+                "source": "synaptic",
+                "state_boost": 1.0,
+                "synaptic_boost": 1.1
+              }
+            ],
+            "target_active_in_experience": true,
+            "target_direct_score": 2.2399999999999998,
+            "target_indirect_score_effect_by_memory": {
+              "B": -1.1038837242136947,
+              "C": 0.9662831986804749,
+              "D": 0.007999999999999952
+            },
+            "target_indirect_score_effect_sum": -0.12960052553321993
+          },
+          "standardized_propagation": {
+            "activated_ids": [
+              "A",
+              "C",
+              "D"
+            ],
+            "query": "A",
+            "reaches_C": true,
+            "reaches_D": true,
+            "target_suppressed": false
+          },
+          "state": {
+            "incident_cell_links": [
+              [
+                0,
+                2,
+                "RESONANT"
+              ]
+            ],
+            "incident_synaptic_links": {
+              "A": {
+                "B": 1.1,
+                "C": 0.8999999999999999,
+                "D": 0.30000000000000004
+              },
+              "B": {
+                "A": 1.1,
+                "C": 0.9999999999999999,
+                "D": 0.30000000000000004
+              },
+              "C": {
+                "A": 0.5599999999999999,
+                "B": 0.38,
+                "D": 1.3000000000000003
+              },
+              "D": {
+                "A": 0.28,
+                "B": 0.38,
+                "C": 0.5
+              }
+            },
+            "last_activation": 1006.0,
+            "recall_count": 4,
+            "state": "REINFORCED",
+            "target_synaptic_links": {
+              "B": 1.1,
+              "C": 0.8999999999999999,
+              "D": 0.30000000000000004
+            }
+          },
+          "step": 6
+        },
+        {
+          "non_target_state_digest": "7998788302277051d9406e008e89d7a1cd99d5c34722a0cca2f712bb4d7b2129",
+          "phase": "post_window",
+          "query": "D",
+          "retrieval": {
+            "activated_ids": [
+              "D"
+            ],
+            "ranked_ids": [
+              "D",
+              "A",
+              "B",
+              "C"
+            ],
+            "scores": [
+              {
+                "base_score": 1.0,
+                "hop_decay": 1.0,
+                "hop_distance": 0,
+                "memory_id": "D",
+                "recency_bonus": 0.05,
+                "score": 1.488,
+                "source": "similarity",
+                "state_boost": 1.0,
+                "synaptic_boost": 1.46
+              },
+              {
+                "base_score": 0.0,
+                "hop_decay": 1.0,
+                "hop_distance": -1,
+                "memory_id": "A",
+                "recency_bonus": 0.0,
+                "score": 0.36000000000000004,
+                "source": "synaptic",
+                "state_boost": 1.5,
+                "synaptic_boost": 1.2000000000000002
+              },
+              {
+                "base_score": 0.0,
+                "hop_decay": 1.0,
+                "hop_distance": -1,
+                "memory_id": "B",
+                "recency_bonus": 0.0,
+                "score": 0.36000000000000004,
+                "source": "synaptic",
+                "state_boost": 1.0,
+                "synaptic_boost": 1.2000000000000002
+              },
+              {
+                "base_score": 0.0,
+                "hop_decay": 1.0,
+                "hop_distance": -1,
+                "memory_id": "C",
+                "recency_bonus": 0.0,
+                "score": 0.32999999999999996,
+                "source": "synaptic",
+                "state_boost": 1.0,
+                "synaptic_boost": 1.0999999999999999
+              }
+            ],
+            "target_active_in_experience": false,
+            "target_direct_score": 0.36000000000000004,
+            "target_indirect_score_effect_by_memory": {
+              "B": 0.36000000000000004,
+              "C": 0.0,
+              "D": 0.11399999999999988
+            },
+            "target_indirect_score_effect_sum": 0.4739999999999999
+          },
+          "standardized_propagation": {
+            "activated_ids": [
+              "A",
+              "C",
+              "D"
+            ],
+            "query": "A",
+            "reaches_C": true,
+            "reaches_D": true,
+            "target_suppressed": false
+          },
+          "state": {
+            "incident_cell_links": [
+              [
+                0,
+                2,
+                "RESONANT"
+              ]
+            ],
+            "incident_synaptic_links": {
+              "A": {
+                "B": 1.2000000000000002,
+                "C": 0.9999999999999999,
+                "D": 0.4
+              },
+              "B": {
+                "A": 1.2000000000000002,
+                "C": 1.0999999999999999,
+                "D": 0.4
+              },
+              "C": {
+                "A": 0.6599999999999999,
+                "B": 0.48,
+                "D": 1.4000000000000004
+              },
+              "D": {
+                "A": 0.38,
+                "B": 0.48,
+                "C": 0.6
+              }
+            },
+            "last_activation": 1007.0,
+            "recall_count": 5,
+            "state": "REINFORCED",
+            "target_synaptic_links": {
+              "B": 1.2000000000000002,
+              "C": 0.9999999999999999,
+              "D": 0.4
+            }
+          },
+          "step": 7
+        },
+        {
+          "non_target_state_digest": "6ba412065138b3d7f9210a344695160fb7ef125d2a69ecd5f408e95d00a56cfb",
+          "phase": "post_window",
+          "query": "B",
+          "retrieval": {
+            "activated_ids": [
+              "B"
+            ],
+            "ranked_ids": [
+              "B",
+              "D",
+              "A",
+              "C"
+            ],
+            "scores": [
+              {
+                "base_score": 0.9999999899804883,
+                "hop_decay": 1.0,
+                "hop_distance": 0,
+                "memory_id": "B",
+                "recency_bonus": 0.05,
+                "score": 1.9499999899804883,
+                "source": "similarity",
+                "state_boost": 1.0,
+                "synaptic_boost": 3.0
+              },
+              {
+                "base_score": 0.0,
+                "hop_decay": 1.0,
+                "hop_distance": -1,
+                "memory_id": "D",
+                "recency_bonus": 0.0,
+                "score": 0.4500000000000001,
+                "source": "synaptic",
+                "state_boost": 1.0,
+                "synaptic_boost": 1.5000000000000004
+              },
+              {
+                "base_score": 0.0,
+                "hop_decay": 1.0,
+                "hop_distance": -1,
+                "memory_id": "A",
+                "recency_bonus": 0.0,
+                "score": 0.39000000000000007,
+                "source": "synaptic",
+                "state_boost": 1.5,
+                "synaptic_boost": 1.3000000000000003
+              },
+              {
+                "base_score": 0.0,
+                "hop_decay": 1.0,
+                "hop_distance": -1,
+                "memory_id": "C",
+                "recency_bonus": 0.0,
+                "score": 0.36,
+                "source": "synaptic",
+                "state_boost": 1.0,
+                "synaptic_boost": 1.2
+              }
+            ],
+            "target_active_in_experience": false,
+            "target_direct_score": 0.39000000000000007,
+            "target_indirect_score_effect_by_memory": {
+              "B": 0.3899999999999999,
+              "C": 0.0,
+              "D": 0.0
+            },
+            "target_indirect_score_effect_sum": 0.3899999999999999
+          },
+          "standardized_propagation": {
+            "activated_ids": [
+              "A",
+              "C",
+              "D"
+            ],
+            "query": "A",
+            "reaches_C": true,
+            "reaches_D": true,
+            "target_suppressed": false
+          },
+          "state": {
+            "incident_cell_links": [
+              [
+                0,
+                2,
+                "RESONANT"
+              ]
+            ],
+            "incident_synaptic_links": {
+              "A": {
+                "B": 1.3000000000000003,
+                "C": 1.0999999999999999,
+                "D": 0.5
+              },
+              "B": {
+                "A": 1.3000000000000003,
+                "C": 1.2,
+                "D": 0.5
+              },
+              "C": {
+                "A": 0.7599999999999999,
+                "B": 0.58,
+                "D": 1.5000000000000004
+              },
+              "D": {
+                "A": 0.48,
+                "B": 0.58,
+                "C": 0.7
+              }
+            },
+            "last_activation": 1008.0,
+            "recall_count": 6,
+            "state": "REINFORCED",
+            "target_synaptic_links": {
+              "B": 1.3000000000000003,
+              "C": 1.0999999999999999,
+              "D": 0.5
+            }
+          },
+          "step": 8
+        },
+        {
+          "non_target_state_digest": "8da666c9bda4a5e3549bc4aab9515564ddbeddd0745711b4fb81c26ccb4a031c",
+          "phase": "washout",
+          "query": "C",
+          "retrieval": {
+            "activated_ids": [
+              "C",
+              "D"
+            ],
+            "ranked_ids": [
+              "C",
+              "D",
+              "A",
+              "B"
+            ],
+            "scores": [
+              {
+                "base_score": 0.9999999775759996,
+                "hop_decay": 1.0,
+                "hop_distance": 0,
+                "memory_id": "C",
+                "recency_bonus": 0.05,
+                "score": 1.9919999775759998,
+                "source": "similarity",
+                "state_boost": 1.0,
+                "synaptic_boost": 3.1400000000000006
+              },
+              {
+                "base_score": 0.916515138991168,
+                "hop_decay": 0.8607079764250578,
+                "hop_distance": 1,
+                "memory_id": "D",
+                "recency_bonus": 0.05,
+                "score": 1.9151094601396028,
+                "source": "similarity",
+                "state_boost": 1.0,
+                "synaptic_boost": 2.0599999999999996
+              },
+              {
+                "base_score": 0.0,
+                "hop_decay": 1.0,
+                "hop_distance": -1,
+                "memory_id": "A",
+                "recency_bonus": 0.0,
+                "score": 0.4200000000000001,
+                "source": "synaptic",
+                "state_boost": 1.5,
+                "synaptic_boost": 1.4000000000000004
+              },
+              {
+                "base_score": 0.0,
+                "hop_decay": 1.0,
+                "hop_distance": -1,
+                "memory_id": "B",
+                "recency_bonus": 0.0,
+                "score": 0.4200000000000001,
+                "source": "synaptic",
+                "state_boost": 1.0,
+                "synaptic_boost": 1.4000000000000004
+              }
+            ],
+            "target_active_in_experience": false,
+            "target_direct_score": 0.4200000000000001,
+            "target_indirect_score_effect_by_memory": {
+              "B": 0.2160000000000001,
+              "C": 0.258,
+              "D": 0.17399999999999993
+            },
+            "target_indirect_score_effect_sum": 0.648
+          },
+          "standardized_propagation": {
+            "activated_ids": [
+              "A",
+              "C",
+              "D"
+            ],
+            "query": "A",
+            "reaches_C": true,
+            "reaches_D": true,
+            "target_suppressed": false
+          },
+          "state": {
+            "incident_cell_links": [
+              [
+                0,
+                2,
+                "RESONANT"
+              ]
+            ],
+            "incident_synaptic_links": {
+              "A": {
+                "B": 1.4000000000000004,
+                "C": 1.2,
+                "D": 0.6
+              },
+              "B": {
+                "A": 1.4000000000000004,
+                "C": 1.3,
+                "D": 0.6
+              },
+              "C": {
+                "A": 0.8599999999999999,
+                "B": 0.6799999999999999,
+                "D": 1.6000000000000005
+              },
+              "D": {
+                "A": 0.58,
+                "B": 0.6799999999999999,
+                "C": 0.7999999999999999
+              }
+            },
+            "last_activation": 1009.0,
+            "recall_count": 7,
+            "state": "REINFORCED",
+            "target_synaptic_links": {
+              "B": 1.4000000000000004,
+              "C": 1.2,
+              "D": 0.6
+            }
+          },
+          "step": 9
+        },
+        {
+          "non_target_state_digest": "27f432ae23083aa347f41bb0edfe386eb58d81dd28830b3216893f4a20767964",
+          "phase": "washout",
+          "query": "D",
+          "retrieval": {
+            "activated_ids": [
+              "D"
+            ],
+            "ranked_ids": [
+              "D",
+              "A",
+              "B",
+              "C"
+            ],
+            "scores": [
+              {
+                "base_score": 1.0,
+                "hop_decay": 1.0,
+                "hop_distance": 0,
+                "memory_id": "D",
+                "recency_bonus": 0.05,
+                "score": 1.758,
+                "source": "similarity",
+                "state_boost": 1.0,
+                "synaptic_boost": 2.36
+              },
+              {
+                "base_score": 0.0,
+                "hop_decay": 1.0,
+                "hop_distance": -1,
+                "memory_id": "A",
+                "recency_bonus": 0.0,
+                "score": 0.4500000000000001,
+                "source": "synaptic",
+                "state_boost": 1.5,
+                "synaptic_boost": 1.5000000000000004
+              },
+              {
+                "base_score": 0.0,
+                "hop_decay": 1.0,
+                "hop_distance": -1,
+                "memory_id": "B",
+                "recency_bonus": 0.0,
+                "score": 0.4500000000000001,
+                "source": "synaptic",
+                "state_boost": 1.0,
+                "synaptic_boost": 1.5000000000000004
+              },
+              {
+                "base_score": 0.0,
+                "hop_decay": 1.0,
+                "hop_distance": -1,
+                "memory_id": "C",
+                "recency_bonus": 0.0,
+                "score": 0.42000000000000004,
+                "source": "synaptic",
+                "state_boost": 1.0,
+                "synaptic_boost": 1.4000000000000001
+              }
+            ],
+            "target_active_in_experience": false,
+            "target_direct_score": 0.4500000000000001,
+            "target_indirect_score_effect_by_memory": {
+              "B": 0.21600000000000016,
+              "C": 0.0,
+              "D": 0.20399999999999996
+            },
+            "target_indirect_score_effect_sum": 0.42000000000000015
+          },
+          "standardized_propagation": {
+            "activated_ids": [
+              "A",
+              "C",
+              "D"
+            ],
+            "query": "A",
+            "reaches_C": true,
+            "reaches_D": true,
+            "target_suppressed": false
+          },
+          "state": {
+            "incident_cell_links": [
+              [
+                0,
+                2,
+                "RESONANT"
+              ]
+            ],
+            "incident_synaptic_links": {
+              "A": {
+                "B": 1.5000000000000004,
+                "C": 1.3,
+                "D": 0.7
+              },
+              "B": {
+                "A": 1.5000000000000004,
+                "C": 1.4000000000000001,
+                "D": 0.7
+              },
+              "C": {
+                "A": 0.9599999999999999,
+                "B": 0.7799999999999999,
+                "D": 1.7000000000000006
+              },
+              "D": {
+                "A": 0.6799999999999999,
+                "B": 0.7799999999999999,
+                "C": 0.8999999999999999
+              }
+            },
+            "last_activation": 1010.0,
+            "recall_count": 8,
+            "state": "REINFORCED",
+            "target_synaptic_links": {
+              "B": 1.5000000000000004,
+              "C": 1.3,
+              "D": 0.7
+            }
+          },
+          "step": 10
+        },
+        {
+          "non_target_state_digest": "fa94f1b07a8725af1d35906615b3bc57af62c0812057d8b5edaf6523acaff0a3",
+          "phase": "washout",
+          "query": "A",
+          "retrieval": {
+            "activated_ids": [
+              "A",
+              "C",
+              "D"
+            ],
+            "ranked_ids": [
+              "A",
+              "C",
+              "D",
+              "B"
+            ],
+            "scores": [
+              {
+                "base_score": 1.0,
+                "hop_decay": 1.0,
+                "hop_distance": 0,
+                "memory_id": "A",
+                "recency_bonus": 0.05,
+                "score": 2.69,
+                "source": "similarity",
+                "state_boost": 1.5,
+                "synaptic_boost": 3.8000000000000007
+              },
+              {
+                "base_score": 0.4000000059604645,
+                "hop_decay": 0.8607079764250578,
+                "hop_distance": 1,
+                "memory_id": "C",
+                "recency_bonus": 0.05,
+                "score": 1.7162831986804747,
+                "source": "similarity",
+                "state_boost": 1.0,
+                "synaptic_boost": 3.74
+              },
+              {
+                "base_score": 0.0,
+                "hop_decay": 0.7408182206817179,
+                "hop_distance": 2,
+                "memory_id": "D",
+                "recency_bonus": 0.05,
+                "score": 0.848,
+                "source": "similarity",
+                "state_boost": 1.0,
+                "synaptic_boost": 2.6599999999999997
+              },
+              {
+                "base_score": 0.0,
+                "hop_decay": 1.0,
+                "hop_distance": -1,
+                "memory_id": "B",
+                "recency_bonus": 0.0,
+                "score": 0.48000000000000015,
+                "source": "synaptic",
+                "state_boost": 1.0,
+                "synaptic_boost": 1.6000000000000005
+              }
+            ],
+            "target_active_in_experience": true,
+            "target_direct_score": 2.69,
+            "target_indirect_score_effect_by_memory": {
+              "B": -1.2538837242136947,
+              "C": 1.2662831986804748,
+              "D": 0.30799999999999983
+            },
+            "target_indirect_score_effect_sum": 0.32039947446677997
+          },
+          "standardized_propagation": {
+            "activated_ids": [
+              "A",
+              "C",
+              "D"
+            ],
+            "query": "A",
+            "reaches_C": true,
+            "reaches_D": true,
+            "target_suppressed": false
+          },
+          "state": {
+            "incident_cell_links": [
+              [
+                0,
+                2,
+                "RESONANT"
+              ]
+            ],
+            "incident_synaptic_links": {
+              "A": {
+                "B": 1.6000000000000005,
+                "C": 1.4000000000000001,
+                "D": 0.7999999999999999
+              },
+              "B": {
+                "A": 1.6000000000000005,
+                "C": 1.5000000000000002,
+                "D": 0.7999999999999999
+              },
+              "C": {
+                "A": 1.0599999999999998,
+                "B": 0.8799999999999999,
+                "D": 1.8000000000000007
+              },
+              "D": {
+                "A": 0.7799999999999999,
+                "B": 0.8799999999999999,
+                "C": 0.9999999999999999
+              }
+            },
+            "last_activation": 1011.0,
+            "recall_count": 9,
+            "state": "REINFORCED",
+            "target_synaptic_links": {
+              "B": 1.6000000000000005,
+              "C": 1.4000000000000001,
+              "D": 0.7999999999999999
+            }
+          },
+          "step": 11
+        },
+        {
+          "non_target_state_digest": "d8afd9d5c79f8dc740e3b8c00b0464977c7744bf852c7a1bb6c73a9d21b00c4d",
+          "phase": "washout",
+          "query": "C",
+          "retrieval": {
+            "activated_ids": [
+              "C",
+              "D"
+            ],
+            "ranked_ids": [
+              "C",
+              "D",
+              "A",
+              "B"
+            ],
+            "scores": [
+              {
+                "base_score": 0.9999999775759996,
+                "hop_decay": 1.0,
+                "hop_distance": 0,
+                "memory_id": "C",
+                "recency_bonus": 0.05,
+                "score": 2.261999977575999,
+                "source": "similarity",
+                "state_boost": 1.0,
+                "synaptic_boost": 4.04
+              },
+              {
+                "base_score": 0.916515138991168,
+                "hop_decay": 0.8607079764250578,
+                "hop_distance": 1,
+                "memory_id": "D",
+                "recency_bonus": 0.05,
+                "score": 2.1851094601396026,
+                "source": "similarity",
+                "state_boost": 1.0,
+                "synaptic_boost": 2.9599999999999995
+              },
+              {
+                "base_score": 0.0,
+                "hop_decay": 1.0,
+                "hop_distance": -1,
+                "memory_id": "A",
+                "recency_bonus": 0.0,
+                "score": 0.5100000000000001,
+                "source": "synaptic",
+                "state_boost": 1.5,
+                "synaptic_boost": 1.7000000000000006
+              },
+              {
+                "base_score": 0.0,
+                "hop_decay": 1.0,
+                "hop_distance": -1,
+                "memory_id": "B",
+                "recency_bonus": 0.0,
+                "score": 0.5100000000000001,
+                "source": "synaptic",
+                "state_boost": 1.0,
+                "synaptic_boost": 1.7000000000000006
+              }
+            ],
+            "target_active_in_experience": false,
+            "target_direct_score": 0.5100000000000001,
+            "target_indirect_score_effect_by_memory": {
+              "B": 0.2160000000000002,
+              "C": 0.3479999999999992,
+              "D": 0.2639999999999998
+            },
+            "target_indirect_score_effect_sum": 0.8279999999999992
+          },
+          "standardized_propagation": {
+            "activated_ids": [
+              "A",
+              "C",
+              "D"
+            ],
+            "query": "A",
+            "reaches_C": true,
+            "reaches_D": true,
+            "target_suppressed": false
+          },
+          "state": {
+            "incident_cell_links": [
+              [
+                0,
+                2,
+                "RESONANT"
+              ]
+            ],
+            "incident_synaptic_links": {
+              "A": {
+                "B": 1.7000000000000006,
+                "C": 1.5000000000000002,
+                "D": 0.8999999999999999
+              },
+              "B": {
+                "A": 1.7000000000000006,
+                "C": 1.6000000000000003,
+                "D": 0.8999999999999999
+              },
+              "C": {
+                "A": 1.16,
+                "B": 0.9799999999999999,
+                "D": 1.9000000000000008
+              },
+              "D": {
+                "A": 0.8799999999999999,
+                "B": 0.9799999999999999,
+                "C": 1.0999999999999999
+              }
+            },
+            "last_activation": 1012.0,
+            "recall_count": 10,
+            "state": "REINFORCED",
+            "target_synaptic_links": {
+              "B": 1.7000000000000006,
+              "C": 1.5000000000000002,
+              "D": 0.8999999999999999
+            }
+          },
+          "step": 12
+        },
+        {
+          "non_target_state_digest": "2bd4c8a922375752c23ec0fed26ee9feb33427651919e009c5110f3299ca1a0d",
+          "phase": "washout",
+          "query": "B",
+          "retrieval": {
+            "activated_ids": [
+              "B"
+            ],
+            "ranked_ids": [
+              "B",
+              "D",
+              "A",
+              "C"
+            ],
+            "scores": [
+              {
+                "base_score": 0.9999999899804883,
+                "hop_decay": 1.0,
+                "hop_distance": 0,
+                "memory_id": "B",
+                "recency_bonus": 0.05,
+                "score": 2.3999999899804885,
+                "source": "similarity",
+                "state_boost": 1.0,
+                "synaptic_boost": 4.500000000000001
+              },
+              {
+                "base_score": 0.0,
+                "hop_decay": 1.0,
+                "hop_distance": -1,
+                "memory_id": "D",
+                "recency_bonus": 0.0,
+                "score": 0.6,
+                "source": "synaptic",
+                "state_boost": 1.0,
+                "synaptic_boost": 2.0
+              },
+              {
+                "base_score": 0.0,
+                "hop_decay": 1.0,
+                "hop_distance": -1,
+                "memory_id": "A",
+                "recency_bonus": 0.0,
+                "score": 0.5400000000000001,
+                "source": "synaptic",
+                "state_boost": 1.5,
+                "synaptic_boost": 1.8000000000000007
+              },
+              {
+                "base_score": 0.0,
+                "hop_decay": 1.0,
+                "hop_distance": -1,
+                "memory_id": "C",
+                "recency_bonus": 0.0,
+                "score": 0.5100000000000001,
+                "source": "synaptic",
+                "state_boost": 1.0,
+                "synaptic_boost": 1.7000000000000004
+              }
+            ],
+            "target_active_in_experience": false,
+            "target_direct_score": 0.5400000000000001,
+            "target_indirect_score_effect_by_memory": {
+              "B": 0.54,
+              "C": 0.0,
+              "D": 0.0
+            },
+            "target_indirect_score_effect_sum": 0.54
+          },
+          "standardized_propagation": {
+            "activated_ids": [
+              "A",
+              "C",
+              "D"
+            ],
+            "query": "A",
+            "reaches_C": true,
+            "reaches_D": true,
+            "target_suppressed": false
+          },
+          "state": {
+            "incident_cell_links": [
+              [
+                0,
+                2,
+                "RESONANT"
+              ]
+            ],
+            "incident_synaptic_links": {
+              "A": {
+                "B": 1.8000000000000007,
+                "C": 1.6000000000000003,
+                "D": 0.9999999999999999
+              },
+              "B": {
+                "A": 1.8000000000000007,
+                "C": 1.7000000000000004,
+                "D": 0.9999999999999999
+              },
+              "C": {
+                "A": 1.26,
+                "B": 1.0799999999999998,
+                "D": 2.0
+              },
+              "D": {
+                "A": 0.9799999999999999,
+                "B": 1.0799999999999998,
+                "C": 1.2
+              }
+            },
+            "last_activation": 1013.0,
+            "recall_count": 11,
+            "state": "REINFORCED",
+            "target_synaptic_links": {
+              "B": 1.8000000000000007,
+              "C": 1.6000000000000003,
+              "D": 0.9999999999999999
+            }
+          },
+          "step": 13
+        }
+      ],
+      "final_non_target_state": {
+        "B": [
+          "NEUTRAL",
+          1013.0,
+          11,
+          {
+            "A": 1.8000000000000007,
+            "C": 1.7000000000000004,
+            "D": 0.9999999999999999
+          }
+        ],
+        "C": [
+          "NEUTRAL",
+          1013.0,
+          13,
+          {
+            "A": 1.26,
+            "B": 1.0799999999999998,
+            "D": 2.0
+          }
+        ],
+        "D": [
+          "NEUTRAL",
+          1013.0,
+          13,
+          {
+            "A": 0.9799999999999999,
+            "B": 1.0799999999999998,
+            "C": 1.2
+          }
+        ]
+      },
+      "non_target_state_changed_from_seed": true
+    },
+    "reexposure": {
+      "checkpoints": [
+        {
+          "non_target_state_digest": "77e7a519d4f1774e25822a7bd580adf299520102a3513fbab25b7ec7a038bda1",
+          "phase": "post_window",
+          "query": "B",
+          "retrieval": {
+            "activated_ids": [
+              "B"
+            ],
+            "ranked_ids": [
+              "B",
+              "C"
+            ],
+            "scores": [
+              {
+                "base_score": 0.9999999899804883,
+                "hop_decay": 1.0,
+                "hop_distance": 0,
+                "memory_id": "B",
+                "recency_bonus": 0.05,
+                "score": 1.1099999899804884,
+                "source": "similarity",
+                "state_boost": 1.0,
+                "synaptic_boost": 0.2
+              },
+              {
+                "base_score": 0.0,
+                "hop_decay": 1.0,
+                "hop_distance": -1,
+                "memory_id": "C",
+                "recency_bonus": 0.0,
+                "score": 0.29999999999999993,
+                "source": "synaptic",
+                "state_boost": 1.0,
+                "synaptic_boost": 0.9999999999999999
+              }
+            ],
+            "target_active_in_experience": false,
+            "target_direct_score": 0.0,
+            "target_indirect_score_effect_by_memory": {
+              "B": 0.0,
+              "C": 0.0
+            },
+            "target_indirect_score_effect_sum": 0.0
+          },
+          "standardized_propagation": {
+            "activated_ids": [
+              "A"
+            ],
+            "query": "A",
+            "reaches_C": false,
+            "reaches_D": false,
+            "target_suppressed": false
+          },
+          "state": {
+            "incident_cell_links": [],
+            "incident_synaptic_links": {
+              "A": {}
+            },
+            "last_activation": 0.0,
+            "recall_count": 0,
+            "state": "NEUTRAL",
+            "target_synaptic_links": {}
+          },
+          "step": 5
+        },
+        {
+          "non_target_state_digest": "b9b45e048ee481bd3a03a6e770eae5daec93fbdcc2d583f94d8aa6000a698215",
+          "phase": "post_window",
+          "query": "A",
+          "retrieval": {
+            "activated_ids": [
+              "A"
+            ],
+            "ranked_ids": [
+              "A",
+              "D"
+            ],
+            "scores": [
+              {
+                "base_score": 1.0,
+                "hop_decay": 1.0,
+                "hop_distance": 0,
+                "memory_id": "A",
+                "recency_bonus": 0.05,
+                "score": 1.05,
+                "source": "similarity",
+                "state_boost": 1.0,
+                "synaptic_boost": 0.0
+              },
+              {
+                "base_score": 0.0,
+                "hop_decay": 1.0,
+                "hop_distance": -1,
+                "memory_id": "D",
+                "recency_bonus": 0.0,
+                "score": 0.33,
+                "source": "synaptic",
+                "state_boost": 1.0,
+                "synaptic_boost": 1.1
+              }
+            ],
+            "target_active_in_experience": true,
+            "target_direct_score": 1.05,
+            "target_indirect_score_effect_by_memory": {
+              "B": -1.373883323088463,
+              "D": 0.0
+            },
+            "target_indirect_score_effect_sum": -1.373883323088463
+          },
+          "standardized_propagation": {
+            "activated_ids": [
+              "A"
+            ],
+            "query": "A",
+            "reaches_C": false,
+            "reaches_D": false,
+            "target_suppressed": false
+          },
+          "state": {
+            "incident_cell_links": [],
+            "incident_synaptic_links": {
+              "A": {},
+              "B": {
+                "A": 0.1,
+                "C": 1.0999999999999999,
+                "D": 0.18000000000000002
+              },
+              "D": {
+                "A": 0.1,
+                "B": 0.08,
+                "C": 0.18
+              }
+            },
+            "last_activation": 1006.0,
+            "recall_count": 1,
+            "state": "NEUTRAL",
+            "target_synaptic_links": {}
+          },
+          "step": 6
+        },
+        {
+          "non_target_state_digest": "f188663e4e53fa500918e18a93de4aa1fb53a308705d644581ba400a7386199d",
+          "phase": "post_window",
+          "query": "D",
+          "retrieval": {
+            "activated_ids": [
+              "D"
+            ],
+            "ranked_ids": [
+              "D"
+            ],
+            "scores": [
+              {
+                "base_score": 1.0,
+                "hop_decay": 1.0,
+                "hop_distance": 0,
+                "memory_id": "D",
+                "recency_bonus": 0.05,
+                "score": 1.05,
+                "source": "similarity",
+                "state_boost": 1.0,
+                "synaptic_boost": 0.0
+              }
+            ],
+            "target_active_in_experience": false,
+            "target_direct_score": 0.0,
+            "target_indirect_score_effect_by_memory": {
+              "D": 0.0
+            },
+            "target_indirect_score_effect_sum": 0.0
+          },
+          "standardized_propagation": {
+            "activated_ids": [
+              "A"
+            ],
+            "query": "A",
+            "reaches_C": false,
+            "reaches_D": false,
+            "target_suppressed": false
+          },
+          "state": {
+            "incident_cell_links": [],
+            "incident_synaptic_links": {
+              "A": {
+                "D": 0.1
+              },
+              "B": {
+                "A": 0.1,
+                "C": 1.0999999999999999,
+                "D": 0.18000000000000002
+              },
+              "D": {
+                "A": 0.1,
+                "B": 0.08,
+                "C": 0.18
+              }
+            },
+            "last_activation": 1006.0,
+            "recall_count": 1,
+            "state": "NEUTRAL",
+            "target_synaptic_links": {
+              "D": 0.1
+            }
+          },
+          "step": 7
+        },
+        {
+          "non_target_state_digest": "5319d5c26cb33fa588346573f2ceb4d8ff51316eece9e221668fe7cc6424531b",
+          "phase": "post_window",
+          "query": "B",
+          "retrieval": {
+            "activated_ids": [
+              "B"
+            ],
+            "ranked_ids": [
+              "B",
+              "C"
+            ],
+            "scores": [
+              {
+                "base_score": 0.9999999899804883,
+                "hop_decay": 1.0,
+                "hop_distance": 0,
+                "memory_id": "B",
+                "recency_bonus": 0.05,
+                "score": 1.0499999899804884,
+                "source": "similarity",
+                "state_boost": 1.0,
+                "synaptic_boost": 0.0
+              },
+              {
+                "base_score": 0.0,
+                "hop_decay": 1.0,
+                "hop_distance": -1,
+                "memory_id": "C",
+                "recency_bonus": 0.0,
+                "score": 0.32999999999999996,
+                "source": "synaptic",
+                "state_boost": 1.0,
+                "synaptic_boost": 1.0999999999999999
+              }
+            ],
+            "target_active_in_experience": false,
+            "target_direct_score": 0.0,
+            "target_indirect_score_effect_by_memory": {
+              "B": 0.0,
+              "C": 0.0
+            },
+            "target_indirect_score_effect_sum": 0.0
+          },
+          "standardized_propagation": {
+            "activated_ids": [
+              "A"
+            ],
+            "query": "A",
+            "reaches_C": false,
+            "reaches_D": false,
+            "target_suppressed": false
+          },
+          "state": {
+            "incident_cell_links": [],
+            "incident_synaptic_links": {
+              "A": {
+                "D": 0.1
+              },
+              "B": {
+                "A": 0.1,
+                "C": 1.0999999999999999,
+                "D": 0.18000000000000002
+              },
+              "D": {
+                "A": 0.08,
+                "B": 0.18,
+                "C": 0.16
+              }
+            },
+            "last_activation": 1006.0,
+            "recall_count": 1,
+            "state": "NEUTRAL",
+            "target_synaptic_links": {
+              "D": 0.1
+            }
+          },
+          "step": 8
+        },
+        {
+          "non_target_state_digest": "03ac851736b1df684c2cd3cf26860f092d674413db514976a6de71a4cf53bd2c",
+          "phase": "washout",
+          "query": "C",
+          "retrieval": {
+            "activated_ids": [
+              "C",
+              "D"
+            ],
+            "ranked_ids": [
+              "C",
+              "D"
+            ],
+            "scores": [
+              {
+                "base_score": 0.9999999775759996,
+                "hop_decay": 1.0,
+                "hop_distance": 0,
+                "memory_id": "C",
+                "recency_bonus": 0.05,
+                "score": 1.4099999775759997,
+                "source": "similarity",
+                "state_boost": 1.0,
+                "synaptic_boost": 1.2000000000000002
+              },
+              {
+                "base_score": 0.916515138991168,
+                "hop_decay": 0.8607079764250578,
+                "hop_distance": 1,
+                "memory_id": "D",
+                "recency_bonus": 0.05,
+                "score": 1.345109460139603,
+                "source": "similarity",
+                "state_boost": 1.0,
+                "synaptic_boost": 0.16
+              }
+            ],
+            "target_active_in_experience": false,
+            "target_direct_score": 0.0,
+            "target_indirect_score_effect_by_memory": {
+              "C": 0.0,
+              "D": 0.0
+            },
+            "target_indirect_score_effect_sum": 0.0
+          },
+          "standardized_propagation": {
+            "activated_ids": [
+              "A"
+            ],
+            "query": "A",
+            "reaches_C": false,
+            "reaches_D": false,
+            "target_suppressed": false
+          },
+          "state": {
+            "incident_cell_links": [],
+            "incident_synaptic_links": {
+              "A": {
+                "D": 0.1
+              },
+              "B": {
+                "A": 0.08,
+                "C": 1.2,
+                "D": 0.28
+              },
+              "D": {
+                "A": 0.08,
+                "B": 0.18,
+                "C": 0.16
+              }
+            },
+            "last_activation": 1006.0,
+            "recall_count": 1,
+            "state": "NEUTRAL",
+            "target_synaptic_links": {
+              "D": 0.1
+            }
+          },
+          "step": 9
+        },
+        {
+          "non_target_state_digest": "fbd442e874920b72dc78fd7b45957d9fdaffb91793c1abbd6f452f0a0c4547dd",
+          "phase": "washout",
+          "query": "D",
+          "retrieval": {
+            "activated_ids": [
+              "D"
+            ],
+            "ranked_ids": [
+              "D"
+            ],
+            "scores": [
+              {
+                "base_score": 1.0,
+                "hop_decay": 1.0,
+                "hop_distance": 0,
+                "memory_id": "D",
+                "recency_bonus": 0.05,
+                "score": 1.05,
+                "source": "similarity",
+                "state_boost": 1.0,
+                "synaptic_boost": 0.0
+              }
+            ],
+            "target_active_in_experience": false,
+            "target_direct_score": 0.0,
+            "target_indirect_score_effect_by_memory": {
+              "D": 0.0
+            },
+            "target_indirect_score_effect_sum": 0.0
+          },
+          "standardized_propagation": {
+            "activated_ids": [
+              "A"
+            ],
+            "query": "A",
+            "reaches_C": false,
+            "reaches_D": false,
+            "target_suppressed": false
+          },
+          "state": {
+            "incident_cell_links": [],
+            "incident_synaptic_links": {
+              "A": {
+                "D": 0.1
+              },
+              "B": {
+                "A": 0.08,
+                "C": 1.2,
+                "D": 0.28
+              },
+              "D": {
+                "A": 0.06,
+                "B": 0.16,
+                "C": 0.14
+              }
+            },
+            "last_activation": 1006.0,
+            "recall_count": 1,
+            "state": "NEUTRAL",
+            "target_synaptic_links": {
+              "D": 0.1
+            }
+          },
+          "step": 10
+        },
+        {
+          "non_target_state_digest": "94121c82a12f2c51e8ab2e26f86c8a7dcd70959f58b213e7939d9db416de1224",
+          "phase": "washout",
+          "query": "A",
+          "retrieval": {
+            "activated_ids": [
+              "A"
+            ],
+            "ranked_ids": [
+              "A"
+            ],
+            "scores": [
+              {
+                "base_score": 1.0,
+                "hop_decay": 1.0,
+                "hop_distance": 0,
+                "memory_id": "A",
+                "recency_bonus": 0.05,
+                "score": 1.05,
+                "source": "similarity",
+                "state_boost": 1.0,
+                "synaptic_boost": 0.0
+              }
+            ],
+            "target_active_in_experience": true,
+            "target_direct_score": 1.05,
+            "target_indirect_score_effect_by_memory": {
+              "B": -1.043882520847654
+            },
+            "target_indirect_score_effect_sum": -1.043882520847654
+          },
+          "standardized_propagation": {
+            "activated_ids": [
+              "A"
+            ],
+            "query": "A",
+            "reaches_C": false,
+            "reaches_D": false,
+            "target_suppressed": false
+          },
+          "state": {
+            "incident_cell_links": [],
+            "incident_synaptic_links": {
+              "A": {
+                "D": 0.1
+              },
+              "B": {
+                "A": 0.08,
+                "C": 1.2,
+                "D": 0.28
+              },
+              "D": {
+                "A": 0.16,
+                "B": 0.14,
+                "C": 0.12000000000000001
+              }
+            },
+            "last_activation": 1011.0,
+            "recall_count": 2,
+            "state": "NEUTRAL",
+            "target_synaptic_links": {
+              "D": 0.1
+            }
+          },
+          "step": 11
+        },
+        {
+          "non_target_state_digest": "52ff635b95eb025a4feb59da575749811145dbf42fa22bdaef7113755d0e18b7",
+          "phase": "washout",
+          "query": "C",
+          "retrieval": {
+            "activated_ids": [
+              "C",
+              "D"
+            ],
+            "ranked_ids": [
+              "C",
+              "D"
+            ],
+            "scores": [
+              {
+                "base_score": 0.9999999775759996,
+                "hop_decay": 1.0,
+                "hop_distance": 0,
+                "memory_id": "C",
+                "recency_bonus": 0.05,
+                "score": 1.4399999775759997,
+                "source": "similarity",
+                "state_boost": 1.0,
+                "synaptic_boost": 1.3000000000000003
+              },
+              {
+                "base_score": 0.916515138991168,
+                "hop_decay": 0.8607079764250578,
+                "hop_distance": 1,
+                "memory_id": "D",
+                "recency_bonus": 0.05,
+                "score": 1.333109460139603,
+                "source": "similarity",
+                "state_boost": 1.0,
+                "synaptic_boost": 0.12000000000000001
+              }
+            ],
+            "target_active_in_experience": false,
+            "target_direct_score": 0.0,
+            "target_indirect_score_effect_by_memory": {
+              "C": 0.0,
+              "D": 0.0
+            },
+            "target_indirect_score_effect_sum": 0.0
+          },
+          "standardized_propagation": {
+            "activated_ids": [
+              "A"
+            ],
+            "query": "A",
+            "reaches_C": false,
+            "reaches_D": false,
+            "target_suppressed": false
+          },
+          "state": {
+            "incident_cell_links": [],
+            "incident_synaptic_links": {
+              "A": {
+                "C": 0.1,
+                "D": 0.2
+              },
+              "B": {
+                "A": 0.08,
+                "C": 1.2,
+                "D": 0.28
+              },
+              "D": {
+                "A": 0.16,
+                "B": 0.14,
+                "C": 0.12000000000000001
+              }
+            },
+            "last_activation": 1011.0,
+            "recall_count": 2,
+            "state": "NEUTRAL",
+            "target_synaptic_links": {
+              "C": 0.1,
+              "D": 0.2
+            }
+          },
+          "step": 12
+        },
+        {
+          "non_target_state_digest": "bc417b90715e043ee4923c473dc3e8371f0daaf380ec782a25ce72ebc84dfd14",
+          "phase": "washout",
+          "query": "B",
+          "retrieval": {
+            "activated_ids": [
+              "B"
+            ],
+            "ranked_ids": [
+              "B",
+              "C"
+            ],
+            "scores": [
+              {
+                "base_score": 0.9999999899804883,
+                "hop_decay": 1.0,
+                "hop_distance": 0,
+                "memory_id": "B",
+                "recency_bonus": 0.05,
+                "score": 1.1339999899804885,
+                "source": "similarity",
+                "state_boost": 1.0,
+                "synaptic_boost": 0.28
+              },
+              {
+                "base_score": 0.0,
+                "hop_decay": 1.0,
+                "hop_distance": -1,
+                "memory_id": "C",
+                "recency_bonus": 0.0,
+                "score": 0.36,
+                "source": "synaptic",
+                "state_boost": 1.0,
+                "synaptic_boost": 1.2
+              }
+            ],
+            "target_active_in_experience": false,
+            "target_direct_score": 0.0,
+            "target_indirect_score_effect_by_memory": {
+              "B": 0.0,
+              "C": 0.0
+            },
+            "target_indirect_score_effect_sum": 0.0
+          },
+          "standardized_propagation": {
+            "activated_ids": [
+              "A"
+            ],
+            "query": "A",
+            "reaches_C": false,
+            "reaches_D": false,
+            "target_suppressed": false
+          },
+          "state": {
+            "incident_cell_links": [],
+            "incident_synaptic_links": {
+              "A": {
+                "C": 0.1,
+                "D": 0.2
+              },
+              "B": {
+                "A": 0.08,
+                "C": 1.2,
+                "D": 0.28
+              },
+              "D": {
+                "A": 0.14,
+                "B": 0.24000000000000002,
+                "C": 0.1
+              }
+            },
+            "last_activation": 1011.0,
+            "recall_count": 2,
+            "state": "NEUTRAL",
+            "target_synaptic_links": {
+              "C": 0.1,
+              "D": 0.2
+            }
+          },
+          "step": 13
+        }
+      ],
+      "final_non_target_state": {
+        "B": [
+          "NEUTRAL",
+          1013.0,
+          6,
+          {
+            "A": 0.08,
+            "C": 1.2,
+            "D": 0.28
+          }
+        ],
+        "C": [
+          "NEUTRAL",
+          1012.0,
+          6,
+          {
+            "B": 0.24000000000000002,
+            "D": 1.4000000000000004
+          }
+        ],
+        "D": [
+          "NEUTRAL",
+          1013.0,
+          8,
+          {
+            "A": 0.14,
+            "B": 0.24000000000000002,
+            "C": 0.1
+          }
+        ]
+      },
+      "non_target_state_changed_from_seed": true
+    },
+    "relearning": {
+      "checkpoints": [
+        {
+          "non_target_state_digest": "a05bdbeae65d12f3f4f7b3fd780661a4df0d8dd866f99349d83fdc7a67d3ded6",
+          "phase": "post_window",
+          "query": "B",
+          "retrieval": {
+            "activated_ids": [
+              "B"
+            ],
+            "ranked_ids": [
+              "B",
+              "C",
+              "A"
+            ],
+            "scores": [
+              {
+                "base_score": 0.9999999899804883,
+                "hop_decay": 1.0,
+                "hop_distance": 0,
+                "memory_id": "B",
+                "recency_bonus": 0.05,
+                "score": 1.1099999899804884,
+                "source": "similarity",
+                "state_boost": 1.0,
+                "synaptic_boost": 0.2
+              },
+              {
+                "base_score": 0.0,
+                "hop_decay": 1.0,
+                "hop_distance": -1,
+                "memory_id": "C",
+                "recency_bonus": 0.0,
+                "score": 0.29999999999999993,
+                "source": "synaptic",
+                "state_boost": 1.0,
+                "synaptic_boost": 0.9999999999999999
+              },
+              {
+                "base_score": 0.0,
+                "hop_decay": 1.0,
+                "hop_distance": -1,
+                "memory_id": "A",
+                "recency_bonus": 0.0,
+                "score": 0.222,
+                "source": "synaptic",
+                "state_boost": 1.5,
+                "synaptic_boost": 0.74
+              }
+            ],
+            "target_active_in_experience": false,
+            "target_direct_score": 0.222,
+            "target_indirect_score_effect_by_memory": {
+              "B": 0.0,
+              "C": 0.0
+            },
+            "target_indirect_score_effect_sum": 0.0
+          },
+          "standardized_propagation": {
+            "activated_ids": [
+              "B"
+            ],
+            "query": "A",
+            "reaches_C": false,
+            "reaches_D": false,
+            "target_suppressed": true
+          },
+          "state": {
+            "incident_cell_links": [
+              [
+                0,
+                2,
+                "RESONANT"
+              ]
+            ],
+            "incident_synaptic_links": {
+              "A": {
+                "B": 0.8,
+                "C": 0.6
+              },
+              "B": {
+                "A": 0.74,
+                "C": 0.9999999999999999,
+                "D": 0.2
+              },
+              "C": {
+                "A": 0.23999999999999996,
+                "B": 0.18,
+                "D": 1.1
+              }
+            },
+            "last_activation": 0.0,
+            "recall_count": 0,
+            "state": "REINFORCED",
+            "target_synaptic_links": {
+              "B": 0.8,
+              "C": 0.6
+            }
+          },
+          "step": 5
+        },
+        {
+          "non_target_state_digest": "b9b45e048ee481bd3a03a6e770eae5daec93fbdcc2d583f94d8aa6000a698215",
+          "phase": "post_window",
+          "query": "A",
+          "retrieval": {
+            "activated_ids": [
+              "A"
+            ],
+            "ranked_ids": [
+              "A",
+              "D"
+            ],
+            "scores": [
+              {
+                "base_score": 1.0,
+                "hop_decay": 1.0,
+                "hop_distance": 0,
+                "memory_id": "A",
+                "recency_bonus": 0.05,
+                "score": 1.05,
+                "source": "similarity",
+                "state_boost": 1.0,
+                "synaptic_boost": 0.0
+              },
+              {
+                "base_score": 0.0,
+                "hop_decay": 1.0,
+                "hop_distance": -1,
+                "memory_id": "D",
+                "recency_bonus": 0.0,
+                "score": 0.33,
+                "source": "synaptic",
+                "state_boost": 1.0,
+                "synaptic_boost": 1.1
+              }
+            ],
+            "target_active_in_experience": true,
+            "target_direct_score": 1.05,
+            "target_indirect_score_effect_by_memory": {
+              "B": -1.373883323088463,
+              "D": 0.0
+            },
+            "target_indirect_score_effect_sum": -1.373883323088463
+          },
+          "standardized_propagation": {
+            "activated_ids": [
+              "A"
+            ],
+            "query": "A",
+            "reaches_C": false,
+            "reaches_D": false,
+            "target_suppressed": false
+          },
+          "state": {
+            "incident_cell_links": [],
+            "incident_synaptic_links": {
+              "A": {},
+              "B": {
+                "A": 0.1,
+                "C": 1.0999999999999999,
+                "D": 0.18000000000000002
+              },
+              "D": {
+                "A": 0.1,
+                "B": 0.08,
+                "C": 0.18
+              }
+            },
+            "last_activation": 1006.0,
+            "recall_count": 1,
+            "state": "NEUTRAL",
+            "target_synaptic_links": {}
+          },
+          "step": 6
+        },
+        {
+          "non_target_state_digest": "f188663e4e53fa500918e18a93de4aa1fb53a308705d644581ba400a7386199d",
+          "phase": "post_window",
+          "query": "D",
+          "retrieval": {
+            "activated_ids": [
+              "D"
+            ],
+            "ranked_ids": [
+              "D"
+            ],
+            "scores": [
+              {
+                "base_score": 1.0,
+                "hop_decay": 1.0,
+                "hop_distance": 0,
+                "memory_id": "D",
+                "recency_bonus": 0.05,
+                "score": 1.05,
+                "source": "similarity",
+                "state_boost": 1.0,
+                "synaptic_boost": 0.0
+              }
+            ],
+            "target_active_in_experience": false,
+            "target_direct_score": 0.0,
+            "target_indirect_score_effect_by_memory": {
+              "D": 0.0
+            },
+            "target_indirect_score_effect_sum": 0.0
+          },
+          "standardized_propagation": {
+            "activated_ids": [
+              "A"
+            ],
+            "query": "A",
+            "reaches_C": false,
+            "reaches_D": false,
+            "target_suppressed": false
+          },
+          "state": {
+            "incident_cell_links": [],
+            "incident_synaptic_links": {
+              "A": {
+                "D": 0.1
+              },
+              "B": {
+                "A": 0.1,
+                "C": 1.0999999999999999,
+                "D": 0.18000000000000002
+              },
+              "D": {
+                "A": 0.1,
+                "B": 0.08,
+                "C": 0.18
+              }
+            },
+            "last_activation": 1006.0,
+            "recall_count": 1,
+            "state": "NEUTRAL",
+            "target_synaptic_links": {
+              "D": 0.1
+            }
+          },
+          "step": 7
+        },
+        {
+          "non_target_state_digest": "5319d5c26cb33fa588346573f2ceb4d8ff51316eece9e221668fe7cc6424531b",
+          "phase": "post_window",
+          "query": "B",
+          "retrieval": {
+            "activated_ids": [
+              "B"
+            ],
+            "ranked_ids": [
+              "B",
+              "C"
+            ],
+            "scores": [
+              {
+                "base_score": 0.9999999899804883,
+                "hop_decay": 1.0,
+                "hop_distance": 0,
+                "memory_id": "B",
+                "recency_bonus": 0.05,
+                "score": 1.0499999899804884,
+                "source": "similarity",
+                "state_boost": 1.0,
+                "synaptic_boost": 0.0
+              },
+              {
+                "base_score": 0.0,
+                "hop_decay": 1.0,
+                "hop_distance": -1,
+                "memory_id": "C",
+                "recency_bonus": 0.0,
+                "score": 0.32999999999999996,
+                "source": "synaptic",
+                "state_boost": 1.0,
+                "synaptic_boost": 1.0999999999999999
+              }
+            ],
+            "target_active_in_experience": false,
+            "target_direct_score": 0.0,
+            "target_indirect_score_effect_by_memory": {
+              "B": 0.0,
+              "C": 0.0
+            },
+            "target_indirect_score_effect_sum": 0.0
+          },
+          "standardized_propagation": {
+            "activated_ids": [
+              "A"
+            ],
+            "query": "A",
+            "reaches_C": false,
+            "reaches_D": false,
+            "target_suppressed": false
+          },
+          "state": {
+            "incident_cell_links": [],
+            "incident_synaptic_links": {
+              "A": {
+                "D": 0.1
+              },
+              "B": {
+                "A": 0.1,
+                "C": 1.0999999999999999,
+                "D": 0.18000000000000002
+              },
+              "D": {
+                "A": 0.08,
+                "B": 0.18,
+                "C": 0.16
+              }
+            },
+            "last_activation": 1006.0,
+            "recall_count": 1,
+            "state": "NEUTRAL",
+            "target_synaptic_links": {
+              "D": 0.1
+            }
+          },
+          "step": 8
+        },
+        {
+          "non_target_state_digest": "03ac851736b1df684c2cd3cf26860f092d674413db514976a6de71a4cf53bd2c",
+          "phase": "washout",
+          "query": "C",
+          "retrieval": {
+            "activated_ids": [
+              "C",
+              "D"
+            ],
+            "ranked_ids": [
+              "C",
+              "D"
+            ],
+            "scores": [
+              {
+                "base_score": 0.9999999775759996,
+                "hop_decay": 1.0,
+                "hop_distance": 0,
+                "memory_id": "C",
+                "recency_bonus": 0.05,
+                "score": 1.4099999775759997,
+                "source": "similarity",
+                "state_boost": 1.0,
+                "synaptic_boost": 1.2000000000000002
+              },
+              {
+                "base_score": 0.916515138991168,
+                "hop_decay": 0.8607079764250578,
+                "hop_distance": 1,
+                "memory_id": "D",
+                "recency_bonus": 0.05,
+                "score": 1.345109460139603,
+                "source": "similarity",
+                "state_boost": 1.0,
+                "synaptic_boost": 0.16
+              }
+            ],
+            "target_active_in_experience": false,
+            "target_direct_score": 0.0,
+            "target_indirect_score_effect_by_memory": {
+              "C": 0.0,
+              "D": 0.0
+            },
+            "target_indirect_score_effect_sum": 0.0
+          },
+          "standardized_propagation": {
+            "activated_ids": [
+              "A"
+            ],
+            "query": "A",
+            "reaches_C": false,
+            "reaches_D": false,
+            "target_suppressed": false
+          },
+          "state": {
+            "incident_cell_links": [],
+            "incident_synaptic_links": {
+              "A": {
+                "D": 0.1
+              },
+              "B": {
+                "A": 0.08,
+                "C": 1.2,
+                "D": 0.28
+              },
+              "D": {
+                "A": 0.08,
+                "B": 0.18,
+                "C": 0.16
+              }
+            },
+            "last_activation": 1006.0,
+            "recall_count": 1,
+            "state": "NEUTRAL",
+            "target_synaptic_links": {
+              "D": 0.1
+            }
+          },
+          "step": 9
+        },
+        {
+          "non_target_state_digest": "fbd442e874920b72dc78fd7b45957d9fdaffb91793c1abbd6f452f0a0c4547dd",
+          "phase": "washout",
+          "query": "D",
+          "retrieval": {
+            "activated_ids": [
+              "D"
+            ],
+            "ranked_ids": [
+              "D"
+            ],
+            "scores": [
+              {
+                "base_score": 1.0,
+                "hop_decay": 1.0,
+                "hop_distance": 0,
+                "memory_id": "D",
+                "recency_bonus": 0.05,
+                "score": 1.05,
+                "source": "similarity",
+                "state_boost": 1.0,
+                "synaptic_boost": 0.0
+              }
+            ],
+            "target_active_in_experience": false,
+            "target_direct_score": 0.0,
+            "target_indirect_score_effect_by_memory": {
+              "D": 0.0
+            },
+            "target_indirect_score_effect_sum": 0.0
+          },
+          "standardized_propagation": {
+            "activated_ids": [
+              "A"
+            ],
+            "query": "A",
+            "reaches_C": false,
+            "reaches_D": false,
+            "target_suppressed": false
+          },
+          "state": {
+            "incident_cell_links": [],
+            "incident_synaptic_links": {
+              "A": {
+                "D": 0.1
+              },
+              "B": {
+                "A": 0.08,
+                "C": 1.2,
+                "D": 0.28
+              },
+              "D": {
+                "A": 0.06,
+                "B": 0.16,
+                "C": 0.14
+              }
+            },
+            "last_activation": 1006.0,
+            "recall_count": 1,
+            "state": "NEUTRAL",
+            "target_synaptic_links": {
+              "D": 0.1
+            }
+          },
+          "step": 10
+        },
+        {
+          "non_target_state_digest": "94121c82a12f2c51e8ab2e26f86c8a7dcd70959f58b213e7939d9db416de1224",
+          "phase": "washout",
+          "query": "A",
+          "retrieval": {
+            "activated_ids": [
+              "A"
+            ],
+            "ranked_ids": [
+              "A"
+            ],
+            "scores": [
+              {
+                "base_score": 1.0,
+                "hop_decay": 1.0,
+                "hop_distance": 0,
+                "memory_id": "A",
+                "recency_bonus": 0.05,
+                "score": 1.05,
+                "source": "similarity",
+                "state_boost": 1.0,
+                "synaptic_boost": 0.0
+              }
+            ],
+            "target_active_in_experience": true,
+            "target_direct_score": 1.05,
+            "target_indirect_score_effect_by_memory": {
+              "B": -1.043882520847654
+            },
+            "target_indirect_score_effect_sum": -1.043882520847654
+          },
+          "standardized_propagation": {
+            "activated_ids": [
+              "A"
+            ],
+            "query": "A",
+            "reaches_C": false,
+            "reaches_D": false,
+            "target_suppressed": false
+          },
+          "state": {
+            "incident_cell_links": [],
+            "incident_synaptic_links": {
+              "A": {
+                "D": 0.1
+              },
+              "B": {
+                "A": 0.08,
+                "C": 1.2,
+                "D": 0.28
+              },
+              "D": {
+                "A": 0.16,
+                "B": 0.14,
+                "C": 0.12000000000000001
+              }
+            },
+            "last_activation": 1011.0,
+            "recall_count": 2,
+            "state": "NEUTRAL",
+            "target_synaptic_links": {
+              "D": 0.1
+            }
+          },
+          "step": 11
+        },
+        {
+          "non_target_state_digest": "52ff635b95eb025a4feb59da575749811145dbf42fa22bdaef7113755d0e18b7",
+          "phase": "washout",
+          "query": "C",
+          "retrieval": {
+            "activated_ids": [
+              "C",
+              "D"
+            ],
+            "ranked_ids": [
+              "C",
+              "D"
+            ],
+            "scores": [
+              {
+                "base_score": 0.9999999775759996,
+                "hop_decay": 1.0,
+                "hop_distance": 0,
+                "memory_id": "C",
+                "recency_bonus": 0.05,
+                "score": 1.4399999775759997,
+                "source": "similarity",
+                "state_boost": 1.0,
+                "synaptic_boost": 1.3000000000000003
+              },
+              {
+                "base_score": 0.916515138991168,
+                "hop_decay": 0.8607079764250578,
+                "hop_distance": 1,
+                "memory_id": "D",
+                "recency_bonus": 0.05,
+                "score": 1.333109460139603,
+                "source": "similarity",
+                "state_boost": 1.0,
+                "synaptic_boost": 0.12000000000000001
+              }
+            ],
+            "target_active_in_experience": false,
+            "target_direct_score": 0.0,
+            "target_indirect_score_effect_by_memory": {
+              "C": 0.0,
+              "D": 0.0
+            },
+            "target_indirect_score_effect_sum": 0.0
+          },
+          "standardized_propagation": {
+            "activated_ids": [
+              "A"
+            ],
+            "query": "A",
+            "reaches_C": false,
+            "reaches_D": false,
+            "target_suppressed": false
+          },
+          "state": {
+            "incident_cell_links": [],
+            "incident_synaptic_links": {
+              "A": {
+                "C": 0.1,
+                "D": 0.2
+              },
+              "B": {
+                "A": 0.08,
+                "C": 1.2,
+                "D": 0.28
+              },
+              "D": {
+                "A": 0.16,
+                "B": 0.14,
+                "C": 0.12000000000000001
+              }
+            },
+            "last_activation": 1011.0,
+            "recall_count": 2,
+            "state": "NEUTRAL",
+            "target_synaptic_links": {
+              "C": 0.1,
+              "D": 0.2
+            }
+          },
+          "step": 12
+        },
+        {
+          "non_target_state_digest": "bc417b90715e043ee4923c473dc3e8371f0daaf380ec782a25ce72ebc84dfd14",
+          "phase": "washout",
+          "query": "B",
+          "retrieval": {
+            "activated_ids": [
+              "B"
+            ],
+            "ranked_ids": [
+              "B",
+              "C"
+            ],
+            "scores": [
+              {
+                "base_score": 0.9999999899804883,
+                "hop_decay": 1.0,
+                "hop_distance": 0,
+                "memory_id": "B",
+                "recency_bonus": 0.05,
+                "score": 1.1339999899804885,
+                "source": "similarity",
+                "state_boost": 1.0,
+                "synaptic_boost": 0.28
+              },
+              {
+                "base_score": 0.0,
+                "hop_decay": 1.0,
+                "hop_distance": -1,
+                "memory_id": "C",
+                "recency_bonus": 0.0,
+                "score": 0.36,
+                "source": "synaptic",
+                "state_boost": 1.0,
+                "synaptic_boost": 1.2
+              }
+            ],
+            "target_active_in_experience": false,
+            "target_direct_score": 0.0,
+            "target_indirect_score_effect_by_memory": {
+              "B": 0.0,
+              "C": 0.0
+            },
+            "target_indirect_score_effect_sum": 0.0
+          },
+          "standardized_propagation": {
+            "activated_ids": [
+              "A"
+            ],
+            "query": "A",
+            "reaches_C": false,
+            "reaches_D": false,
+            "target_suppressed": false
+          },
+          "state": {
+            "incident_cell_links": [],
+            "incident_synaptic_links": {
+              "A": {
+                "C": 0.1,
+                "D": 0.2
+              },
+              "B": {
+                "A": 0.08,
+                "C": 1.2,
+                "D": 0.28
+              },
+              "D": {
+                "A": 0.14,
+                "B": 0.24000000000000002,
+                "C": 0.1
+              }
+            },
+            "last_activation": 1011.0,
+            "recall_count": 2,
+            "state": "NEUTRAL",
+            "target_synaptic_links": {
+              "C": 0.1,
+              "D": 0.2
+            }
+          },
+          "step": 13
+        }
+      ],
+      "final_non_target_state": {
+        "B": [
+          "NEUTRAL",
+          1013.0,
+          6,
+          {
+            "A": 0.08,
+            "C": 1.2,
+            "D": 0.28
+          }
+        ],
+        "C": [
+          "NEUTRAL",
+          1012.0,
+          6,
+          {
+            "B": 0.24000000000000002,
+            "D": 1.4000000000000004
+          }
+        ],
+        "D": [
+          "NEUTRAL",
+          1013.0,
+          8,
+          {
+            "A": 0.14,
+            "B": 0.24000000000000002,
+            "C": 0.1
+          }
+        ]
+      },
+      "non_target_state_changed_from_seed": true
+    },
+    "strict_local_restore": {
+      "checkpoints": [
+        {
+          "non_target_state_digest": "a05bdbeae65d12f3f4f7b3fd780661a4df0d8dd866f99349d83fdc7a67d3ded6",
+          "phase": "post_window",
+          "query": "B",
+          "retrieval": {
+            "activated_ids": [
+              "B"
+            ],
+            "ranked_ids": [
+              "B",
+              "C",
+              "A"
+            ],
+            "scores": [
+              {
+                "base_score": 0.9999999899804883,
+                "hop_decay": 1.0,
+                "hop_distance": 0,
+                "memory_id": "B",
+                "recency_bonus": 0.05,
+                "score": 1.1099999899804884,
+                "source": "similarity",
+                "state_boost": 1.0,
+                "synaptic_boost": 0.2
+              },
+              {
+                "base_score": 0.0,
+                "hop_decay": 1.0,
+                "hop_distance": -1,
+                "memory_id": "C",
+                "recency_bonus": 0.0,
+                "score": 0.29999999999999993,
+                "source": "synaptic",
+                "state_boost": 1.0,
+                "synaptic_boost": 0.9999999999999999
+              },
+              {
+                "base_score": 0.0,
+                "hop_decay": 1.0,
+                "hop_distance": -1,
+                "memory_id": "A",
+                "recency_bonus": 0.0,
+                "score": 0.222,
+                "source": "synaptic",
+                "state_boost": 1.5,
+                "synaptic_boost": 0.74
+              }
+            ],
+            "target_active_in_experience": false,
+            "target_direct_score": 0.222,
+            "target_indirect_score_effect_by_memory": {
+              "B": 0.0,
+              "C": 0.0
+            },
+            "target_indirect_score_effect_sum": 0.0
+          },
+          "standardized_propagation": {
+            "activated_ids": [
+              "A",
+              "C",
+              "D"
+            ],
+            "query": "A",
+            "reaches_C": true,
+            "reaches_D": true,
+            "target_suppressed": false
+          },
+          "state": {
+            "incident_cell_links": [
+              [
+                0,
+                2,
+                "RESONANT"
+              ]
+            ],
+            "incident_synaptic_links": {
+              "A": {
+                "B": 0.8,
+                "C": 0.6
+              },
+              "B": {
+                "A": 0.74,
+                "C": 0.9999999999999999,
+                "D": 0.2
+              },
+              "C": {
+                "A": 0.23999999999999996,
+                "B": 0.18,
+                "D": 1.1
+              }
+            },
+            "last_activation": 0.0,
+            "recall_count": 0,
+            "state": "REINFORCED",
+            "target_synaptic_links": {
+              "B": 0.8,
+              "C": 0.6
+            }
+          },
+          "step": 5
+        },
+        {
+          "non_target_state_digest": "79f1e51943b94fa192a6c0b7ff528eb98fd8d92be4001b0cab11e4732d2cf345",
+          "phase": "post_window",
+          "query": "A",
+          "retrieval": {
+            "activated_ids": [
+              "A",
+              "C",
+              "D"
+            ],
+            "ranked_ids": [
+              "A",
+              "C",
+              "B",
+              "D"
+            ],
+            "scores": [
+              {
+                "base_score": 1.0,
+                "hop_decay": 1.0,
+                "hop_distance": 0,
+                "memory_id": "A",
+                "recency_bonus": 0.05,
+                "score": 1.73,
+                "source": "similarity",
+                "state_boost": 1.5,
+                "synaptic_boost": 0.6
+              },
+              {
+                "base_score": 0.4000000059604645,
+                "hop_decay": 0.8607079764250578,
+                "hop_distance": 1,
+                "memory_id": "C",
+                "recency_bonus": 0.05,
+                "score": 0.9962831986804748,
+                "source": "similarity",
+                "state_boost": 1.0,
+                "synaptic_boost": 1.34
+              },
+              {
+                "base_score": 0.0,
+                "hop_decay": 1.0,
+                "hop_distance": -1,
+                "memory_id": "B",
+                "recency_bonus": 0.0,
+                "score": 0.24,
+                "source": "synaptic",
+                "state_boost": 1.0,
+                "synaptic_boost": 0.8
+              },
+              {
+                "base_score": 0.0,
+                "hop_decay": 0.7408182206817179,
+                "hop_distance": 2,
+                "memory_id": "D",
+                "recency_bonus": 0.05,
+                "score": 0.134,
+                "source": "similarity",
+                "state_boost": 1.0,
+                "synaptic_boost": 0.28
+              }
+            ],
+            "target_active_in_experience": true,
+            "target_direct_score": 1.73,
+            "target_indirect_score_effect_by_memory": {
+              "B": -1.2238833230884631,
+              "C": 0.9962831986804748,
+              "D": -0.196
+            },
+            "target_indirect_score_effect_sum": -0.4236001244079884
+          },
+          "standardized_propagation": {
+            "activated_ids": [
+              "A",
+              "C",
+              "D"
+            ],
+            "query": "A",
+            "reaches_C": true,
+            "reaches_D": true,
+            "target_suppressed": false
+          },
+          "state": {
+            "incident_cell_links": [
+              [
+                0,
+                2,
+                "RESONANT"
+              ]
+            ],
+            "incident_synaptic_links": {
+              "A": {
+                "B": 0.8,
+                "C": 0.6
+              },
+              "B": {
+                "A": 0.84,
+                "C": 1.0999999999999999,
+                "D": 0.30000000000000004
+              },
+              "C": {
+                "A": 0.23999999999999996,
+                "B": 0.18,
+                "D": 1.1
+              },
+              "D": {
+                "A": 0.1,
+                "B": 0.08,
+                "C": 0.18
+              }
+            },
+            "last_activation": 1006.0,
+            "recall_count": 1,
+            "state": "REINFORCED",
+            "target_synaptic_links": {
+              "B": 0.8,
+              "C": 0.6
+            }
+          },
+          "step": 6
+        },
+        {
+          "non_target_state_digest": "e55551b5f2c6194742491e86932d1dce27f0ed4286bdd77972f662be2db01d39",
+          "phase": "post_window",
+          "query": "D",
+          "retrieval": {
+            "activated_ids": [
+              "D"
+            ],
+            "ranked_ids": [
+              "D",
+              "C",
+              "A"
+            ],
+            "scores": [
+              {
+                "base_score": 1.0,
+                "hop_decay": 1.0,
+                "hop_distance": 0,
+                "memory_id": "D",
+                "recency_bonus": 0.05,
+                "score": 1.188,
+                "source": "similarity",
+                "state_boost": 1.0,
+                "synaptic_boost": 0.46
+              },
+              {
+                "base_score": 0.0,
+                "hop_decay": 1.0,
+                "hop_distance": -1,
+                "memory_id": "C",
+                "recency_bonus": 0.0,
+                "score": 0.32999999999999996,
+                "source": "synaptic",
+                "state_boost": 1.0,
+                "synaptic_boost": 1.0999999999999999
+              },
+              {
+                "base_score": 0.0,
+                "hop_decay": 1.0,
+                "hop_distance": -1,
+                "memory_id": "A",
+                "recency_bonus": 0.0,
+                "score": 0.252,
+                "source": "synaptic",
+                "state_boost": 1.5,
+                "synaptic_boost": 0.84
+              }
+            ],
+            "target_active_in_experience": false,
+            "target_direct_score": 0.252,
+            "target_indirect_score_effect_by_memory": {
+              "C": 0.0,
+              "D": 0.0
+            },
+            "target_indirect_score_effect_sum": 0.0
+          },
+          "standardized_propagation": {
+            "activated_ids": [
+              "A",
+              "C",
+              "D"
+            ],
+            "query": "A",
+            "reaches_C": true,
+            "reaches_D": true,
+            "target_suppressed": false
+          },
+          "state": {
+            "incident_cell_links": [
+              [
+                0,
+                2,
+                "RESONANT"
+              ]
+            ],
+            "incident_synaptic_links": {
+              "A": {
+                "B": 0.9,
+                "C": 0.7,
+                "D": 0.1
+              },
+              "B": {
+                "A": 0.84,
+                "C": 1.0999999999999999,
+                "D": 0.30000000000000004
+              },
+              "C": {
+                "A": 0.21999999999999997,
+                "B": 0.28,
+                "D": 1.2000000000000002
+              },
+              "D": {
+                "A": 0.08,
+                "B": 0.18,
+                "C": 0.28
+              }
+            },
+            "last_activation": 1006.0,
+            "recall_count": 1,
+            "state": "REINFORCED",
+            "target_synaptic_links": {
+              "B": 0.9,
+              "C": 0.7,
+              "D": 0.1
+            }
+          },
+          "step": 7
+        },
+        {
+          "non_target_state_digest": "8291d6d2046d859fd1688a2fc41879f76d53ec2b13f9d095fb4e4d3087bc2cd6",
+          "phase": "post_window",
+          "query": "B",
+          "retrieval": {
+            "activated_ids": [
+              "B"
+            ],
+            "ranked_ids": [
+              "B",
+              "D",
+              "C",
+              "A"
+            ],
+            "scores": [
+              {
+                "base_score": 0.9999999899804883,
+                "hop_decay": 1.0,
+                "hop_distance": 0,
+                "memory_id": "B",
+                "recency_bonus": 0.05,
+                "score": 1.8119999899804884,
+                "source": "similarity",
+                "state_boost": 1.0,
+                "synaptic_boost": 2.54
+              },
+              {
+                "base_score": 0.0,
+                "hop_decay": 1.0,
+                "hop_distance": -1,
+                "memory_id": "D",
+                "recency_bonus": 0.0,
+                "score": 0.39000000000000007,
+                "source": "synaptic",
+                "state_boost": 1.0,
+                "synaptic_boost": 1.3000000000000003
+              },
+              {
+                "base_score": 0.0,
+                "hop_decay": 1.0,
+                "hop_distance": -1,
+                "memory_id": "C",
+                "recency_bonus": 0.0,
+                "score": 0.36,
+                "source": "synaptic",
+                "state_boost": 1.0,
+                "synaptic_boost": 1.2
+              },
+              {
+                "base_score": 0.0,
+                "hop_decay": 1.0,
+                "hop_distance": -1,
+                "memory_id": "A",
+                "recency_bonus": 0.0,
+                "score": 0.282,
+                "source": "synaptic",
+                "state_boost": 1.5,
+                "synaptic_boost": 0.94
+              }
+            ],
+            "target_active_in_experience": false,
+            "target_direct_score": 0.282,
+            "target_indirect_score_effect_by_memory": {
+              "B": 0.28200000000000003,
+              "C": 0.0,
+              "D": 0.0
+            },
+            "target_indirect_score_effect_sum": 0.28200000000000003
+          },
+          "standardized_propagation": {
+            "activated_ids": [
+              "A",
+              "C",
+              "D"
+            ],
+            "query": "A",
+            "reaches_C": true,
+            "reaches_D": true,
+            "target_suppressed": false
+          },
+          "state": {
+            "incident_cell_links": [
+              [
+                0,
+                2,
+                "RESONANT"
+              ]
+            ],
+            "incident_synaptic_links": {
+              "A": {
+                "B": 0.9,
+                "C": 0.7,
+                "D": 0.1
+              },
+              "B": {
+                "A": 0.94,
+                "C": 1.2,
+                "D": 0.4
+              },
+              "C": {
+                "A": 0.31999999999999995,
+                "B": 0.38,
+                "D": 1.3000000000000003
+              },
+              "D": {
+                "A": 0.18,
+                "B": 0.28,
+                "C": 0.38
+              }
+            },
+            "last_activation": 1008.0,
+            "recall_count": 2,
+            "state": "REINFORCED",
+            "target_synaptic_links": {
+              "B": 0.9,
+              "C": 0.7,
+              "D": 0.1
+            }
+          },
+          "step": 8
+        },
+        {
+          "non_target_state_digest": "42d04442975a5ca32eccf81b94a546b8180ca9486038370637d1a0e6e3a05a95",
+          "phase": "washout",
+          "query": "C",
+          "retrieval": {
+            "activated_ids": [
+              "C",
+              "D"
+            ],
+            "ranked_ids": [
+              "C",
+              "D",
+              "A",
+              "B"
+            ],
+            "scores": [
+              {
+                "base_score": 0.9999999775759996,
+                "hop_decay": 1.0,
+                "hop_distance": 0,
+                "memory_id": "C",
+                "recency_bonus": 0.05,
+                "score": 1.7399999775759996,
+                "source": "similarity",
+                "state_boost": 1.0,
+                "synaptic_boost": 2.3000000000000003
+              },
+              {
+                "base_score": 0.916515138991168,
+                "hop_decay": 0.8607079764250578,
+                "hop_distance": 1,
+                "memory_id": "D",
+                "recency_bonus": 0.05,
+                "score": 1.639109460139603,
+                "source": "similarity",
+                "state_boost": 1.0,
+                "synaptic_boost": 1.1400000000000001
+              },
+              {
+                "base_score": 0.0,
+                "hop_decay": 1.0,
+                "hop_distance": -1,
+                "memory_id": "A",
+                "recency_bonus": 0.0,
+                "score": 0.312,
+                "source": "synaptic",
+                "state_boost": 1.5,
+                "synaptic_boost": 1.04
+              },
+              {
+                "base_score": 0.0,
+                "hop_decay": 1.0,
+                "hop_distance": -1,
+                "memory_id": "B",
+                "recency_bonus": 0.0,
+                "score": 0.3,
+                "source": "synaptic",
+                "state_boost": 1.0,
+                "synaptic_boost": 1.0
+              }
+            ],
+            "target_active_in_experience": false,
+            "target_direct_score": 0.312,
+            "target_indirect_score_effect_by_memory": {
+              "B": 0.3,
+              "C": 0.1259999999999999,
+              "D": 0.08400000000000007
+            },
+            "target_indirect_score_effect_sum": 0.51
+          },
+          "standardized_propagation": {
+            "activated_ids": [
+              "A",
+              "C",
+              "D"
+            ],
+            "query": "A",
+            "reaches_C": true,
+            "reaches_D": true,
+            "target_suppressed": false
+          },
+          "state": {
+            "incident_cell_links": [
+              [
+                0,
+                2,
+                "RESONANT"
+              ]
+            ],
+            "incident_synaptic_links": {
+              "A": {
+                "B": 1.0,
+                "C": 0.7999999999999999,
+                "D": 0.2
+              },
+              "B": {
+                "A": 1.04,
+                "C": 1.3,
+                "D": 0.5
+              },
+              "C": {
+                "A": 0.41999999999999993,
+                "B": 0.48,
+                "D": 1.4000000000000004
+              },
+              "D": {
+                "A": 0.28,
+                "B": 0.38,
+                "C": 0.48
+              }
+            },
+            "last_activation": 1009.0,
+            "recall_count": 3,
+            "state": "REINFORCED",
+            "target_synaptic_links": {
+              "B": 1.0,
+              "C": 0.7999999999999999,
+              "D": 0.2
+            }
+          },
+          "step": 9
+        },
+        {
+          "non_target_state_digest": "316c221481022a3eda57c4d6915c958fff373c0e22e3323e9972eb52ebbe0f6c",
+          "phase": "washout",
+          "query": "D",
+          "retrieval": {
+            "activated_ids": [
+              "D"
+            ],
+            "ranked_ids": [
+              "D",
+              "C",
+              "A",
+              "B"
+            ],
+            "scores": [
+              {
+                "base_score": 1.0,
+                "hop_decay": 1.0,
+                "hop_distance": 0,
+                "memory_id": "D",
+                "recency_bonus": 0.05,
+                "score": 1.482,
+                "source": "similarity",
+                "state_boost": 1.0,
+                "synaptic_boost": 1.44
+              },
+              {
+                "base_score": 0.0,
+                "hop_decay": 1.0,
+                "hop_distance": -1,
+                "memory_id": "C",
+                "recency_bonus": 0.0,
+                "score": 0.42000000000000004,
+                "source": "synaptic",
+                "state_boost": 1.0,
+                "synaptic_boost": 1.4000000000000001
+              },
+              {
+                "base_score": 0.0,
+                "hop_decay": 1.0,
+                "hop_distance": -1,
+                "memory_id": "A",
+                "recency_bonus": 0.0,
+                "score": 0.342,
+                "source": "synaptic",
+                "state_boost": 1.5,
+                "synaptic_boost": 1.1400000000000001
+              },
+              {
+                "base_score": 0.0,
+                "hop_decay": 1.0,
+                "hop_distance": -1,
+                "memory_id": "B",
+                "recency_bonus": 0.0,
+                "score": 0.33,
+                "source": "synaptic",
+                "state_boost": 1.0,
+                "synaptic_boost": 1.1
+              }
+            ],
+            "target_active_in_experience": false,
+            "target_direct_score": 0.342,
+            "target_indirect_score_effect_by_memory": {
+              "B": 0.15600000000000003,
+              "C": 0.0,
+              "D": 0.11399999999999988
+            },
+            "target_indirect_score_effect_sum": 0.2699999999999999
+          },
+          "standardized_propagation": {
+            "activated_ids": [
+              "A",
+              "C",
+              "D"
+            ],
+            "query": "A",
+            "reaches_C": true,
+            "reaches_D": true,
+            "target_suppressed": false
+          },
+          "state": {
+            "incident_cell_links": [
+              [
+                0,
+                2,
+                "RESONANT"
+              ]
+            ],
+            "incident_synaptic_links": {
+              "A": {
+                "B": 1.1,
+                "C": 0.8999999999999999,
+                "D": 0.30000000000000004
+              },
+              "B": {
+                "A": 1.1400000000000001,
+                "C": 1.4000000000000001,
+                "D": 0.6
+              },
+              "C": {
+                "A": 0.5199999999999999,
+                "B": 0.58,
+                "D": 1.5000000000000004
+              },
+              "D": {
+                "A": 0.38,
+                "B": 0.48,
+                "C": 0.58
+              }
+            },
+            "last_activation": 1010.0,
+            "recall_count": 4,
+            "state": "REINFORCED",
+            "target_synaptic_links": {
+              "B": 1.1,
+              "C": 0.8999999999999999,
+              "D": 0.30000000000000004
+            }
+          },
+          "step": 10
+        },
+        {
+          "non_target_state_digest": "3c22bc30f57cbb16ca5d7a6df64089a83f06bdde8bf0eba141573290c6d1b8f8",
+          "phase": "washout",
+          "query": "A",
+          "retrieval": {
+            "activated_ids": [
+              "A",
+              "C",
+              "D"
+            ],
+            "ranked_ids": [
+              "A",
+              "C",
+              "D",
+              "B"
+            ],
+            "scores": [
+              {
+                "base_score": 1.0,
+                "hop_decay": 1.0,
+                "hop_distance": 0,
+                "memory_id": "A",
+                "recency_bonus": 0.05,
+                "score": 2.33,
+                "source": "similarity",
+                "state_boost": 1.5,
+                "synaptic_boost": 2.6
+              },
+              {
+                "base_score": 0.4000000059604645,
+                "hop_decay": 0.8607079764250578,
+                "hop_distance": 1,
+                "memory_id": "C",
+                "recency_bonus": 0.05,
+                "score": 1.464283198680475,
+                "source": "similarity",
+                "state_boost": 1.0,
+                "synaptic_boost": 2.9000000000000004
+              },
+              {
+                "base_score": 0.0,
+                "hop_decay": 0.7408182206817179,
+                "hop_distance": 2,
+                "memory_id": "D",
+                "recency_bonus": 0.05,
+                "score": 0.572,
+                "source": "similarity",
+                "state_boost": 1.0,
+                "synaptic_boost": 1.7399999999999998
+              },
+              {
+                "base_score": 0.0,
+                "hop_decay": 1.0,
+                "hop_distance": -1,
+                "memory_id": "B",
+                "recency_bonus": 0.0,
+                "score": 0.36000000000000004,
+                "source": "synaptic",
+                "state_boost": 1.0,
+                "synaptic_boost": 1.2000000000000002
+              }
+            ],
+            "target_active_in_experience": true,
+            "target_direct_score": 2.33,
+            "target_indirect_score_effect_by_memory": {
+              "B": -1.3438837242136947,
+              "C": 1.014283198680475,
+              "D": 0.0919999999999998
+            },
+            "target_indirect_score_effect_sum": -0.23760052553321992
+          },
+          "standardized_propagation": {
+            "activated_ids": [
+              "A",
+              "C",
+              "D"
+            ],
+            "query": "A",
+            "reaches_C": true,
+            "reaches_D": true,
+            "target_suppressed": false
+          },
+          "state": {
+            "incident_cell_links": [
+              [
+                0,
+                2,
+                "RESONANT"
+              ]
+            ],
+            "incident_synaptic_links": {
+              "A": {
+                "B": 1.2000000000000002,
+                "C": 0.9999999999999999,
+                "D": 0.4
+              },
+              "B": {
+                "A": 1.2400000000000002,
+                "C": 1.5000000000000002,
+                "D": 0.7
+              },
+              "C": {
+                "A": 0.6199999999999999,
+                "B": 0.6799999999999999,
+                "D": 1.6000000000000005
+              },
+              "D": {
+                "A": 0.48,
+                "B": 0.58,
+                "C": 0.6799999999999999
+              }
+            },
+            "last_activation": 1011.0,
+            "recall_count": 5,
+            "state": "REINFORCED",
+            "target_synaptic_links": {
+              "B": 1.2000000000000002,
+              "C": 0.9999999999999999,
+              "D": 0.4
+            }
+          },
+          "step": 11
+        },
+        {
+          "non_target_state_digest": "41cda6198e8d4a70afc69f4ec97dd24d7625e05487b9652be2b71a11b5048426",
+          "phase": "washout",
+          "query": "C",
+          "retrieval": {
+            "activated_ids": [
+              "C",
+              "D"
+            ],
+            "ranked_ids": [
+              "C",
+              "D",
+              "A",
+              "B"
+            ],
+            "scores": [
+              {
+                "base_score": 0.9999999775759996,
+                "hop_decay": 1.0,
+                "hop_distance": 0,
+                "memory_id": "C",
+                "recency_bonus": 0.05,
+                "score": 2.0099999775759994,
+                "source": "similarity",
+                "state_boost": 1.0,
+                "synaptic_boost": 3.2
+              },
+              {
+                "base_score": 0.916515138991168,
+                "hop_decay": 0.8607079764250578,
+                "hop_distance": 1,
+                "memory_id": "D",
+                "recency_bonus": 0.05,
+                "score": 1.909109460139603,
+                "source": "similarity",
+                "state_boost": 1.0,
+                "synaptic_boost": 2.04
+              },
+              {
+                "base_score": 0.0,
+                "hop_decay": 1.0,
+                "hop_distance": -1,
+                "memory_id": "A",
+                "recency_bonus": 0.0,
+                "score": 0.4020000000000001,
+                "source": "synaptic",
+                "state_boost": 1.5,
+                "synaptic_boost": 1.3400000000000003
+              },
+              {
+                "base_score": 0.0,
+                "hop_decay": 1.0,
+                "hop_distance": -1,
+                "memory_id": "B",
+                "recency_bonus": 0.0,
+                "score": 0.39000000000000007,
+                "source": "synaptic",
+                "state_boost": 1.0,
+                "synaptic_boost": 1.3000000000000003
+              }
+            ],
+            "target_active_in_experience": false,
+            "target_direct_score": 0.4020000000000001,
+            "target_indirect_score_effect_by_memory": {
+              "B": 0.1560000000000001,
+              "C": 0.21599999999999953,
+              "D": 0.17400000000000015
+            },
+            "target_indirect_score_effect_sum": 0.5459999999999998
+          },
+          "standardized_propagation": {
+            "activated_ids": [
+              "A",
+              "C",
+              "D"
+            ],
+            "query": "A",
+            "reaches_C": true,
+            "reaches_D": true,
+            "target_suppressed": false
+          },
+          "state": {
+            "incident_cell_links": [
+              [
+                0,
+                2,
+                "RESONANT"
+              ]
+            ],
+            "incident_synaptic_links": {
+              "A": {
+                "B": 1.3000000000000003,
+                "C": 1.0999999999999999,
+                "D": 0.5
+              },
+              "B": {
+                "A": 1.3400000000000003,
+                "C": 1.6000000000000003,
+                "D": 0.7999999999999999
+              },
+              "C": {
+                "A": 0.7199999999999999,
+                "B": 0.7799999999999999,
+                "D": 1.7000000000000006
+              },
+              "D": {
+                "A": 0.58,
+                "B": 0.6799999999999999,
+                "C": 0.7799999999999999
+              }
+            },
+            "last_activation": 1012.0,
+            "recall_count": 6,
+            "state": "REINFORCED",
+            "target_synaptic_links": {
+              "B": 1.3000000000000003,
+              "C": 1.0999999999999999,
+              "D": 0.5
+            }
+          },
+          "step": 12
+        },
+        {
+          "non_target_state_digest": "ce6158c185c3d9046edc5095544bb6198c6b8c52c12359c0e9bd34f51624ffe7",
+          "phase": "washout",
+          "query": "B",
+          "retrieval": {
+            "activated_ids": [
+              "B"
+            ],
+            "ranked_ids": [
+              "B",
+              "D",
+              "C",
+              "A"
+            ],
+            "scores": [
+              {
+                "base_score": 0.9999999899804883,
+                "hop_decay": 1.0,
+                "hop_distance": 0,
+                "memory_id": "B",
+                "recency_bonus": 0.05,
+                "score": 2.261999989980488,
+                "source": "similarity",
+                "state_boost": 1.0,
+                "synaptic_boost": 4.040000000000001
+              },
+              {
+                "base_score": 0.0,
+                "hop_decay": 1.0,
+                "hop_distance": -1,
+                "memory_id": "D",
+                "recency_bonus": 0.0,
+                "score": 0.5400000000000001,
+                "source": "synaptic",
+                "state_boost": 1.0,
+                "synaptic_boost": 1.8000000000000007
+              },
+              {
+                "base_score": 0.0,
+                "hop_decay": 1.0,
+                "hop_distance": -1,
+                "memory_id": "C",
+                "recency_bonus": 0.0,
+                "score": 0.5100000000000001,
+                "source": "synaptic",
+                "state_boost": 1.0,
+                "synaptic_boost": 1.7000000000000004
+              },
+              {
+                "base_score": 0.0,
+                "hop_decay": 1.0,
+                "hop_distance": -1,
+                "memory_id": "A",
+                "recency_bonus": 0.0,
+                "score": 0.4320000000000001,
+                "source": "synaptic",
+                "state_boost": 1.5,
+                "synaptic_boost": 1.4400000000000004
+              }
+            ],
+            "target_active_in_experience": false,
+            "target_direct_score": 0.4320000000000001,
+            "target_indirect_score_effect_by_memory": {
+              "B": 0.4319999999999997,
+              "C": 0.0,
+              "D": 0.0
+            },
+            "target_indirect_score_effect_sum": 0.4319999999999997
+          },
+          "standardized_propagation": {
+            "activated_ids": [
+              "A",
+              "C",
+              "D"
+            ],
+            "query": "A",
+            "reaches_C": true,
+            "reaches_D": true,
+            "target_suppressed": false
+          },
+          "state": {
+            "incident_cell_links": [
+              [
+                0,
+                2,
+                "RESONANT"
+              ]
+            ],
+            "incident_synaptic_links": {
+              "A": {
+                "B": 1.4000000000000004,
+                "C": 1.2,
+                "D": 0.6
+              },
+              "B": {
+                "A": 1.4400000000000004,
+                "C": 1.7000000000000004,
+                "D": 0.8999999999999999
+              },
+              "C": {
+                "A": 0.8199999999999998,
+                "B": 0.8799999999999999,
+                "D": 1.8000000000000007
+              },
+              "D": {
+                "A": 0.6799999999999999,
+                "B": 0.7799999999999999,
+                "C": 0.8799999999999999
+              }
+            },
+            "last_activation": 1013.0,
+            "recall_count": 7,
+            "state": "REINFORCED",
+            "target_synaptic_links": {
+              "B": 1.4000000000000004,
+              "C": 1.2,
+              "D": 0.6
+            }
+          },
+          "step": 13
+        }
+      ],
+      "final_non_target_state": {
+        "B": [
+          "NEUTRAL",
+          1013.0,
+          11,
+          {
+            "A": 1.4400000000000004,
+            "C": 1.7000000000000004,
+            "D": 0.8999999999999999
+          }
+        ],
+        "C": [
+          "NEUTRAL",
+          1013.0,
+          11,
+          {
+            "A": 0.8199999999999998,
+            "B": 0.8799999999999999,
+            "D": 1.8000000000000007
+          }
+        ],
+        "D": [
+          "NEUTRAL",
+          1013.0,
+          11,
+          {
+            "A": 0.6799999999999999,
+            "B": 0.7799999999999999,
+            "C": 0.8799999999999999
+          }
+        ]
+      },
+      "non_target_state_changed_from_seed": true
+    }
+  },
+  "backend": "exact scipy KDTree",
+  "clock": "fixed now=1000+step for scoring; fixture timestamps=1000",
+  "embedding_dimension": 8,
+  "experiment": "Exp51",
+  "interpretation": {
+    "downstream_agent_behavior_measured": false,
+    "evidence_scope": "one synthetic field and one deterministic schedule",
+    "retrieval_only": true
+  },
+  "neighbor_graph": "disabled with k_neighbors=0; only declared cell links propagate",
+  "post_window_steps": [
+    5,
+    6,
+    7,
+    8
+  ],
+  "query_schedule": [
+    "A",
+    "B",
+    "A",
+    "C",
+    "B",
+    "A",
+    "D",
+    "B",
+    "C",
+    "D",
+    "A",
+    "C",
+    "B"
+  ],
+  "raw_raven_suppression_probe": {
+    "adapted_current_turn_source_ids": [
+      "B"
+    ],
+    "adapted_emits_linked_C": false,
+    "raw_core_current_turn_source_ids": [
+      "B",
+      "C"
+    ],
+    "raw_core_emits_linked_C": true
+  },
+  "seed_snapshot_sha256": "395c120e61d4538afddb623f18cdd6981af01625900ba18843a86896a31ed53c",
+  "source_commit": "56df6cfdd7f3dd3000bfd7ce8cc42606d66a191f",
+  "title": "Raven Longitudinal Restoration Pilot",
+  "vectors": {
+    "A": [
+      1.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0
+    ],
+    "B": [
+      0.9,
+      0.1,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0
+    ],
+    "C": [
+      0.4,
+      0.916515138991168,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0
+    ],
+    "D": [
+      0.0,
+      1.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0
+    ]
+  },
+  "washout_steps": [
+    9,
+    10,
+    11,
+    12,
+    13
+  ]
+}
