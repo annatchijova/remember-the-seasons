@@ -1,0 +1,244 @@
+{
+  "arms": {
+    "disabled": {
+      "causal_C_effect": {
+        "C_candidate": false,
+        "C_processed_during_BFS": false,
+        "D_activated": false,
+        "choice_C_suppressed": "Y",
+        "choice_with_C": "Y",
+        "decision_scores_C_suppressed": {
+          "X": "0/1",
+          "Y": "1/4"
+        },
+        "decision_scores_with_C": {
+          "X": "0/1",
+          "Y": "1/4"
+        },
+        "delta_by_action": {
+          "X": "0/1",
+          "Y": "0/1"
+        },
+        "delta_margin_X_minus_Y": "0/1"
+      },
+      "recall": {
+        "activated": [
+          "A",
+          "B",
+          "R",
+          "X",
+          "Y"
+        ],
+        "activation_hop": {
+          "A": 0,
+          "B": 1,
+          "R": 0,
+          "X": 1,
+          "Y": 2
+        },
+        "candidates": [
+          "A",
+          "B",
+          "R",
+          "X",
+          "Y"
+        ],
+        "exclusions": {
+          "C": "INHIBITED"
+        },
+        "inhibited": [
+          "C"
+        ],
+        "processed": [
+          "A",
+          "B",
+          "R",
+          "X",
+          "Y"
+        ],
+        "rescued": [],
+        "seeds": [
+          "A",
+          "R"
+        ]
+      },
+      "world_equals_common_start": true
+    },
+    "during_bfs": {
+      "causal_C_effect": {
+        "C_candidate": true,
+        "C_processed_during_BFS": true,
+        "D_activated": true,
+        "choice_C_suppressed": "Y",
+        "choice_with_C": "Y",
+        "decision_scores_C_suppressed": {
+          "X": "0/1",
+          "Y": "1/4"
+        },
+        "decision_scores_with_C": {
+          "X": "1/1",
+          "Y": "5/4"
+        },
+        "delta_by_action": {
+          "X": "1/1",
+          "Y": "1/1"
+        },
+        "delta_margin_X_minus_Y": "0/1"
+      },
+      "recall": {
+        "activated": [
+          "A",
+          "B",
+          "C",
+          "D",
+          "R",
+          "X",
+          "Y"
+        ],
+        "activation_hop": {
+          "A": 0,
+          "B": 1,
+          "C": 2,
+          "D": 3,
+          "R": 0,
+          "X": 1,
+          "Y": 2
+        },
+        "candidates": [
+          "A",
+          "B",
+          "C",
+          "D",
+          "R",
+          "X",
+          "Y"
+        ],
+        "exclusions": {},
+        "inhibited": [],
+        "processed": [
+          "A",
+          "B",
+          "C",
+          "D",
+          "R",
+          "X",
+          "Y"
+        ],
+        "rescued": [
+          "C"
+        ],
+        "seeds": [
+          "A",
+          "R"
+        ]
+      },
+      "world_equals_common_start": true
+    },
+    "post_bfs": {
+      "causal_C_effect": {
+        "C_candidate": true,
+        "C_processed_during_BFS": false,
+        "D_activated": false,
+        "choice_C_suppressed": "Y",
+        "choice_with_C": "X",
+        "decision_scores_C_suppressed": {
+          "X": "0/1",
+          "Y": "1/4"
+        },
+        "decision_scores_with_C": {
+          "X": "1/1",
+          "Y": "1/4"
+        },
+        "delta_by_action": {
+          "X": "1/1",
+          "Y": "0/1"
+        },
+        "delta_margin_X_minus_Y": "1/1"
+      },
+      "recall": {
+        "activated": [
+          "A",
+          "B",
+          "C",
+          "R",
+          "X",
+          "Y"
+        ],
+        "activation_hop": {
+          "A": 0,
+          "B": 1,
+          "R": 0,
+          "X": 1,
+          "Y": 2
+        },
+        "candidates": [
+          "A",
+          "B",
+          "C",
+          "R",
+          "X",
+          "Y"
+        ],
+        "exclusions": {},
+        "inhibited": [],
+        "processed": [
+          "A",
+          "B",
+          "R",
+          "X",
+          "Y"
+        ],
+        "rescued": [
+          "C"
+        ],
+        "seeds": [
+          "A",
+          "R"
+        ]
+      },
+      "world_equals_common_start": true
+    }
+  },
+  "common_start": {
+    "all_branches_clone_same_state": true,
+    "alternate_activation_route": [
+      "R",
+      "X",
+      "Y",
+      "C"
+    ],
+    "downstream_node": "D",
+    "inhibitory_link": "B->C",
+    "states": {
+      "A": "NEUTRAL",
+      "B": "NEUTRAL",
+      "C": "REINFORCED",
+      "D": "NEUTRAL",
+      "R": "NEUTRAL",
+      "X": "NEUTRAL",
+      "Y": "NEUTRAL"
+    }
+  },
+  "decision_oracle": {
+    "C_contribution": "1/1 to X when C is a candidate",
+    "D_contribution": "1/1 to Y when D is a candidate",
+    "Y_baseline_bias": "1/4",
+    "warning": "A declared synthetic readout used to compare causal score effects; not Raven ranking or an agent decision model."
+  },
+  "epistemic_labels": {
+    "INFERRED": "In this setup, post-BFS rescue restores C's candidate availability while during-BFS rescue additionally restores propagation to D.",
+    "OBSERVED": "The three deterministic branches, candidate sets, downstream score effects, and test outputs produced by this harness.",
+    "PROPOSED": "During-BFS reactivation and the downstream decision-score mapping are experimental interventions, not observed Raven behavior.",
+    "UNKNOWN": "Whether this timing distinction predicts retrieval or decisions in Raven, MNEME, or a deployed agent."
+  },
+  "limits": "One finite-hop graph and one deterministic score oracle; no model noise, persistent learning, downstream LLM, Raven runtime execution, or MNEME validation.",
+  "raven_snapshot": {
+    "commit": "56df6cfdd7f3dd3000bfd7ce8cc42606d66a191f",
+    "observed_rule": "An inhibited REINFORCED cell is rescued after BFS by removing it from inhibited_cells and adding it to activated_cells.",
+    "repo": "sources/raven-memory",
+    "source_file": "sources/raven-memory/raven/memory_engine.py",
+    "source_lines": "1718-1730"
+  },
+  "sha256": "beed7680ccab7de1a5e2a4c2ea4523e558cc8bbc6556d35f89dc4a75e812a619",
+  "status": "EXECUTED_SYNTHETIC_RESCUE_TIMING_ASSAY"
+}
