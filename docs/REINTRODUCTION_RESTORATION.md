@@ -1,6 +1,11 @@
 # Proposed Study: Memory Re-exposure, Restoration, and Relearning
 
-Status: **H14 protocol PROPOSED and not preregistered. An independent toy assay (Exp36) has been implemented and run; it is not Raven/MNEME evidence.**
+Status: **H14 remains OPEN.** The originating protocol below has since been
+preregistered and extended through Exp36–54. Exp36–50 are synthetic assays;
+Exp51–54 use copied Raven source and synthetic fixtures. None demonstrates
+restoration effects in a deployed agent. This document preserves the original
+question and protocol decisions; see the [Memory Lab guide](MEMORY_LAB.md) for
+the current vocabulary, experiment map, scope, and status.
 
 The verification, toy result, provenance, and protocol deviations are recorded in
 [the Phase 11 review](../research/PHASE11_H14_TOY_ASSAY.md).

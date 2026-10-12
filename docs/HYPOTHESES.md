@@ -513,17 +513,21 @@ directions. H11 remains inconclusive for equivalence.
 - A very small new core is sufficient.
 - The overall premise (H0) remains unsupported.
 
-## Proposed follow-up hypothesis (not registered)
+## H14 — Reintroduction and causal restoration
 
-**H14 — Reintroduction does not necessarily restore causal function.**
-Re-exposure, intrinsic-state restoration, incident-link restoration, and
-relearning may produce different causal-influence vectors after functional
-absence; restoring the target and its links may still fail to match the
-no-absence trajectory. H14 remains PROPOSED and unregistered. Exp36 is retained as a historical
-toy assay with known measurement limitations; Exp37 adds a separate
-signed-score instrument check with frozen A-incident links. Neither evaluates
-Raven/MNEME. The operational definitions and open decisions are in
-[`REINTRODUCTION_RESTORATION.md`](REINTRODUCTION_RESTORATION.md); see
-[`PHASE11_H14_TOY_ASSAY.md`](../research/PHASE11_H14_TOY_ASSAY.md) and
-[`PHASE11_H14_EXP37_MEASUREMENT.md`](../research/PHASE11_H14_EXP37_MEASUREMENT.md)
-for the two toy assay records.
+**PROPOSED hypothesis, actively tested; verdict OPEN.** Re-exposure,
+intrinsic-state restoration, incident-link restoration, and relearning may
+produce different causal-influence trajectories after functional absence.
+Restoring a target memory and its links may still fail to match the
+no-absence trajectory because the rest of the system was not rewound.
+
+Exp36–50 developed and challenged the synthetic measurement and finite-state
+arguments. Exp51–54 examined selected operations in a copied Raven source
+snapshot with synthetic fixtures. Those assays do not establish restoration
+effects in a deployed agent or show that a Raven state representation is
+sufficient or minimal. The current vocabulary, evidence map, and threat
+scenarios are in [`MEMORY_LAB.md`](MEMORY_LAB.md); the full sequence is in
+[`EXPERIMENTS.md`](EXPERIMENTS.md). Earlier operational definitions and assay
+history remain in [`REINTRODUCTION_RESTORATION.md`](REINTRODUCTION_RESTORATION.md),
+[`PHASE11_H14_TOY_ASSAY.md`](../research/PHASE11_H14_TOY_ASSAY.md), and
+[`PHASE11_H14_EXP37_MEASUREMENT.md`](../research/PHASE11_H14_EXP37_MEASUREMENT.md).

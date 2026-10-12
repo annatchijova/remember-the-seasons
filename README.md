@@ -12,50 +12,12 @@ recomputed in your browser).
 > We were asked to build the next frontier of AI. We cannot claim to
 > have revolutionized it. This is our best attempt in one month.
 
-> STATUS: the main research phase is closed; Exp48–50 are synthetic H14
-> follow-up assays. Exp51–54 are isolated transfer, state-consumer, and
-> observability probes against a copied
-> Raven implementation with synthetic data. **OBSERVED, copied source with
-> synthetic fixture:** it found a current-turn
-> synaptic-source path that bypasses the copied core's documented suppression
-> semantics, then measured six longitudinal arms using an experiment-only
-> filter. The run is retrieval evidence for one snapshot and schedule, not
-> validation of a deployed agent. Exp48 found that the 1,512-state Cartesian domain
-> used by Exp47 differs from the 172-state closure reachable from its
-> documented seed, and computed observational quotients for both under 24
-> fixed query schedules. Exp49 found the 118-class quotient is stable under
-> both declared actions on that seed closure; the Cartesian quotient is not.
-> Exp50 rechecked the quotient using shared challenger-score inputs, matching
-> Exp47's state-dependent transition semantics. On the same closure, its fixed
-> point also has 118 classes, matching Exp48; 2,376 checks found no immediate
-> output or successor-class mismatch. Certificates cover all 6,903 class pairs:
-> 6,169 differ on the initial observation, and the other 734 have shortest
-> distinguishing query sequences of at most three steps. This is a finite
-> synthetic result, not a Raven/MNEME evaluation.
-> Exp52 found raw suppression excluded A from results but still allowed A's
-> `current_turn_memories` synaptic source path to change non-A scores. An
-> experiment-only source filter matched the no-source control. After deleting
-> A and its incident links, one non-target recall counter still differed, but
-> all four preregistered score vectors and rankings matched. This is a finite
-> synthetic result, not evidence beyond the declared schedule. See the
-> [Exp52 report and artifacts](experiments/exp52_raven_suppression_semantics/).
-> Exp53 isolated `C.recall_count` (5 versus 4). **OBSERVED:** four fixed Raven
-> retrieval queries produced identical scores and rankings, while stats and
-> inspection exposed the count; truncating `export_graph(max_nodes=1)` selected
-> C versus B in this fixture. The sleep consolidator dry run was identical
-> because its weights came from the unchanged audit log. This separates
-> retrieval effects from telemetry/export effects; it does not show a
-> downstream agent decision. See the
-> [Exp53 assay](experiments/exp53_raven_latent_trace/).
-> Exp54 inventories Raven's declared FastAPI/MCP surface and tests five
-> same-input mutating engine actions. **OBSERVED:** the S5/S4 pair stayed
-> equivalent on the four retrieval probes after each action, while stats and
-> memory inspection continued to expose the counter difference. Reversing
-> physical SQLite row order with identical logical rows changed the original
-> truncated graph's tied winner (B to C); an Exp54-only selector with
-> `memory_id` as a secondary key was stable. This is bounded to the copied
-> Raven snapshot and fixture, not the full service contract. See the
-> [Exp54 assay](experiments/exp54_raven_observational_contract/).
+> STATUS: the core research phase is closed. H14 remains open, with synthetic
+> restoration assays and isolated transfer probes against a copied Raven
+> snapshot. These runs use synthetic data and do not validate a deployed agent.
+> Their purpose and scope are summarized in the
+> [Memory Lab research guide](docs/MEMORY_LAB.md); the complete run-by-run
+> record remains in [`docs/EXPERIMENTS.md`](docs/EXPERIMENTS.md).
 > A working prototype lives in `product/`; sources
 > remain read-only, claims stay labelled, and limitations are documented.
 

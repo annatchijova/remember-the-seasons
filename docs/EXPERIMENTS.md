@@ -1,5 +1,8 @@
 # Experiments index
 
+For the H14 intervention vocabulary, evidence map, and scope boundaries, see
+the [Memory Lab research guide](MEMORY_LAB.md).
+
 All 36 numbered experiment scripts in `experiments/`, grouped by phase. Verdicts are
 observed results, not aspirations. `PASS` means the property survived
 falsification; `FALSIFIED` means the experiment killed the hypothesis.
@@ -229,12 +232,12 @@ in `research/PHASE*.md`.
 
 ## H14 status
 
-Exp36 remains the historical six-arm toy assay with binary flip outcomes
-and incident-link aging. Exp37 is a separate six-arm toy assay with signed
-action-score effects and frozen A-incident links. Both are synthetic and
-neither evaluates Raven or MNEME. H14 remains OPEN. See
-[`REINTRODUCTION_RESTORATION.md`](REINTRODUCTION_RESTORATION.md) for the
-protocol, [`research/PHASE11_H14_TOY_ASSAY.md`](../research/PHASE11_H14_TOY_ASSAY.md)
-for the Exp36 verification, and
-[`research/PHASE11_H14_EXP37_MEASUREMENT.md`](../research/PHASE11_H14_EXP37_MEASUREMENT.md)
-for Exp37.
+H14 remains OPEN. Exp36–50 are synthetic restoration and finite-state assays;
+Exp51–54 are isolated experiments against a copied Raven snapshot with
+synthetic fixtures. Exp51–54 provide bounded evidence about selected Raven
+operations and observables, not a deployed-agent validation or a sufficient
+or minimal Raven state representation. The current vocabulary and research
+map are in [`MEMORY_LAB.md`](MEMORY_LAB.md). The protocol origin and historic
+Exp36/37 records remain in [`REINTRODUCTION_RESTORATION.md`](REINTRODUCTION_RESTORATION.md),
+[`research/PHASE11_H14_TOY_ASSAY.md`](../research/PHASE11_H14_TOY_ASSAY.md), and
+[`research/PHASE11_H14_EXP37_MEASUREMENT.md`](../research/PHASE11_H14_EXP37_MEASUREMENT.md).

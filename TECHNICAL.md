@@ -6,6 +6,10 @@ Deep architecture, protocol contracts, invariants, determinism scope,
 and the honest list of what this system does not guarantee. Audience:
 the reader auditing or extending the product layer (`product/`).
 
+The experimental intervention track is documented separately in
+[`docs/MEMORY_LAB.md`](docs/MEMORY_LAB.md). That research record is not a
+product capability or validation claim for this architecture.
+
 ## 1. Architecture
 
 Three decoupled layers, each independently inspectable:
@@ -199,3 +203,13 @@ bash conformance/cf/v1/differential.sh
 Specs: `product/spec/cf-bundle-v1.md`, `product/spec/causal-ontology-v2.md`,
 `product/SPEC.md` (protocol governance, §11). Experiment narrative:
 `docs/EXPERIMENTS.md`, `docs/HYPOTHESES.md`, `docs/STOP_CONDITIONS.md`.
+
+## 11. Memory Lab research boundary
+
+H14 and Exp36–54 examine temporary interventions, restoration, propagation,
+observable equivalence, and transition congruence. The experiments range from
+synthetic finite machines to isolated runs against a copied Raven source
+snapshot with synthetic data. They do not validate the product layer above or
+an agent deployment. The [Memory Lab guide](docs/MEMORY_LAB.md) defines the
+working vocabulary, summarizes the evidence with its scope, and records
+proposed safeguards for any future intervention harness.
