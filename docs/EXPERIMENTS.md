@@ -2,6 +2,8 @@
 
 For the H14 intervention vocabulary, evidence map, and scope boundaries, see
 the [Memory Lab research guide](MEMORY_LAB.md).
+For the source-level operation and observation inventory behind Exp54–55, see
+[Raven observational contract](RAVEN_OBSERVATIONAL_CONTRACT.md).
 
 All 36 numbered experiment scripts in `experiments/`, grouped by phase. Verdicts are
 observed results, not aspirations. `PASS` means the property survived
@@ -196,6 +198,52 @@ Exp54 does not test arbitrary inputs, live API/MCP behavior, concurrency,
 non-dry-run consolidation, provider behavior, or agent decisions. See the
 [Exp54 preregistration, report, tests, provenance, and run artifact](../experiments/exp54_raven_observational_contract/).
 
+**OBSERVED, copied Raven snapshot plus synthetic fixture:** Exp55 applied
+non-dry-run consolidation to branches differing only in C's persisted
+`recall_count` while holding audit history fixed. The merged embeddings,
+logical databases, and complete C/D retrieval traces matched. Its audit-weight
+canary changed the merged embedding and shifted C/D scores in the predicted
+directions. The result supports a bounded negative for the row counter's path
+through this consolidation schedule; it does not generalize to other Raven
+operations or deployed agents. Five tests passed, including a mutation check
+that made the primary branches diverge when a temporary mutant read row
+counters instead of audit counts. See the [Exp55 preregistration, runner,
+tests, report, provenance, and JSON result](../experiments/exp55_raven_counter_consolidation/).
+
+**OBSERVED, copied Raven snapshot plus synthetic fixture:** Exp56 held the
+per-memory audit-derived counts at C=5/D=4 while changing audit event order or
+query text. The three histories had different audit-log digests but identical
+merge weights, embedding bytes, and fixed C/D retrieval traces. A same-total
+control that changed allocation to C=4/D=5 changed the embedding and shifted
+scores in the predicted directions. A deliberately order-sensitive mutation
+was detected; 4 tests passed, including a full-run replay check. This supports
+the count vector as a sufficient projection only for those consolidation and
+retrieval outputs in the declared fixture. It does not imply full operational
+equivalence. See the [Exp56 preregistration, runner, tests, report, provenance,
+and JSON result](../experiments/exp56_raven_audit_projection/).
+
+**OBSERVED, copied Raven snapshot plus synthetic fixture:** Exp57 kept the
+same C=5/D=4 recall counts but assigned those events to opposite timestamp
+windows. This changed pre-consolidation recency bonuses and scores; an
+equalized-`last_activation` control removed the difference. After consolidation,
+the merged embeddings and fixed C/D traces matched, and both new nodes had
+`last_activation=0`. A zero-recency mutation removed the pre-merge contrast.
+Five tests passed, including a full-run replay check. This supports a narrow
+claim that the tested consolidator drops this measured recency distinction
+from its merged node; audit histories remain different. See the [Exp57
+preregistration, runner, tests, report, provenance, and JSON result](../experiments/exp57_raven_temporal_recency/).
+
+**OBSERVED, copied Raven snapshot plus synthetic fixture:** Exp58 replayed
+eight identical real recalls through the Exp57 post-consolidation branches.
+At every step, returned IDs, score components, memory rows, and cell links
+matched. The preexisting histories and every new audit-entry hash remained
+different; both audit chains still passed linkage and hash-integrity checks.
+A recency-state mutation changed the measured score. Five tests passed,
+including a canonical full-run replay. This bounds the result to the selected
+post-consolidation recall sequence; it does not establish congruence for all
+Raven operations. See the [Exp58 preregistration, runner, tests, report,
+provenance, and JSON result](../experiments/exp58_raven_postconsolidation_replay/).
+
 
 | Script | Role |
 |---|---|
@@ -233,8 +281,8 @@ in `research/PHASE*.md`.
 ## H14 status
 
 H14 remains OPEN. Exp36–50 are synthetic restoration and finite-state assays;
-Exp51–54 are isolated experiments against a copied Raven snapshot with
-synthetic fixtures. Exp51–54 provide bounded evidence about selected Raven
+Exp51–58 are isolated experiments against a copied Raven snapshot with
+synthetic fixtures. Exp51–58 provide bounded evidence about selected Raven
 operations and observables, not a deployed-agent validation or a sufficient
 or minimal Raven state representation. The current vocabulary and research
 map are in [`MEMORY_LAB.md`](MEMORY_LAB.md). The protocol origin and historic

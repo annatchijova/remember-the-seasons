@@ -74,6 +74,8 @@ show why a Raven transfer assay needs a wider contract: score/rank outputs,
 inspection, telemetry, export, and state-changing operations can distinguish
 states that fixed retrieval queries do not. See the individual reports for
 their finite scopes and source citations.
+The source-grounded inventory and proposed nested contracts are in the
+[Raven observational contract](RAVEN_OBSERVATIONAL_CONTRACT.md).
 
 ## What has been tested
 
@@ -89,6 +91,10 @@ transfer to another implementation.
 | [Exp45](../experiments/exp45_h14_sufficient_state/) · [Exp46](../experiments/exp46_h14_history_collisions/) · [Exp47](../experiments/exp47_h14_state_characterization/) · [Exp48](../experiments/exp48_h14_observational_quotient/) · [Exp49](../experiments/exp49_h14_quotient_congruence/) · [Exp50](../experiments/exp50_h14_partition_refinement/) | **OBSERVED, finite synthetic machine:** state projections were challenged with history collisions, observational quotients, transition congruence, and a partition-refinement certificate. The minimality result applies only to that declared machine, seed closure, input alphabet, and observations. See the [Exp48–50 report](H14_EXP48_50_MINIMIZATION.md). |
 | [Exp51](../experiments/exp51_raven_h14_longitudinal/) · [Exp52](../experiments/exp52_raven_suppression_semantics/) | **OBSERVED, copied Raven snapshot and synthetic fixture:** suppression as result exclusion did not guarantee source-influence exclusion in the tested path. Deleting a memory and incident links left a counter difference, while four fixed retrieval probes matched. |
 | [Exp53](../experiments/exp53_raven_latent_trace/) · [Exp54](../experiments/exp54_raven_observational_contract/) | **OBSERVED, copied Raven snapshot and synthetic fixture:** `recall_count` was visible outside retrieval; five selected same-input actions preserved the four-query retrieval equivalence. Reversing physical SQLite row order changed the tied winner of the truncated graph export in this fixture. |
+| [Exp55](../experiments/exp55_raven_counter_consolidation/) | **OBSERVED, copied Raven snapshot and synthetic fixture:** a stored `recall_count` difference alone did not change real consolidation or later C/D retrieval. A canary that changed audit-derived counts did change the merged embedding and later scores. Five tests passed, including a counter-source mutation check. |
+| [Exp56](../experiments/exp56_raven_audit_projection/) | **OBSERVED, copied Raven snapshot and synthetic fixture:** changing audit event order or query text at fixed per-memory counts did not change consolidation-derived retrieval outputs; changing count allocation did. Audit histories stayed distinguishable. Four tests passed, including an order-sensitive mutation and replay check. |
+| [Exp57](../experiments/exp57_raven_temporal_recency/) | **OBSERVED, copied Raven snapshot and synthetic fixture:** assigning identical per-memory recall counts to different timestamps changed pre-consolidation retrieval through recency. Equalizing timestamps removed the difference; consolidation produced matching merged embeddings/traces with zero recency. Five tests passed, including a zero-recency mutation and replay check. |
+| [Exp58](../experiments/exp58_raven_postconsolidation_replay/) | **OBSERVED, copied Raven snapshot and synthetic fixture:** eight identical post-consolidation recall calls preserved equal outputs and memory/link state across branches with different audit histories. Each branch's audit chain remained valid, and a recency-state mutation was detected. Five tests passed, including replay. |
 
 **INFERRED:** the experiments establish that observational equivalence depends
 on the operations and outputs included in the observer. They do not establish
@@ -149,12 +155,15 @@ intervention tooling is exposed.
 - [Experiment index](EXPERIMENTS.md) — sequence and current research record.
 - [H14 real-system transfer audit](H14_REAL_SYSTEM_TRANSFER_AUDIT.md) — what
   source inspection does and does not support for Raven, MNEME, and Stigmergy.
+- [Raven observational contract](RAVEN_OBSERVATIONAL_CONTRACT.md) —
+  observed REST/MCP/engine surfaces and proposed equivalence scopes for a
+  future bounded assay.
 - [Exp48–50 minimization report](H14_EXP48_50_MINIMIZATION.md) — formal scope
   for the synthetic finite-machine result.
 - [Hypotheses](HYPOTHESES.md) and [stop conditions](STOP_CONDITIONS.md) —
   falsifiers and research boundaries.
 
-**Current status — OBSERVED:** Exp54 is the latest recorded assay in this
+**Current status — OBSERVED:** Exp58 is the latest recorded assay in this
 line. H14 remains open; there is no demonstrated transfer of restoration
-effects to a deployed agent. Further work should first define the operations
-and outputs that the intended equivalence must preserve.
+effects to a deployed agent. The Exp54–58 results are bounded to selected
+operations in one copied Raven snapshot and synthetic fixtures.

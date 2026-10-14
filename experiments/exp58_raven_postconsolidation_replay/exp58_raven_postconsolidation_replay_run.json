@@ -1,0 +1,454 @@
+{
+  "epistemic_scope": "copied Raven snapshot and synthetic Exp51 fixture",
+  "experiment": "Exp58",
+  "limitations": [
+    "one pinned source snapshot and four-memory synthetic fixture",
+    "eight fixed real recall operations after one consolidation pass",
+    "memory rows and cell links compared; audit histories remain intentionally distinct",
+    "does not test arbitrary Raven operations, deployed agents, MNEME, or Stigmergy"
+  ],
+  "parameters": {
+    "hops": 0,
+    "query_sequence": [
+      "C",
+      "D",
+      "D",
+      "C",
+      "D",
+      "C",
+      "C",
+      "D"
+    ],
+    "step_seconds": 21600.0,
+    "timestamp_schedule": "NOW + ordinal * 21600 seconds",
+    "top_k": 4
+  },
+  "source_commit": "56df6cfdd7f3dd3000bfd7ce8cc42606d66a191f",
+  "source_copy_hashes": {
+    "memory_engine.py": "ae6527e4b7f7bd444e982971aeffbe8d122eca28e0ebe8ea70149cb89d5d1af0",
+    "sleep_consolidator.py": "9e2a0fa1c8b2c5b68bd691511b708644ff1419e5afc04ac1fb692da5729bab39"
+  },
+  "state_sensitivity_control": {
+    "baseline_recency_bonus": 0.0,
+    "mutant_recency_bonus": 0.04204482076268573,
+    "mutation": "set merged node last_activation to the query timestamp",
+    "state_change_detected": true
+  },
+  "status": "runtime assay",
+  "title": "Post-Consolidation Longitudinal Replay",
+  "trajectory_assay": {
+    "all_step_audit_hashes_distinct": true,
+    "all_steps_equal": true,
+    "audit_chain_verification": {
+      "T1": {
+        "chain_intact": true,
+        "hash_integrity": true,
+        "issue_count": 0
+      },
+      "T2": {
+        "chain_intact": true,
+        "hash_integrity": true,
+        "issue_count": 0
+      }
+    },
+    "final_audit_histories_distinct": true,
+    "final_audit_sha256": {
+      "T1": "f663556d95065239681e8846b5296bbeb937929d1ce6a3f450c7134faa51307c",
+      "T2": "973d8417b94c069f31f4eb5ff8c2028478a69b5b8c53a4b3d7c596b46d524d6d"
+    },
+    "initial_audit_histories_distinct": true,
+    "initial_audit_sha256": {
+      "T1": "42b74b29173f8d02447a176c4289c601ae53cf2909713c80a4ac9c80410f6e01",
+      "T2": "281cb375f8a858eadd645613c0bb7ffee7c96b1ba7f331665e9913078259d1c8"
+    },
+    "initial_memory_and_link_state_equal": true,
+    "per_step_audit_hashes_distinct": [
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true
+    ],
+    "per_step_observations_and_state_equal": [
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true
+    ],
+    "query_sequence": [
+      "C",
+      "D",
+      "D",
+      "C",
+      "D",
+      "C",
+      "C",
+      "D"
+    ],
+    "trajectories": {
+      "T1": [
+        {
+          "audit_entry_hash": "450616b5b3ef7e26ac910afe98cbfbf69ee3cd943b81006a4cb25453ef2f6f1a",
+          "behavioral_output": {
+            "query": "C",
+            "returned": [
+              {
+                "base_score": 0.9833799554489762,
+                "hop_decay": 1.0,
+                "hop_distance": 0,
+                "memory_id": "cons_8450b0cfb8f1a49b_2000000000",
+                "rank": 1,
+                "recency_bonus": 0.0,
+                "score": 0.9833799554489762,
+                "source": "similarity",
+                "state_boost": 1.0,
+                "synaptic_boost": 0.0
+              }
+            ],
+            "timestamp": 2021600.0
+          },
+          "operational_state_sha256": "a9524fd47aca224be5afccf2d743479fb32841f4e2988dcc5a0be3d577384fe9"
+        },
+        {
+          "audit_entry_hash": "a1616be6bb18544156617a0d829b9d53ad8b220e3e95096dde973cadd3623262",
+          "behavioral_output": {
+            "query": "D",
+            "returned": [
+              {
+                "base_score": 0.9739065170288086,
+                "hop_decay": 1.0,
+                "hop_distance": 0,
+                "memory_id": "cons_8450b0cfb8f1a49b_2000000000",
+                "rank": 1,
+                "recency_bonus": 0.04204482076268573,
+                "score": 1.0159513377914944,
+                "source": "similarity",
+                "state_boost": 1.0,
+                "synaptic_boost": 0.0
+              }
+            ],
+            "timestamp": 2043200.0
+          },
+          "operational_state_sha256": "6c483955e3a9171dc4c0170a1236c2d7f3291bd134aea3b3c544c173bcfd8126"
+        },
+        {
+          "audit_entry_hash": "72d9cf2ebb7ba9d45ee63c9cb0cb1ea37fa6e67715b62cc2c1185d2a6fb57575",
+          "behavioral_output": {
+            "query": "D",
+            "returned": [
+              {
+                "base_score": 0.9739065170288086,
+                "hop_decay": 1.0,
+                "hop_distance": 0,
+                "memory_id": "cons_8450b0cfb8f1a49b_2000000000",
+                "rank": 1,
+                "recency_bonus": 0.04204482076268573,
+                "score": 1.0159513377914944,
+                "source": "similarity",
+                "state_boost": 1.0,
+                "synaptic_boost": 0.0
+              }
+            ],
+            "timestamp": 2064800.0
+          },
+          "operational_state_sha256": "a408f40300e456b1e78505aec3cefacce89726f79b2653e1f6fda7b8cc2f8c2e"
+        },
+        {
+          "audit_entry_hash": "33a2ed45fa0c2b25a6fd5d7447c5f4104f044dde3954882748ffea0e8fe184c9",
+          "behavioral_output": {
+            "query": "C",
+            "returned": [
+              {
+                "base_score": 0.9833799554489762,
+                "hop_decay": 1.0,
+                "hop_distance": 0,
+                "memory_id": "cons_8450b0cfb8f1a49b_2000000000",
+                "rank": 1,
+                "recency_bonus": 0.04204482076268573,
+                "score": 1.025424776211662,
+                "source": "similarity",
+                "state_boost": 1.0,
+                "synaptic_boost": 0.0
+              }
+            ],
+            "timestamp": 2086400.0
+          },
+          "operational_state_sha256": "91706344fccd3c0f0c99c704c8be860f211639a4e61982f4509aa9876361a298"
+        },
+        {
+          "audit_entry_hash": "3ef322042e1b9ac966713e8dcfb420fb40cc91c061b214d84c715f139e9b84b6",
+          "behavioral_output": {
+            "query": "D",
+            "returned": [
+              {
+                "base_score": 0.9739065170288086,
+                "hop_decay": 1.0,
+                "hop_distance": 0,
+                "memory_id": "cons_8450b0cfb8f1a49b_2000000000",
+                "rank": 1,
+                "recency_bonus": 0.04204482076268573,
+                "score": 1.0159513377914944,
+                "source": "similarity",
+                "state_boost": 1.0,
+                "synaptic_boost": 0.0
+              }
+            ],
+            "timestamp": 2108000.0
+          },
+          "operational_state_sha256": "2c6abdb880d6378ec1f17b74801902b1bdf6711a276ff8f8986f13732e4d9a7a"
+        },
+        {
+          "audit_entry_hash": "ef154b64ae11b0eea87bbf74e1b2a012a6a236a4cd6541020eb3ee6a1be39326",
+          "behavioral_output": {
+            "query": "C",
+            "returned": [
+              {
+                "base_score": 0.9833799554489762,
+                "hop_decay": 1.0,
+                "hop_distance": 0,
+                "memory_id": "cons_8450b0cfb8f1a49b_2000000000",
+                "rank": 1,
+                "recency_bonus": 0.04204482076268573,
+                "score": 1.025424776211662,
+                "source": "similarity",
+                "state_boost": 1.0,
+                "synaptic_boost": 0.0
+              }
+            ],
+            "timestamp": 2129600.0
+          },
+          "operational_state_sha256": "8de3d5ff0cb3c4085782b2b70fb2039629900a985f2e16042e93b23f03af57e7"
+        },
+        {
+          "audit_entry_hash": "3eb8edb12084841adbb5395009b17e38f2a176ad8bbcd4aef0692dff11626d0e",
+          "behavioral_output": {
+            "query": "C",
+            "returned": [
+              {
+                "base_score": 0.9833799554489762,
+                "hop_decay": 1.0,
+                "hop_distance": 0,
+                "memory_id": "cons_8450b0cfb8f1a49b_2000000000",
+                "rank": 1,
+                "recency_bonus": 0.04204482076268573,
+                "score": 1.025424776211662,
+                "source": "similarity",
+                "state_boost": 1.0,
+                "synaptic_boost": 0.0
+              }
+            ],
+            "timestamp": 2151200.0
+          },
+          "operational_state_sha256": "4dacdf9a0662acfc9a8980edb010fc6dee8788dfd17735c42176a1f704d120da"
+        },
+        {
+          "audit_entry_hash": "503563d5850167b72d5064dd3fdb8761c64d25f5fe392257bfe5aefb0e9dbc12",
+          "behavioral_output": {
+            "query": "D",
+            "returned": [
+              {
+                "base_score": 0.9739065170288086,
+                "hop_decay": 1.0,
+                "hop_distance": 0,
+                "memory_id": "cons_8450b0cfb8f1a49b_2000000000",
+                "rank": 1,
+                "recency_bonus": 0.04204482076268573,
+                "score": 1.0159513377914944,
+                "source": "similarity",
+                "state_boost": 1.0,
+                "synaptic_boost": 0.0
+              }
+            ],
+            "timestamp": 2172800.0
+          },
+          "operational_state_sha256": "5d4c612e4fbbb75a84d38c72aeea6519b5adee966d158806cf97d943f55c0616"
+        }
+      ],
+      "T2": [
+        {
+          "audit_entry_hash": "9fcfeb1f0419d83edf22f8f0fb2711d03ce0663da959fdc164f2630a4db1d44f",
+          "behavioral_output": {
+            "query": "C",
+            "returned": [
+              {
+                "base_score": 0.9833799554489762,
+                "hop_decay": 1.0,
+                "hop_distance": 0,
+                "memory_id": "cons_8450b0cfb8f1a49b_2000000000",
+                "rank": 1,
+                "recency_bonus": 0.0,
+                "score": 0.9833799554489762,
+                "source": "similarity",
+                "state_boost": 1.0,
+                "synaptic_boost": 0.0
+              }
+            ],
+            "timestamp": 2021600.0
+          },
+          "operational_state_sha256": "a9524fd47aca224be5afccf2d743479fb32841f4e2988dcc5a0be3d577384fe9"
+        },
+        {
+          "audit_entry_hash": "852004308b46e436a28008f74e24c89c0b36785ef3bd59d5fb4ec629d0333d43",
+          "behavioral_output": {
+            "query": "D",
+            "returned": [
+              {
+                "base_score": 0.9739065170288086,
+                "hop_decay": 1.0,
+                "hop_distance": 0,
+                "memory_id": "cons_8450b0cfb8f1a49b_2000000000",
+                "rank": 1,
+                "recency_bonus": 0.04204482076268573,
+                "score": 1.0159513377914944,
+                "source": "similarity",
+                "state_boost": 1.0,
+                "synaptic_boost": 0.0
+              }
+            ],
+            "timestamp": 2043200.0
+          },
+          "operational_state_sha256": "6c483955e3a9171dc4c0170a1236c2d7f3291bd134aea3b3c544c173bcfd8126"
+        },
+        {
+          "audit_entry_hash": "acc65bd12e0fc493c28ecbe4c822ad70ec442ee0c4eb8fabc4687c0ddf96c6bd",
+          "behavioral_output": {
+            "query": "D",
+            "returned": [
+              {
+                "base_score": 0.9739065170288086,
+                "hop_decay": 1.0,
+                "hop_distance": 0,
+                "memory_id": "cons_8450b0cfb8f1a49b_2000000000",
+                "rank": 1,
+                "recency_bonus": 0.04204482076268573,
+                "score": 1.0159513377914944,
+                "source": "similarity",
+                "state_boost": 1.0,
+                "synaptic_boost": 0.0
+              }
+            ],
+            "timestamp": 2064800.0
+          },
+          "operational_state_sha256": "a408f40300e456b1e78505aec3cefacce89726f79b2653e1f6fda7b8cc2f8c2e"
+        },
+        {
+          "audit_entry_hash": "a3e0b0f54dab65624eaff5d9a63d4d64ea294f2e4116577255aedf51cb8dd87b",
+          "behavioral_output": {
+            "query": "C",
+            "returned": [
+              {
+                "base_score": 0.9833799554489762,
+                "hop_decay": 1.0,
+                "hop_distance": 0,
+                "memory_id": "cons_8450b0cfb8f1a49b_2000000000",
+                "rank": 1,
+                "recency_bonus": 0.04204482076268573,
+                "score": 1.025424776211662,
+                "source": "similarity",
+                "state_boost": 1.0,
+                "synaptic_boost": 0.0
+              }
+            ],
+            "timestamp": 2086400.0
+          },
+          "operational_state_sha256": "91706344fccd3c0f0c99c704c8be860f211639a4e61982f4509aa9876361a298"
+        },
+        {
+          "audit_entry_hash": "815d4d81fa37882cc7c4953604cfe88292258d7f74470186360d69da5cd631ff",
+          "behavioral_output": {
+            "query": "D",
+            "returned": [
+              {
+                "base_score": 0.9739065170288086,
+                "hop_decay": 1.0,
+                "hop_distance": 0,
+                "memory_id": "cons_8450b0cfb8f1a49b_2000000000",
+                "rank": 1,
+                "recency_bonus": 0.04204482076268573,
+                "score": 1.0159513377914944,
+                "source": "similarity",
+                "state_boost": 1.0,
+                "synaptic_boost": 0.0
+              }
+            ],
+            "timestamp": 2108000.0
+          },
+          "operational_state_sha256": "2c6abdb880d6378ec1f17b74801902b1bdf6711a276ff8f8986f13732e4d9a7a"
+        },
+        {
+          "audit_entry_hash": "583e3ae2acdf63412e5ff3cc738195844c14e39b78d0c8e7ac105667bfc603df",
+          "behavioral_output": {
+            "query": "C",
+            "returned": [
+              {
+                "base_score": 0.9833799554489762,
+                "hop_decay": 1.0,
+                "hop_distance": 0,
+                "memory_id": "cons_8450b0cfb8f1a49b_2000000000",
+                "rank": 1,
+                "recency_bonus": 0.04204482076268573,
+                "score": 1.025424776211662,
+                "source": "similarity",
+                "state_boost": 1.0,
+                "synaptic_boost": 0.0
+              }
+            ],
+            "timestamp": 2129600.0
+          },
+          "operational_state_sha256": "8de3d5ff0cb3c4085782b2b70fb2039629900a985f2e16042e93b23f03af57e7"
+        },
+        {
+          "audit_entry_hash": "c920f26475539500e7b90b24583dfd524b236b180ff438114968973eb0789763",
+          "behavioral_output": {
+            "query": "C",
+            "returned": [
+              {
+                "base_score": 0.9833799554489762,
+                "hop_decay": 1.0,
+                "hop_distance": 0,
+                "memory_id": "cons_8450b0cfb8f1a49b_2000000000",
+                "rank": 1,
+                "recency_bonus": 0.04204482076268573,
+                "score": 1.025424776211662,
+                "source": "similarity",
+                "state_boost": 1.0,
+                "synaptic_boost": 0.0
+              }
+            ],
+            "timestamp": 2151200.0
+          },
+          "operational_state_sha256": "4dacdf9a0662acfc9a8980edb010fc6dee8788dfd17735c42176a1f704d120da"
+        },
+        {
+          "audit_entry_hash": "65acb509a95f39e0a712c7cbd7d8f330ec3e32fcc7c77f8dd98df0788c989ecf",
+          "behavioral_output": {
+            "query": "D",
+            "returned": [
+              {
+                "base_score": 0.9739065170288086,
+                "hop_decay": 1.0,
+                "hop_distance": 0,
+                "memory_id": "cons_8450b0cfb8f1a49b_2000000000",
+                "rank": 1,
+                "recency_bonus": 0.04204482076268573,
+                "score": 1.0159513377914944,
+                "source": "similarity",
+                "state_boost": 1.0,
+                "synaptic_boost": 0.0
+              }
+            ],
+            "timestamp": 2172800.0
+          },
+          "operational_state_sha256": "5d4c612e4fbbb75a84d38c72aeea6519b5adee966d158806cf97d943f55c0616"
+        }
+      ]
+    }
+  }
+}

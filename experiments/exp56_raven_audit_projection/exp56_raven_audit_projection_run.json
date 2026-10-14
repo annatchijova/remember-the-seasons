@@ -1,0 +1,338 @@
+{
+  "epistemic_scope": "copied Raven snapshot and synthetic Exp51 fixture",
+  "experiment": "Exp56",
+  "limitations": [
+    "one pinned source snapshot and four-memory synthetic fixture",
+    "equivalence covers consolidation weights, merged embedding, and two fixed retrieval traces only",
+    "audit logs and other Raven observers intentionally remain distinguishable",
+    "does not establish behavior in deployed Raven, MNEME, Stigmergy, or downstream agents"
+  ],
+  "mutation_control": {
+    "deliberate_mutation": "add one consolidation weight to the last retrieved memory",
+    "mutant_embedding_diverges_H1_H2": true
+  },
+  "parameters": {
+    "backend": "kdtree",
+    "fixed_time": 2000.0,
+    "query_keys": [
+      "C",
+      "D"
+    ],
+    "threshold": 0.9
+  },
+  "primary_and_control": {
+    "allocation_sensitivity_control": {
+      "C_score_H1_greater": true,
+      "D_score_H1_lower": true,
+      "embedding_differs": true
+    },
+    "audit_histories_distinct_H1_H2": true,
+    "audit_histories_distinct_H1_H3": true,
+    "branches": {
+      "H1": {
+        "base_scores": {
+          "C": 0.9833799554489762,
+          "D": 0.9739065170288086
+        },
+        "history": {
+          "audit_counts": {
+            "C": 5,
+            "D": 4
+          },
+          "audit_sha256": "b49224306331198cb55c560a9ec180db7f54dc6e9e6cbe16d662de5a709dd7d4",
+          "event_count": 9,
+          "persisted_row_counts": {
+            "C": 9,
+            "D": 8
+          }
+        },
+        "merged_embedding_hex": "8265683ef051793f000000000000000000000000000000000000000000000000",
+        "merged_metadata": {
+          "consolidated_from": [
+            "C",
+            "D"
+          ],
+          "consolidation_ts": 2000.0,
+          "original_count": 2,
+          "recall_counts": {
+            "C": 5,
+            "D": 4
+          },
+          "total_weight": 9
+        },
+        "retrieval": {
+          "C": {
+            "ranked_ids": [
+              "cons_8450b0cfb8f1a49b_2000000"
+            ],
+            "scores": [
+              {
+                "base_score": 0.9833799554489762,
+                "hop_decay": 1.0,
+                "hop_distance": 0,
+                "memory_id": "cons_8450b0cfb8f1a49b_2000000",
+                "recency_bonus": 0.0,
+                "score": 0.9833799554489762,
+                "source": "similarity",
+                "state_boost": 1.0,
+                "synaptic_boost": 0.0
+              }
+            ]
+          },
+          "D": {
+            "ranked_ids": [
+              "cons_8450b0cfb8f1a49b_2000000"
+            ],
+            "scores": [
+              {
+                "base_score": 0.9739065170288086,
+                "hop_decay": 1.0,
+                "hop_distance": 0,
+                "memory_id": "cons_8450b0cfb8f1a49b_2000000",
+                "recency_bonus": 0.0,
+                "score": 0.9739065170288086,
+                "source": "similarity",
+                "state_boost": 1.0,
+                "synaptic_boost": 0.0
+              }
+            ]
+          }
+        },
+        "weights": {
+          "C": 5,
+          "D": 4
+        }
+      },
+      "H2": {
+        "base_scores": {
+          "C": 0.9833799554489762,
+          "D": 0.9739065170288086
+        },
+        "history": {
+          "audit_counts": {
+            "C": 5,
+            "D": 4
+          },
+          "audit_sha256": "e1bdb77094138d59646655888b9c04f631f90af57216b90aedc8c770fd2aaffd",
+          "event_count": 9,
+          "persisted_row_counts": {
+            "C": 9,
+            "D": 8
+          }
+        },
+        "merged_embedding_hex": "8265683ef051793f000000000000000000000000000000000000000000000000",
+        "merged_metadata": {
+          "consolidated_from": [
+            "C",
+            "D"
+          ],
+          "consolidation_ts": 2000.0,
+          "original_count": 2,
+          "recall_counts": {
+            "C": 5,
+            "D": 4
+          },
+          "total_weight": 9
+        },
+        "retrieval": {
+          "C": {
+            "ranked_ids": [
+              "cons_8450b0cfb8f1a49b_2000000"
+            ],
+            "scores": [
+              {
+                "base_score": 0.9833799554489762,
+                "hop_decay": 1.0,
+                "hop_distance": 0,
+                "memory_id": "cons_8450b0cfb8f1a49b_2000000",
+                "recency_bonus": 0.0,
+                "score": 0.9833799554489762,
+                "source": "similarity",
+                "state_boost": 1.0,
+                "synaptic_boost": 0.0
+              }
+            ]
+          },
+          "D": {
+            "ranked_ids": [
+              "cons_8450b0cfb8f1a49b_2000000"
+            ],
+            "scores": [
+              {
+                "base_score": 0.9739065170288086,
+                "hop_decay": 1.0,
+                "hop_distance": 0,
+                "memory_id": "cons_8450b0cfb8f1a49b_2000000",
+                "recency_bonus": 0.0,
+                "score": 0.9739065170288086,
+                "source": "similarity",
+                "state_boost": 1.0,
+                "synaptic_boost": 0.0
+              }
+            ]
+          }
+        },
+        "weights": {
+          "C": 5,
+          "D": 4
+        }
+      },
+      "H3": {
+        "base_scores": {
+          "C": 0.9833799554489762,
+          "D": 0.9739065170288086
+        },
+        "history": {
+          "audit_counts": {
+            "C": 5,
+            "D": 4
+          },
+          "audit_sha256": "f56370fff63980997439f4f6bb634c0942f7cbea9d4163fd61e3e2b4436c62cf",
+          "event_count": 9,
+          "persisted_row_counts": {
+            "C": 9,
+            "D": 8
+          }
+        },
+        "merged_embedding_hex": "8265683ef051793f000000000000000000000000000000000000000000000000",
+        "merged_metadata": {
+          "consolidated_from": [
+            "C",
+            "D"
+          ],
+          "consolidation_ts": 2000.0,
+          "original_count": 2,
+          "recall_counts": {
+            "C": 5,
+            "D": 4
+          },
+          "total_weight": 9
+        },
+        "retrieval": {
+          "C": {
+            "ranked_ids": [
+              "cons_8450b0cfb8f1a49b_2000000"
+            ],
+            "scores": [
+              {
+                "base_score": 0.9833799554489762,
+                "hop_decay": 1.0,
+                "hop_distance": 0,
+                "memory_id": "cons_8450b0cfb8f1a49b_2000000",
+                "recency_bonus": 0.0,
+                "score": 0.9833799554489762,
+                "source": "similarity",
+                "state_boost": 1.0,
+                "synaptic_boost": 0.0
+              }
+            ]
+          },
+          "D": {
+            "ranked_ids": [
+              "cons_8450b0cfb8f1a49b_2000000"
+            ],
+            "scores": [
+              {
+                "base_score": 0.9739065170288086,
+                "hop_decay": 1.0,
+                "hop_distance": 0,
+                "memory_id": "cons_8450b0cfb8f1a49b_2000000",
+                "recency_bonus": 0.0,
+                "score": 0.9739065170288086,
+                "source": "similarity",
+                "state_boost": 1.0,
+                "synaptic_boost": 0.0
+              }
+            ]
+          }
+        },
+        "weights": {
+          "C": 5,
+          "D": 4
+        }
+      },
+      "H4": {
+        "base_scores": {
+          "C": 0.9739065267557034,
+          "D": 0.9833799590694879
+        },
+        "history": {
+          "audit_counts": {
+            "C": 4,
+            "D": 5
+          },
+          "audit_sha256": "156bca554dcbefa1a323a19591ba79a554f6369850b2ba1e939008b67997eb90",
+          "event_count": 9,
+          "persisted_row_counts": {
+            "C": 8,
+            "D": 9
+          }
+        },
+        "merged_embedding_hex": "cdea393ec9be7b3f000000000000000000000000000000000000000000000000",
+        "merged_metadata": {
+          "consolidated_from": [
+            "C",
+            "D"
+          ],
+          "consolidation_ts": 2000.0,
+          "original_count": 2,
+          "recall_counts": {
+            "C": 4,
+            "D": 5
+          },
+          "total_weight": 9
+        },
+        "retrieval": {
+          "C": {
+            "ranked_ids": [
+              "cons_8450b0cfb8f1a49b_2000000"
+            ],
+            "scores": [
+              {
+                "base_score": 0.9739065267557034,
+                "hop_decay": 1.0,
+                "hop_distance": 0,
+                "memory_id": "cons_8450b0cfb8f1a49b_2000000",
+                "recency_bonus": 0.0,
+                "score": 0.9739065267557034,
+                "source": "similarity",
+                "state_boost": 1.0,
+                "synaptic_boost": 0.0
+              }
+            ]
+          },
+          "D": {
+            "ranked_ids": [
+              "cons_8450b0cfb8f1a49b_2000000"
+            ],
+            "scores": [
+              {
+                "base_score": 0.9833799590694879,
+                "hop_decay": 1.0,
+                "hop_distance": 0,
+                "memory_id": "cons_8450b0cfb8f1a49b_2000000",
+                "recency_bonus": 0.0,
+                "score": 0.9833799590694879,
+                "source": "similarity",
+                "state_boost": 1.0,
+                "synaptic_boost": 0.0
+              }
+            ]
+          }
+        },
+        "weights": {
+          "C": 4,
+          "D": 5
+        }
+      }
+    },
+    "same_count_projection_equal_on_target": true
+  },
+  "source_commit": "56df6cfdd7f3dd3000bfd7ce8cc42606d66a191f",
+  "source_copy_hashes": {
+    "memory_engine.py": "ae6527e4b7f7bd444e982971aeffbe8d122eca28e0ebe8ea70149cb89d5d1af0",
+    "sleep_consolidator.py": "9e2a0fa1c8b2c5b68bd691511b708644ff1419e5afc04ac1fb692da5729bab39"
+  },
+  "status": "runtime assay",
+  "title": "Audit Projection Sufficiency for Consolidation"
+}

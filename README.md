@@ -122,7 +122,7 @@ subordinate of the protocol — by design.
 ## The evidence
 
 - **Research**: `experiments/` — Exp19–35, the main falsification chain,
-  plus H14 follow-up assays Exp36–54. **OBSERVED, synthetic:** Exp48 groups
+  plus H14 follow-up assays Exp36–58. **OBSERVED, synthetic:** Exp48 groups
   states by exact choice, propagation, and causal-contribution traces under
   its 24 fixed schedules. It finds 441 observational classes in Exp47's
   1,512-state Cartesian domain and 118 classes in a 172-state closure from
@@ -149,6 +149,10 @@ subordinate of the protocol — by design.
   the [Exp52 suppression semantics assay](experiments/exp52_raven_suppression_semantics/),
   the [Exp53 latent trace assay](experiments/exp53_raven_latent_trace/),
   the [Exp54 observational contract assay](experiments/exp54_raven_observational_contract/),
+  the [Exp55 consolidation assay](experiments/exp55_raven_counter_consolidation/),
+  [Exp56 audit-projection assay](experiments/exp56_raven_audit_projection/),
+  [Exp57 temporal-recency assay](experiments/exp57_raven_temporal_recency/),
+  [Exp58 post-consolidation replay assay](experiments/exp58_raven_postconsolidation_replay/),
   `docs/HYPOTHESES.md`, and `docs/EXPERIMENTS.md`.
 - **Protocol conformance**: `mneme-cf-bundle/v1` + `cf-cascade/v2` +
   `causal_ontology 2.0.0` — a clean-room Go verifier reproduces every
@@ -171,7 +175,7 @@ remember-the-seasons/
   sources/       read-only research snapshots (raven-memory, mneme,
                  stigmergy — each with PROVENANCE.md)
   research/      archaeology inventories, mechanism maps
-  experiments/   Exp19–Exp35 falsification chain + H14 Exp36–54
+  experiments/   Exp19–Exp35 falsification chain + H14 Exp36–58
   docs/          research package, hypotheses, stop conditions
   product/       the working skeleton — see product/README.md
     mneme/       custody, authority, receipts, claims, canonical JSON
