@@ -1,0 +1,68 @@
+{
+  "engine_store_parameters": [
+    "self",
+    "content",
+    "embedding",
+    "layer",
+    "state",
+    "session_id",
+    "author_id",
+    "metadata"
+  ],
+  "experiment": "Exp60",
+  "generated_memory_id_assignment_line": 1542,
+  "http_store_forwarded_kwargs": [
+    "author_id",
+    "content",
+    "embedding",
+    "layer",
+    "metadata",
+    "session_id",
+    "state"
+  ],
+  "http_store_request_fields": [
+    "content",
+    "layer",
+    "state",
+    "session_id",
+    "author_id",
+    "metadata"
+  ],
+  "inferred_scope": "The direct same-ID replacement tested in Exp59 is not shown reachable through these declared ingestion paths.",
+  "low_level_store_memory_callsites": [
+    {
+      "file": "raven/memory_engine.py",
+      "line": 1562,
+      "owner": "store"
+    }
+  ],
+  "low_level_store_uses_insert_or_replace": true,
+  "mcp_store_forwarded_kwargs": [
+    "author_id",
+    "content",
+    "embedding",
+    "layer",
+    "metadata",
+    "session_id"
+  ],
+  "mcp_store_parameters": [
+    "content",
+    "layer",
+    "author_id",
+    "session_id",
+    "topic",
+    "claim"
+  ],
+  "source_commit": "56df6cfdd7f3dd3000bfd7ce8cc42606d66a191f",
+  "source_file_sha256": {
+    "api_server.py": "f83a88e1cb6a89b92319184ca4fecc13a5d1223a1ddf904bddabbc01e462a9b5",
+    "mcp_server.py": "f89a21558649f9dea6f6768a793e7e6b6e41bb3710167b9bc9485feb537770fc",
+    "raven/memory_engine.py": "ae6527e4b7f7bd444e982971aeffbe8d122eca28e0ebe8ea70149cb89d5d1af0"
+  },
+  "unknowns": [
+    "Automatic-ID collision possibility and operational likelihood",
+    "Live server or MCP transport behavior",
+    "Deployment wrappers, proxies, and uninspected ingestion paths"
+  ],
+  "verdict": "Caller-selected memory_id is absent from the inspected HTTP and MCP ingestion signatures; both delegate to engine.store(), which generates the ID."
+}

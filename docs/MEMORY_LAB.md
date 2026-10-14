@@ -96,6 +96,7 @@ transfer to another implementation.
 | [Exp57](../experiments/exp57_raven_temporal_recency/) | **OBSERVED, copied Raven snapshot and synthetic fixture:** assigning identical per-memory recall counts to different timestamps changed pre-consolidation retrieval through recency. Equalizing timestamps removed the difference; consolidation produced matching merged embeddings/traces with zero recency. Five tests passed, including a zero-recency mutation and replay check. |
 | [Exp58](../experiments/exp58_raven_postconsolidation_replay/) | **OBSERVED, copied Raven snapshot and synthetic fixture:** eight identical post-consolidation recall calls preserved equal outputs and memory/link state across branches with different audit histories. Each branch's audit chain remained valid, and a recency-state mutation was detected. Five tests passed, including replay. |
 | [Exp59](../experiments/exp59_raven_memory_id_reincarnation/) | **OBSERVED, copied Raven snapshot and synthetic fixture:** replacing content under reused IDs let old audit counts affect a later consolidation despite equal current memory/link rows. Fresh IDs and a content-hash-aware mutation removed the effect. Five tests passed. Intended ID semantics and public reachability remain **UNKNOWN**. |
+| [Exp60](../experiments/exp60_public_id_reuse_audit/) | **OBSERVED, static audit of pinned Raven source:** the inspected HTTP and MCP ingestion signatures do not accept or forward caller-selected `memory_id`; both call the ID-generating engine method, and the low-level replacement callsite appears only there. **INFERRED:** Exp59's direct same-ID setup is not shown reachable through these two declared paths. Collision likelihood and live/deployment wrappers remain **UNKNOWN**. Six tests passed. |
 
 **INFERRED:** the experiments establish that observational equivalence depends
 on the operations and outputs included in the observer. They do not establish
@@ -164,7 +165,8 @@ intervention tooling is exposed.
 - [Hypotheses](HYPOTHESES.md) and [stop conditions](STOP_CONDITIONS.md) —
   falsifiers and research boundaries.
 
-**Current status — OBSERVED:** Exp59 is the latest recorded assay in this
+**Current status — OBSERVED:** Exp60 is the latest recorded assay in this
 line. H14 remains open; there is no demonstrated transfer of restoration
 effects to a deployed agent. The Exp54–59 results are bounded to selected
-operations in one copied Raven snapshot and synthetic fixtures.
+operations in one copied Raven snapshot and synthetic fixtures; Exp60 is a
+static audit of two ingestion paths in the pinned snapshot.

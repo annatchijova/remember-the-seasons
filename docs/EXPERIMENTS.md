@@ -5,7 +5,7 @@ the [Memory Lab research guide](MEMORY_LAB.md).
 For the source-level operation and observation inventory behind Exp54–55, see
 [Raven observational contract](RAVEN_OBSERVATIONAL_CONTRACT.md).
 
-All 36 numbered experiment scripts in `experiments/`, grouped by phase. Verdicts are
+Numbered experiments in `experiments/`, grouped by phase. Verdicts are
 observed results, not aspirations. `PASS` means the property survived
 falsification; `FALSIFIED` means the experiment killed the hypothesis.
 
@@ -255,6 +255,18 @@ storage/consolidation path; whether it violates intended identity semantics
 or is reachable through a deployed API is **UNKNOWN**. See the [Exp59
 preregistration, runner, tests, report, provenance, and result](../experiments/exp59_raven_memory_id_reincarnation/).
 
+**OBSERVED, static source audit:** Exp60 parsed the pinned Raven snapshot
+(`56df6cfdd7f3dd3000bfd7ce8cc42606d66a191f`) and found no caller-supplied
+`memory_id` in the inspected HTTP `StoreRequest`/handler or MCP `raven_store`
+signature/forwarding. Both paths call the ID-generating engine `store()`; the
+snapshot-wide scan found the lower-level `store_memory()` replacement call
+only inside that method. **INFERRED:** Exp59's direct same-ID setup is not
+shown reachable through those two declared ingestion paths. Automatic-ID
+collision likelihood, live transports, deployment wrappers, and other routes
+remain **UNKNOWN**. Six tests passed. This is a static audit, not a runtime
+API guarantee. See the [Exp60 preregistration, runner, tests, report,
+provenance, and result](../experiments/exp60_public_id_reuse_audit/).
+
 
 | Script | Role |
 |---|---|
@@ -293,7 +305,8 @@ in `research/PHASE*.md`.
 
 H14 remains OPEN. Exp36–50 are synthetic restoration and finite-state assays;
 Exp51–59 are isolated experiments against a copied Raven snapshot with
-synthetic fixtures. Exp51–59 provide bounded evidence about selected Raven
+synthetic fixtures; Exp60 is a static source audit of two ingestion paths.
+Exp51–60 provide bounded evidence about selected Raven
 operations and observables, not a deployed-agent validation or a sufficient
 or minimal Raven state representation. The current vocabulary and research
 map are in [`MEMORY_LAB.md`](MEMORY_LAB.md). The protocol origin and historic
