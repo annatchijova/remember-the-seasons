@@ -206,7 +206,7 @@ Specs: `product/spec/cf-bundle-v1.md`, `product/spec/causal-ontology-v2.md`,
 
 ## 11. Memory Lab research boundary
 
-H14 and Exp36–58 examine temporary interventions, restoration, propagation,
+H14 and Exp36–59 examine temporary interventions, restoration, propagation,
 observable equivalence, and transition congruence. The experiments range from
 synthetic finite machines to isolated runs against a copied Raven source
 snapshot with synthetic data. They do not validate the product layer above or
@@ -215,6 +215,6 @@ working vocabulary, summarizes the evidence with its scope, and records
 proposed safeguards for any future intervention harness.
 The source-level Raven operation inventory and observation contracts are in
 [`docs/RAVEN_OBSERVATIONAL_CONTRACT.md`](docs/RAVEN_OBSERVATIONAL_CONTRACT.md).
-The latest bounded Raven assay is Exp58; its preregistration, runner, tests,
+The latest bounded Raven assay is Exp59; its preregistration, runner, tests,
 report, provenance, and raw result are under
-[`experiments/exp58_raven_postconsolidation_replay/`](experiments/exp58_raven_postconsolidation_replay/).
+[`experiments/exp59_raven_memory_id_reincarnation/`](experiments/exp59_raven_memory_id_reincarnation/).

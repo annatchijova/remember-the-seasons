@@ -1,0 +1,352 @@
+{
+  "content_hash_mutation_control": {
+    "mutated_embeddings_equal": true,
+    "mutation": "ignore audit recalls whose content hash differs from the current row",
+    "mutation_counts": {
+      "R45": {
+        "C": 0,
+        "D": 0
+      },
+      "R54": {
+        "C": 0,
+        "D": 0
+      }
+    }
+  },
+  "epistemic_scope": "copied Raven snapshot and synthetic Exp51 fixture",
+  "experiment": "Exp59",
+  "fresh_id_control": {
+    "audit_histories_distinct_before_consolidation": true,
+    "branches": {
+      "R45": {
+        "counts": {
+          "C_reborn": 0,
+          "D_reborn": 0
+        },
+        "embedding": [
+          0.2043096423149109,
+          0.9789062738418579,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "embedding_hex": "8c36513e9a997a3f000000000000000000000000000000000000000000000000",
+        "merge_metadata": {
+          "consolidated_from": [
+            "C_reborn",
+            "D_reborn"
+          ],
+          "consolidation_ts": 2000.0,
+          "original_count": 2,
+          "recall_counts": {
+            "C_reborn": 0,
+            "D_reborn": 0
+          },
+          "total_weight": 2
+        },
+        "merged_node_id": "cons_67f821809439f592_2000000",
+        "run": {
+          "created": 1,
+          "dry_run": false,
+          "groups": [
+            {
+              "previews": [
+                "Exp59 reincarnated content for C",
+                "Exp59 reincarnated content for D"
+              ],
+              "size": 2,
+              "total_recalls": 0
+            }
+          ],
+          "merged": 2,
+          "nodes": [
+            {
+              "cell_id": 4,
+              "memory_id": "cons_67f821809439f592_2000000",
+              "size": 2
+            }
+          ],
+          "processed": 2,
+          "singletons": 0,
+          "threshold": 0.9
+        },
+        "sources": [
+          "C_reborn",
+          "D_reborn"
+        ]
+      },
+      "R54": {
+        "counts": {
+          "C_reborn": 0,
+          "D_reborn": 0
+        },
+        "embedding": [
+          0.2043096423149109,
+          0.9789062738418579,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "embedding_hex": "8c36513e9a997a3f000000000000000000000000000000000000000000000000",
+        "merge_metadata": {
+          "consolidated_from": [
+            "C_reborn",
+            "D_reborn"
+          ],
+          "consolidation_ts": 2000.0,
+          "original_count": 2,
+          "recall_counts": {
+            "C_reborn": 0,
+            "D_reborn": 0
+          },
+          "total_weight": 2
+        },
+        "merged_node_id": "cons_67f821809439f592_2000000",
+        "run": {
+          "created": 1,
+          "dry_run": false,
+          "groups": [
+            {
+              "previews": [
+                "Exp59 reincarnated content for C",
+                "Exp59 reincarnated content for D"
+              ],
+              "size": 2,
+              "total_recalls": 0
+            }
+          ],
+          "merged": 2,
+          "nodes": [
+            {
+              "cell_id": 4,
+              "memory_id": "cons_67f821809439f592_2000000",
+              "size": 2
+            }
+          ],
+          "processed": 2,
+          "singletons": 0,
+          "threshold": 0.9
+        },
+        "sources": [
+          "C_reborn",
+          "D_reborn"
+        ]
+      }
+    },
+    "current_content_hashes": {
+      "R45": {
+        "C_reborn": "6bd9c1981c201002f49738cfe9285f2199398ee064fd1ed1adcf3c978f1ecdcb",
+        "D_reborn": "61a7e624d33ddb7afbc59779504804e8817e8501f082360aab3dc3444d467b14"
+      },
+      "R54": {
+        "C_reborn": "6bd9c1981c201002f49738cfe9285f2199398ee064fd1ed1adcf3c978f1ecdcb",
+        "D_reborn": "61a7e624d33ddb7afbc59779504804e8817e8501f082360aab3dc3444d467b14"
+      }
+    },
+    "current_state_equal_before_consolidation": true,
+    "fresh_id_control": true,
+    "fresh_id_outputs_equal": true,
+    "historical_content_hashes": {
+      "R45": {
+        "C": [
+          "6b23c0d5f35d1b11f9b683f0b0a617355deb11277d91ae091d399c655b87940d"
+        ],
+        "D": [
+          "3f39d5c348e5b79d06e842c114e6cc571583bbf44e4b0ebfda1a01ec05745d43"
+        ]
+      },
+      "R54": {
+        "C": [
+          "6b23c0d5f35d1b11f9b683f0b0a617355deb11277d91ae091d399c655b87940d"
+        ],
+        "D": [
+          "3f39d5c348e5b79d06e842c114e6cc571583bbf44e4b0ebfda1a01ec05745d43"
+        ]
+      }
+    }
+  },
+  "limitations": [
+    "one pinned snapshot and four-memory synthetic fixture",
+    "memory rows replaced through the copied store layer with same or fresh IDs",
+    "only audit-derived consolidation weights and merged embeddings measured",
+    "does not establish deployed-service exploitability or downstream agent effects"
+  ],
+  "parameters": {
+    "fixed_time": 2000.0,
+    "threshold": 0.9,
+    "total_prior_recalls": 9
+  },
+  "same_id_reincarnation": {
+    "audit_histories_distinct_before_consolidation": true,
+    "branches": {
+      "R45": {
+        "counts": {
+          "C": 4,
+          "D": 5
+        },
+        "embedding": [
+          0.181559756398201,
+          0.9833799004554749,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "embedding_hex": "cdea393ec9be7b3f000000000000000000000000000000000000000000000000",
+        "merge_metadata": {
+          "consolidated_from": [
+            "C",
+            "D"
+          ],
+          "consolidation_ts": 2000.0,
+          "original_count": 2,
+          "recall_counts": {
+            "C": 4,
+            "D": 5
+          },
+          "total_weight": 9
+        },
+        "merged_node_id": "cons_67f821809439f592_2000000",
+        "run": {
+          "created": 1,
+          "dry_run": false,
+          "groups": [
+            {
+              "previews": [
+                "Exp59 reincarnated content for C",
+                "Exp59 reincarnated content for D"
+              ],
+              "size": 2,
+              "total_recalls": 9
+            }
+          ],
+          "merged": 2,
+          "nodes": [
+            {
+              "cell_id": 4,
+              "memory_id": "cons_67f821809439f592_2000000",
+              "size": 2
+            }
+          ],
+          "processed": 2,
+          "singletons": 0,
+          "threshold": 0.9
+        },
+        "sources": [
+          "C",
+          "D"
+        ]
+      },
+      "R54": {
+        "counts": {
+          "C": 5,
+          "D": 4
+        },
+        "embedding": [
+          0.22694972157478333,
+          0.9739065170288086,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "embedding_hex": "8265683ef051793f000000000000000000000000000000000000000000000000",
+        "merge_metadata": {
+          "consolidated_from": [
+            "C",
+            "D"
+          ],
+          "consolidation_ts": 2000.0,
+          "original_count": 2,
+          "recall_counts": {
+            "C": 5,
+            "D": 4
+          },
+          "total_weight": 9
+        },
+        "merged_node_id": "cons_67f821809439f592_2000000",
+        "run": {
+          "created": 1,
+          "dry_run": false,
+          "groups": [
+            {
+              "previews": [
+                "Exp59 reincarnated content for C",
+                "Exp59 reincarnated content for D"
+              ],
+              "size": 2,
+              "total_recalls": 9
+            }
+          ],
+          "merged": 2,
+          "nodes": [
+            {
+              "cell_id": 4,
+              "memory_id": "cons_67f821809439f592_2000000",
+              "size": 2
+            }
+          ],
+          "processed": 2,
+          "singletons": 0,
+          "threshold": 0.9
+        },
+        "sources": [
+          "C",
+          "D"
+        ]
+      }
+    },
+    "current_content_hashes": {
+      "R45": {
+        "C": "6bd9c1981c201002f49738cfe9285f2199398ee064fd1ed1adcf3c978f1ecdcb",
+        "D": "61a7e624d33ddb7afbc59779504804e8817e8501f082360aab3dc3444d467b14"
+      },
+      "R54": {
+        "C": "6bd9c1981c201002f49738cfe9285f2199398ee064fd1ed1adcf3c978f1ecdcb",
+        "D": "61a7e624d33ddb7afbc59779504804e8817e8501f082360aab3dc3444d467b14"
+      }
+    },
+    "current_state_equal_before_consolidation": true,
+    "fresh_id_control": false,
+    "historical_content_hashes": {
+      "R45": {
+        "C": [
+          "6b23c0d5f35d1b11f9b683f0b0a617355deb11277d91ae091d399c655b87940d"
+        ],
+        "D": [
+          "3f39d5c348e5b79d06e842c114e6cc571583bbf44e4b0ebfda1a01ec05745d43"
+        ]
+      },
+      "R54": {
+        "C": [
+          "6b23c0d5f35d1b11f9b683f0b0a617355deb11277d91ae091d399c655b87940d"
+        ],
+        "D": [
+          "3f39d5c348e5b79d06e842c114e6cc571583bbf44e4b0ebfda1a01ec05745d43"
+        ]
+      }
+    },
+    "same_id_directional_effect": {
+      "C_similarity_R54_greater": true,
+      "D_similarity_R54_lower": true,
+      "different_embeddings": true
+    }
+  },
+  "source_commit": "56df6cfdd7f3dd3000bfd7ce8cc42606d66a191f",
+  "source_copy_hashes": {
+    "memory_engine.py": "ae6527e4b7f7bd444e982971aeffbe8d122eca28e0ebe8ea70149cb89d5d1af0",
+    "sleep_consolidator.py": "9e2a0fa1c8b2c5b68bd691511b708644ff1419e5afc04ac1fb692da5729bab39"
+  },
+  "status": "runtime assay",
+  "title": "Recall History Across Memory-ID Reuse"
+}

@@ -244,6 +244,17 @@ post-consolidation recall sequence; it does not establish congruence for all
 Raven operations. See the [Exp58 preregistration, runner, tests, report,
 provenance, and JSON result](../experiments/exp58_raven_postconsolidation_replay/).
 
+**OBSERVED, copied Raven snapshot plus synthetic fixture:** Exp59 replaced C
+and D with new content under the same IDs after creating distinct historical
+recall distributions. Despite identical current memory/link rows, the next
+consolidation used the prior per-ID counts and produced different embeddings.
+Fresh IDs inherited zero old counts and produced equal embeddings; a
+content-hash-aware mutation also removed the difference. Five tests passed,
+including replay. The finding is an ID-linked history effect in the copied
+storage/consolidation path; whether it violates intended identity semantics
+or is reachable through a deployed API is **UNKNOWN**. See the [Exp59
+preregistration, runner, tests, report, provenance, and result](../experiments/exp59_raven_memory_id_reincarnation/).
+
 
 | Script | Role |
 |---|---|
@@ -281,8 +292,8 @@ in `research/PHASE*.md`.
 ## H14 status
 
 H14 remains OPEN. Exp36–50 are synthetic restoration and finite-state assays;
-Exp51–58 are isolated experiments against a copied Raven snapshot with
-synthetic fixtures. Exp51–58 provide bounded evidence about selected Raven
+Exp51–59 are isolated experiments against a copied Raven snapshot with
+synthetic fixtures. Exp51–59 provide bounded evidence about selected Raven
 operations and observables, not a deployed-agent validation or a sufficient
 or minimal Raven state representation. The current vocabulary and research
 map are in [`MEMORY_LAB.md`](MEMORY_LAB.md). The protocol origin and historic

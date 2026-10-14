@@ -122,7 +122,7 @@ subordinate of the protocol — by design.
 ## The evidence
 
 - **Research**: `experiments/` — Exp19–35, the main falsification chain,
-  plus H14 follow-up assays Exp36–58. **OBSERVED, synthetic:** Exp48 groups
+  plus H14 follow-up assays Exp36–59. **OBSERVED, synthetic:** Exp48 groups
   states by exact choice, propagation, and causal-contribution traces under
   its 24 fixed schedules. It finds 441 observational classes in Exp47's
   1,512-state Cartesian domain and 118 classes in a 172-state closure from
@@ -153,6 +153,7 @@ subordinate of the protocol — by design.
   [Exp56 audit-projection assay](experiments/exp56_raven_audit_projection/),
   [Exp57 temporal-recency assay](experiments/exp57_raven_temporal_recency/),
   [Exp58 post-consolidation replay assay](experiments/exp58_raven_postconsolidation_replay/),
+  [Exp59 memory-ID reincarnation assay](experiments/exp59_raven_memory_id_reincarnation/),
   `docs/HYPOTHESES.md`, and `docs/EXPERIMENTS.md`.
 - **Protocol conformance**: `mneme-cf-bundle/v1` + `cf-cascade/v2` +
   `causal_ontology 2.0.0` — a clean-room Go verifier reproduces every
@@ -175,7 +176,7 @@ remember-the-seasons/
   sources/       read-only research snapshots (raven-memory, mneme,
                  stigmergy — each with PROVENANCE.md)
   research/      archaeology inventories, mechanism maps
-  experiments/   Exp19–Exp35 falsification chain + H14 Exp36–58
+  experiments/   Exp19–Exp35 falsification chain + H14 Exp36–59
   docs/          research package, hypotheses, stop conditions
   product/       the working skeleton — see product/README.md
     mneme/       custody, authority, receipts, claims, canonical JSON
