@@ -1,0 +1,86 @@
+{
+  "copied_source_sha256": {
+    "memory_engine.py": "ae6527e4b7f7bd444e982971aeffbe8d122eca28e0ebe8ea70149cb89d5d1af0",
+    "sleep_consolidator.py": "9e2a0fa1c8b2c5b68bd691511b708644ff1419e5afc04ac1fb692da5729bab39",
+    "spectral.py": "36d5a1198a9f7a817ec8cd540f2f4c8c1c9a0c26e74782c2ef4d38fcf257ca90"
+  },
+  "experiment": "Exp62",
+  "fixed_time": 1800000000.125,
+  "reload_control": {
+    "ready_counters": [
+      0,
+      1
+    ],
+    "returned": [
+      [
+        "mem_78c29f2561db580a_1800000000125_0",
+        0
+      ],
+      [
+        "mem_e1d9b6302b122bd5_1800000000125_1",
+        1
+      ]
+    ],
+    "rows": [
+      {
+        "cell_id": 0,
+        "content": "reload alpha",
+        "embedding_hex": "0000803f000000000000000000000000",
+        "memory_id": "mem_78c29f2561db580a_1800000000125_0"
+      },
+      {
+        "cell_id": 1,
+        "content": "reload beta",
+        "embedding_hex": "000000000000803f0000000000000000",
+        "memory_id": "mem_e1d9b6302b122bd5_1800000000125_1"
+      }
+    ]
+  },
+  "scope": "Independent spawned Python processes, copied Raven engine and consolidator, temporary shared SQLite; no API/MCP transport or production deployment.",
+  "sequential_same_id_processes": {
+    "audit_count_after_replacement": 1,
+    "audit_count_before_replacement": 1,
+    "ready_counters": [
+      0,
+      0
+    ],
+    "returned": [
+      [
+        "mem_e94045d2493922f0_1800000000125_0",
+        0
+      ],
+      [
+        "mem_e94045d2493922f0_1800000000125_0",
+        0
+      ]
+    ],
+    "rows": [
+      {
+        "cell_id": 0,
+        "content": "same payload",
+        "embedding_hex": "000000000000803f0000000000000000",
+        "memory_id": "mem_e94045d2493922f0_1800000000125_0"
+      }
+    ],
+    "same_memory_id": true
+  },
+  "simultaneous_different_content_processes": {
+    "ready_counters": [
+      0,
+      0
+    ],
+    "returned": [
+      [
+        "mem_2c888c2f3af68473_1800000000125_0",
+        0
+      ],
+      [
+        "mem_9e5c9e5703bc59b9_1800000000125_0",
+        0
+      ]
+    ],
+    "row_count": 1,
+    "surviving_row_is_a_contender": true
+  },
+  "source_commit": "56df6cfdd7f3dd3000bfd7ce8cc42606d66a191f"
+}

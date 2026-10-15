@@ -97,6 +97,8 @@ transfer to another implementation.
 | [Exp58](../experiments/exp58_raven_postconsolidation_replay/) | **OBSERVED, copied Raven snapshot and synthetic fixture:** eight identical post-consolidation recall calls preserved equal outputs and memory/link state across branches with different audit histories. Each branch's audit chain remained valid, and a recency-state mutation was detected. Five tests passed, including replay. |
 | [Exp59](../experiments/exp59_raven_memory_id_reincarnation/) | **OBSERVED, copied Raven snapshot and synthetic fixture:** replacing content under reused IDs let old audit counts affect a later consolidation despite equal current memory/link rows. Fresh IDs and a content-hash-aware mutation removed the effect. Five tests passed. Intended ID semantics and public reachability remain **UNKNOWN**. |
 | [Exp60](../experiments/exp60_public_id_reuse_audit/) | **OBSERVED, static audit of pinned Raven source:** the inspected HTTP and MCP ingestion signatures do not accept or forward caller-selected `memory_id`; both call the ID-generating engine method, and the low-level replacement callsite appears only there. **INFERRED:** Exp59's direct same-ID setup is not shown reachable through these two declared paths. Collision likelihood and live/deployment wrappers remain **UNKNOWN**. Six tests passed. |
+| [Exp61](../experiments/exp61_shared_database_allocator/) | **OBSERVED, copied Raven runtime:** two stale engine instances sharing a temporary database reused `cell_id`; the later row replaced the earlier row. With the same content and frozen millisecond, they also generated the same `memory_id`, and the copied consolidator counted the old audit event for that ID after replacement. Single-engine and reload controls retained both rows. Six tests passed; a storage-statement mutation failed the two replacement tests. This was sequential same-process execution, not a cross-process race or frequency estimate. |
+| [Exp62](../experiments/exp62_cross_process_allocator/) | **OBSERVED, copied Raven runtime across spawned processes:** both engines initialized before writes and both used `cell_id = 0`; simultaneous different-content writes left one row. With same content and frozen time, separate processes returned the same `memory_id`, and the copied consolidator counted its prior audit event after replacement. A reload control preserved both rows. Five tests passed; a storage mutation failed the exact-ID embedding oracle. This does not establish that a deployment shares a database or estimate natural frequency. |
 
 **INFERRED:** the experiments establish that observational equivalence depends
 on the operations and outputs included in the observer. They do not establish
@@ -165,8 +167,11 @@ intervention tooling is exposed.
 - [Hypotheses](HYPOTHESES.md) and [stop conditions](STOP_CONDITIONS.md) —
   falsifiers and research boundaries.
 
-**Current status — OBSERVED:** Exp60 is the latest recorded assay in this
+**Current status — OBSERVED:** Exp62 is the latest recorded assay in this
 line. H14 remains open; there is no demonstrated transfer of restoration
 effects to a deployed agent. The Exp54–59 results are bounded to selected
 operations in one copied Raven snapshot and synthetic fixtures; Exp60 is a
-static audit of two ingestion paths in the pinned snapshot.
+static audit of two ingestion paths, and Exp61–62 are frozen-clock runtime
+assays with same-process and spawned-process engines. Whether a production
+deployment shares a database across live engines and the natural collision
+frequency remain unknown.

@@ -1,0 +1,105 @@
+{
+  "audit_count_note": "The audit row uses Raven's memories_retrieved JSON shape and is counted by memory_id, matching the ID aggregation at sources/raven-memory/raven/sleep_consolidator.py:79-96.",
+  "copied_consolidator_sha256": "9e2a0fa1c8b2c5b68bd691511b708644ff1419e5afc04ac1fb692da5729bab39",
+  "copied_engine_sha256": "ae6527e4b7f7bd444e982971aeffbe8d122eca28e0ebe8ea70149cb89d5d1af0",
+  "copied_spectral_sha256": "36d5a1198a9f7a817ec8cd540f2f4c8c1c9a0c26e74782c2ef4d38fcf257ca90",
+  "experiment": "Exp61",
+  "fixed_time": 1800000000.125,
+  "reloaded_second_engine_control": {
+    "returned": [
+      [
+        "mem_78c29f2561db580a_1800000000125_0",
+        0
+      ],
+      [
+        "mem_e1d9b6302b122bd5_1800000000125_1",
+        1
+      ]
+    ],
+    "rows": [
+      {
+        "cell_id": 0,
+        "content": "reload alpha",
+        "embedding_hex": "0000803f000000000000000000000000",
+        "memory_id": "mem_78c29f2561db580a_1800000000125_0"
+      },
+      {
+        "cell_id": 1,
+        "content": "reload beta",
+        "embedding_hex": "000000000000803f0000000000000000",
+        "memory_id": "mem_e1d9b6302b122bd5_1800000000125_1"
+      }
+    ]
+  },
+  "scope": "Same-process independent engine instances using separate instance locks and a shared temporary SQLite file; no service transport or cross-process run.",
+  "single_engine_control": {
+    "returned": [
+      [
+        "mem_e7ac9c9cc2f34f02_1800000000125_0",
+        0
+      ],
+      [
+        "mem_59b35be697a56073_1800000000125_1",
+        1
+      ]
+    ],
+    "rows": [
+      {
+        "cell_id": 0,
+        "content": "control alpha",
+        "embedding_hex": "0000803f000000000000000000000000",
+        "memory_id": "mem_e7ac9c9cc2f34f02_1800000000125_0"
+      },
+      {
+        "cell_id": 1,
+        "content": "control beta",
+        "embedding_hex": "000000000000803f0000000000000000",
+        "memory_id": "mem_59b35be697a56073_1800000000125_1"
+      }
+    ]
+  },
+  "source_commit": "56df6cfdd7f3dd3000bfd7ce8cc42606d66a191f",
+  "stale_allocators_different_content": {
+    "returned": [
+      [
+        "mem_18c1c8ef5206e727_1800000000125_0",
+        0
+      ],
+      [
+        "mem_ff3941c49bc148d6_1800000000125_0",
+        0
+      ]
+    ],
+    "rows": [
+      {
+        "cell_id": 0,
+        "content": "stale beta",
+        "embedding_hex": "000000000000803f0000000000000000",
+        "memory_id": "mem_ff3941c49bc148d6_1800000000125_0"
+      }
+    ]
+  },
+  "stale_allocators_same_content": {
+    "audit_count_after_replacement": 1,
+    "audit_count_before_replacement": 1,
+    "returned": [
+      [
+        "mem_e94045d2493922f0_1800000000125_0",
+        0
+      ],
+      [
+        "mem_e94045d2493922f0_1800000000125_0",
+        0
+      ]
+    ],
+    "rows": [
+      {
+        "cell_id": 0,
+        "content": "same payload",
+        "embedding_hex": "000000000000803f0000000000000000",
+        "memory_id": "mem_e94045d2493922f0_1800000000125_0"
+      }
+    ],
+    "same_memory_id": true
+  }
+}

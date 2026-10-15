@@ -267,6 +267,33 @@ remain **UNKNOWN**. Six tests passed. This is a static audit, not a runtime
 API guarantee. See the [Exp60 preregistration, runner, tests, report,
 provenance, and result](../experiments/exp60_public_id_reuse_audit/).
 
+**OBSERVED, copied Raven runtime with temporary SQLite fixtures:** Exp61
+opened two independent engine instances before either wrote. With different
+contents, both allocated `cell_id = 0`, and the second `INSERT OR REPLACE`
+left one row. With identical content and a frozen millisecond clock, both
+generated the same `memory_id`; the copied consolidator still counted the
+preexisting audit event for that ID after replacement. A single-engine
+control and a second-engine-after-reload control preserved both rows. Six
+tests passed. A mutation changing `INSERT OR REPLACE` to `INSERT OR IGNORE`
+failed the two replacement-specific tests. This was sequential same-process
+execution, not a simultaneous or cross-process test, and does not establish
+production reachability or natural collision frequency. See the [Exp61
+preregistration, copied source, runner, tests, report, provenance, and
+result](../experiments/exp61_shared_database_allocator/).
+
+**OBSERVED, copied Raven runtime across spawned processes:** Exp62 initialized
+two independent processes against the same empty SQLite file before writes.
+Concurrent different-content stores both used `cell_id = 0`; one row remained.
+In a sequential same-content arm with a frozen millisecond clock, both
+processes generated the same `memory_id`, and the copied consolidator counted
+the prior audit event after replacement. A process started after the prior
+write loaded `cell_id = 1` and preserved both rows. Five tests passed and the
+JSON replay matched byte-for-byte. A storage mutation failed the exact-ID
+embedding oracle. This is a controlled process-level reproduction, not proof
+that a particular deployment shares a database or an estimate of natural
+collision frequency. See the [Exp62 preregistration, copied source, runner,
+tests, report, provenance, and result](../experiments/exp62_cross_process_allocator/).
+
 
 | Script | Role |
 |---|---|
@@ -305,8 +332,10 @@ in `research/PHASE*.md`.
 
 H14 remains OPEN. Exp36–50 are synthetic restoration and finite-state assays;
 Exp51–59 are isolated experiments against a copied Raven snapshot with
-synthetic fixtures; Exp60 is a static source audit of two ingestion paths.
-Exp51–60 provide bounded evidence about selected Raven
+synthetic fixtures; Exp60 is a static source audit of two ingestion paths;
+Exp61 is a copied-engine runtime assay with a frozen clock and temporary
+SQLite; Exp62 extends the allocator condition across spawned processes.
+Exp51–62 provide bounded evidence about selected Raven
 operations and observables, not a deployed-agent validation or a sufficient
 or minimal Raven state representation. The current vocabulary and research
 map are in [`MEMORY_LAB.md`](MEMORY_LAB.md). The protocol origin and historic
