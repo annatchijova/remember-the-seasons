@@ -357,8 +357,17 @@ var (
 )
 
 func seqOf(e map[string]interface{}) int {
-	n, _ := strconv.Atoi(e["seq"].(json.Number).String())
+	n, _ := integerValue(e["seq"])
 	return n
+}
+
+func integerValue(v interface{}) (int, bool) {
+	n, ok := v.(json.Number)
+	if !ok {
+		return 0, false
+	}
+	i, err := strconv.Atoi(n.String())
+	return i, err == nil
 }
 
 func payloadOf(e map[string]interface{}) map[string]interface{} {
@@ -771,6 +780,8 @@ func main() {
 		fmt.Println(string(out))
 		os.Exit(1)
 	}
+	eventSigs, _ := ev["event_sigs"].([]interface{})
+	actorKeys, _ := ev["actor_keys"].([]interface{})
 	chainsRaw := ev["chains"].(map[string]interface{})
 	midI := iv["memory_id"].(string)
 	seqI, _ := strconv.Atoi(iv["seq"].(json.Number).String())
@@ -837,11 +848,11 @@ func main() {
 
 	// CF1.7 — every sealed reference resolves to an existing object.
 	// A dangling cause is an integrity failure, not an inert dep.
-	seqSet := map[string]map[float64]bool{}
+	seqSet := map[string]map[int]bool{}
 	for mid, ch := range chains {
-		seqSet[mid] = map[float64]bool{}
+		seqSet[mid] = map[int]bool{}
 		for _, e := range ch {
-			seqSet[mid][float64(seqOf(e))] = true
+			seqSet[mid][seqOf(e)] = true
 		}
 	}
 	decSet := map[string]bool{}
@@ -881,8 +892,8 @@ func main() {
 					switch c["kind"] {
 					case "event":
 						tmid, _ := c["memory_id"].(string)
-						tseq, _ := c["seq"].(float64)
-						if !seqSet[tmid][tseq] {
+						tseq, ok := integerValue(c["seq"])
+						if !ok || !seqSet[tmid][tseq] {
 							dangling++
 						}
 					case "decision":
@@ -913,9 +924,10 @@ func main() {
 	}
 	// an event_sig attesting to a nonexistent (memory_id, seq) is
 	// dangling evidence — an attestation with no event
-	for _, sv := range ev["event_sigs"].([]interface{}) {
+	for _, sv := range eventSigs {
 		s := sv.(map[string]interface{})
-		if !seqSet[s["memory_id"].(string)][s["seq"].(float64)] {
+		seq, ok := integerValue(s["seq"])
+		if !ok || !seqSet[s["memory_id"].(string)][seq] {
 			dangling++
 		}
 	}
@@ -926,7 +938,7 @@ func main() {
 	// event_sig verifying over its entry_hash under one of the
 	// actor's keys. Keyless actors' events are unsigned and legal.
 	keyByActor := map[string]map[string]string{}
-	for _, kv := range ev["actor_keys"].([]interface{}) {
+	for _, kv := range actorKeys {
 		k := kv.(map[string]interface{})
 		aid := k["actor_id"].(string)
 		if keyByActor[aid] == nil {
@@ -936,10 +948,14 @@ func main() {
 			k["verify_key_hex"].(string)
 	}
 	sigMap := map[string]map[string]interface{}{}
-	for _, sv := range ev["event_sigs"].([]interface{}) {
+	for _, sv := range eventSigs {
 		s := sv.(map[string]interface{})
+		seq, ok := integerValue(s["seq"])
+		if !ok {
+			continue
+		}
 		sigMap[s["memory_id"].(string)+"/"+
-			fmt.Sprint(int64(s["seq"].(float64)))] = s
+			fmt.Sprint(seq)] = s
 	}
 	badSig := 0
 	for mid, ch := range chains {
