@@ -294,6 +294,22 @@ that a particular deployment shares a database or an estimate of natural
 collision frequency. See the [Exp62 preregistration, copied source, runner,
 tests, report, provenance, and result](../experiments/exp62_cross_process_allocator/).
 
+**OBSERVED, copied Raven API and MCP entry points in separate processes:**
+Exp63 initialized the copied API handler and MCP store tool against the same
+temporary SQLite file before writes. Concurrent different-content requests
+both used cell ID zero and left one row. Sequential identical-content stores
+reused the ID; distinct deterministic vectors showed the MCP write replaced
+the API row, while the consolidator still counted the earlier ID-keyed audit
+event. Starting MCP after the API write loaded cell ID one and preserved both
+rows. Five tests passed. The harness bypassed HTTP and MCP wire protocols and
+ran the API handler's `asyncio.to_thread` inline after quiet-loop probes
+stalled. A later probe reproduced the wait in plain Python without Raven; a
+periodic asyncio timer allowed both a trivial worker await and the copied API
+handler to complete. The root cause remains **UNKNOWN**, and Exp63 itself still
+does not establish normal server thread-pool behavior or deployment topology.
+See the [Exp63 preregistration, copied source, runner, tests, report,
+provenance, and result](../experiments/exp63_raven_service_shared_database/).
+
 
 | Script | Role |
 |---|---|
@@ -334,8 +350,9 @@ H14 remains OPEN. Exp36–50 are synthetic restoration and finite-state assays;
 Exp51–59 are isolated experiments against a copied Raven snapshot with
 synthetic fixtures; Exp60 is a static source audit of two ingestion paths;
 Exp61 is a copied-engine runtime assay with a frozen clock and temporary
-SQLite; Exp62 extends the allocator condition across spawned processes.
-Exp51–62 provide bounded evidence about selected Raven
+SQLite; Exp62 extends the allocator condition across spawned processes;
+Exp63 exercises the copied API/MCP store entry points across processes with
+transport protocols bypassed. Exp51–63 provide bounded evidence about selected Raven
 operations and observables, not a deployed-agent validation or a sufficient
 or minimal Raven state representation. The current vocabulary and research
 map are in [`MEMORY_LAB.md`](MEMORY_LAB.md). The protocol origin and historic
