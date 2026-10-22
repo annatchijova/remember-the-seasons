@@ -303,11 +303,13 @@ the API row, while the consolidator still counted the earlier ID-keyed audit
 event. Starting MCP after the API write loaded cell ID one and preserved both
 rows. Five tests passed. The harness bypassed HTTP and MCP wire protocols and
 ran the API handler's `asyncio.to_thread` inline after quiet-loop probes
-stalled. A later probe reproduced the wait in plain Python without Raven; a
-periodic asyncio timer allowed both a trivial worker await and the copied API
-handler to complete. The root cause remains **UNKNOWN**, and Exp63 itself still
-does not establish normal server thread-pool behavior or deployment topology.
-See the [Exp63 preregistration, copied source, runner, tests, report,
+stalled. Follow-up probes found local `socketpair.send()` returns `EPERM` in
+the sandbox but succeeds outside it. The inspected Python 3.12 event-loop code
+uses that socket for thread-safe wakeups and suppresses `OSError` unless debug
+logging is enabled. **INFERRED:** this sandbox restriction explains the quiet
+loop wait; it does not establish a Raven or unsandboxed Python defect. Exp63
+still does not test normal server thread-pool behavior or deployment topology.
+See the [Exp63 report, preregistration, copied source, runner, tests,
 provenance, and result](../experiments/exp63_raven_service_shared_database/).
 
 

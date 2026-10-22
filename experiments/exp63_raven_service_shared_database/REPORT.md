@@ -46,22 +46,28 @@ millisecond collisions.
 - The engine clock was frozen only around each store.
 - The original Exp63 API worker replaced `asyncio.to_thread` with an inline
   async executor after the unmodified handler appeared to stall. Follow-up
-  probes narrowed this behavior but did not identify its root cause:
-  - **OBSERVED, local Python 3.12 process:** a plain program without Raven can
-    execute a worker function, yet a subsequent direct `await
-    asyncio.to_thread(...)` may remain suspended when the event loop has no
-    other scheduled activity. The worker's concurrent future completed; a
-    periodic timer allowed the awaiting coroutine to resume.
+  probes identified the cause of that local stall:
+  - **OBSERVED, sandboxed process:** a local `socketpair.send()` raised
+    `PermissionError(EPERM)` from both the main thread and a worker thread.
+    The same local send probe succeeded when run outside the sandbox.
+  - **OBSERVED, installed Python 3.12 standard library:**
+    `BaseEventLoop.call_soon_threadsafe()` enqueues a callback and invokes
+    `_write_to_self()`; `BaseSelectorEventLoop._write_to_self()` sends a byte
+    on its internal socket and catches `OSError`, logging it only in debug
+    mode (`/usr/lib/python3.12/asyncio/base_events.py:838-847`;
+    `/usr/lib/python3.12/asyncio/selector_events.py:141-157`).
+  - **INFERRED:** the sandbox-denied socket write explains why the worker
+    completed and queued its result callback while the quiet event loop stayed
+    asleep until a timer woke it. The inference would be refuted if the same
+    `to_thread` stall reproduced outside the sandbox with socket writes
+    allowed.
   - **OBSERVED, copied Raven API:** the actual `store_memory` handler returned
     when a periodic asyncio timer ran alongside it, without replacing
     `asyncio.to_thread`.
-  - **UNKNOWN:** why the executor completion notification was not sufficient
-    to resume the waiter in these quiet-loop probes, and whether the behavior
-    is specific to this execution environment.
-  These findings show the original stall was not specific to Raven's
-  `engine.store`, but they do not validate normal HTTP server behavior. Exp63's
-  recorded result remains an inline-executor assay and does not test API
-  thread-pool behavior.
+  This diagnosis is specific to the sandboxed assay environment; it is not
+  evidence of a Raven or unsandboxed Python defect. Exp63's recorded result
+  remains an inline-executor assay and does not test normal API thread-pool
+  behavior or the HTTP runtime.
 - The concurrent writer is nondeterministic; the assay asserts only that one
   contender survives, not which one wins.
 
