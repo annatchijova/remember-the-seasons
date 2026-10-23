@@ -81,7 +81,7 @@ decision records, the receipts, the counterfactual report. An
 offline verifier — a clean-room Go implementation, plus an
 import-free Python one — recomputes the whole cascade and either
 confirms the claim or says exactly where the evidence broke.
-20/20 conformance artifacts agree across both implementations.
+21/21 conformance artifacts agree across both implementations.
 
 ## The one-sentence version for a judge
 

@@ -12,9 +12,10 @@ recomputa en tu navegador).
 > Nos pidieron construir la próxima frontera de la IA. No podemos
 > afirmar que la revolucionamos. Este es nuestro mejor intento en un mes.
 
-> ESTADO: fase de investigación cerrada; el prototipo funcional vive en
-> `product/`. Las fuentes siguen read-only, las afirmaciones etiquetadas,
-> y los límites honestos están en el Technical README — no escondidos.
+> ESTADO: el prototipo vive en `product/` y H14 sigue abierta. La
+> investigación incluye ensayos sintéticos y auditorías aisladas sobre
+> copias de Raven; no demuestra transferencia a un despliegue real. Las
+> fuentes siguen read-only y los límites están en el Technical README.
 
 ## El problema
 
@@ -119,8 +120,11 @@ protocolo — por diseño.
 
 ## La evidencia
 
-- **Investigación**: `experiments/` — Exp19–35, la cadena de
-  falsificación (`docs/HYPOTHESES.md`, `docs/EXPERIMENTS.md`).
+- **Investigación**: `experiments/` — Exp19–35 y los seguimientos H14
+  Exp36–63 (`docs/HYPOTHESES.md`, `docs/EXPERIMENTS.md`). **OBSERVED,
+  en una copia de Raven con una base temporal:** Exp63 ejecutó los puntos
+  de entrada API y MCP en procesos separados, pero evitó sus protocolos
+  de transporte. No demuestra el comportamiento de una instalación real.
 - **Conformidad de protocolo**: `mneme-cf-bundle/v1` + `cf-cascade/v2`
   + `causal_ontology 2.0.0` — un verificador Go escrito de cero
   reproduce cada veredicto: **21/21 artifacts coinciden**, el corpus
@@ -129,11 +133,12 @@ protocolo — por diseño.
   `causes[]` explícitas, invalidación por clausura transitiva; la
   adyacencia sola ya no mata nada.
 - **Serie stigmergy adversarial**: `product/tests/test_stigmergy_pure.py`
-  — 18 invariantes sobre escritura concurrente multi-autoridad.
-  Encontró races reales (ya corregidas), demostró que serialización
-  no es causalidad, que legalidad no es confluencia, y terminó en una
-  frontera documentada: el registro sellado todavía no distingue
-  concurrente de ordenado.
+  — 18 checks sobre escritura concurrente multi-autoridad. Las pruebas
+  motivaron reintentos acotados para colisiones de IDs, pero queda una
+  falla intermitente S5 por agotamiento de reintentos; la ruta no debe
+  considerarse libre de carreras. También mostró que serialización no es
+  causalidad y que legalidad no es confluencia. El registro sellado todavía
+  no distingue escrituras concurrentes de escrituras ordenadas.
 
 ## Layout
 
@@ -142,7 +147,7 @@ remember-the-seasons/
   sources/       snapshots read-only de investigación (raven-memory,
                  mneme, stigmergy — cada uno con PROVENANCE.md)
   research/      inventarios de arqueología, mapas de mecanismos
-  experiments/   Exp19–Exp35 — la cadena de falsificación
+  experiments/   Exp19–Exp35 + seguimientos H14 Exp36–63
   docs/          paquete de investigación, hipótesis, stop conditions
   product/       el esqueleto funcional — ver product/README.md
     mneme/       custodia, autoridad, receipts, claims, canonical JSON
@@ -174,9 +179,9 @@ el navegador (digest, chains, referencias, atribución Ed25519).
 
 ## Reglas vigentes
 
-Ver `AGENTS.md`. En particular: nada de commit/push sin autorización
-explícita; `sources/` es read-only; cada afirmación va etiquetada
-OBSERVED / INFERRED / PROPOSED / UNKNOWN.
+Ver `AGENTS.md`. En particular: `sources/` es read-only y las
+afirmaciones de investigación se etiquetan OBSERVED / INFERRED / PROPOSED
+/ UNKNOWN.
 
 ## El producto, como lo ve el jurado
 

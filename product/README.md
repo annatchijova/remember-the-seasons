@@ -19,7 +19,7 @@ product/
   mneme/           vendored port of sources/mneme — the forensic core
                    (custody chains, recall receipts, decisions, claims,
                    counterfactual worlds, sealed bundles, protocols)
-  tests/           mneme's ported test suite — 12 files, all passing
+  tests/           mneme's ported test suite — 12 files
   conformance/     ported conformance vectors
   verify_offline.py  the standalone auditor (stdlib-only)
   seasons/         the product layer:
@@ -143,7 +143,7 @@ itself carries `projection_sha256` so the answer is addressable.
 
 - `NEBIUS_API_KEY` + `NEBIUS_BASE_URL` (default
   `https://api.tokenfactory.nebius.com/v1`) — OpenAI-compatible.
-- `SEASONS_MODEL` — default `nvidia/Llama-3.1-Nemotron-70B-Instruct-HF`.
+- `SEASONS_MODEL` — default `nvidia/NVIDIA-Nemotron-3-Nano-30B-A3B`.
 - `SEASONS_EMBED_MODEL` — default `Qwen/Qwen3-Embedding-8B`.
 - With no key: deterministic local embedder + stub LLM. Same recall,
   same answer, on every machine — receipts stay reproducible.
@@ -191,29 +191,31 @@ not hidden.
 
 ## Status
 
-Skeleton, verified end-to-end on Nebius Token Factory
+Skeleton; a live path was exercised on Nebius Token Factory
 (`nvidia/NVIDIA-Nemotron-3-Nano-30B-A3B` chat +
 `Qwen/Qwen3-Embedding-8B` embeddings — hackathon requirement met:
-Nebius execution + NVIDIA open-source model). Not wired:
-MCP server, hosted demo.
+Nebius execution + NVIDIA open-source model). The MCP stdio server and
+localhost demo UI are implemented; neither is deployed as a hosted service.
 
 **Counterfactual: causal-ontology 2.0.0 / cf-cascade/v2.** Events
 declare their antecedents in `payload.causes[]`; the cascade is a
 fixpoint closure over that declared graph (spec:
 `spec/causal-ontology-v2.md`). Conformance: Python↔Go differential,
-18/18 corpus artifacts agree; `cf/v1/generate.py --check`
+21/21 corpus artifacts agree; `cf/v1/generate.py --check`
 reproduces the corpus byte-for-byte. Legacy evidence (no `causes`)
 still verifies under the unified rule — the corpus carries a v1-form
 bundle to prove it. CI runs all three checks on every push.
 
-**Stigmergy series (tests/test_stigmergy_pure.py, 16 checks):**
+**Stigmergy series (tests/test_stigmergy_pure.py, 18 checks):**
 multi-authority operation on one shared field. Established, in
 order:
 
 - independent agents need no process-level coordination — ids and
   counters are field state;
-- concurrent writes collide on ids and prev_hash — bounded retry
-  resolves races with zero loss under threads+SQLite+single-host;
+- concurrent writes exposed id and prev_hash races. Bounded retry
+  addressed the observed id collisions, but an intermittent S5 retry
+  exhaustion remains under investigation; do not treat the path as fully
+  race-free;
 - serialization is not causality — concurrent same-chain writes stay
   dense and linked, and the causal verdict is identical under both
   serializations;

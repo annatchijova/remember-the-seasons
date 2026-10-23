@@ -146,6 +146,13 @@ QUAR→SUP vs SUP→QUAR, both legal, different final states |
 seals where the event landed, not the head the writer observed;
 `observed_head` is not recorded. `E(W1)=E(W2), W1≠W2` |
 
+The earlier bounded-retry change addressed observed ID collisions, but it
+does not establish that the concurrent write path is race-free. In the
+latest recorded CI run, S5 failed once and passed on rerun; locally, the
+same retry-exhaustion symptom appeared once in 20 repetitions, followed
+by 30 passing repetitions. Treat this as an unresolved intermittent
+failure, not as a fixed race or a stable failure rate.
+
 ## 7. Determinism and reproducibility
 
 - No floats in sealed/decision paths; `Fraction` for ratios,
@@ -206,7 +213,7 @@ Specs: `product/spec/cf-bundle-v1.md`, `product/spec/causal-ontology-v2.md`,
 
 ## 11. Memory Lab research boundary
 
-H14 and Exp36–62 examine temporary interventions, restoration, propagation,
+H14 and Exp36–63 examine temporary interventions, restoration, propagation,
 observable equivalence, and transition congruence. The experiments range from
 synthetic finite machines to isolated runs against a copied Raven source
 snapshot with synthetic data. They do not validate the product layer above or
@@ -215,6 +222,10 @@ working vocabulary, summarizes the evidence with its scope, and records
 proposed safeguards for any future intervention harness.
 The source-level Raven operation inventory and observation contracts are in
 [`docs/RAVEN_OBSERVATIONAL_CONTRACT.md`](docs/RAVEN_OBSERVATIONAL_CONTRACT.md).
-The latest Raven runtime assay is Exp62; its preregistration, copied source,
-runner, tests, report, provenance, and raw result are under
-[`experiments/exp62_cross_process_allocator/`](experiments/exp62_cross_process_allocator/).
+The latest Raven runtime assay is Exp63. It exercises copied API and MCP
+entry points in separate processes against one temporary database; its wire
+protocols were bypassed, and the API handler used inline `to_thread` in the
+recorded assay. The sandbox-specific asyncio stall is not evidence about
+normal Raven server thread-pool behavior or deployed topology. See the
+[Exp63 report](experiments/exp63_raven_service_shared_database/REPORT.md),
+preregistration, copied source, runner, tests, provenance, and raw result.

@@ -101,8 +101,11 @@ un índice de embeddings lo arregla sin cambiar el protocolo.
 
 ## Estado
 
-Esqueleto verificado end-to-end en Nebius Token Factory (requisito del
-hackathon cumplido: ejecución Nebius + modelo NVIDIA open-source).
+Esqueleto con una ruta live ejercitada en Nebius Token Factory
+(`NVIDIA-Nemotron-3-Nano-30B-A3B` + `Qwen3-Embedding-8B`). El servidor MCP
+stdio y la UI local están implementados; ninguno está desplegado como
+servicio público. Esto no equivale a tener un demo alojado listo para el
+hackathon.
 Audit red-team en `REDTEAM.md`. Limitaciones nombradas, no escondidas:
 el counterfactual v1 es local (una transición/una chain); los links
 explícitos no tienen custody event propio; no hay rewind causal global.

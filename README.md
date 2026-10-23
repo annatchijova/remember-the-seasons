@@ -122,7 +122,7 @@ subordinate of the protocol — by design.
 ## The evidence
 
 - **Research**: `experiments/` — Exp19–35, the main falsification chain,
-  plus H14 follow-up assays Exp36–62. **OBSERVED, synthetic:** Exp48 groups
+  plus H14 follow-up assays Exp36–63. **OBSERVED, synthetic:** Exp48 groups
   states by exact choice, propagation, and causal-contribution traces under
   its 24 fixed schedules. It finds 441 observational classes in Exp47's
   1,512-state Cartesian domain and 118 classes in a 172-state closure from
@@ -157,6 +157,7 @@ subordinate of the protocol — by design.
   [Exp60 public ID reuse reachability audit](experiments/exp60_public_id_reuse_audit/),
   [Exp61 shared-database allocator assay](experiments/exp61_shared_database_allocator/),
   [Exp62 cross-process allocator assay](experiments/exp62_cross_process_allocator/),
+  [Exp63 cross-service shared-database assay](experiments/exp63_raven_service_shared_database/),
   `docs/HYPOTHESES.md`, and `docs/EXPERIMENTS.md`.
 - **Protocol conformance**: `mneme-cf-bundle/v1` + `cf-cascade/v2` +
   `causal_ontology 2.0.0` — a clean-room Go verifier reproduces every
@@ -166,8 +167,10 @@ subordinate of the protocol — by design.
   explicit `causes[]`, transitive-closure invalidation; adjacency
   alone can no longer kill anything.
 - **Stigmergy adversarial series**: `product/tests/test_stigmergy_pure.py`
-  — 16 invariants over concurrent multi-authority writes. It found
-  real races (now fixed), proved serialization is not causality,
+  — 18 checks over concurrent multi-authority writes. It found
+  allocator races and tested bounded retries; an intermittent S5 retry
+  exhaustion remains under investigation. It also showed serialization
+  is not causality,
   proved legality is not confluence, and ended at a documented
   frontier: the sealed record cannot distinguish concurrent from
   ordered — yet.
@@ -179,7 +182,7 @@ remember-the-seasons/
   sources/       read-only research snapshots (raven-memory, mneme,
                  stigmergy — each with PROVENANCE.md)
   research/      archaeology inventories, mechanism maps
-  experiments/   Exp19–Exp35 falsification chain + H14 Exp36–62
+  experiments/   Exp19–Exp35 falsification chain + H14 Exp36–63
   docs/          research package, hypotheses, stop conditions
   product/       the working skeleton — see product/README.md
     mneme/       custody, authority, receipts, claims, canonical JSON
