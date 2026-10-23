@@ -20,8 +20,10 @@ collision under the preregistered startup condition.
   then loaded allocator value one, stored at cell ID one, and both rows
   remained.
 
-Five tests passed, including the pre-write counters, replacement canary,
-reload control, source hashes, and recorded-result replay.
+Seven tests passed, including pre-write counters, replacement identity and
+content, per-service payload preservation in the reload control, source
+hashes, and recorded-result replay. The two added assertions reject a
+corrupted persisted row even when the row count is unchanged.
 
 ## Interpretation
 
@@ -50,6 +52,9 @@ millisecond collisions.
   - **OBSERVED, sandboxed process:** a local `socketpair.send()` raised
     `PermissionError(EPERM)` from both the main thread and a worker thread.
     The same local send probe succeeded when run outside the sandbox.
+  - **OBSERVED, unsandboxed Python 3.12 control:** three consecutive direct
+    `asyncio.to_thread()` awaits completed without timers, and `asyncio.run()`
+    exited normally.
   - **OBSERVED, installed Python 3.12 standard library:**
     `BaseEventLoop.call_soon_threadsafe()` enqueues a callback and invokes
     `_write_to_self()`; `BaseSelectorEventLoop._write_to_self()` sends a byte
@@ -58,9 +63,9 @@ millisecond collisions.
     `/usr/lib/python3.12/asyncio/selector_events.py:141-157`).
   - **INFERRED:** the sandbox-denied socket write explains why the worker
     completed and queued its result callback while the quiet event loop stayed
-    asleep until a timer woke it. The inference would be refuted if the same
-    `to_thread` stall reproduced outside the sandbox with socket writes
-    allowed.
+    asleep until a timer woke it. The unsandboxed `to_thread` control supports
+    this explanation for the minimal probe; it does not validate the full HTTP
+    runtime or every deployment configuration.
   - **OBSERVED, copied Raven API:** the actual `store_memory` handler returned
     when a periodic asyncio timer ran alongside it, without replacing
     `asyncio.to_thread`.
