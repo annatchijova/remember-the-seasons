@@ -1,0 +1,659 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Remember the Seasons</title>
+<meta name="description" content="Persistent agent memory that keeps both the state it needs to behave and the history it needs to explain that state — a recorded session, sealed and independently verifiable in this page.">
+<style>
+:root{
+  --g:#76b900; --g-dim:#5a9100;
+  --bg:#0b0f0a; --p:#121810; --p2:#0d130b;
+  --line:#22301c; --line2:#1a2414;
+  --dim:#8fa383; --tx:#e7f0e3; --warn:#e8b33d; --bad:#d16a6a;
+  --mono:ui-monospace,"SF Mono",Menlo,Consolas,monospace;
+  --sans:-apple-system,BlinkMacSystemFont,"Segoe UI",Helvetica,Arial,sans-serif;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+  margin:0;background:var(--bg);color:var(--tx);
+  font:15px/1.6 var(--sans);
+}
+.wrap{max-width:980px;margin:0 auto;padding:0 20px}
+a{color:var(--g)}
+code,.mono{font-family:var(--mono)}
+
+/* ---------- hero ---------- */
+.hero{position:relative}
+.hero picture,.hero img{display:block;width:100%;height:clamp(220px,34vw,420px);object-fit:cover;object-position:center 38%}
+.hero-fade{position:absolute;inset:0;background:linear-gradient(180deg,rgba(11,15,10,0) 45%,rgba(11,15,10,.92) 92%,var(--bg) 100%)}
+.hero-copy{position:relative;margin-top:-120px;padding:0 20px 28px}
+.hero-copy .inner{max-width:980px;margin:0 auto}
+.kicker{color:var(--g);font:12px/1 var(--mono);letter-spacing:2.5px;text-transform:uppercase;margin-bottom:10px}
+h1.title{font:700 clamp(28px,5vw,44px)/1.1 var(--sans);margin:0 0 14px;color:var(--tx);letter-spacing:-.01em}
+.lede{font-size:17px;color:var(--dim);max-width:62ch;margin:0 0 22px}
+.lede b{color:var(--tx);font-weight:600}
+.cta-row{display:flex;gap:10px;flex-wrap:wrap}
+.btn{
+  display:inline-flex;align-items:center;gap:7px;
+  background:var(--g);color:#071005;font-weight:700;font-size:14px;
+  padding:11px 18px;border-radius:7px;text-decoration:none;border:1px solid var(--g);
+  font-family:var(--sans);
+}
+.btn.ghost{background:transparent;color:var(--g);border-color:var(--g)}
+.btn:hover{filter:brightness(1.08)}
+
+/* ---------- editorial sections ---------- */
+section.ed{padding:38px 0}
+section.ed h2{font:700 20px/1.3 var(--sans);color:var(--tx);margin:0 0 12px}
+section.ed p{color:var(--dim);max-width:68ch;margin:0 0 14px;font-size:15.5px}
+section.ed p b{color:var(--tx)}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:22px;margin-top:18px}
+@media (max-width:720px){.grid2{grid-template-columns:1fr}}
+.pill-row{display:flex;gap:8px;flex-wrap:wrap;margin:14px 0}
+.pill{font:11px var(--mono);letter-spacing:.4px;color:var(--dim);border:1px solid var(--line);border-radius:20px;padding:4px 11px}
+.compare{width:100%;border-collapse:collapse;margin-top:16px;font-size:13.5px}
+.compare td{padding:8px 12px;border-bottom:1px solid var(--line2);color:var(--dim);vertical-align:top}
+.compare tr td:first-child{color:#9a7}
+.compare tr td:last-child{color:var(--tx)}
+
+hr.rule{border:0;border-top:1px solid var(--line);margin:0}
+
+/* ---------- terminal panels ---------- */
+section.term{padding:30px 0}
+.panel{background:var(--p);border:1px solid var(--line);border-radius:10px;padding:18px 20px;margin-bottom:16px}
+.panel h3{
+  color:var(--g);font:12px var(--mono);text-transform:uppercase;letter-spacing:1.6px;
+  margin:0 0 14px;display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap
+}
+.section-head{display:flex;align-items:baseline;justify-content:space-between;gap:14px;flex-wrap:wrap;margin-bottom:6px}
+.section-head h2{margin:0}
+.section-note{color:var(--dim);font-size:13px;font-family:var(--mono);max-width:60ch}
+
+.badge{display:inline-block;font:11px var(--mono);padding:2px 9px;border-radius:9px;border:1px solid;letter-spacing:.3px}
+.b-ok{color:var(--g);border-color:var(--g)}
+.b-warn{color:var(--warn);border-color:var(--warn)}
+.b-bad{color:var(--bad);border-color:var(--bad)}
+.b-dim{color:var(--dim);border-color:var(--line)}
+
+.triad{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;margin:10px 0}
+@media (max-width:640px){.triad{grid-template-columns:1fr}}
+.triad .cell{background:var(--p2);border-radius:7px;padding:10px 12px;border-left:3px solid var(--line)}
+.triad .cell.served{border-left-color:var(--dim)}
+.triad .cell.used{border-left-color:var(--warn)}
+.triad .cell.reinforced{border-left-color:var(--g)}
+.triad .lbl{font:11px var(--mono);color:var(--dim);text-transform:uppercase;letter-spacing:.5px;margin-bottom:5px}
+.triad .val{font:13px var(--mono);color:var(--tx);word-break:break-word}
+
+.turn{border-left:2px solid var(--line);padding:4px 0 4px 16px;margin:0 0 4px}
+.turn.season2{border-left-color:#3a4a2c}
+.season-cut{
+  display:flex;align-items:center;gap:10px;margin:18px 0 14px;color:var(--g);
+  font:12px var(--mono);text-transform:uppercase;letter-spacing:2px
+}
+.season-cut::before,.season-cut::after{content:"";flex:1;height:1px;background:var(--line)}
+.q{color:var(--tx);font-size:14px;margin:2px 0}
+.q .arrow{color:var(--g)}
+.ans{background:var(--p2);border-radius:7px;padding:10px 12px;margin:6px 0;font-size:13.5px;color:var(--tx)}
+.hash{color:#5a7050;font-size:11.5px;word-break:break-all;font-family:var(--mono)}
+.meta{color:var(--dim);font-size:12px;font-family:var(--mono)}
+.memline{padding:5px 0;color:var(--dim);font-size:13px}
+.memline b{color:var(--g);font-family:var(--mono);font-weight:600;margin-right:8px}
+
+.chainline{padding:3px 0 3px 2px;font-size:12.5px;color:var(--dim);border-left:2px solid var(--line2);padding-left:12px;margin-left:2px}
+.chainline b{color:var(--tx)}
+.chainline .seq{color:var(--g);display:inline-block;width:20px;font-family:var(--mono)}
+
+select,button.op{
+  background:#0a0e08;border:1px solid var(--line);color:var(--tx);
+  padding:9px 12px;border-radius:6px;font:13px var(--mono);cursor:pointer
+}
+.select-wrap{position:relative;display:inline-flex;min-width:280px;flex:1 1 280px;max-width:520px}
+.select-wrap select{
+  appearance:none;-webkit-appearance:none;-moz-appearance:none;
+  width:100%;padding-right:34px;color-scheme:dark;
+}
+.select-wrap select:hover{border-color:var(--g-dim)}
+.select-wrap select:focus{outline:none;border-color:var(--g);box-shadow:0 0 0 1px var(--g)}
+.select-wrap option{background:#0a0e08;color:var(--tx)}
+.select-chevron{
+  position:absolute;right:12px;top:50%;transform:translateY(-50%);
+  color:var(--g);font-size:11px;pointer-events:none
+}
+button.op{background:var(--g);color:#071005;font-weight:700;border:none}
+button.op.ghost{background:transparent;color:var(--g);border:1px solid var(--g)}
+.row{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin:10px 0}
+
+.cf-result{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:12px 0}
+@media (max-width:640px){.cf-result{grid-template-columns:1fr}}
+.cf-box{background:var(--p2);border-radius:7px;padding:12px}
+.cf-box .lbl{font:11px var(--mono);color:var(--dim);text-transform:uppercase;letter-spacing:.5px;margin-bottom:6px}
+.cf-box.hyp{border:1px dashed var(--warn)}
+.delta-line{font:13px var(--mono);color:var(--warn);margin:8px 0}
+.honest-note{
+  background:#17140a;border:1px solid #3a2f12;border-radius:7px;padding:11px 14px;
+  color:#c9ae6e;font-size:13px;margin:10px 0
+}
+.honest-note b{color:var(--warn)}
+
+/* ---------- verification table ---------- */
+.vchk{padding:7px 10px;border-radius:6px;margin:3px 0;font-size:13px;display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap}
+.vchk.pass{background:#0d130b;border-left:3px solid var(--g)}
+.vchk.fail{background:#1c0d0d;border-left:3px solid var(--bad)}
+.vchk.pend{background:#121810;border-left:3px solid var(--line)}
+.vchk .label{color:var(--tx)}
+.vchk .detail{color:var(--dim);font:11.5px var(--mono)}
+.verdict-big{font:700 16px var(--mono);padding:14px 16px;border-radius:7px;margin-top:6px}
+.verdict-big.good{background:#0d130b;color:var(--g);border:1px solid var(--g)}
+.verdict-big.warn{background:#17140a;color:var(--warn);border:1px solid var(--warn)}
+.verdict-big.bad{background:#1c0d0d;color:var(--bad);border:1px solid var(--bad)}
+.vchk.warn{background:#17140a;border-left:3px solid var(--warn)}
+input[type=file]{
+  margin:4px 0;padding:9px;background:#0a0e08;border:1px dashed var(--line);
+  border-radius:6px;color:var(--tx);width:100%;font:13px var(--mono)
+}
+
+footer{padding:34px 0 60px;color:var(--dim);font-size:13px;border-top:1px solid var(--line);margin-top:20px}
+footer a{margin-right:16px}
+.foot-links{margin-bottom:10px}
+</style>
+</head>
+<body>
+
+<div class="hero">
+  <picture>
+    <source srcset="banner.webp" type="image/webp">
+    <img src="banner.jpg" alt="Remember the Seasons">
+  </picture>
+  <div class="hero-fade"></div>
+</div>
+<div class="hero-copy">
+  <div class="inner">
+    <div class="kicker">Nebius x NVIDIA Global AI Hackathon — Personal AI</div>
+    <h1 class="title">Remember the Seasons</h1>
+    <p class="lede">An agent can remember a fact. Can it explain <b>why</b> it knows it?
+      This page replays one real session — Nemotron answering, the field
+      deciding what to keep — and <b>re-verifies every seal in your browser</b>,
+      no server, no trust required.</p>
+    <div class="cta-row">
+      <a class="btn" href="#session">▸ Watch the recorded session</a>
+      <a class="btn ghost" href="#verify">✓ Verify it yourself</a>
+    </div>
+  </div>
+</div>
+
+<div class="wrap">
+
+<section class="ed">
+  <h2>The problem</h2>
+  <p>Retrieval answers <i>"what is similar to this question."</i> It does not
+  answer why a memory was available, what decision depended on it, or
+  whether the answer it gave last month would still hold today. For an
+  agent that runs for months and accumulates memory, that gap is where
+  trust quietly erodes — the agent's behavior drifts, and nobody can
+  point to which historical event caused it.</p>
+  <p><b>This system keeps both</b>: the operational state the agent needs
+  to behave right now, and the forensic trajectory — a hash-linked,
+  signed custody chain per memory — that explains exactly why it
+  behaves that way, with a counterfactual replay that can answer
+  <code>"what if that one event had never happened?"</code> as a sealed,
+  reproducible report instead of a guess.</p>
+  <div class="grid2">
+    <div>
+      <div class="pill-row">
+        <span class="pill">served ≠ used ≠ reinforced</span>
+        <span class="pill">do(T=∅) replay</span>
+        <span class="pill">Ed25519-signed events</span>
+        <span class="pill">clean-room Go verifier · 21/21</span>
+      </div>
+    </div>
+    <table class="compare">
+      <tr><td>typical retrieval memory</td><td>returns similar documents</td></tr>
+      <tr><td>this system</td><td>serves memories <i>and</i> seals the receipt</td></tr>
+      <tr><td>"trust the embedding"</td><td>the model may declare; only
+        corroboration changes the field</td></tr>
+      <tr><td>"it felt related"</td><td><code>do(T_i=∅)</code> excises one
+        transition, replays production recall, seals the delta</td></tr>
+    </table>
+  </div>
+</section>
+
+<hr class="rule">
+
+<section class="ed">
+  <h2>Nemotron is the reasoning interface, not an ornament</h2>
+  <p>Two models, both served by <b>Nebius Token Factory</b>, do real work
+  in the loop you're about to watch: <code>nvidia/NVIDIA-Nemotron-3-Nano-30B-A3B</code>
+  reads the retrieved memories and answers; <code>Qwen/Qwen3-Embedding-8B</code>
+  produces the vectors retrieval ranks on. Neither touches sealed state.
+  Nemotron's answer carries a declaration — which memory ids it says it
+  used — and that declaration is recorded as a <i>claim</i>. A
+  deterministic engine then checks whether the answer text actually
+  overlaps the content of each declared memory; only the memories that
+  pass that check get reinforced. A model that declares a memory it
+  was never served, or that a hostile memory tries to steer, gets
+  caught here — its declaration lands on the custody chain as evidence
+  against it, never as authority over the field.</p>
+</section>
+
+</div>
+
+<section class="term" id="session">
+<div class="wrap">
+  <div class="section-head">
+    <h2>▸ The recorded session</h2>
+    <span class="section-note" id="run-note">loading…</span>
+  </div>
+
+  <div class="panel">
+    <h3>Run <span id="run-badges"></span></h3>
+    <div id="run-detail" class="meta"></div>
+  </div>
+
+  <div class="panel" id="transcript-panel">
+    <h3>Transcript — every turn, as it happened</h3>
+    <div id="transcript"><div class="meta">loading session.recording.json…</div></div>
+  </div>
+
+  <div class="panel" id="cf-panel" style="display:none">
+    <h3>Trajectory counterfactual — what if it hadn't happened?</h3>
+    <div class="section-note" style="margin-bottom:10px">
+      Every excisable custody event on every memory this session served was
+      replayed in this recording — pick one. The production recall runs
+      again inside a database SAVEPOINT with that one event gone, then
+      rolls back. Nothing here is computed live in your browser; you are
+      selecting among <b id="cf-count">—</b> already-sealed results.
+    </div>
+    <div id="cf-honest"></div>
+    <div class="row">
+      <div class="select-wrap">
+        <select id="cf-select"></select>
+        <span class="select-chevron" aria-hidden="true">▾</span>
+      </div>
+      <button class="op ghost" onclick="renderCF()">show this excision</button>
+    </div>
+    <div id="cf-out"></div>
+  </div>
+</div>
+</section>
+
+<div class="wrap">
+<section class="ed" id="verify">
+  <h2>Don't trust this page — verify it</h2>
+  <p>Everything above came from one JSON file,
+  <code>session.recording.json</code>. Its narration sits beside a
+  <b>sealed, signed evidence bundle</b> (the same <code>mneme-cf-bundle/v1</code>
+  DSSE envelope this product's offline and clean-room Go verifiers
+  already accept — nothing about its format changed to make this page).
+  The checks below run in this browser, over the bytes you're looking
+  at: they recompute every hash and signature from scratch and either
+  confirm the claim or say exactly where it breaks.</p>
+</section>
+</div>
+
+<section class="term">
+<div class="wrap">
+  <div class="panel">
+    <h3>Load a recording <span class="meta" style="font-weight:400;text-transform:none;letter-spacing:0">— auto-loads session.recording.json; drop a different one to check it instead</span></h3>
+    <input type="file" id="file-input" accept=".json">
+  </div>
+  <div class="panel">
+    <h3>Verification</h3>
+    <div id="verify-out"><div class="meta">verifying…</div></div>
+  </div>
+</div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <div class="foot-links">
+      <a href="https://github.com/annatchijova/remember-the-seasons">GitHub repository</a>
+      <a href="https://github.com/annatchijova/remember-the-seasons/blob/master/README.md">README</a>
+      <a href="https://github.com/annatchijova/remember-the-seasons/blob/master/TECHNICAL.md">Technical README</a>
+      <a href="https://github.com/annatchijova/remember-the-seasons/blob/master/docs/DEMO.md">Demo walkthrough</a>
+      <a href="viewer.html">Bundle-only verifier</a>
+    </div>
+    <div class="wrap" style="padding:0">
+      Apache-2.0, Copyright 2026 Anna Tchijova. Built on Nebius Token
+      Factory (NVIDIA Nemotron-3-Nano-30B-A3B, Qwen3-Embedding-8B).
+      This is research material; claims about a deployed agent are
+      explicitly out of scope — see the repository's
+      <code>KNOWN_LIMITATIONS.md</code>.
+    </div>
+  </div>
+</footer>
+
+<script>
+'use strict';
+const $ = id => document.getElementById(id);
+const esc = s => String(s).replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const enc = new TextEncoder();
+
+/* ---------- crypto / canonicalization (mneme-cjson/1.0.0) ---------- */
+async function sha256hex(bytes){
+  const d = await crypto.subtle.digest('SHA-256', bytes);
+  return [...new Uint8Array(d)].map(b => b.toString(16).padStart(2,'0')).join('');
+}
+const hexToBytes = h => new Uint8Array(h.match(/../g).map(x => parseInt(x,16)));
+const b64d = s => Uint8Array.from(atob(s.replace(/-/g,'+').replace(/_/g,'/')), c => c.charCodeAt(0));
+
+function canonical(v){
+  if (v === null) return 'null';
+  if (typeof v === 'number') return String(v);
+  if (typeof v === 'boolean') return v ? 'true' : 'false';
+  if (typeof v === 'string') return JSON.stringify(v);
+  if (Array.isArray(v)) return '[' + v.map(canonical).join(',') + ']';
+  return '{' + Object.keys(v).sort().map(k => JSON.stringify(k) + ':' + canonical(v[k])).join(',') + '}';
+}
+const GEN = 'MNEME_CUSTODY_GENESIS:';
+async function entryHash(mid, e, prev){
+  const env = {['memory_id']: mid, seq: e.seq, event_type: e.event_type,
+    actor_id: e.actor_id, reason: e.reason, created_at: e.created_at,
+    payload: JSON.parse(e.payload_json)};
+  return sha256hex(enc.encode(prev + canonical(env)));
+}
+async function edVerify(vkHex, sigB, msgB){
+  try{
+    const k = await crypto.subtle.importKey('raw', hexToBytes(vkHex), {name:'Ed25519'}, false, ['verify']);
+    return await crypto.subtle.verify('Ed25519', k, sigB, msgB);
+  }catch(_){ return null; } // browser lacks Ed25519 — degrade honestly
+}
+
+/* ---------- state ---------- */
+// Trust anchor: the public verify key of this repo's published demo
+// signer (DEMO_KEY_SEED = "dd"*32 in product/record_session.py —
+// a fixed, intentionally public test seed, documented in the repo).
+// This MUST come from the page itself, never from the loaded file —
+// trusting a key the file also supplies would let a forged file vouch
+// for its own forged signature. A judge auditing a DIFFERENT bundle
+// (one not signed by this seed) will correctly see ORIGIN_UNTRUSTED
+// below, not a false pass.
+window.TRUSTED_KEYS = {
+  "68460ebef3b13816": "68460ebef3b138164ec7fd8610e95800df7598f70f2f2ea7db5172ac74ebc144"
+};
+
+let REC = null;     // the full recording body
+let BUNDLE = null;  // decoded inner bundle (payload)
+
+/* ---------- rendering: run + transcript ---------- */
+function renderRun(rec){
+  const r = rec.run;
+  const liveBadge = r.live
+    ? `<span class="badge b-ok">LIVE · Nebius Token Factory</span>`
+    : `<span class="badge b-warn">OFFLINE STUB — no NEBIUS_API_KEY</span>`;
+  const signedBadge = r.signed ? `<span class="badge b-ok">signed</span>` : `<span class="badge b-bad">unsigned</span>`;
+  $('run-badges').innerHTML = liveBadge + ' ' + signedBadge;
+  const lines = [];
+  if (r.live) {
+    lines.push(`chat model: ${esc(r.chat_model)}`);
+    lines.push(`embedding model: ${esc(r.embedding_model)}`);
+    lines.push(`endpoint: ${esc(r.endpoint)}`);
+  } else {
+    lines.push(`embedding: ${esc(r.embedding_model)} (deterministic, no network)`);
+  }
+  lines.push(`agent keyid: ${esc(rec.agent.keyid || '—')}`);
+  lines.push(`started: ${esc(r.started_at)}`);
+  lines.push(`finished: ${esc(r.finished_at)}`);
+  lines.push(`recording digest: ${esc(rec.recording_sha256.slice(0,32))}…`);
+  $('run-detail').innerHTML = lines.join('<br>');
+  $('run-note').textContent = r.live
+    ? 'a real Nemotron + Qwen3 session, recorded end to end'
+    : 'offline deterministic run — re-record with a Nebius key for a live session';
+}
+
+function triad(served, used, reinforced){
+  return `<div class="triad">
+    <div class="cell served"><div class="lbl">served — what retrieval offered</div><div class="val">${esc(JSON.stringify(served))}</div></div>
+    <div class="cell used"><div class="lbl">used — the model's claim</div><div class="val">${esc(JSON.stringify(used))}</div></div>
+    <div class="cell reinforced"><div class="lbl">reinforced — what the engine honored</div><div class="val">${esc(JSON.stringify(reinforced))}</div></div>
+  </div>`;
+}
+
+function renderTranscript(rec){
+  const out = [];
+  let season = 1;
+  for (const t of rec.turns){
+    if (t.kind === 'season_boundary'){
+      season = 2;
+      out.push(`<div class="season-cut">season 2 — history happens</div>`);
+      continue;
+    }
+    const cls = season === 2 ? 'turn season2' : 'turn';
+    if (t.kind === 'remember'){
+      out.push(`<div class="${cls}"><div class="memline"><b>${esc(t.memory_id)}</b>${esc(t.content)}</div></div>`);
+    } else if (t.kind === 'ask'){
+      out.push(`<div class="${cls}">
+        <div class="q"><span class="arrow">ask ▸</span> ${esc(t.question)}</div>
+        <div class="ans">${esc(t.answer)}</div>
+        ${triad(t.served, t.used, t.reinforced)}
+        <div class="hash">receipt ${esc(t.receipt.slice(0,28))}… · decision ${esc(t.decision||'—')} · ${t.latency_ms}ms
+          ${t.receipt_changed !== undefined ? ' · different receipt than the first ask: ' + t.receipt_changed : ''}
+          ${t.integrity_violation ? ' · <span class="badge b-bad">forged USED: line detected</span>' : ''}
+        </div>
+      </div>`);
+    } else if (t.kind === 'season_replay'){
+      out.push(`<div class="${cls}">
+        <div class="q"><span class="arrow">season ▸</span> ${esc(t.question)} <span class="meta">as_of ${esc(t.as_of.slice(0,23))}…</span></div>
+        <div class="meta">what the field would have served THEN (recomputed from chains truncated at t, not a stored snapshot):</div>
+        <div class="ans">${t.hits.map(h => `${esc(h.memory_id)} — ${esc(h.content)}`).join('<br>')}</div>
+        <div class="hash">receipt ${esc(t.receipt.slice(0,28))}… · now serves ${esc(JSON.stringify(t.now_served))}</div>
+      </div>`);
+    } else if (t.kind === 'chain'){
+      const evs = t.events.map(e => `<div class="chainline"><span class="seq">${e.seq}</span><b>${esc(e.event_type)}</b> by ${esc(e.actor_id)} — ${esc((e.reason||'').slice(0,50))}</div>`).join('');
+      out.push(`<div class="${cls}"><div class="meta">${esc(t.memory_id)} entered in season ${t.entered_in_season} — its full custody chain:</div>${evs}</div>`);
+    } else if (t.kind === 'impact'){
+      out.push(`<div class="${cls}"><div class="meta">impact(${esc(t.memory_id)}): direct receipts ${t.direct_receipts}, direct decisions ${t.direct_decisions}</div></div>`);
+    }
+  }
+  $('transcript').innerHTML = out.join('');
+}
+
+/* ---------- counterfactual explorer ---------- */
+function renderCFSelect(cfTurn){
+  $('cf-count').textContent = cfTurn.runs.length;
+  const opts = cfTurn.runs.map((r,i) =>
+    `<option value="${i}">${esc(r.memory_id)} seq ${r.seq} (${esc(r.event_type)})${r.flipped_top1?' — FLIPS TOP-1':(r.changed_anything?' — changes ranking':' — no change')}</option>`
+  ).join('');
+  $('cf-select').innerHTML = opts;
+  const defaultIdx = cfTurn.runs.findIndex(r =>
+    r.memory_id === cfTurn.default_memory_id && r.seq === cfTurn.default_seq);
+  $('cf-select').value = defaultIdx >= 0 ? defaultIdx : 0;
+
+  if (!cfTurn.any_flip){
+    const note = cfTurn.any_change
+      ? `<b>Honest note:</b> in this recorded session, no excised transition flipped
+         which memory ranked first — some changed a memory's field state
+         (e.g. REINFORCED → NEUTRAL) without changing the serve order for
+         this query. That is a real, reportable result: the counterfactual
+         mechanism worked and found that this particular transition didn't
+         decide the ranking. See <code>docs/DEMO.md §5</code> for a session
+         specifically constructed to show a flip.`
+      : `<b>Honest note:</b> in this recorded session, none of the excised
+         transitions changed the served ranking for this query — the
+         offline stub embedder is a deterministic token-hash, not a
+         semantic one, so ranking in this particular run is close to
+         flat. Re-record with <code>NEBIUS_API_KEY</code> set (real
+         Qwen3-Embedding-8B) to see the counterfactual move the ranking
+         the way it does in <code>docs/DEMO.md §5</code>.`;
+    $('cf-honest').innerHTML = `<div class="honest-note">${note}</div>`;
+  } else {
+    $('cf-honest').innerHTML = '';
+  }
+  renderCF();
+}
+function renderCF(){
+  if (!REC) return;
+  const cfTurn = REC.turns.find(t => t.kind === 'counterfactual');
+  const r = cfTurn.runs[Number($('cf-select').value)];
+  $('cf-out').innerHTML = `
+    <div class="cf-result">
+      <div class="cf-box"><div class="lbl">actual</div><div class="val mono">${esc(JSON.stringify(r.actual_served))}</div></div>
+      <div class="cf-box hyp"><div class="lbl">counterfactual <span class="badge b-warn">hypothetical</span></div><div class="val mono">${esc(JSON.stringify(r.counterfactual_served))}</div></div>
+    </div>
+    <div class="delta-line">Δ removed=${esc(JSON.stringify(r.delta.removed))} entered=${esc(JSON.stringify(r.delta.entered))} rank_changed=${esc(JSON.stringify(r.delta.rank_changed))}</div>
+    <div class="meta">excised: ${esc(r.memory_id)} seq ${r.seq} (${esc(r.event_type)}) → counterfactual state ${esc(JSON.stringify(r.counterfactual_state))}</div>
+    <div class="hash">report ${esc(r.report_sha256.slice(0,28))}… · hypothetical=${r.hypothetical}</div>`;
+}
+
+/* ---------- verification ---------- */
+async function verify(rec){
+  const out = [];
+  let hardFail = false;
+  // cls lets a caller mark a check as a soft/advisory line (e.g. the
+  // signature-authentication line below) that must NOT by itself flip
+  // the overall verdict to REJECTED — mirrors verify_cf_offline.py's
+  // three-way honest verdict instead of collapsing everything to
+  // pass/fail.
+  const log = (ok, label, detail='', soft=false) => {
+    out.push(
+      `<div class="vchk ${ok===null?'pend':ok?'pass':(soft?'warn':'fail')}">
+         <span class="label">${ok===null?'◦':ok?'✓':(soft?'⚠':'✗')} ${esc(label)}</span>
+         ${detail ? `<span class="detail">${esc(detail)}</span>` : ''}
+       </div>`);
+    if (ok === false && !soft) hardFail = true;
+  };
+
+  // ---- outer recording digest ----
+  const recCopy = Object.assign({}, rec);
+  const claimedRecDigest = recCopy.recording_sha256;
+  delete recCopy.recording_sha256;
+  const recDigest = await sha256hex(enc.encode(canonical(recCopy)));
+  log(recDigest === claimedRecDigest, 'Recording digest — sha256 over the narration + sealed bundle',
+      recDigest.slice(0,20) + '…');
+
+  // ---- inner DSSE envelope (unmodified mneme-cf-bundle/v1 path) ----
+  const raw = rec.bundle;
+  let b, auth = false, kid = '';
+  if (raw && raw.payloadType && raw.signatures){
+    const payload = b64d(raw.payload);
+    const t = enc.encode(raw.payloadType);
+    const pae = new Uint8Array([...enc.encode('DSSEv1 '), ...enc.encode(String(t.length)),
+      ...enc.encode(' '), ...t, ...enc.encode(' '), ...enc.encode(String(payload.length)),
+      ...enc.encode(' '), ...payload]);
+    for (const s of raw.signatures){
+      kid = s.keyid || kid;
+      if (window.TRUSTED_KEYS && window.TRUSTED_KEYS[s.keyid]){
+        const ok = await edVerify(window.TRUSTED_KEYS[s.keyid], b64d(s.sig), pae);
+        if (ok){ auth = true; kid = s.keyid; }
+      }
+    }
+    log(auth, 'CF-1 DSSE envelope signature',
+        auth ? `keyid ${kid} — matches this page's published trust anchor`
+             : `keyid ${kid||'none'} does not match this page's trust anchor — ORIGIN_UNTRUSTED`,
+        /*soft=*/true);
+    b = JSON.parse(new TextDecoder().decode(payload));
+  } else {
+    log(null, 'unsigned bundle — ORIGIN_UNTRUSTED verdict path');
+    b = raw;
+  }
+  BUNDLE = b;
+
+  const seal = b.bundle_sha256; delete b.bundle_sha256;
+  const dig = await sha256hex(enc.encode(canonical(b)));
+  log(dig === seal, 'CF0 bundle digest — sha256 over canonical body', dig.slice(0,16) + '…');
+  b.bundle_sha256 = seal;
+
+  const E = b.evidence, ch = E.chains, mids = Object.keys(ch);
+
+  let linked = true;
+  for (const mid of mids){
+    let prev = await sha256hex(enc.encode(GEN + mid));
+    const seqs = ch[mid].map(e => e.seq);
+    if (seqs.join() !== ch[mid].map((_,i) => i).join()) linked = false;
+    for (const e of ch[mid]){
+      if (e.prev_hash !== prev) linked = false;
+      if (e.entry_hash !== await entryHash(mid, e, prev)) linked = false;
+      prev = e.entry_hash;
+    }
+  }
+  log(linked, 'CF1 every chain dense + linked + genesis-bound', `${mids.length} chains`);
+
+  const seqSet = {}, decSet = new Set(E.decisions.map(d => d.decision_id)),
+        recSet = new Set(Object.keys(E.receipts)), midSet = new Set(mids);
+  mids.forEach(m => seqSet[m] = new Set(ch[m].map(e => e.seq)));
+  let dangling = 0;
+  for (const mid of mids) for (const e of ch[mid]){
+    const p = JSON.parse(e.payload_json);
+    for (const c of p.causes || []){
+      if (c.kind === 'event' && !(seqSet[c.memory_id] && seqSet[c.memory_id].has(c.seq))) dangling++;
+      if (c.kind === 'decision' && !decSet.has(c.id)) dangling++;
+      if (c.kind === 'receipt' && !recSet.has(c.id)) dangling++;
+    }
+    const cb = p.caused_by_decision_id;
+    if (cb !== undefined && cb !== null && !decSet.has(cb)) dangling++;
+  }
+  for (const l of E.cell_links || [])
+    if (!midSet.has(l.from_id) || !midSet.has(l.to_id)) dangling++;
+  for (const s of E.event_sigs || [])
+    if (!(seqSet[s.memory_id] && seqSet[s.memory_id].has(s.seq))) dangling++;
+  log(dangling === 0, 'CF1.7 every sealed reference resolves', dangling ? `${dangling} dangling` : '');
+
+  const keyActor = {};
+  for (const k of E.actor_keys || []) (keyActor[k.actor_id] = keyActor[k.actor_id] || {})[k.keyid] = k.verify_key_hex;
+  const sigMap = {};
+  for (const s of E.event_sigs || []) sigMap[s.memory_id + '/' + s.seq] = s;
+  let badSig = 0, edNull = false;
+  for (const mid of mids) for (const e of ch[mid]){
+    const akeys = keyActor[e.actor_id]; if (!akeys) continue;
+    const s = sigMap[mid + '/' + e.seq];
+    const vk = s && akeys[s.keyid];
+    if (!vk){ badSig++; continue; }
+    const ok = await edVerify(vk, hexToBytes(s.sig), enc.encode(e.entry_hash));
+    if (ok === null) edNull = true; else if (!ok) badSig++;
+  }
+  log(edNull ? null : badSig === 0, "CF1.8 keyed actors' events carry valid signatures",
+      edNull ? 'this browser lacks WebCrypto Ed25519 — attribution unverifiable here' : (badSig ? badSig + ' bad' : 'attribution verified'));
+
+  // ---- cross-check: narration cites only receipts that exist in the seal ----
+  const askTurns = rec.turns.filter(t => t.kind === 'ask');
+  let unsealed = 0;
+  for (const t of askTurns) if (!recSet.has(t.receipt)) unsealed++;
+  log(unsealed === 0, 'Narration cross-check — every cited receipt exists in the sealed bundle',
+      `${askTurns.length} ask turns checked, ${unsealed} not found in seal`);
+
+  let verdict, cls;
+  if (hardFail){
+    verdict = 'REJECTED — a check that recomputes evidence failed'; cls = 'bad';
+  } else if (auth){
+    verdict = 'VERIFIED + AUTHENTICATED — signed by the published trust anchor'; cls = 'good';
+  } else {
+    verdict = 'VERIFIED (integrity + semantics) — ORIGIN_UNTRUSTED: signed, but not by a key this page recognizes'; cls = 'warn';
+  }
+  out.unshift(`<div class="verdict-big ${cls}">${verdict}</div>`);
+  out.push(`<div class="meta" style="margin-top:8px">${mids.length} memories · ${E.decisions.length} decisions ·
+    ${Object.keys(E.receipts).length} receipts · ${(E.event_sigs||[]).length} event signatures ·
+    ${rec.turns.length} narrated turns</div>`);
+
+  $('verify-out').innerHTML = out.join('');
+}
+
+/* ---------- boot ---------- */
+async function load(rec){
+  REC = rec;
+  renderRun(rec);
+  renderTranscript(rec);
+  const cfTurn = rec.turns.find(t => t.kind === 'counterfactual');
+  if (cfTurn){ $('cf-panel').style.display = ''; renderCFSelect(cfTurn); }
+  await verify(rec);
+}
+
+$('file-input').onchange = async ev => {
+  try{
+    const rec = JSON.parse(await ev.target.files[0].text());
+    await load(rec);
+  }catch(e){
+    $('verify-out').innerHTML = `<div class="vchk fail"><span class="label">could not parse file: ${esc(e.message)}</span></div>`;
+  }
+};
+
+fetch('session.recording.json').then(r => r.ok ? r.json() : Promise.reject())
+  .then(load)
+  .catch(() => {
+    $('transcript').innerHTML = '<div class="meta">no session.recording.json next to this page — drop one below to view it.</div>';
+    $('verify-out').innerHTML = '<div class="meta">no recording loaded yet.</div>';
+    $('run-note').textContent = 'no recording loaded';
+  });
+</script>
+</body>
+</html>

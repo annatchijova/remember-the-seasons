@@ -30,6 +30,11 @@ product/
     agent.py       SeasonsAgent: remember / ask / season / what_if
   demo.py          end-to-end: same question across two seasons,
                    difference explained from sealed chains
+  record_session.py  runs a real session and writes web/session.recording.json —
+                   the narration (every turn) beside the SAME unmodified
+                   mneme-cf-bundle/v1 DSSE envelope this product already
+                   exports; that file is what ../web/index.html replays
+                   and re-verifies in the browser
 ```
 
 ## served ≠ used ≠ reinforced
@@ -171,7 +176,12 @@ Tools: `remember` `ask` `season` `what_if_transition`
 `request_provenance` `export_bundle`. The pitch is not "another
 agent" — it is forensic memory ANY agent can plug in.
 
-`server.py` is the human-facing demo UI (stdlib-only, :8420).
+`server.py` is a local interactive demo UI (stdlib-only, :8420) for
+developing against a live agent by hand — ask, remember, excise,
+replay, click through provenance. It is not what judges see: the
+judge-facing artifact is `record_session.py` + `../web/index.html`
+(a recorded session, replayed and re-verified in the browser with no
+server running at all — see the root README).
 
 ## Latency (bench.py, offline embedder)
 

@@ -29,3 +29,5 @@ seasons_demo.db
 product/verifier-go/mneme-verify
 product/verifier-go/verifier-go
 product/verifier-go/mneme-verify
+.vercel
+.env*
