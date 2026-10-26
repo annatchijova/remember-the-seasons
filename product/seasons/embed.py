@@ -16,6 +16,7 @@ import re
 import urllib.request
 
 DIM = 64
+DEFAULT_MODEL = "Qwen/Qwen3-Embedding-8B"
 
 _TOKEN = re.compile(r"[a-z0-9]+")
 
@@ -39,7 +40,7 @@ def embed_nebius(text: str, model: str | None = None) -> list[float]:
     base = os.environ.get("NEBIUS_BASE_URL",
                           "https://api.tokenfactory.nebius.com/v1")
     key = os.environ["NEBIUS_API_KEY"]
-    model = model or os.environ.get("SEASONS_EMBED_MODEL", "Qwen/Qwen3-Embedding-8B")
+    model = model or os.environ.get("SEASONS_EMBED_MODEL", DEFAULT_MODEL)
     body = {"model": model, "input": text}
     req = urllib.request.Request(
         f"{base}/embeddings",

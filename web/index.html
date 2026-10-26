@@ -463,6 +463,7 @@ function renderCFSelect(cfTurn){
   $('cf-select').value = defaultIdx >= 0 ? defaultIdx : 0;
 
   if (!cfTurn.any_flip){
+    const live = REC && REC.run && REC.run.live;
     const note = cfTurn.any_change
       ? `<b>Honest note:</b> in this recorded session, no excised transition flipped
          which memory ranked first — some changed a memory's field state
@@ -471,13 +472,27 @@ function renderCFSelect(cfTurn){
          mechanism worked and found that this particular transition didn't
          decide the ranking. See <code>docs/DEMO.md §5</code> for a session
          specifically constructed to show a flip.`
+      : live
+      ? `<b>Honest note:</b> this is a real Nemotron + Qwen3-Embedding-8B
+         session, and none of the excised transitions changed the served
+         ranking for this query. That's expected here, not a limitation of
+         live inference: the explorer excises REINFORCEMENT/promotion
+         events, not the underlying semantic similarity — and in this
+         three-memory demo corpus, the two deploy-policy memories are both
+         already strongly, closely relevant to the question, so removing
+         one promotion isn't enough to demote either below the other. See
+         <code>docs/DEMO.md §5</code> for a session deliberately
+         constructed (more memories, a closer rival) specifically to show
+         a flip.`
       : `<b>Honest note:</b> in this recorded session, none of the excised
          transitions changed the served ranking for this query — the
          offline stub embedder is a deterministic token-hash, not a
          semantic one, so ranking in this particular run is close to
          flat. Re-record with <code>NEBIUS_API_KEY</code> set (real
-         Qwen3-Embedding-8B) to see the counterfactual move the ranking
-         the way it does in <code>docs/DEMO.md §5</code>.`;
+         Qwen3-Embedding-8B) to see real semantic ranking in action — note
+         that even with real embeddings this specific small demo corpus
+         may still not flip; see <code>docs/DEMO.md §5</code> for a
+         session deliberately constructed to show one.`;
     $('cf-honest').innerHTML = `<div class="honest-note">${note}</div>`;
   } else {
     $('cf-honest').innerHTML = '';

@@ -216,7 +216,7 @@ def record(out_path: str) -> dict:
                 "https://api.tokenfactory.nebius.com/v1") if live
                 else None),
             "chat_model": (llm.DEFAULT_MODEL if live else None),
-            "embedding_model": (embed.model_name() if live else
+            "embedding_model": (embed.DEFAULT_MODEL if live else
                                 "local-token-hash-64"),
             "started_at": started,
             "finished_at": now(),
