@@ -77,6 +77,17 @@ a clock is not a cause |
 
 ![the recorded-session transcript — served/used/reinforced triad, custody chain, receipts](visual/page.png)
 
+<details>
+<summary>More screenshots of the live page</summary>
+
+![hero — the problem retrieval memory doesn't solve](visual/Screenshot%20from%202026-10-26%2001-01-57.png)
+![Nemotron + Qwen3-Embedding role split, recorded-session header](visual/Screenshot%20from%202026-10-26%2001-02-01.png)
+![transcript turns with served/used/reinforced receipts, season 2 policy change](visual/Screenshot%20from%202026-10-26%2001-02-05.png)
+![do(T=∅) counterfactual excision panel](visual/Screenshot%20from%202026-10-26%2001-02-09.png)
+![in-browser verification panel — DSSE envelope and chain checks, all green](visual/Screenshot%20from%202026-10-26%2001-02-12.png)
+
+</details>
+
 ## How it works — three layers
 
 ```

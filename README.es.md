@@ -78,6 +78,17 @@ matan — un reloj no es una causa |
 
 ![transcripción de la sesión grabada — triada served/used/reinforced, custody chain, receipts](visual/page.png)
 
+<details>
+<summary>Más capturas de la página en vivo</summary>
+
+![hero — el problema que la memoria de retrieval no resuelve](visual/Screenshot%20from%202026-10-26%2001-01-57.png)
+![reparto de roles Nemotron + Qwen3-Embedding, encabezado de la sesión grabada](visual/Screenshot%20from%202026-10-26%2001-02-01.png)
+![turnos de la transcripción con receipts served/used/reinforced, cambio de política en season 2](visual/Screenshot%20from%202026-10-26%2001-02-05.png)
+![panel de excisión contrafactual do(T=∅)](visual/Screenshot%20from%202026-10-26%2001-02-09.png)
+![panel de verificación en el navegador — envelope DSSE y chequeos de cadena, todo en verde](visual/Screenshot%20from%202026-10-26%2001-02-12.png)
+
+</details>
+
 ## Cómo funciona — tres capas
 
 ```
